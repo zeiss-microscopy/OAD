@@ -1,10 +1,12 @@
 # Open Application Development (OAD)
 
-ZEN Blue is an open, flexible and powerful image acquisition platform that allows controlling a wide range of microscopes system. Additionally it offers various tools to automate workflows including acquisition and image analysis tasks.
+ZEN Blue is an open, flexible and powerful image acquisition platform that allows controlling a wide range of microscopes systems. Additionally it offers various tools to automate workflows including acquisition and image analysis tasks.
 
-Since that linkage and the automation of such workflows becomes increasingly ZEN to fulfill those demands the ZEN Blue platform offers various features and options, which are combined inside a concept called Open Application Development (OAD). It main components are:
+In order to fulfill the request for automation the ZEN Blue platform offers various features and options, which are combined inside a concept called Open Application Development (OAD).
 
-*    Open CZI image data format and its APIs
+Its main components are:
+
+*    CZI image data format and its APIs
 *    Python Scripting (OAD Simple API) 
 *    Interfaces to ZEN (TCP-IP, COM, Extensions)
 *    Experiment Feedback (Adaptive Acquistion with Online Image Analysis)   
