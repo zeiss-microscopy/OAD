@@ -23,7 +23,7 @@ Its main components are:
 
 * The** CZI-API for .NET (ZeissImgLib)** and for **C++ (libCZI)** and **BioFormats(CZIReader)** allow easy access to CZI files from many external applications. (OME-TIFF Export and Import in ZEN Blue is possible)
 
-* **BioFormats Impor**t as a module inside ZEN Blue
+* **BioFormats Import**t as a module inside ZEN Blue
 
 * Create **“smart”** experiments with **Experiment Feedback** and modify the acquisition **On-the-fly** based on **Online Image Analysis** and **External Inputs** 
 
