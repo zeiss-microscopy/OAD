@@ -1,4 +1,4 @@
-# TCP/IP Interface
+## TCP/IP Interface
 
 A modern digital light microscopy workstation with its software as provided by the
 manufacturer is hardly able to fulfill every single customer requirement. There is a need to (i)
@@ -48,6 +48,11 @@ where the next step of the workflow expect them to be. In the following workflow
 and analysis software packages may work with the data or a feeder is driven by the workflow system to
 bring new images to the microscope.
 
+
+***
+
 ![TCP-IP_Interface_Kitty](/images/TCP-IP_Kitty.png)
+
+***
 
 ![TCP-IP_Interface_Example](/images/Send_Single_Commands_TCP-IP.gif)

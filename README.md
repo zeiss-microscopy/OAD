@@ -28,7 +28,17 @@ Its main components are:
 * Create **“smart”** experiments with **Experiment Feedback** and modify the acquisition **On-the-fly** based on **Online Image Analysis** and **External Inputs** 
 
 ***
+
 ![Screenshot of GUI](/images/OAD_Overview.png)
+
+***
+
+![Example - Online Ratio](/videos/Automated_Physiology_IA.gif)
+
+***
+
+![Example - Adaptive Feedback Microscopy](/videos/GuidedAcquisition_ZEN_Fiji.gif)
+
 ***
 
 ## Links and Referneces

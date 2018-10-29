@@ -1,6 +1,6 @@
 ## Hardware and Acquistion
 
-### FindSurface_SWAF_ActiveExp.czmac
+### FindSurface_SWAF_ActiveExp.py
 
 This script is intented to be placed as a action button inside the ZEN menu bar especially when using a Celldiscoverer 7 system. The idea here is to combine the hard-based focus with the sofware focus to store the final z-value (where something should be in focus) inside the hardware focus in order to be able to relocate to that value (relative to the sample carriere surface) easily without beleaching.
 
