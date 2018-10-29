@@ -1,0 +1,450 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ImageAnalysisSetting>
+  <Version>1.1</Version>
+  <TilingMode>NoTiling</TilingMode>
+  <TileSize>0</TileSize>
+  <MaxParticleSize>0</MaxParticleSize>
+  <MaxDisplaySize>3500</MaxDisplaySize>
+  <HiliteColor>#FFFF0000</HiliteColor>
+  <HiliteLineWidth>1</HiliteLineWidth>
+  <Script Name="Builtin Multichannel">
+    <SegmenterSource>SegmenterBuiltinDefault</SegmenterSource>
+  </Script>
+  <SubImageDimension>C</SubImageDimension>
+  <RegionClass Name="Root" Id="0">
+    <Type>Or</Type>
+    <Color>#FFFFFFFF</Color>
+    <ParametersCollection>
+      <Parameters Key="Segmentation" Name="SegmenterClassBuiltinDefault" />
+    </ParametersCollection>
+    <RegionClass Name="AllNuclei" Id="1">
+      <Type>Collection</Type>
+      <Color>#FF00CCFF</Color>
+      <ParametersCollection>
+        <Parameters Key="Segmentation" Name="SegmenterClassBuiltinDefault" />
+      </ParametersCollection>
+      <Features>
+        <Features>
+          <Feature Name="RegionsCount" IsDisplayEnabled="true" />
+          <Feature Name="ImageSceneContainerName" />
+          <Feature Name="ImageSceneRow" />
+          <Feature Name="ImageSceneColumn" />
+          <Feature Name="ID" />
+        </Features>
+      </Features>
+      <RegionClass Name="SingleNucleus" Id="2">
+        <Type>Single</Type>
+        <ChannelName>AF568</ChannelName>
+        <Color>#FF00CCFF</Color>
+        <Overlap>60</Overlap>
+        <ParametersCollection>
+          <Parameters Key="Segmentation" Name="SegmenterClassBuiltinDefault">
+            <Parameter Key="Smoothing1">
+              <Name>Smoothing1</Name>
+              <Source>Smoothing</Source>
+              <IsInteractive>false</IsInteractive>
+              <Mode>Median</Mode>
+              <LowpassKernelSize>3</LowpassKernelSize>
+              <MedianKernelSize>5</MedianKernelSize>
+              <GaussSigma>1.3</GaussSigma>
+            </Parameter>
+            <Parameter Key="BackgroundReduction1">
+              <Name>BackgroundReduction1</Name>
+              <Source>BackgroundReduction</Source>
+              <MustExecute>false</MustExecute>
+              <Mode>None</Mode>
+              <RollingBallRadius>20</RollingBallRadius>
+              <RollingBallIsLightBackground>false</RollingBallIsLightBackground>
+            </Parameter>
+            <Parameter Key="Sharpening1">
+              <Name>Sharpening1</Name>
+              <Source>Sharpening</Source>
+              <IsInteractive>false</IsInteractive>
+              <Mode>None</Mode>
+              <DelineateThreshold>0</DelineateThreshold>
+              <DelineateSize>1</DelineateSize>
+              <UnsharpRadius>2</UnsharpRadius>
+              <UnsharpStrength>1</UnsharpStrength>
+            </Parameter>
+            <Parameter Key="MinArea1">
+              <Name>MinArea1</Name>
+              <Source>MinArea</Source>
+              <IsInteractive>false</IsInteractive>
+              <Minimum>1</Minimum>
+              <Value>10</Value>
+              <Maximum>1000</Maximum>
+              <SmallChange>1</SmallChange>
+            </Parameter>
+            <Parameter Key="ThresholdHistogram1">
+              <Name>ThresholdHistogram1</Name>
+              <Source>ThresholdHistogram</Source>
+              <Minimum1>0</Minimum1>
+              <ValueLower1>310</ValueLower1>
+              <ValueUpper1>14268</ValueUpper1>
+              <Maximum1>65535</Maximum1>
+              <Minimum2>0</Minimum2>
+              <ValueLower2>0</ValueLower2>
+              <ValueUpper2>0</ValueUpper2>
+              <Maximum2>65535</Maximum2>
+              <Minimum3>0</Minimum3>
+              <ValueLower3>0</ValueLower3>
+              <ValueUpper3>0</ValueUpper3>
+              <Maximum3>65535</Maximum3>
+              <IsHLS>false</IsHLS>
+              <IsValid1>true</IsValid1>
+              <IsValid2>false</IsValid2>
+              <IsValid3>false</IsValid3>
+              <AnalysisThresholdMode>Automatic</AnalysisThresholdMode>
+              <AutomaticThresholdMethod>TriangleThreshold</AutomaticThresholdMethod>
+              <AnalysisThresholdShapeMode>Polygon</AnalysisThresholdShapeMode>
+              <PickSize>1</PickSize>
+              <PickTolerance>3</PickTolerance>
+            </Parameter>
+            <Parameter Key="Fill1">
+              <Name>@ImageAnalysisWizard_SegmentationFill</Name>
+              <Source>Boolean</Source>
+              <IsInteractive>false</IsInteractive>
+              <Value>true</Value>
+            </Parameter>
+            <Parameter Key="Separate1">
+              <Name>Separate1</Name>
+              <Source>Separate</Source>
+              <IsInteractive>false</IsInteractive>
+              <Mode>Watersheds</Mode>
+              <Count>3</Count>
+            </Parameter>
+          </Parameters>
+        </ParametersCollection>
+        <InteractiveParameters>
+          <Parameter Key="RegionEdit1">
+            <Source>RegionEdit</Source>
+            <IsInteractive>false</IsInteractive>
+            <EditMethod>Draw</EditMethod>
+          </Parameter>
+          <Parameter Key="RegionGrow1">
+            <Source>RegionGrow</Source>
+            <IsInteractive>false</IsInteractive>
+            <IntensityTolerance>10</IntensityTolerance>
+            <ColorTolerance>10</ColorTolerance>
+            <Fill>false</Fill>
+          </Parameter>
+        </InteractiveParameters>
+        <Conditions>
+          <Condition Key="MinMax1">
+            <Name>MinMax</Name>
+            <Source>ConditionMinMax</Source>
+          </Condition>
+        </Conditions>
+        <Features>
+          <Features>
+            <Feature Name="ImageSceneContainerName" />
+            <Feature Name="ImageSceneRow" />
+            <Feature Name="ImageSceneColumn" />
+            <Feature Name="ID" />
+            <Feature Name="Index" />
+            <Feature Name="IntensityMean" ChannelName="AF488" />
+            <Feature Name="Area" />
+            <Feature Name="Perimeter" />
+            <Feature Name="Roundness" />
+            <Feature Name="FeretRatio" />
+          </Features>
+        </Features>
+      </RegionClass>
+    </RegionClass>
+    <RegionClass Name="AllGolgi" Id="3">
+      <Type>Collection</Type>
+      <Color>#FFFFFF00</Color>
+      <ParametersCollection>
+        <Parameters Key="Segmentation" Name="SegmenterClassBuiltinDefault" />
+      </ParametersCollection>
+      <Features>
+        <Features>
+          <Feature Name="RegionsCount" />
+        </Features>
+      </Features>
+      <RegionClass Name="SingleGolgi" Id="4">
+        <Type>Single</Type>
+        <ChannelName>AF488</ChannelName>
+        <Color>#FFFFFF00</Color>
+        <Overlap>60</Overlap>
+        <ParametersCollection>
+          <Parameters Key="Segmentation" Name="SegmenterClassBuiltinDefault">
+            <Parameter Key="Smoothing1">
+              <Name>Smoothing1</Name>
+              <Source>Smoothing</Source>
+              <MustExecute>false</MustExecute>
+              <IsInteractive>false</IsInteractive>
+              <Mode>None</Mode>
+              <LowpassKernelSize>3</LowpassKernelSize>
+              <MedianKernelSize>3</MedianKernelSize>
+              <GaussSigma>1.3</GaussSigma>
+            </Parameter>
+            <Parameter Key="Sharpening1">
+              <Name>Sharpening1</Name>
+              <Source>Sharpening</Source>
+              <IsInteractive>false</IsInteractive>
+              <Mode>None</Mode>
+              <DelineateThreshold>0</DelineateThreshold>
+              <DelineateSize>1</DelineateSize>
+              <UnsharpRadius>2</UnsharpRadius>
+              <UnsharpStrength>1</UnsharpStrength>
+            </Parameter>
+            <Parameter Key="MinArea1">
+              <Name>MinArea1</Name>
+              <Source>MinArea</Source>
+              <IsInteractive>false</IsInteractive>
+              <Minimum>1</Minimum>
+              <Value>1</Value>
+              <Maximum>1000</Maximum>
+              <SmallChange>1</SmallChange>
+            </Parameter>
+            <Parameter Key="ThresholdHistogram1">
+              <Name>ThresholdHistogram1</Name>
+              <Source>ThresholdHistogram</Source>
+              <Minimum1>0</Minimum1>
+              <ValueLower1>394</ValueLower1>
+              <ValueUpper1>12588</ValueUpper1>
+              <Maximum1>65535</Maximum1>
+              <Minimum2>0</Minimum2>
+              <ValueLower2>0</ValueLower2>
+              <ValueUpper2>0</ValueUpper2>
+              <Maximum2>65535</Maximum2>
+              <Minimum3>0</Minimum3>
+              <ValueLower3>0</ValueLower3>
+              <ValueUpper3>0</ValueUpper3>
+              <Maximum3>65535</Maximum3>
+              <IsHLS>false</IsHLS>
+              <IsValid1>true</IsValid1>
+              <IsValid2>false</IsValid2>
+              <IsValid3>false</IsValid3>
+              <AnalysisThresholdMode>Automatic</AnalysisThresholdMode>
+              <AutomaticThresholdMethod>TriangleThreshold</AutomaticThresholdMethod>
+              <AnalysisThresholdShapeMode>Polygon</AnalysisThresholdShapeMode>
+              <PickSize>1</PickSize>
+              <PickTolerance>3</PickTolerance>
+            </Parameter>
+            <Parameter Key="Fill1">
+              <Name>@ImageAnalysisWizard_SegmentationFill</Name>
+              <Source>Boolean</Source>
+              <IsInteractive>false</IsInteractive>
+              <Value>true</Value>
+            </Parameter>
+            <Parameter Key="Separate1">
+              <Name>Separate1</Name>
+              <Source>Separate</Source>
+              <IsInteractive>false</IsInteractive>
+              <Mode>Watersheds</Mode>
+              <Count>3</Count>
+            </Parameter>
+          </Parameters>
+        </ParametersCollection>
+        <InteractiveParameters>
+          <Parameter Key="RegionEdit1">
+            <Source>RegionEdit</Source>
+            <IsInteractive>false</IsInteractive>
+            <EditMethod>Draw</EditMethod>
+          </Parameter>
+          <Parameter Key="RegionGrow1">
+            <Source>RegionGrow</Source>
+            <IsInteractive>false</IsInteractive>
+            <IntensityTolerance>10</IntensityTolerance>
+            <ColorTolerance>10</ColorTolerance>
+            <Fill>false</Fill>
+          </Parameter>
+        </InteractiveParameters>
+        <Conditions>
+          <Condition Key="MinMax1">
+            <Name>MinMax</Name>
+            <Source>ConditionMinMax</Source>
+          </Condition>
+        </Conditions>
+        <Features>
+          <Features>
+            <Feature Name="ImageSceneContainerName" />
+            <Feature Name="ImageSceneRow" />
+            <Feature Name="ImageSceneColumn" />
+            <Feature Name="ID" />
+            <Feature Name="Index" />
+            <Feature Name="IntensityMean" ChannelName="AF568" />
+            <Feature Name="Area" />
+            <Feature Name="Perimeter" />
+            <Feature Name="Roundness" />
+            <Feature Name="FeretRatio" />
+          </Features>
+        </Features>
+      </RegionClass>
+    </RegionClass>
+  </RegionClass>
+  <RegionClassTemplate Name="RootTemplate" Id="0">
+    <Type>Or</Type>
+    <Color>#FFFFFFFF</Color>
+    <RegionClass Name="Classes" Id="1">
+      <Type>Collection</Type>
+      <Color>#FFFF0000</Color>
+      <Features>
+        <Features>
+          <Feature Name="RegionsCount" />
+        </Features>
+      </Features>
+      <RegionClass Name="Class" Id="2">
+        <Type>Single</Type>
+        <Color>#FFFF0000</Color>
+        <Overlap>60</Overlap>
+        <ParametersCollection>
+          <Parameters Key="Segmentation" Name="SegmenterClassBuiltinDefault">
+            <Parameter Key="Smoothing1">
+              <Name>Smoothing1</Name>
+              <Source>Smoothing</Source>
+              <MustExecute>false</MustExecute>
+              <IsInteractive>false</IsInteractive>
+              <Mode>None</Mode>
+              <LowpassKernelSize>3</LowpassKernelSize>
+              <MedianKernelSize>3</MedianKernelSize>
+              <GaussSigma>1.3</GaussSigma>
+            </Parameter>
+            <Parameter Key="Sharpening1">
+              <Name>Sharpening1</Name>
+              <Source>Sharpening</Source>
+              <IsInteractive>false</IsInteractive>
+              <Mode>None</Mode>
+              <DelineateThreshold>0</DelineateThreshold>
+              <DelineateSize>1</DelineateSize>
+              <UnsharpRadius>2</UnsharpRadius>
+              <UnsharpStrength>1</UnsharpStrength>
+            </Parameter>
+            <Parameter Key="MinArea1">
+              <Name>MinArea1</Name>
+              <Source>MinArea</Source>
+              <IsInteractive>false</IsInteractive>
+              <Minimum>1</Minimum>
+              <Value>1</Value>
+              <Maximum>1000</Maximum>
+              <SmallChange>1</SmallChange>
+            </Parameter>
+            <Parameter Key="ThresholdHistogram1">
+              <Name>ThresholdHistogram1</Name>
+              <Source>ThresholdHistogram</Source>
+              <Minimum1>0</Minimum1>
+              <ValueLower1>0</ValueLower1>
+              <ValueUpper1>0</ValueUpper1>
+              <Maximum1>255</Maximum1>
+              <Minimum2>0</Minimum2>
+              <ValueLower2>0</ValueLower2>
+              <ValueUpper2>0</ValueUpper2>
+              <Maximum2>255</Maximum2>
+              <Minimum3>0</Minimum3>
+              <ValueLower3>0</ValueLower3>
+              <ValueUpper3>0</ValueUpper3>
+              <Maximum3>255</Maximum3>
+              <IsHLS>false</IsHLS>
+              <IsValid1>false</IsValid1>
+              <IsValid2>false</IsValid2>
+              <IsValid3>false</IsValid3>
+              <AnalysisThresholdMode>Click</AnalysisThresholdMode>
+              <AutomaticThresholdMethod>Otsu</AutomaticThresholdMethod>
+              <AnalysisThresholdShapeMode>Polygon</AnalysisThresholdShapeMode>
+              <PickSize>1</PickSize>
+              <PickTolerance>3</PickTolerance>
+            </Parameter>
+            <Parameter Key="Fill1">
+              <Name>@ImageAnalysisWizard_SegmentationFill</Name>
+              <Source>Boolean</Source>
+              <IsInteractive>false</IsInteractive>
+              <Value>false</Value>
+            </Parameter>
+            <Parameter Key="Separate1">
+              <Name>Separate1</Name>
+              <Source>Separate</Source>
+              <IsInteractive>false</IsInteractive>
+              <Mode>None</Mode>
+              <Count>3</Count>
+            </Parameter>
+          </Parameters>
+        </ParametersCollection>
+        <InteractiveParameters>
+          <Parameter Key="RegionEdit1">
+            <Source>RegionEdit</Source>
+            <IsInteractive>false</IsInteractive>
+            <EditMethod>Draw</EditMethod>
+          </Parameter>
+          <Parameter Key="RegionGrow1">
+            <Source>RegionGrow</Source>
+            <IsInteractive>false</IsInteractive>
+            <IntensityTolerance>10</IntensityTolerance>
+            <ColorTolerance>10</ColorTolerance>
+            <Fill>false</Fill>
+          </Parameter>
+        </InteractiveParameters>
+        <Conditions>
+          <Condition Key="MinMax1">
+            <Name>MinMax</Name>
+            <Source>ConditionMinMax</Source>
+          </Condition>
+        </Conditions>
+        <Features>
+          <Features>
+            <Feature Name="ID" />
+            <Feature Name="Area" />
+            <Feature Name="Perimeter" />
+          </Features>
+        </Features>
+      </RegionClass>
+    </RegionClass>
+  </RegionClassTemplate>
+  <AnalysisStepCollection>
+    <AnalysisStep Name="Class">
+      <MustExecute>false</MustExecute>
+      <IsInteractive>false</IsInteractive>
+    </AnalysisStep>
+    <AnalysisStep Name="Frame">
+      <MustExecute>true</MustExecute>
+      <IsInteractive>false</IsInteractive>
+    </AnalysisStep>
+    <AnalysisStep Name="Segmentation">
+      <MustExecute>true</MustExecute>
+      <IsInteractive>false</IsInteractive>
+    </AnalysisStep>
+    <AnalysisStep Name="Condition">
+      <MustExecute>false</MustExecute>
+      <IsInteractive>false</IsInteractive>
+    </AnalysisStep>
+    <AnalysisStep Name="Interactive">
+      <MustExecute>true</MustExecute>
+      <IsInteractive>false</IsInteractive>
+    </AnalysisStep>
+    <AnalysisStep Name="Features">
+      <MustExecute>false</MustExecute>
+      <IsInteractive>false</IsInteractive>
+    </AnalysisStep>
+    <AnalysisStep Name="Measure">
+      <MustExecute>false</MustExecute>
+      <IsInteractive>false</IsInteractive>
+    </AnalysisStep>
+  </AnalysisStepCollection>
+  <AdditionalChannelSetting />
+  <AnalysisFrameTeach>
+    <Source>AnalysisFrameDefault</Source>
+  </AnalysisFrameTeach>
+  <AnalysisFrameRun>
+    <Source>AnalysisFrameDefault</Source>
+  </AnalysisFrameRun>
+  <AnalysisFeatures>
+    <Source>AnalysisFeaturesDefault</Source>
+  </AnalysisFeatures>
+  <AnalysisClass>
+    <Source>AnalysisClassDefault</Source>
+  </AnalysisClass>
+  <MeasureFrame>
+    <FrameMode>Cut</FrameMode>
+    <IsFrameMaximize>false</IsFrameMaximize>
+    <Complement>false</Complement>
+    <GraphicLayer>
+      <Usage>Edit</Usage>
+      <IsProtected>false</IsProtected>
+      <IsAnimationEnabled>false</IsAnimationEnabled>
+      <AnimationDimension>None</AnimationDimension>
+      <LayerFlags>1</LayerFlags>
+      <Elements />
+    </GraphicLayer>
+  </MeasureFrame>
+</ImageAnalysisSetting>
