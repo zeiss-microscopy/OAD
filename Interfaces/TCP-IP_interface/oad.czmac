@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Script Version="1.0">
+  <Language>Python</Language>
+  <Text>exp = Zen.Acquisition.Experiments.GetByName("ML_96_Wellplate_Castor.czexp")
+img = Zen.Acquisition.Execute(exp)
+Zen.Application.Documents.Add(img)
+</Text>
+  <Author></Author>
+  <Description></Description>
+  <ApplicationName></ApplicationName>
+  <Keywords></Keywords>
+  <Row>1</Row>
+  <Column>1</Column>
+</Script>
