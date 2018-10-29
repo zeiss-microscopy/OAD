@@ -1,0 +1,1565 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<HardwareExperiment Version="1.1">
+  <RunMode>ValidateAndAdaptBeforePerformEnabled,OptimizeBeforePerformEnabled</RunMode>
+  <BeforeHardwareSetting>Before Exp [fluo4] Smart</BeforeHardwareSetting>
+  <AfterHardwareSetting>After Exp [fluo4] Smart</AfterHardwareSetting>
+  <ExperimentBlockIndex>0</ExperimentBlockIndex>
+  <IsSegmented>false</IsSegmented>
+  <IsStandardMode>true</IsStandardMode>
+  <ImageTransferMode>MemoryMappedAndFileStream</ImageTransferMode>
+  <AutoSave IsActivated="false" EnableSingleFileSave="false">
+    <StorageFolder>C:\Users\M1MALANG\Pictures</StorageFolder>
+    <Name>New</Name>
+    <IsAutoSubFolder>true</IsAutoSubFolder>
+    <IsAutoSubFolderExternal>true</IsAutoSubFolderExternal>
+    <IsClosedOnCompletion>false</IsClosedOnCompletion>
+    <SingleFileSaveFormat>TIFF</SingleFileSaveFormat>
+    <ConvertTo8Bit>false</ConvertTo8Bit>
+    <AddXmlMetadata>false</AddXmlMetadata>
+    <ApplyDisplayMappings>false</ApplyDisplayMappings>
+    <SaveOriginalData>true</SaveOriginalData>
+    <UseChannelNames>false</UseChannelNames>
+    <Quality>100</Quality>
+    <CompressionMethod></CompressionMethod>
+    <SingleFileSaveDestinationFolder>C:\Users\M1MALANG\Pictures</SingleFileSaveDestinationFolder>
+    <DimensionsForSeparateFolders>-C;-T;-Z;-S</DimensionsForSeparateFolders>
+  </AutoSave>
+  <Scripting IsActivated="false">
+    <RunMacroBeforeExperiment>false</RunMacroBeforeExperiment>
+    <MacroBeforeExperiment></MacroBeforeExperiment>
+    <ErrorActionBeforeExperiment>ErrorAction_Continue</ErrorActionBeforeExperiment>
+    <RunMacroAfterExperiment>false</RunMacroAfterExperiment>
+    <MacroAfterExperiment></MacroAfterExperiment>
+    <ErrorActionAfterExperiment>ErrorAction_Continue</ErrorActionAfterExperiment>
+  </Scripting>
+  <BlockExecutionOrder>1</BlockExecutionOrder>
+  <LoopDefinitions />
+  <ExperimentBlocks>
+    <AcquisitionBlock IsActivated="true" BlockReference="635073175912234082">
+      <RunMode>ComponentUpdateEnabled,StateUpdateEnabled</RunMode>
+      <BeforeHardwareSetting></BeforeHardwareSetting>
+      <AfterHardwareSetting></AfterHardwareSetting>
+      <SubDimensionSetups>
+        <TimeSeriesSetup IsActivated="true">
+          <IsInteractive>true</IsInteractive>
+          <IsLongAsPossible>false</IsLongAsPossible>
+          <IsBurstMode>false</IsBurstMode>
+          <Duration>
+            <Cycles>40</Cycles>
+          </Duration>
+          <IsFastAsPossible>false</IsFastAsPossible>
+          <Interval>
+            <TimeSpan>
+              <Value>0.7</Value>
+              <DefaultUnitFormat>s</DefaultUnitFormat>
+            </TimeSpan>
+          </Interval>
+          <BeforeHardwareSetting></BeforeHardwareSetting>
+          <AfterHardwareSetting></AfterHardwareSetting>
+          <StartMode>
+            <Manual>
+              <DigitalIn>None</DigitalIn>
+              <DigitalOut>None</DigitalOut>
+              <TimeSpan>
+                <Value>0.001</Value>
+                <DefaultUnitFormat>ms</DefaultUnitFormat>
+              </TimeSpan>
+              <DateTime>
+                <Seconds>0</Seconds>
+                <Minutes>0</Minutes>
+                <Hours>0</Hours>
+              </DateTime>
+              <Interval>0</Interval>
+              <MarkerDescription></MarkerDescription>
+            </Manual>
+          </StartMode>
+          <StopMode>
+            <Manual>
+              <DigitalIn>None</DigitalIn>
+              <DigitalOut>None</DigitalOut>
+              <TimeSpan>
+                <Value>0.001</Value>
+                <DefaultUnitFormat>ms</DefaultUnitFormat>
+              </TimeSpan>
+              <DateTime>
+                <Seconds>0</Seconds>
+                <Minutes>0</Minutes>
+                <Hours>0</Hours>
+              </DateTime>
+              <Interval>0</Interval>
+              <MarkerDescription></MarkerDescription>
+            </Manual>
+          </StopMode>
+          <PauseBeginMode>
+            <Manual>
+              <DigitalIn>None</DigitalIn>
+              <DigitalOut>None</DigitalOut>
+              <TimeSpan>
+                <Value>0.001</Value>
+                <DefaultUnitFormat>ms</DefaultUnitFormat>
+              </TimeSpan>
+              <DateTime>
+                <Seconds>0</Seconds>
+                <Minutes>0</Minutes>
+                <Hours>0</Hours>
+              </DateTime>
+              <Interval>0</Interval>
+              <MarkerDescription></MarkerDescription>
+            </Manual>
+          </PauseBeginMode>
+          <PauseEndMode>
+            <Manual>
+              <DigitalIn>None</DigitalIn>
+              <DigitalOut>None</DigitalOut>
+              <TimeSpan>
+                <Value>0.001</Value>
+                <DefaultUnitFormat>ms</DefaultUnitFormat>
+              </TimeSpan>
+              <DateTime>
+                <Seconds>0</Seconds>
+                <Minutes>0</Minutes>
+                <Hours>0</Hours>
+              </DateTime>
+              <Interval>0</Interval>
+              <MarkerDescription></MarkerDescription>
+            </Manual>
+          </PauseEndMode>
+          <StartNextTimeSliceMode>
+            <Manual>
+              <DigitalIn>None</DigitalIn>
+              <DigitalOut>None</DigitalOut>
+              <TimeSpan>
+                <Value>0.001</Value>
+                <DefaultUnitFormat>ms</DefaultUnitFormat>
+              </TimeSpan>
+              <DateTime>
+                <Seconds>0</Seconds>
+                <Minutes>0</Minutes>
+                <Hours>0</Hours>
+              </DateTime>
+              <Interval>0</Interval>
+              <MarkerDescription></MarkerDescription>
+            </Manual>
+          </StartNextTimeSliceMode>
+          <TimeSeriesTriggerIntervalModeCollection />
+          <TimeSeriesTriggerMarkerModeCollection />
+          <SwitchCollection />
+          <SetupExtensions />
+          <SubDimensionSetups>
+            <MultiTrackSetup IsActivated="true">
+              <IsTIRFAngleSynchronized>true</IsTIRFAngleSynchronized>
+              <ImagingDepth>0</ImagingDepth>
+              <Track IsActivated="true" IsSelected="true">
+                <DetectionModeSetup>
+                  <Zeiss.Micro.Acquisition.WfTrackDetectionMode />
+                </DetectionModeSetup>
+                <BeforeHardwareSetting>Before [fluo4]</BeforeHardwareSetting>
+                <AfterHardwareSetting>After [fluo4]</AfterHardwareSetting>
+                <TrackName></TrackName>
+                <Channels>
+                  <Channel IsActivated="true" IsSelected="true" ChannelSetupId="635073306018744739" Name="Fluo-4" Description="">
+                    <Color>#FF00FF34</Color>
+                    <PixelShiftX>0</PixelShiftX>
+                    <PixelShiftY>0</PixelShiftY>
+                    <TemplateName>Jurakt_Detection</TemplateName>
+                    <Gamma>0.79999999999999982</Gamma>
+                    <Low>0.00085692759973219127</Low>
+                    <High>0.0091554131380178535</High>
+                    <LowerBestFit>2</LowerBestFit>
+                    <UpperBestFit>0.01</UpperBestFit>
+                    <UseDisplayValues>true</UseDisplayValues>
+                    <BitCountRange>16</BitCountRange>
+                    <PixelType>Gray8</PixelType>
+                    <IsAutoApplyEnabled>false</IsAutoApplyEnabled>
+                    <AutoApplyMode>BestFit</AutoApplyMode>
+                    <DataGrabberSetup>
+                      <CameraFrameSetup Id="MTBCamera_MTBCameraPortChanger_Internal.TestCam">
+                        <ShadingReference IsActivated="true">false</ShadingReference>
+                        <ShadingReferenceSource IsActivated="true">1</ShadingReferenceSource>
+                        <ExposureTime IsActivated="true">8.5</ExposureTime>
+                        <Adjust IsActivated="true">1</Adjust>
+                        <AutoExposure IsActivated="true">false</AutoExposure>
+                        <EMGain IsActivated="true">50</EMGain>
+                      </CameraFrameSetup>
+                    </DataGrabberSetup>
+                    <FluorescenceDye>
+                      <Name>fluo-4</Name>
+                      <ShortName>fluo4</ShortName>
+                      <Description></Description>
+                      <IlluminationType>Fluorescence</IlluminationType>
+                      <ContrastMethods>ReflectedLightFluorescence</ContrastMethods>
+                      <ContrastTypes>Unknown</ContrastTypes>
+                      <Color>#FF00FF34</Color>
+                      <dye_id>McNamara-Boswell-0163</dye_id>
+                      <collection_id>66071726-cbd4-4c41-b371-0a6eee4ae9c5</collection_id>
+                    </FluorescenceDye>
+                  </Channel>
+                </Channels>
+                <IsExtendedSetupModificationWarningShown>false</IsExtendedSetupModificationWarningShown>
+                <ZStackMode>Yes</ZStackMode>
+                <UseZStackCenter>true</UseZStackCenter>
+                <ZStackSliceIndex>1</ZStackSliceIndex>
+                <IsDisabledForApoTome>false</IsDisabledForApoTome>
+                <FocusOffset>0</FocusOffset>
+                <DirectDevice>Standard</DirectDevice>
+              </Track>
+              <SubDimensionSetups />
+            </MultiTrackSetup>
+          </SubDimensionSetups>
+        </TimeSeriesSetup>
+        <ApoTomeAcquisitionSetup IsActivated="false">
+          <PhaseCount>0</PhaseCount>
+          <IsOnlineProcessing>false</IsOnlineProcessing>
+          <SubDimensionSetups />
+        </ApoTomeAcquisitionSetup>
+        <PanoramaSetup IsActivated="false">
+          <SubDimensionSetups />
+        </PanoramaSetup>
+        <RegionsSetup IsActivated="false">
+          <SampleHolder>
+            <Overlap>0.1</Overlap>
+            <ScanMode>Comb</ScanMode>
+            <PositionedRegionsScanMode>FirstYThenX</PositionedRegionsScanMode>
+            <TemplateShapesScanMode>Comb</TemplateShapesScanMode>
+            <IsConstantTiles>false</IsConstantTiles>
+            <TileRegionAnchorMode>Center</TileRegionAnchorMode>
+            <StageReferencePoint>0,0</StageReferencePoint>
+            <UseStageBacklashCorrection>false</UseStageBacklashCorrection>
+            <UseFocusBacklashCorrection>false</UseFocusBacklashCorrection>
+            <IsOptimizedPositionedRegionsSorting>true</IsOptimizedPositionedRegionsSorting>
+            <IsOptimizedTemplateShapesSorting>true</IsOptimizedTemplateShapesSorting>
+            <UseStageContinualSpeed>false</UseStageContinualSpeed>
+            <StageContinualSpeed>1</StageContinualSpeed>
+            <UseStageContinualAcceleration>false</UseStageContinualAcceleration>
+            <StageContinualAcceleration>1</StageContinualAcceleration>
+            <MoveToLoadPositionBetweenRegions>false</MoveToLoadPositionBetweenRegions>
+            <MoveToLoadPositionBetweenShapes>false</MoveToLoadPositionBetweenShapes>
+            <SplitScenesInSeparateFiles>false</SplitScenesInSeparateFiles>
+            <TileRegionCoveringMode>AlignedToLocalTileRegion</TileRegionCoveringMode>
+            <TemplateShapesFillMode>FillGrade</TemplateShapesFillMode>
+            <TemplateShapesFillGrade>1</TemplateShapesFillGrade>
+            <TemplateShapesFillWidth>10</TemplateShapesFillWidth>
+            <TemplateShapesFillHeight>10</TemplateShapesFillHeight>
+            <IsOnlineStitchingEnabled>false</IsOnlineStitchingEnabled>
+            <IsOnlinePyramidEnabled>true</IsOnlinePyramidEnabled>
+            <GlobalInterpolationExpansionDegree>1</GlobalInterpolationExpansionDegree>
+            <LocalInterpolationExpansionDegree>1</LocalInterpolationExpansionDegree>
+            <IsFocusSurfaceOutlierRemovingEnabled>true</IsFocusSurfaceOutlierRemovingEnabled>
+            <FocusSurfaceOutlierExpansionDegree>0</FocusSurfaceOutlierExpansionDegree>
+            <FocusSurfaceOutlierThresholdSigma>1</FocusSurfaceOutlierThresholdSigma>
+            <UseDefaultSurfaceFit>true</UseDefaultSurfaceFit>
+            <UsedSurfaceFitTypeName></UsedSurfaceFitTypeName>
+            <DelayAfterStageMove>0</DelayAfterStageMove>
+            <OnlineStitchingParameter>
+              <UseFocusReferenceChannel>true</UseFocusReferenceChannel>
+              <ReferenceChannelId>0</ReferenceChannelId>
+            </OnlineStitchingParameter>
+            <AllowedScanArea IsActivated="false">
+              <ContourType>Rectangle</ContourType>
+              <Center>0,0</Center>
+              <Size>0,0</Size>
+            </AllowedScanArea>
+            <TileRegions />
+            <SingleTileRegions />
+            <SingleTileRegionArrays />
+            <Template Name="Multiwell 96">
+              <AnchorPoint>-9900,-2750</AnchorPoint>
+              <BoundsSize>127800,85500</BoundsSize>
+              <Category>Multiwell</Category>
+              <HasRegularShapes>true</HasRegularShapes>
+              <ReferencePoint>0,0</ReferencePoint>
+              <ReferencePointLocationMode>TopLeft</ReferencePointLocationMode>
+              <ShapeType>Ellipse</ShapeType>
+              <ShapeColumns>12</ShapeColumns>
+              <ShapeRows>8</ShapeRows>
+              <ShapeWidth>6600</ShapeWidth>
+              <ShapeHeight>6600</ShapeHeight>
+              <ShapeDistanceX>9000</ShapeDistanceX>
+              <ShapeDistanceY>9000</ShapeDistanceY>
+              <OriginalShapeWidth>6600</OriginalShapeWidth>
+              <OriginalShapeHeight>6600</OriginalShapeHeight>
+              <OriginalShapeDistanceX>9000</OriginalShapeDistanceX>
+              <OriginalShapeDistanceY>9000</OriginalShapeDistanceY>
+              <AreShapesCenteredX>true</AreShapesCenteredX>
+              <AreShapesCenteredY>true</AreShapesCenteredY>
+              <ShapesDistanceToBorderX>0</ShapesDistanceToBorderX>
+              <ShapesDistanceToBorderY>0</ShapesDistanceToBorderY>
+              <Rotation>0</Rotation>
+              <ImmersionPoint>63900,42750</ImmersionPoint>
+              <BottomMaterial>Glass</BottomMaterial>
+              <BottomThickness>170</BottomThickness>
+              <BottomOffset>1500</BottomOffset>
+              <BottomOffsetMeasured>NaN</BottomOffsetMeasured>
+              <BottomRefractiveIndex>1.52</BottomRefractiveIndex>
+              <InsertType>Default</InsertType>
+              <PartOfInsertName></PartOfInsertName>
+              <BottomColor>Unknown</BottomColor>
+              <UsageHints></UsageHints>
+              <BottomDetectionShape>D6</BottomDetectionShape>
+              <SupportPoints />
+            </Template>
+          </SampleHolder>
+          <SubDimensionSetups />
+        </RegionsSetup>
+        <TilesSetup IsActivated="false">
+          <SubDimensionSetups />
+        </TilesSetup>
+        <ZStackSetup IsActivated="false">
+          <IsCenterMode>false</IsCenterMode>
+          <IsIntervalKept>true</IsIntervalKept>
+          <Offset>0</Offset>
+          <RefractiveIndexCorrection>1</RefractiveIndexCorrection>
+          <UseFocusBacklashCorrection>false</UseFocusBacklashCorrection>
+          <DelayAfterFocusMove>0</DelayAfterFocusMove>
+          <EnforceOptimalZDistance>false</EnforceOptimalZDistance>
+          <First>
+            <Distance>
+              <Value>-2E-06</Value>
+              <DefaultUnitFormat>um</DefaultUnitFormat>
+            </Distance>
+          </First>
+          <Last>
+            <Distance>
+              <Value>2E-06</Value>
+              <DefaultUnitFormat>um</DefaultUnitFormat>
+            </Distance>
+          </Last>
+          <Interval>
+            <Distance>
+              <Value>1E-06</Value>
+              <DefaultUnitFormat>um</DefaultUnitFormat>
+            </Distance>
+          </Interval>
+          <SetupExtensions />
+          <SubDimensionSetups />
+        </ZStackSetup>
+        <HalfPupilSetup IsActivated="false">
+          <IsContainerAdaptionEnabled>true</IsContainerAdaptionEnabled>
+          <StartAngle>0</StartAngle>
+          <SubDimensionSetups />
+        </HalfPupilSetup>
+        <LiveSetup IsActivated="false">
+          <SubDimensionSetups />
+        </LiveSetup>
+        <CorrelativeSetup IsActivated="false">
+          <HolderDocument>
+            <Image />
+            <Delta1To2>
+              <X>0</X>
+              <Y>0</Y>
+            </Delta1To2>
+            <Delta2To3>
+              <X>0</X>
+              <Y>0</Y>
+            </Delta2To3>
+            <HolderName></HolderName>
+            <IsReadOnly>false</IsReadOnly>
+            <Calibration>
+              <Marker1>
+                <X>NaN</X>
+                <Y>NaN</Y>
+                <Z>NaN</Z>
+              </Marker1>
+              <Marker2>
+                <X>NaN</X>
+                <Y>NaN</Y>
+                <Z>NaN</Z>
+              </Marker2>
+              <Marker3>
+                <X>NaN</X>
+                <Y>NaN</Y>
+                <Z>NaN</Z>
+              </Marker3>
+              <StageRotation>NaN</StageRotation>
+              <CorrectedMarkerDeltas>
+                <Delta1To2>
+                  <X>NaN</X>
+                  <Y>NaN</Y>
+                </Delta1To2>
+                <Delta2To3>
+                  <X>NaN</X>
+                  <Y>NaN</Y>
+                </Delta2To3>
+              </CorrectedMarkerDeltas>
+            </Calibration>
+            <IsHolderEnabled>true</IsHolderEnabled>
+            <HolderNumber />
+          </HolderDocument>
+          <SubDimensionSetups />
+        </CorrelativeSetup>
+        <VitroLivePixelSourceSetup IsActivated="false">
+          <SubDimensionSetups />
+          <SingleSnap>false</SingleSnap>
+          <Mode>Widefield</Mode>
+          <IntensityUV>0</IntensityUV>
+          <IntensityRGB>0</IntensityRGB>
+          <KickAutoAdjustIntensity>false</KickAutoAdjustIntensity>
+        </VitroLivePixelSourceSetup>
+        <VitroPixelSourceSetup IsActivated="false">
+          <SubDimensionSetups />
+          <Mode>FromCalibration</Mode>
+          <ImageType>Topography</ImageType>
+          <ContinuousPositioningZ>true</ContinuousPositioningZ>
+          <IntensityUV>0</IntensityUV>
+          <IntensityRGB>0</IntensityRGB>
+          <EnableHDR>false</EnableHDR>
+          <PlaneResolution>1</PlaneResolution>
+          <SendProgress>true</SendProgress>
+        </VitroPixelSourceSetup>
+      </SubDimensionSetups>
+      <HelperSetups>
+        <AcquisitionModeSetup IsActivated="true">
+          <SelectedDetector>MTBCamera_MTBCameraPortChanger_Internal.TestCam</SelectedDetector>
+          <Detectors>
+            <Camera Id="MTBCamera_MTBCSU_Left.TestCam">
+              <ApplyCameraProfile Status="Valid">false</ApplyCameraProfile>
+              <ApplyImageOrientation Status="Valid">true</ApplyImageOrientation>
+              <CameraBias Status="Valid">32</CameraBias>
+              <ExposureTime Status="Valid">20</ExposureTime>
+              <Frame Status="Valid">0,0,256,256</Frame>
+              <ImageOrientation Status="Valid">0</ImageOrientation>
+              <Adjust Status="Valid">1</Adjust>
+              <AdjustFrameRate Status="Valid">false</AdjustFrameRate>
+              <AutoExposure Status="Valid">false</AutoExposure>
+              <AutoExposureFrame Status="Valid">Empty</AutoExposureFrame>
+              <Binning Status="Valid">1,1</Binning>
+              <DualCameraCalibration Status="Valid">false</DualCameraCalibration>
+              <DualCameraCalibrationId Status="Valid"></DualCameraCalibrationId>
+              <ExposureDelay Status="Valid">0</ExposureDelay>
+              <FrameRateTarget Status="Valid">30</FrameRateTarget>
+              <NoiseFilter Status="Valid">false</NoiseFilter>
+              <NoiseFilterThreshold Status="Valid">1.5</NoiseFilterThreshold>
+              <SnapMode Status="Valid">0</SnapMode>
+              <UnsharpMask Status="Valid">false</UnsharpMask>
+              <UnsharpMaskState Status="Valid"></UnsharpMaskState>
+              <HDRBits Status="Valid">2</HDRBits>
+              <ImageCount Status="Valid">3</ImageCount>
+              <CameraProfile Status="Valid">*srgb</CameraProfile>
+              <DeliverReferenceData Status="Valid"></DeliverReferenceData>
+              <DisplayCurrentImage Status="Valid"></DisplayCurrentImage>
+              <LogCameraEvents Status="Valid"></LogCameraEvents>
+              <CameraBitDepth Status="Valid">8</CameraBitDepth>
+              <ImagePath Status="Valid">C:\Users\M1SRH\Documents\Testdata_Zeiss\Jurkat Detection\SingleTIFF</ImagePath>
+              <ImageMode Status="Valid">3</ImageMode>
+              <PerformFunction Status="Valid">0</PerformFunction>
+              <UnitTestCamera Status="Valid"></UnitTestCamera>
+              <UnitTestIndex Status="Valid">0</UnitTestIndex>
+              <TestImageMode Status="Valid">0</TestImageMode>
+              <Resolution Status="Valid">0</Resolution>
+              <SimulateExposure Status="Valid"></SimulateExposure>
+              <ColorMode Status="Valid">1</ColorMode>
+            </Camera>
+            <Camera Id="MTBCamera_MTBCSU_Top.TestCam">
+              <ApplyCameraProfile Status="Valid">false</ApplyCameraProfile>
+              <ApplyImageOrientation Status="Valid">true</ApplyImageOrientation>
+              <CameraBias Status="Valid">32</CameraBias>
+              <ExposureTime Status="Valid">20</ExposureTime>
+              <Frame Status="Valid">0,0,692,520</Frame>
+              <ImageOrientation Status="Valid">0</ImageOrientation>
+              <Adjust Status="Valid">1</Adjust>
+              <AdjustFrameRate Status="Valid">true</AdjustFrameRate>
+              <AutoExposure Status="Valid">false</AutoExposure>
+              <AutoExposureFrame Status="Valid">Empty</AutoExposureFrame>
+              <Binning Status="Valid">1,1</Binning>
+              <DualCameraCalibration Status="Valid">false</DualCameraCalibration>
+              <DualCameraCalibrationId Status="Valid">None</DualCameraCalibrationId>
+              <ExposureDelay Status="Valid">33.333333333333</ExposureDelay>
+              <FrameRateTarget Status="Valid">30</FrameRateTarget>
+              <NoiseFilter Status="Valid">false</NoiseFilter>
+              <NoiseFilterThreshold Status="Valid">1.5</NoiseFilterThreshold>
+              <SnapMode Status="Valid">0</SnapMode>
+              <UnsharpMask Status="Valid">false</UnsharpMask>
+              <UnsharpMaskState Status="Valid">
+                <UnsharpMask>
+                  <ColorMode>0</ColorMode>
+                  <AutoContrastMode>0</AutoContrastMode>
+                  <ThresholdMode>1</ThresholdMode>
+                  <Strength>1</Strength>
+                  <Radius>2</Radius>
+                  <LowThreshold>0</LowThreshold>
+                  <HighThreshold>100</HighThreshold>
+                  <AutoContrastTolerance>1</AutoContrastTolerance>
+                  <ClipToValidBits>true</ClipToValidBits>
+                  <PerformInPlace>false</PerformInPlace>
+                </UnsharpMask>
+              </UnsharpMaskState>
+              <HDRBits Status="Valid">2</HDRBits>
+              <ImageCount Status="Valid">3</ImageCount>
+              <CameraProfile Status="Valid">*srgb</CameraProfile>
+              <DeliverReferenceData Status="Valid">false</DeliverReferenceData>
+              <DisplayCurrentImage Status="Valid">false</DisplayCurrentImage>
+              <LogCameraEvents Status="Valid">false</LogCameraEvents>
+              <CameraBitDepth Status="Valid">16</CameraBitDepth>
+              <ImagePath Status="Valid">C:\Users\M1SRH\Documents\Testdata_Zeiss\Jurkat_Detection\SingleTIFF-2</ImagePath>
+              <ImageMode Status="Valid">0</ImageMode>
+              <PerformFunction Status="Valid">0</PerformFunction>
+              <UnitTestCamera Status="Valid"></UnitTestCamera>
+              <UnitTestIndex Status="Valid">0</UnitTestIndex>
+              <TestImageMode Status="Valid">0</TestImageMode>
+              <Resolution Status="Valid">0</Resolution>
+              <SimulateExposure Status="Valid">false</SimulateExposure>
+            </Camera>
+            <Camera Id="MTBCamera_MTBSideportChanger_Left.TestCam">
+              <ApplyCameraProfile Status="Valid">false</ApplyCameraProfile>
+              <ApplyImageOrientation Status="Valid">true</ApplyImageOrientation>
+              <CameraBias Status="Valid">32</CameraBias>
+              <ExposureTime Status="Valid">20</ExposureTime>
+              <Frame Status="Valid">0,0,692,520</Frame>
+              <ImageOrientation Status="Valid">0</ImageOrientation>
+              <ImageDeliveryBufferCount Status="Valid">4</ImageDeliveryBufferCount>
+              <Adjust Status="Valid">1</Adjust>
+              <AdjustFrameRate Status="Valid">true</AdjustFrameRate>
+              <AutoExposure Status="Valid">false</AutoExposure>
+              <AutoExposureFrame Status="Valid">Empty</AutoExposureFrame>
+              <Binning Status="Valid">1,1</Binning>
+              <DualCameraCalibration Status="Valid">false</DualCameraCalibration>
+              <DualCameraCalibrationId Status="Valid">None</DualCameraCalibrationId>
+              <ExposureDelay Status="Valid">32.883307169022</ExposureDelay>
+              <FrameRateTarget Status="Valid">30</FrameRateTarget>
+              <LiveMode Status="Valid">0</LiveMode>
+              <NoiseFilter Status="Valid">false</NoiseFilter>
+              <NoiseFilterThreshold Status="Valid">1.5</NoiseFilterThreshold>
+              <ShadingStrength Status="Valid">1</ShadingStrength>
+              <ShadingUseBias Status="Valid">true</ShadingUseBias>
+              <SnapMode Status="Valid">0</SnapMode>
+              <UnsharpMask Status="Valid">false</UnsharpMask>
+              <UnsharpMaskState Status="Valid">
+                <UnsharpMask>
+                  <ColorMode>0</ColorMode>
+                  <AutoContrastMode>0</AutoContrastMode>
+                  <ThresholdMode>1</ThresholdMode>
+                  <Strength>1</Strength>
+                  <Radius>2</Radius>
+                  <LowThreshold>0</LowThreshold>
+                  <HighThreshold>100</HighThreshold>
+                  <AutoContrastTolerance>1</AutoContrastTolerance>
+                  <ClipToValidBits>true</ClipToValidBits>
+                  <PerformInPlace>false</PerformInPlace>
+                </UnsharpMask>
+              </UnsharpMaskState>
+              <HDRBits Status="Valid">2</HDRBits>
+              <ImageCount Status="Valid">3</ImageCount>
+              <ContinuousAcquisitionMode Status="Valid">0</ContinuousAcquisitionMode>
+              <SequenceCount Status="Valid">1</SequenceCount>
+              <SequenceProgress Status="Valid">true</SequenceProgress>
+              <CameraProfile Status="Valid">*srgb</CameraProfile>
+              <DeliverReferenceData Status="Valid">false</DeliverReferenceData>
+              <DisplayCurrentImage Status="Valid">false</DisplayCurrentImage>
+              <LogCameraEvents Status="Valid">false</LogCameraEvents>
+              <CameraBitDepth Status="Valid">10</CameraBitDepth>
+              <ImagePath Status="Valid">C:\TFS\Doc\3-ZIS\3-Development\Discussions\ExperimentFeedback\Release_DVD\CCD_Testimages_Folder\Jurkat_Activation_Detection</ImagePath>
+              <ImageMode Status="Valid">0</ImageMode>
+              <PerformFunction Status="Valid">0</PerformFunction>
+              <UnitTestCamera Status="Valid"></UnitTestCamera>
+              <UnitTestIndex Status="Valid">0</UnitTestIndex>
+              <TestImageMode Status="Valid">0</TestImageMode>
+              <Resolution Status="Valid">0</Resolution>
+              <SimulateExposure Status="Valid">false</SimulateExposure>
+              <UseDecoder Status="Valid">true</UseDecoder>
+              <LogEvents Status="Valid">false</LogEvents>
+              <VariBits Status="Valid">8</VariBits>
+              <AutomaticTriggerControl Status="Valid">true</AutomaticTriggerControl>
+              <ShadingReference Status="Valid">false</ShadingReference>
+              <ImageByteSize Status="Valid">719680</ImageByteSize>
+              <LiveImageByteSize Status="Valid">719680</LiveImageByteSize>
+              <ImageFrame Status="Valid">0,0,692,520</ImageFrame>
+              <LiveImageFrame Status="Valid">0,0,692,520</LiveImageFrame>
+              <CameraPixelAccuracy Status="Valid">0.0009765625</CameraPixelAccuracy>
+              <CameraPixelType Status="Valid">Gray16</CameraPixelType>
+              <ImagePixelAccuracy Status="Valid">0.0009765625</ImagePixelAccuracy>
+              <ImagePixelType Status="Valid">Gray16</ImagePixelType>
+              <LiveImagePixelType Status="Valid">Gray16</LiveImagePixelType>
+              <CameraPixelMaximum Status="Valid">1023</CameraPixelMaximum>
+              <LiveValidBits Status="Valid">10</LiveValidBits>
+              <ValidBits Status="Valid">10</ValidBits>
+              <LiveImagePixelAccuracy Status="Valid">0.0009765625</LiveImagePixelAccuracy>
+              <FrameRate Status="Valid">17.9</FrameRate>
+              <ColorMode Status="Valid">0</ColorMode>
+            </Camera>
+            <Camera Id="MTBCamera_MTBCameraPortChanger_Internal.TestCam">
+              <CameraDisplayName Status="Valid">Internal</CameraDisplayName>
+              <ApplyCameraProfile Status="Valid">true</ApplyCameraProfile>
+              <ApplyImageOrientation Status="Valid">true</ApplyImageOrientation>
+              <CameraBias Status="Valid">0</CameraBias>
+              <ExposureTime Status="Valid">20</ExposureTime>
+              <Frame Status="Valid">0,0,692,520</Frame>
+              <ImageOrientation Status="Valid">0</ImageOrientation>
+              <ImageDeliveryBufferCount Status="Valid">4</ImageDeliveryBufferCount>
+              <Adjust Status="Valid">1</Adjust>
+              <AdjustFrameRate Status="Valid">true</AdjustFrameRate>
+              <AutoExposure Status="Valid">false</AutoExposure>
+              <AutoExposureFrame Status="Valid">Empty</AutoExposureFrame>
+              <Binning Status="Valid">1,1</Binning>
+              <BinningList Status="Valid">0</BinningList>
+              <BlackReference Status="Valid">false</BlackReference>
+              <DualCameraCalibration Status="Valid">false</DualCameraCalibration>
+              <DualCameraCalibrationId Status="Valid">None</DualCameraCalibrationId>
+              <ExposureDelay Status="Valid">0</ExposureDelay>
+              <FrameRateTarget Status="Valid">4</FrameRateTarget>
+              <LiveMode Status="Valid">0</LiveMode>
+              <NoiseFilter Status="Valid">false</NoiseFilter>
+              <NoiseFilterThreshold Status="Valid">1.5</NoiseFilterThreshold>
+              <ShadingReference Status="Valid">false</ShadingReference>
+              <ShadingReferenceSource Status="Valid">1</ShadingReferenceSource>
+              <ShadingReferenceSourceVisibility Status="Valid">true</ShadingReferenceSourceVisibility>
+              <ShadingStrength Status="Valid">1</ShadingStrength>
+              <ShadingUseBias Status="Valid">true</ShadingUseBias>
+              <SnapMode Status="Valid">0</SnapMode>
+              <UnsharpMask Status="Valid">false</UnsharpMask>
+              <UnsharpMaskState Status="Valid"></UnsharpMaskState>
+              <AdaptExposureByBinningChange Status="Valid">false</AdaptExposureByBinningChange>
+              <AsynchronousImageDelivery Status="Valid"></AsynchronousImageDelivery>
+              <HDRBits Status="Valid">2</HDRBits>
+              <ImageCount Status="Valid">3</ImageCount>
+              <ContinuousAcquisitionMode Status="Valid">0</ContinuousAcquisitionMode>
+              <SequenceCount Status="Valid">0</SequenceCount>
+              <SequenceProgress Status="Valid">true</SequenceProgress>
+              <AcquisitionFrame Status="Valid">0,0,692,520</AcquisitionFrame>
+              <UserCameraOrientation Status="Valid">0</UserCameraOrientation>
+              <CameraProfile Status="Valid">*srgb</CameraProfile>
+              <DeliverReferenceData Status="Valid"></DeliverReferenceData>
+              <DisplayCurrentImage Status="Valid"></DisplayCurrentImage>
+              <LogCameraEvents Status="Valid"></LogCameraEvents>
+              <EMGain Status="Valid">50</EMGain>
+              <ExperimentalImageFile Status="Valid"></ExperimentalImageFile>
+              <CameraBitDepth Status="Valid">10</CameraBitDepth>
+              <HardwareImagePlugIn Status="Valid">Zeiss.Micro.Cameras.TestCam.TestCamDriver</HardwareImagePlugIn>
+              <ImagePath Status="Valid">C:\TFS\Doc\3-ZIS\3-Development\Discussions\ExpFeedback\DVD_2_5\Testimages\Jurkat_Activation_Detection</ImagePath>
+              <ImageMode Status="Valid">0</ImageMode>
+              <LampIntensity Status="Valid">0</LampIntensity>
+              <LiveSpeed Status="Valid">0</LiveSpeed>
+              <PerformFunction Status="Valid">0</PerformFunction>
+              <StagePosition Status="Valid"></StagePosition>
+              <UnitTestCamera Status="Valid"></UnitTestCamera>
+              <UnitTestIndex Status="Valid">0</UnitTestIndex>
+              <TestImageMode Status="Valid">0</TestImageMode>
+              <Resolution Status="Valid">0</Resolution>
+              <ModifyLiveImage Status="Valid"></ModifyLiveImage>
+              <SimulateExposure Status="Valid">true</SimulateExposure>
+              <TotalMagnification Status="Valid">1</TotalMagnification>
+              <UseDecoder Status="Valid"></UseDecoder>
+              <UseBasicCameraContinuousAcquisition Status="Valid"></UseBasicCameraContinuousAcquisition>
+              <SaveSnap Status="Valid"></SaveSnap>
+            </Camera>
+          </Detectors>
+          <Devices />
+          <MixedMode>
+            <DisparityWarpingActivated>false</DisparityWarpingActivated>
+            <DisparityMapFile></DisparityMapFile>
+            <DoAutoScalingSynchronization>false</DoAutoScalingSynchronization>
+            <SelectedScalingMaster>LSM</SelectedScalingMaster>
+          </MixedMode>
+        </AcquisitionModeSetup>
+        <FocusSetup IsActivated="true">
+          <RepetitionSettingsMode>Standard</RepetitionSettingsMode>
+          <FocusStrategy IsActivated="true">
+            <StrategyMode>None</StrategyMode>
+            <ReferenceChannelId>635073306018744739</ReferenceChannelId>
+            <FixedZPosition>0</FixedZPosition>
+            <UseZPositionFromTilesSetup>false</UseZPositionFromTilesSetup>
+            <ExecutionInTileRegionMode>CenterOfRegion</ExecutionInTileRegionMode>
+            <SupportPointsMode>FixedZPosition</SupportPointsMode>
+            <FocusZStackMode>FixedZ</FocusZStackMode>
+            <WaitPositionMode>CenterOfFirstRegion</WaitPositionMode>
+            <WaitPositionX>0</WaitPositionX>
+            <WaitPositionY>0</WaitPositionY>
+            <WaitPositionZ>0</WaitPositionZ>
+            <IsUpdatePositionedRegionsToClientEnabled>false</IsUpdatePositionedRegionsToClientEnabled>
+            <PositionedRegionsUpdateMode>CumulatedPositions</PositionedRegionsUpdateMode>
+            <BreakAfterSupportPointsDetermination>false</BreakAfterSupportPointsDetermination>
+            <ErrorNotificationHints>None</ErrorNotificationHints>
+            <AdditionalSupportPointOffset>0</AdditionalSupportPointOffset>
+            <TimeSeriesIntervalInfo>
+              <IsActivated>false</IsActivated>
+              <IsMainIntervalEnabled>true</IsMainIntervalEnabled>
+              <IsSubIntervalEnabled>false</IsSubIntervalEnabled>
+              <MainInterval>1</MainInterval>
+              <SubInterval>1</SubInterval>
+            </TimeSeriesIntervalInfo>
+            <RegionsIntervalInfo>
+              <IsActivated>false</IsActivated>
+              <IsMainIntervalEnabled>true</IsMainIntervalEnabled>
+              <IsSubIntervalEnabled>false</IsSubIntervalEnabled>
+              <MainInterval>1</MainInterval>
+              <SubInterval>1</SubInterval>
+            </RegionsIntervalInfo>
+            <TilesIntervalInfo>
+              <IsActivated>false</IsActivated>
+              <IsMainIntervalEnabled>true</IsMainIntervalEnabled>
+              <IsSubIntervalEnabled>false</IsSubIntervalEnabled>
+              <MainInterval>1</MainInterval>
+              <SubInterval>1</SubInterval>
+            </TilesIntervalInfo>
+            <HardwareAutofocusOptions>
+              <IsSupportedBySoftwareAutofocus>false</IsSupportedBySoftwareAutofocus>
+            </HardwareAutofocusOptions>
+            <HardwareAutofocusSupportPointsModeOptions>
+              <IsSupportedBySoftwareAutofocus>false</IsSupportedBySoftwareAutofocus>
+            </HardwareAutofocusSupportPointsModeOptions>
+          </FocusStrategy>
+          <Autofocus Id="Autofocus">
+            <AutofocusStrategyMode Status="Valid">Software</AutofocusStrategyMode>
+            <AutofocusSignalQualityThreshold Status="Valid">50</AutofocusSignalQualityThreshold>
+          </Autofocus>
+          <HardwareAutofocus Id="MTBAutoFocus">
+            <Period>0</Period>
+            <AutofocusMountingAngle>0</AutofocusMountingAngle>
+            <AutofocusPositionOffset>0</AutofocusPositionOffset>
+            <AutofocusOperationMode>Exact</AutofocusOperationMode>
+            <AutofocusSpecimenType>Reflective</AutofocusSpecimenType>
+          </HardwareAutofocus>
+          <SoftwareAutofocus>
+            <ReflectionMode>Disabled</ReflectionMode>
+            <AutofocusRegion>
+              <X>0</X>
+              <Y>0</Y>
+              <DX>1</DX>
+              <DY>1</DY>
+            </AutofocusRegion>
+            <BacklashStepsize>2</BacklashStepsize>
+            <DepthOfFocus>5.96</DepthOfFocus>
+            <DoBleachingCorrection>true</DoBleachingCorrection>
+            <InitialDirection>1</InitialDirection>
+            <IsAutomaticRange>true</IsAutomaticRange>
+            <LowerLimit>100</LowerLimit>
+            <PredefinedStepsize>Optimal</PredefinedStepsize>
+            <SharpnessMeasureMethod>Auto</SharpnessMeasureMethod>
+            <RelativeSearchRange>238.4</RelativeSearchRange>
+            <SearchRangeType>Relative</SearchRangeType>
+            <SearchStrategy>Exhaustive</SearchStrategy>
+            <SharpnessMeasureSet Name="Best" Aggregator="RootMeanSquare">
+              <SharpnessMeasure DecisionWeight="1" ScoreType="HaarGradient">
+                <Parameters>
+                  <Parameter>1</Parameter>
+                </Parameters>
+              </SharpnessMeasure>
+              <SharpnessMeasure DecisionWeight="2" ScoreType="HaarGradient">
+                <Parameters>
+                  <Parameter>2</Parameter>
+                </Parameters>
+              </SharpnessMeasure>
+              <SharpnessMeasure DecisionWeight="3" ScoreType="HaarGradient">
+                <Parameters>
+                  <Parameter>3</Parameter>
+                </Parameters>
+              </SharpnessMeasure>
+            </SharpnessMeasureSet>
+            <UpperLimit>-100</UpperLimit>
+            <UseAcquisitionROI>true</UseAcquisitionROI>
+            <UseCameraParameters>false</UseCameraParameters>
+            <UseChannelInformation>true</UseChannelInformation>
+            <IsLiveAnalysisReportingEnabled>false</IsLiveAnalysisReportingEnabled>
+            <Extensions>
+              <Extension ID="urn:uuid:1c806154-7f22-40de-9433-c2c1fd85eb2d" Name="SoftwareAutofocusTweakParameters" />
+              <Extension ID="urn:uuid:e291569a-8562-4dd2-8f37-d0afa3e81a20" Name="LsmAutofocusParameters">
+                <ExecutePreSearch>Auto</ExecutePreSearch>
+              </Extension>
+              <Extension ID="urn:uuid:a5ce7d4f-d567-479c-a311-2b470a56b6a6" Name="GaussianFitAutofocusParameters">
+                <FactorGaussianFitStepSize>10</FactorGaussianFitStepSize>
+              </Extension>
+            </Extensions>
+          </SoftwareAutofocus>
+          <DefiniteFocus IsActivated="false">
+            <IsContinuousStabilizationEnabled>false</IsContinuousStabilizationEnabled>
+            <ContinuousStabilizationMode>Periodic</ContinuousStabilizationMode>
+            <Period>10</Period>
+            <OperationMode>Exact</OperationMode>
+            <IsPausedDuringAcquisition>true</IsPausedDuringAcquisition>
+            <SkipInitialization>false</SkipInitialization>
+            <DelayOnFirstTileInRegion>0</DelayOnFirstTileInRegion>
+          </DefiniteFocus>
+        </FocusSetup>
+        <BleachingSetup IsActivated="false">
+          <BleachSettingsName>not defined</BleachSettingsName>
+          <BleachSettingsType></BleachSettingsType>
+        </BleachingSetup>
+        <RatioSetup IsActivated="false">
+          <IsRatioImageGenerated>false</IsRatioImageGenerated>
+          <SelectedColorMode>Palette</SelectedColorMode>
+          <Color>#00FFFFFF</Color>
+          <PaletteName>rainbow</PaletteName>
+          <RatioDisplayMinimum>0</RatioDisplayMinimum>
+          <RatioDisplayMaximum>10</RatioDisplayMaximum>
+          <RatioMethod>SingleWavelength</RatioMethod>
+          <SelectedReferenceIdChannel1>0</SelectedReferenceIdChannel1>
+          <SelectedReferenceIdChannel2>0</SelectedReferenceIdChannel2>
+          <RatioBackgroundCorrection>None</RatioBackgroundCorrection>
+          <BackgroundCorrectionChannel1>0</BackgroundCorrectionChannel1>
+          <BackgroundCorrectionChannel2>0</BackgroundCorrectionChannel2>
+          <BackgroundCorrectionFaktor1>1</BackgroundCorrectionFaktor1>
+          <BackgroundCorrectionFaktor2>1</BackgroundCorrectionFaktor2>
+          <AverageFrame>5</AverageFrame>
+          <Multiplicator>1</Multiplicator>
+          <IsOptionalThreshold>false</IsOptionalThreshold>
+          <OptionalThresholdChannel1>0</OptionalThresholdChannel1>
+          <OptionalThresholdChannel2>0</OptionalThresholdChannel2>
+          <ThresholdChannelOrderId1>0</ThresholdChannelOrderId1>
+          <ThresholdChannelOrderId2>0</ThresholdChannelOrderId2>
+          <IsRatioClipping>true</IsRatioClipping>
+          <RatioClipping>10</RatioClipping>
+          <IsRatioCalculationEnabled>true</IsRatioCalculationEnabled>
+          <IsRatioReferenceImageDefined>true</IsRatioReferenceImageDefined>
+          <AverageStartFrame>1</AverageStartFrame>
+          <AverageEndFrame>1</AverageEndFrame>
+        </RatioSetup>
+        <LinkamRampSetup IsActivated="false">
+          <Rate>0</Rate>
+          <Limit>0</Limit>
+          <HoldTime>0</HoldTime>
+          <RampType>TimeSeries</RampType>
+        </LinkamRampSetup>
+        <TempSeriesSetup IsActivated="false">
+          <TemperatureStep>0</TemperatureStep>
+        </TempSeriesSetup>
+        <PipetteSetup IsActivated="false">
+          <Duration>0</Duration>
+          <IsManualMode>true</IsManualMode>
+          <SelectedRepeatUnit>s</SelectedRepeatUnit>
+          <MoveStageDown>false</MoveStageDown>
+          <IsPipetteEnabled>true</IsPipetteEnabled>
+          <PipetteCountLimit>-1</PipetteCountLimit>
+          <Containers />
+        </PipetteSetup>
+        <AutoImmersionSetup IsActivated="false">
+          <ImmersionTimeInterval>10</ImmersionTimeInterval>
+          <ImmersionTravelDistance>5</ImmersionTravelDistance>
+          <IsBubbleEliminationMovementEnabled>false</IsBubbleEliminationMovementEnabled>
+          <BubbleEliminationMovementTargetX>20000</BubbleEliminationMovementTargetX>
+          <BubbleEliminationMovementTargetY>20000</BubbleEliminationMovementTargetY>
+        </AutoImmersionSetup>
+        <DynamicsSetup IsActivated="false" GraphicScale="1" Id="636523948776323949">
+          <Appliances>
+            <MeasurementSettings />
+            <DisplaySetting>
+              <Channels />
+              <ToneMapping>
+                <Mode>None</Mode>
+                <EnhanceClipLimit>3</EnhanceClipLimit>
+                <EnhanceRegionSizePercentage>15</EnhanceRegionSizePercentage>
+              </ToneMapping>
+            </DisplaySetting>
+          </Appliances>
+        </DynamicsSetup>
+        <ExperimentRegionsSetup IsActivated="false">
+          <FitFrameSizeToRegions>false</FitFrameSizeToRegions>
+          <ImageCenterAsCoordinateReference>false</ImageCenterAsCoordinateReference>
+          <Regions />
+        </ExperimentRegionsSetup>
+        <VivaTome2AcquisitionSetup IsActivated="true">
+          <AcquisitionMode>OpticalSectioning</AcquisitionMode>
+          <IsShadingCorrection>true</IsShadingCorrection>
+          <IsNormalization>false</IsNormalization>
+          <Averaging>1</Averaging>
+          <Grid>Pattern1</Grid>
+          <AutomaticGridControl>false</AutomaticGridControl>
+          <IsOnlineProcessing>false</IsOnlineProcessing>
+        </VivaTome2AcquisitionSetup>
+        <AutoImmersionRemovalSetup IsActivated="true">
+          <ImmersionRemovePositionX>Infinity</ImmersionRemovePositionX>
+          <ImmersionRemovePositionY>Infinity</ImmersionRemovePositionY>
+        </AutoImmersionRemovalSetup>
+        <InvertImageSetup IsActivated="false">
+          <InvertImage>false</InvertImage>
+        </InvertImageSetup>
+        <ResetDetectorSetup IsActivated="false">
+          <ResetDetectorsInTilesExperiment>false</ResetDetectorsInTilesExperiment>
+        </ResetDetectorSetup>
+        <DisableBlankingSetup IsActivated="false" />
+        <ExperimentModifierRulesSetup IsActivated="false">
+          <Flags>
+            <RunMode></RunMode>
+          </Flags>
+        </ExperimentModifierRulesSetup>
+      </HelperSetups>
+    </AcquisitionBlock>
+  </ExperimentBlocks>
+  <HardwareSettingsPool>
+    <HardwareSetting Name="Before Exp [fluo4] Smart">
+      <ParameterCollection Id="MTBTLShutter">
+        <IsClosed IsActivated="true">true</IsClosed>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBHXP120Shutter">
+        <IsClosed IsActivated="true">true</IsClosed>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBRLShutter">
+        <IsClosed IsActivated="true">false</IsClosed>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBLED1">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBLED2">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBLED3">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBLED4">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine1">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine2">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine3">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine4">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBMDSController">
+        <IsBlanked IsActivated="true">true</IsBlanked>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBCSUShutter">
+        <IsClosed IsActivated="true">false</IsClosed>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF2LaserLine1">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF2LaserLine2">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF2LaserLine3">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF2LaserLine4">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+    </HardwareSetting>
+    <HardwareSetting Name="After Exp [fluo4] Smart">
+      <ParameterCollection Id="MTBTLShutter">
+        <IsClosed IsActivated="true">true</IsClosed>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBHXP120Shutter">
+        <IsClosed IsActivated="true">true</IsClosed>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBRLShutter">
+        <IsClosed IsActivated="true">false</IsClosed>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBLED1">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBLED2">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBLED3">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBLED4">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine1">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine2">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine3">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine4">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBMDSController">
+        <IsBlanked IsActivated="true">true</IsBlanked>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBCSUShutter">
+        <IsClosed IsActivated="true">false</IsClosed>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF2LaserLine1">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF2LaserLine2">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF2LaserLine3">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF2LaserLine4">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+    </HardwareSetting>
+    <HardwareSetting Name="Before [fluo4] Smart">
+      <ParameterCollection Id="MTBReflectorChanger">
+        <Position IsActivated="true">2</Position>
+        <PositionName IsActivated="true">Reflector.none</PositionName>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBSideportChanger">
+        <Position IsActivated="true">3</Position>
+        <PositionName IsActivated="true">Aquila.SideportElement_100%L</PositionName>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBCSUDichroicChanger">
+        <Position IsActivated="true">3</Position>
+        <PositionName IsActivated="true">YokogawaDichroic.447963-9000-000</PositionName>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBCSUShutter">
+        <IsClosed IsActivated="true">false</IsClosed>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBLaserModuleShutter">
+        <IsClosed IsActivated="true">false</IsClosed>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine2">
+        <IsEnabled IsActivated="true">true</IsEnabled>
+        <Intensity IsActivated="true">50</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBMDSController">
+        <IsBlanked IsActivated="true">false</IsBlanked>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBCSUPortSwitch">
+        <Position IsActivated="true">1</Position>
+        <PositionName IsActivated="true">YokogawaPortSwitchElement.446437-0011-000</PositionName>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBCSULeftEmissionFilterChanger">
+        <Position IsActivated="true">4</Position>
+        <PositionName IsActivated="true">YokogawaEmissionFilter.489038-8002-000</PositionName>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine1">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine3">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine4">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine5">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine6">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+    </HardwareSetting>
+    <HardwareSetting Name="After [fluo4] Smart">
+      <ParameterCollection Id="MTBAOTF1LaserLine2">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBMDSController">
+        <IsBlanked IsActivated="true">true</IsBlanked>
+      </ParameterCollection>
+    </HardwareSetting>
+    <HardwareSetting Name="Before [fluo4]">
+      <ParameterCollection Id="MTBReflectorChanger">
+        <Position IsActivated="true">2</Position>
+        <PositionName IsActivated="true">Reflector.none</PositionName>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBSideportChanger">
+        <Position IsActivated="true">3</Position>
+        <PositionName IsActivated="true">Aquila.SideportElement_100%L</PositionName>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBCSUDichroicChanger">
+        <Position IsActivated="true">3</Position>
+        <PositionName IsActivated="true">YokogawaDichroic.447963-9000-000</PositionName>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBCSUShutter">
+        <IsClosed IsActivated="true">false</IsClosed>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBLaserModuleShutter">
+        <IsClosed IsActivated="true">false</IsClosed>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine2">
+        <IsEnabled Status="Valid" IsActivated="true">true</IsEnabled>
+        <Intensity Status="Valid" IsActivated="true">50</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBMDSController">
+        <IsBlanked Status="Valid" IsActivated="true">false</IsBlanked>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBCSUPortSwitch">
+        <Position IsActivated="true">2</Position>
+        <PositionName IsActivated="true">YokogawaPortSwitchElement.446434-0011-000</PositionName>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBCSUTopEmissionFilterChanger">
+        <Position IsActivated="true">1</Position>
+        <PositionName IsActivated="true">YokogawaEmissionFilter.489046-8002-000</PositionName>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine1">
+        <IsEnabled Status="Valid" IsActivated="true">false</IsEnabled>
+        <Intensity Status="Valid" IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine3">
+        <IsEnabled Status="Valid" IsActivated="true">false</IsEnabled>
+        <Intensity Status="Valid" IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine4">
+        <IsEnabled Status="Valid" IsActivated="true">false</IsEnabled>
+        <Intensity Status="Valid" IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine5">
+        <IsEnabled Status="Valid" IsActivated="true">false</IsEnabled>
+        <Intensity Status="Valid" IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBAOTF1LaserLine6">
+        <IsEnabled Status="Valid" IsActivated="true">false</IsEnabled>
+        <Intensity Status="Valid" IsActivated="true">0</Intensity>
+      </ParameterCollection>
+    </HardwareSetting>
+    <HardwareSetting Name="After [fluo4]">
+      <ParameterCollection Id="MTBAOTF1LaserLine2">
+        <IsEnabled IsActivated="true">false</IsEnabled>
+        <Intensity IsActivated="true">0</Intensity>
+      </ParameterCollection>
+      <ParameterCollection Id="MTBMDSController">
+        <IsBlanked IsActivated="true">true</IsBlanked>
+      </ParameterCollection>
+    </HardwareSetting>
+  </HardwareSettingsPool>
+  <ExperimentFeedback IsActivated="true">
+    <IsSynchronous>true</IsSynchronous>
+    <IsSynchronousToAnalysis>true</IsSynchronousToAnalysis>
+    <IsSynchronousToFile>false</IsSynchronousToFile>
+    <AllowNonExperimentObservablesToTriggerScript>false</AllowNonExperimentObservablesToTriggerScript>
+    <DeadlockTimeout>10</DeadlockTimeout>
+    <PreScript>from System.Diagnostics import Process
+lastindex = 0
+cn_last = 0
+soundfile1 = r'C:\TFS\Doc\3-ZIS\3-Development\Discussions\ExpFeedback\DVD_2_5\SoundFiles\PsychoScream.wav'
+soundfile2 = r'C:\TFS\Doc\3-ZIS\3-Development\Discussions\ExpFeedback\DVD_2_5\SoundFiles\YEAH.WAV'</PreScript>
+    <LoopScript># get parameters
+frame = ZenService.Analysis.Cells.ImageIndexTime
+cn = ZenService.Analysis.Cells.RegionsCount
+
+# calculate the change of cell numbers
+delta = cn - cn_last
+
+# write to log file (optional)
+logfile = ZenService.Xtra.System.AppendLogLine(str(frame)+'\t'+str(cn)+'\t'+str(delta))
+cn_last = cn
+
+# check if the number of active cells has changed
+
+# if active cell number has increased, play soundfile 1
+if (delta &gt; 0):
+    ZenService.Xtra.System.PlaySound(soundfile2)
+
+# if actice cell number has decreased, play soundfile 2 
+elif (delta &lt; 0): 
+    ZenService.Xtra.System.PlaySound(soundfile1)
+</LoopScript>
+    <PostScript>ZenService.Xtra.System.ExecuteExternalProgram(r"C:\Program Files\Notepad++\notepad++.exe", logfile)
+
+filename = ZenService.Experiment.ImageFileName[:-4] + '_Log.txt'
+exeloc = 'python'
+script = r"C:\TFS\Doc\3-ZIS\3-Development\Discussions\ExpFeedback\DVD_2_5\Python_Scripts\display_jurkat.py"
+cmd = script + ' -f ' + filename
+
+# start Python
+app = Process();
+app.StartInfo.FileName = exeloc
+app.StartInfo.Arguments = cmd
+app.Start()
+
+
+</PostScript>
+    <IsWarningPopupShown>true</IsWarningPopupShown>
+    <AreDebugMessagesEnabled>true</AreDebugMessagesEnabled>
+    <AnalysisScript Name="EF_Jurkat_cells.czias">
+      <Version>1.1</Version>
+      <TilingMode>NoTiling</TilingMode>
+      <TileSize>0</TileSize>
+      <MaxParticleSize>0</MaxParticleSize>
+      <MaxDisplaySize>3500</MaxDisplaySize>
+      <HiliteColor>#FFFF0000</HiliteColor>
+      <HiliteLineWidth>1</HiliteLineWidth>
+      <Script Name="Builtin Multichannel">
+        <SegmenterSource>SegmenterBuiltinDefault</SegmenterSource>
+      </Script>
+      <SubImageDimension>C</SubImageDimension>
+      <RegionClass Name="Root" Id="0">
+        <Type>Or</Type>
+        <Color>#FFFFFFFF</Color>
+        <DrawWidth>1</DrawWidth>
+        <DrawColor>#FFFFFFFF</DrawColor>
+        <DrawColorEnabled>false</DrawColorEnabled>
+        <RegionClass Name="Cells" Id="1">
+          <Type>Collection</Type>
+          <ChannelName>Fluo-4</ChannelName>
+          <Color>#FFFF0000</Color>
+          <DrawWidth>1</DrawWidth>
+          <DrawColor>#FFFF0000</DrawColor>
+          <DrawColorEnabled>false</DrawColorEnabled>
+          <ParametersCollection>
+            <Parameters Key="Segmentation" Name="SegmenterClassBuiltinDefault" />
+          </ParametersCollection>
+          <Features>
+            <Features>
+              <Feature Name="RegionsCount" />
+              <Feature Name="ImageIndexTime" />
+              <Feature Name="ImageAcquisitionTime" />
+            </Features>
+          </Features>
+          <RegionClass Name="Cell" Id="2">
+            <Type>Single</Type>
+            <ChannelName>Fluo-4</ChannelName>
+            <Color>#FFFF0000</Color>
+            <DrawWidth>1</DrawWidth>
+            <DrawColor>#FFFF0000</DrawColor>
+            <DrawColorEnabled>false</DrawColorEnabled>
+            <ParametersCollection>
+              <Parameters Key="Segmentation" Name="SegmenterClassBuiltinDefault">
+                <Parameter Key="Smoothing1">
+                  <Name>Smoothing1</Name>
+                  <Source>Smoothing</Source>
+                  <Mode>None</Mode>
+                  <LowpassKernelSize>3</LowpassKernelSize>
+                  <MedianKernelSize>3</MedianKernelSize>
+                  <GaussSigma>1.3</GaussSigma>
+                </Parameter>
+                <Parameter Key="Sharpening1">
+                  <Name>Sharpening1</Name>
+                  <Source>Sharpening</Source>
+                  <Mode>None</Mode>
+                  <DelineateThreshold>0</DelineateThreshold>
+                  <DelineateSize>1</DelineateSize>
+                  <UnsharpRadius>2</UnsharpRadius>
+                  <UnsharpStrength>1</UnsharpStrength>
+                </Parameter>
+                <Parameter Key="ThresholdHistogram1">
+                  <Name>ThresholdHistogram1</Name>
+                  <Source>ThresholdHistogram</Source>
+                  <Minimum1>0</Minimum1>
+                  <ValueLower1>370</ValueLower1>
+                  <ValueUpper1>1023</ValueUpper1>
+                  <Maximum1>255</Maximum1>
+                  <Minimum2>0</Minimum2>
+                  <ValueLower2>0</ValueLower2>
+                  <ValueUpper2>0</ValueUpper2>
+                  <Maximum2>255</Maximum2>
+                  <Minimum3>0</Minimum3>
+                  <ValueLower3>0</ValueLower3>
+                  <ValueUpper3>0</ValueUpper3>
+                  <Maximum3>255</Maximum3>
+                  <IsHLS>false</IsHLS>
+                  <IsValid1>true</IsValid1>
+                  <IsValid2>false</IsValid2>
+                  <IsValid3>false</IsValid3>
+                  <AnalysisThresholdMode>Automatic</AnalysisThresholdMode>
+                  <AutomaticThresholdMethod>Otsu</AutomaticThresholdMethod>
+                  <AnalysisThresholdShapeMode>Polygon</AnalysisThresholdShapeMode>
+                  <IsEnabledAutomaticThreshold>true</IsEnabledAutomaticThreshold>
+                  <PickSize>1</PickSize>
+                  <PickTolerance>3</PickTolerance>
+                  <MinimumFloat1>0</MinimumFloat1>
+                  <ValueLowerFloat1>0</ValueLowerFloat1>
+                  <ValueUpperFloat1>0</ValueUpperFloat1>
+                  <MaximumFloat1>0</MaximumFloat1>
+                  <MinimumFloat2>0</MinimumFloat2>
+                  <ValueLowerFloat2>0</ValueLowerFloat2>
+                  <ValueUpperFloat2>0</ValueUpperFloat2>
+                  <MaximumFloat2>0</MaximumFloat2>
+                  <MinimumFloat3>0</MinimumFloat3>
+                  <ValueLowerFloat3>0</ValueLowerFloat3>
+                  <ValueUpperFloat3>0</ValueUpperFloat3>
+                  <MaximumFloat3>0</MaximumFloat3>
+                </Parameter>
+                <Parameter Key="MinArea1">
+                  <Name>MinArea1</Name>
+                  <Source>MinArea</Source>
+                  <Minimum>1</Minimum>
+                  <Value>1</Value>
+                  <Maximum>1000</Maximum>
+                  <SmallChange>1</SmallChange>
+                </Parameter>
+                <Parameter Key="Fill1">
+                  <Name>@ImageAnalysisWizard_SegmentationFill</Name>
+                  <Source>Boolean</Source>
+                  <Value>true</Value>
+                </Parameter>
+                <Parameter Key="Separate1">
+                  <Name>Separate1</Name>
+                  <Source>Separate</Source>
+                  <Mode>None</Mode>
+                  <Count>3</Count>
+                </Parameter>
+              </Parameters>
+            </ParametersCollection>
+            <InteractiveParameters>
+              <Parameter Key="RegionEdit1">
+                <Name>@ImageAnalysisWizard_InteractiveMethodRegionEdit</Name>
+                <Source>RegionEdit</Source>
+                <IsInteractive>false</IsInteractive>
+                <EditMethod>Draw</EditMethod>
+                <IsDisabled>0</IsDisabled>
+              </Parameter>
+              <Parameter Key="RegionGrow1">
+                <Name>@ImageAnalysisWizard_InteractiveMethodRegionGrow</Name>
+                <Source>RegionGrow</Source>
+                <IsInteractive>false</IsInteractive>
+                <IntensityTolerance>10</IntensityTolerance>
+                <ColorTolerance>10</ColorTolerance>
+                <Fill>false</Fill>
+              </Parameter>
+            </InteractiveParameters>
+            <Conditions>
+              <Condition Key="MinMax1">
+                <Name>MinMax</Name>
+                <Source>ConditionMinMax</Source>
+                <FeatureMinMaxCollections>
+                  <FeatureMinMaxCollection>
+                    <FeatureMinMax Name="Area">
+                      <Minimum>2</Minimum>
+                      <Maximum>50</Maximum>
+                    </FeatureMinMax>
+                  </FeatureMinMaxCollection>
+                </FeatureMinMaxCollections>
+              </Condition>
+            </Conditions>
+            <Features>
+              <Features>
+                <Feature Name="ID" />
+                <Feature Name="Area" />
+                <Feature Name="Perimeter" />
+              </Features>
+            </Features>
+          </RegionClass>
+        </RegionClass>
+      </RegionClass>
+      <CommonParameters Key="Segmentation" Name="SegmenterClassBuiltinDefault">
+        <Parameter Key="RegionsNoOverlapRegionsNoOverlap">
+          <Name>@ImageAnalysisWizard_SegmentationRegionsNoOverlap</Name>
+          <Source>Boolean</Source>
+          <MustExecute>false</MustExecute>
+          <IsInteractive>false</IsInteractive>
+          <Value>false</Value>
+        </Parameter>
+      </CommonParameters>
+      <RegionClassTemplate Name="RootTemplate" Id="0">
+        <Type>Or</Type>
+        <Color>#FFFFFFFF</Color>
+        <DrawWidth>1</DrawWidth>
+        <DrawColor>#FFFFFFFF</DrawColor>
+        <DrawColorEnabled>false</DrawColorEnabled>
+        <RegionClass Name="Classes" Id="1">
+          <Type>Collection</Type>
+          <Color>#FFFF0000</Color>
+          <DrawWidth>1</DrawWidth>
+          <DrawColor>#FFFF0000</DrawColor>
+          <DrawColorEnabled>false</DrawColorEnabled>
+          <Features>
+            <Features>
+              <Feature Name="RegionsCount" />
+            </Features>
+          </Features>
+          <RegionClass Name="Class" Id="2">
+            <Type>Single</Type>
+            <Color>#FFFF0000</Color>
+            <DrawWidth>1</DrawWidth>
+            <DrawColor>#FFFF0000</DrawColor>
+            <DrawColorEnabled>false</DrawColorEnabled>
+            <ParametersCollection>
+              <Parameters Key="Segmentation" Name="SegmenterClassBuiltinDefault">
+                <Parameter Key="Smoothing1">
+                  <Name>Smoothing1</Name>
+                  <Source>Smoothing</Source>
+                  <Mode>None</Mode>
+                  <LowpassKernelSize>3</LowpassKernelSize>
+                  <MedianKernelSize>3</MedianKernelSize>
+                  <GaussSigma>1.3</GaussSigma>
+                </Parameter>
+                <Parameter Key="Sharpening1">
+                  <Name>Sharpening1</Name>
+                  <Source>Sharpening</Source>
+                  <Mode>None</Mode>
+                  <DelineateThreshold>0</DelineateThreshold>
+                  <DelineateSize>1</DelineateSize>
+                  <UnsharpRadius>2</UnsharpRadius>
+                  <UnsharpStrength>1</UnsharpStrength>
+                </Parameter>
+                <Parameter Key="ThresholdHistogram1">
+                  <Name>ThresholdHistogram1</Name>
+                  <Source>ThresholdHistogram</Source>
+                  <Minimum1>0</Minimum1>
+                  <ValueLower1>0</ValueLower1>
+                  <ValueUpper1>0</ValueUpper1>
+                  <Maximum1>255</Maximum1>
+                  <Minimum2>0</Minimum2>
+                  <ValueLower2>0</ValueLower2>
+                  <ValueUpper2>0</ValueUpper2>
+                  <Maximum2>255</Maximum2>
+                  <Minimum3>0</Minimum3>
+                  <ValueLower3>0</ValueLower3>
+                  <ValueUpper3>0</ValueUpper3>
+                  <Maximum3>255</Maximum3>
+                  <IsHLS>false</IsHLS>
+                  <IsValid1>false</IsValid1>
+                  <IsValid2>false</IsValid2>
+                  <IsValid3>false</IsValid3>
+                  <AnalysisThresholdMode>Click</AnalysisThresholdMode>
+                  <AutomaticThresholdMethod>Otsu</AutomaticThresholdMethod>
+                  <AnalysisThresholdShapeMode>Polygon</AnalysisThresholdShapeMode>
+                  <IsEnabledAutomaticThreshold>true</IsEnabledAutomaticThreshold>
+                  <PickSize>1</PickSize>
+                  <PickTolerance>3</PickTolerance>
+                  <MinimumFloat1>0</MinimumFloat1>
+                  <ValueLowerFloat1>0</ValueLowerFloat1>
+                  <ValueUpperFloat1>0</ValueUpperFloat1>
+                  <MaximumFloat1>0</MaximumFloat1>
+                  <MinimumFloat2>0</MinimumFloat2>
+                  <ValueLowerFloat2>0</ValueLowerFloat2>
+                  <ValueUpperFloat2>0</ValueUpperFloat2>
+                  <MaximumFloat2>0</MaximumFloat2>
+                  <MinimumFloat3>0</MinimumFloat3>
+                  <ValueLowerFloat3>0</ValueLowerFloat3>
+                  <ValueUpperFloat3>0</ValueUpperFloat3>
+                  <MaximumFloat3>0</MaximumFloat3>
+                </Parameter>
+                <Parameter Key="MinArea1">
+                  <Name>MinArea1</Name>
+                  <Source>MinArea</Source>
+                  <Minimum>1</Minimum>
+                  <Value>1</Value>
+                  <Maximum>1000</Maximum>
+                  <SmallChange>1</SmallChange>
+                </Parameter>
+                <Parameter Key="Fill1">
+                  <Name>@ImageAnalysisWizard_SegmentationFill</Name>
+                  <Source>Boolean</Source>
+                  <Value>false</Value>
+                </Parameter>
+                <Parameter Key="Separate1">
+                  <Name>Separate1</Name>
+                  <Source>Separate</Source>
+                  <Mode>None</Mode>
+                  <Count>3</Count>
+                </Parameter>
+              </Parameters>
+            </ParametersCollection>
+            <InteractiveParameters>
+              <Parameter Key="RegionEdit1">
+                <Name>@ImageAnalysisWizard_InteractiveMethodRegionEdit</Name>
+                <Source>RegionEdit</Source>
+                <IsInteractive>false</IsInteractive>
+                <EditMethod>Draw</EditMethod>
+                <IsDisabled>0</IsDisabled>
+              </Parameter>
+              <Parameter Key="RegionGrow1">
+                <Name>@ImageAnalysisWizard_InteractiveMethodRegionGrow</Name>
+                <Source>RegionGrow</Source>
+                <IsInteractive>false</IsInteractive>
+                <IntensityTolerance>10</IntensityTolerance>
+                <ColorTolerance>10</ColorTolerance>
+                <Fill>false</Fill>
+              </Parameter>
+            </InteractiveParameters>
+            <Conditions>
+              <Condition Key="MinMax1">
+                <Name>MinMax</Name>
+                <Source>ConditionMinMax</Source>
+              </Condition>
+            </Conditions>
+            <Features>
+              <Features>
+                <Feature Name="ID" />
+                <Feature Name="Area" />
+                <Feature Name="Perimeter" />
+              </Features>
+            </Features>
+          </RegionClass>
+        </RegionClass>
+      </RegionClassTemplate>
+      <AnalysisStepCollection>
+        <AnalysisStep Name="Class">
+          <MustExecute>false</MustExecute>
+          <IsInteractive>false</IsInteractive>
+          <RegionFill>true</RegionFill>
+          <ShowAllRegions>true</ShowAllRegions>
+        </AnalysisStep>
+        <AnalysisStep Name="Frame">
+          <MustExecute>true</MustExecute>
+          <IsInteractive>true</IsInteractive>
+          <RegionFill>true</RegionFill>
+          <ShowAllRegions>true</ShowAllRegions>
+        </AnalysisStep>
+        <AnalysisStep Name="Segmentation">
+          <MustExecute>true</MustExecute>
+          <IsInteractive>true</IsInteractive>
+          <RegionFill>true</RegionFill>
+          <ShowAllRegions>true</ShowAllRegions>
+        </AnalysisStep>
+        <AnalysisStep Name="Condition">
+          <MustExecute>true</MustExecute>
+          <IsInteractive>true</IsInteractive>
+          <RegionFill>true</RegionFill>
+          <ShowAllRegions>true</ShowAllRegions>
+        </AnalysisStep>
+        <AnalysisStep Name="Interactive">
+          <MustExecute>true</MustExecute>
+          <IsInteractive>true</IsInteractive>
+          <RegionFill>true</RegionFill>
+          <ShowAllRegions>true</ShowAllRegions>
+        </AnalysisStep>
+        <AnalysisStep Name="Features">
+          <MustExecute>false</MustExecute>
+          <IsInteractive>false</IsInteractive>
+          <RegionFill>true</RegionFill>
+          <ShowAllRegions>true</ShowAllRegions>
+        </AnalysisStep>
+        <AnalysisStep Name="Measure">
+          <MustExecute>false</MustExecute>
+          <IsInteractive>false</IsInteractive>
+          <RegionFill>true</RegionFill>
+          <ShowAllRegions>true</ShowAllRegions>
+        </AnalysisStep>
+      </AnalysisStepCollection>
+      <AdditionalChannelSetting />
+      <AnalysisFrameTeach>
+        <Source>AnalysisFrameDefault</Source>
+      </AnalysisFrameTeach>
+      <AnalysisFrameRun>
+        <Source>AnalysisFrameDefault</Source>
+      </AnalysisFrameRun>
+      <AnalysisFeatures>
+        <Source>AnalysisFeaturesDefault</Source>
+      </AnalysisFeatures>
+      <AnalysisClass>
+        <Source>AnalysisClassDefault</Source>
+      </AnalysisClass>
+      <MeasureFrame>
+        <FrameMode>Cut</FrameMode>
+        <IsFrameMaximize>false</IsFrameMaximize>
+        <GraphicLayer>
+          <Usage>Edit</Usage>
+          <IsProtected>false</IsProtected>
+          <IsAnimationEnabled>false</IsAnimationEnabled>
+          <AnimationDimension>None</AnimationDimension>
+          <LayerFlags>1</LayerFlags>
+          <Elements />
+        </GraphicLayer>
+      </MeasureFrame>
+    </AnalysisScript>
+    <Actions />
+  </ExperimentFeedback>
+  <AdditionalSettings />
+  <Metadata>
+    <ExperimentDuration></ExperimentDuration>
+  </Metadata>
+</HardwareExperiment>
