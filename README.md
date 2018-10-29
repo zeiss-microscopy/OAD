@@ -6,10 +6,10 @@ In order to fulfill the request for automation the ZEN Blue platform offers vari
 
 Its main components are:
 
-*    CZI image data format and its APIs
-*    Python Scripting (OAD Simple API) 
-*    Interfaces to ZEN (TCP-IP, COM, Extensions)
-*    Experiment Feedback (Adaptive Acquistion with Online Image Analysis)   
+*    **CZI image data format and its APIs**
+*    **Python Scripting (OAD Simple API)**
+*    **Interfaces to ZEN (TCP-IP, COM, Extensions)**
+*    **Experiment Feedback - Adaptive Acquistion with Online Image Analysis**
 
 ***
 ![Screenshot of GUI](/images/ZEN_OAD_Tools_Slide.png)
