@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProcessingParameters Function="DeconvolutionApplication">
+  <FunctionParameters Function="DeconvolutionApplication">
+    <Algorithm>FastIterative</Algorithm>
+    <UseGpu>false</UseGpu>
+    <UseGpuTiling>true</UseGpuTiling>
+    <SaveAfterNIterations>0</SaveAfterNIterations>
+    <MaximumNumberOfIterations>500</MaximumNumberOfIterations>
+    <AutoStopPercentage>0.1</AutoStopPercentage>
+    <Optimization>None</Optimization>
+    <DcvChannelParameters>
+      <c0>
+        <Name>DAPI</Name>
+        <Index>0</Index>
+        <UseManualStrength>false</UseManualStrength>
+        <RegularizationValue>0.0069411043173037</RegularizationValue>
+        <ExecutionOption>Execute</ExecutionOption>
+        <Normalization>Auto</Normalization>
+        <Regularization>None</Regularization>
+        <Likelihood>PoissonRichardsonLucy</Likelihood>
+        <FirstEstimate>Input</FirstEstimate>
+        <CorrectionMode>None</CorrectionMode>
+        <PSFDimension>ThreeDimensional</PSFDimension>
+      </c0>
+      <c1>
+        <Name>Alexa Fluor 488</Name>
+        <Index>1</Index>
+        <UseManualStrength>false</UseManualStrength>
+        <RegularizationValue>0.0069411043173037</RegularizationValue>
+        <ExecutionOption>Execute</ExecutionOption>
+        <Normalization>Auto</Normalization>
+        <Regularization>None</Regularization>
+        <Likelihood>PoissonRichardsonLucy</Likelihood>
+        <FirstEstimate>Input</FirstEstimate>
+        <CorrectionMode>None</CorrectionMode>
+        <PSFDimension>ThreeDimensional</PSFDimension>
+      </c1>
+      <c2>
+        <Name>Alexa Fluor 594</Name>
+        <Index>2</Index>
+        <UseManualStrength>false</UseManualStrength>
+        <RegularizationValue>0.0069411043173037</RegularizationValue>
+        <ExecutionOption>Execute</ExecutionOption>
+        <Normalization>Auto</Normalization>
+        <Regularization>None</Regularization>
+        <Likelihood>PoissonRichardsonLucy</Likelihood>
+        <FirstEstimate>Input</FirstEstimate>
+        <CorrectionMode>None</CorrectionMode>
+        <PSFDimension>ThreeDimensional</PSFDimension>
+      </c2>
+    </DcvChannelParameters>
+    <PSFParameters>
+      <NAObjective>1.4</NAObjective>
+      <OptovarMagnification>1</OptovarMagnification>
+      <ObjectiveMagnification>63</ObjectiveMagnification>
+      <TransverseScale>0.102381</TransverseScale>
+      <AxialScale>0.24</AxialScale>
+      <GratingPeriod>NaN</GratingPeriod>
+      <ImmersionRefractiveIndex>1.515</ImmersionRefractiveIndex>
+      <CoverSlipRefractiveIndex>1.515</CoverSlipRefractiveIndex>
+      <CoverSlipThickness>170</CoverSlipThickness>
+      <EmbeddingThickness>12.96</EmbeddingThickness>
+      <EmbeddingRefractiveIndex>1.515</EmbeddingRefractiveIndex>
+      <DesignImmersionRefractiveIndex>1.515</DesignImmersionRefractiveIndex>
+      <DesignCoverSlipRefractiveIndex>1.515</DesignCoverSlipRefractiveIndex>
+      <DesignCoverSlipThickness>170</DesignCoverSlipThickness>
+      <DesignWorkingDistance>193</DesignWorkingDistance>
+      <IsAxialSymmetric>true</IsAxialSymmetric>
+      <IsTheoretical>true</IsTheoretical>
+      <PupilGeometry>Circular</PupilGeometry>
+      <PinholeGeometry>Circular</PinholeGeometry>
+      <Orientation>Descending</Orientation>
+      <Source>ScalarTheory</Source>
+      <Instrument>ConventionalMicroscope</Instrument>
+      <PsfDimension>ThreeDimensional</PsfDimension>
+      <Channels>
+        <c0>
+          <Name>DAPI</Name>
+          <Index>0</Index>
+          <PSFSource>ScalarTheory</PSFSource>
+          <Instrument>ConventionalMicroscope</Instrument>
+          <ImageFormation>Incoherent</ImageFormation>
+          <Illumination>EpiFluorescent</Illumination>
+          <UseDepthVariantPsf>false</UseDepthVariantPsf>
+          <IlluminationWavelength>353</IlluminationWavelength>
+          <DetectionWavelength>465</DetectionWavelength>
+          <PinholeSize>NaN</PinholeSize>
+          <NACondensor>0.55</NACondensor>
+          <NALightSheet>NaN</NALightSheet>
+          <AiryScanMagnification>NaN</AiryScanMagnification>
+          <AttachedPsfName>None</AttachedPsfName>
+          <IsValid>true</IsValid>
+          <IsAxialSymmetric>true</IsAxialSymmetric>
+          <Info>
+            <AxialAiryUnit>0.7189 µm</AxialAiryUnit>
+            <TransverseAiryUnit>0.2026 µm</TransverseAiryUnit>
+            <AxialFWHM>0.4786 µm</AxialFWHM>
+            <TransverseFWHM>0.1775 µm</TransverseFWHM>
+            <TransverseRayleigh>0.2106 µm</TransverseRayleigh>
+            <AxialSampling>1.994</AxialSampling>
+            <TransverseSampling>2.0568</TransverseSampling>
+            <FocusShiftDueToSA>0 µm</FocusShiftDueToSA>
+          </Info>
+        </c0>
+        <c1>
+          <Name>Alexa Fluor 488</Name>
+          <Index>1</Index>
+          <PSFSource>ScalarTheory</PSFSource>
+          <Instrument>ConventionalMicroscope</Instrument>
+          <ImageFormation>Incoherent</ImageFormation>
+          <Illumination>EpiFluorescent</Illumination>
+          <UseDepthVariantPsf>false</UseDepthVariantPsf>
+          <IlluminationWavelength>493</IlluminationWavelength>
+          <DetectionWavelength>517</DetectionWavelength>
+          <PinholeSize>NaN</PinholeSize>
+          <NACondensor>0.55</NACondensor>
+          <NALightSheet>NaN</NALightSheet>
+          <AiryScanMagnification>NaN</AiryScanMagnification>
+          <AttachedPsfName>None</AttachedPsfName>
+          <IsValid>true</IsValid>
+          <IsAxialSymmetric>true</IsAxialSymmetric>
+          <Info>
+            <AxialAiryUnit>0.7992 µm</AxialAiryUnit>
+            <TransverseAiryUnit>0.2253 µm</TransverseAiryUnit>
+            <AxialFWHM>0.5321 µm</AxialFWHM>
+            <TransverseFWHM>0.1974 µm</TransverseFWHM>
+            <TransverseRayleigh>0.2341 µm</TransverseRayleigh>
+            <AxialSampling>2.217</AxialSampling>
+            <TransverseSampling>2.2868</TransverseSampling>
+            <FocusShiftDueToSA>0 µm</FocusShiftDueToSA>
+          </Info>
+        </c1>
+        <c2>
+          <Name>Alexa Fluor 594</Name>
+          <Index>2</Index>
+          <PSFSource>ScalarTheory</PSFSource>
+          <Instrument>ConventionalMicroscope</Instrument>
+          <ImageFormation>Incoherent</ImageFormation>
+          <Illumination>EpiFluorescent</Illumination>
+          <UseDepthVariantPsf>false</UseDepthVariantPsf>
+          <IlluminationWavelength>280</IlluminationWavelength>
+          <DetectionWavelength>618</DetectionWavelength>
+          <PinholeSize>NaN</PinholeSize>
+          <NACondensor>0.55</NACondensor>
+          <NALightSheet>NaN</NALightSheet>
+          <AiryScanMagnification>NaN</AiryScanMagnification>
+          <AttachedPsfName>None</AttachedPsfName>
+          <IsValid>true</IsValid>
+          <IsAxialSymmetric>true</IsAxialSymmetric>
+          <Info>
+            <AxialAiryUnit>0.9554 µm</AxialAiryUnit>
+            <TransverseAiryUnit>0.2693 µm</TransverseAiryUnit>
+            <AxialFWHM>0.636 µm</AxialFWHM>
+            <TransverseFWHM>0.2359 µm</TransverseFWHM>
+            <TransverseRayleigh>0.2799 µm</TransverseRayleigh>
+            <AxialSampling>2.6501</AxialSampling>
+            <TransverseSampling>2.7336</TransverseSampling>
+            <FocusShiftDueToSA>0 µm</FocusShiftDueToSA>
+          </Info>
+        </c2>
+      </Channels>
+      <Theory>Scalar</Theory>
+    </PSFParameters>
+  </FunctionParameters>
+  <ViewModelParameters>
+    <DcvDataContext>
+      <UseChannelSelection>false</UseChannelSelection>
+      <IsCorrectionsExpanded>false</IsCorrectionsExpanded>
+      <IsAdvancedSettingsExpanded>true</IsAdvancedSettingsExpanded>
+    </DcvDataContext>
+    <PsfDataContext>
+      <IsOverridable>false</IsOverridable>
+      <IsCorrectionEnabled>false</IsCorrectionEnabled>
+      <IsMicroscopeInfoExpanded>false</IsMicroscopeInfoExpanded>
+      <IsPsfViewExpanded>false</IsPsfViewExpanded>
+      <IsChannelSelectorExpanded>true</IsChannelSelectorExpanded>
+      <IsAberrationCorrectionExpanded>false</IsAberrationCorrectionExpanded>
+      <IsDepthVarianceEnabled>false</IsDepthVarianceEnabled>
+      <SpatialVarianceMethod>PCA</SpatialVarianceMethod>
+      <PsfCount>10</PsfCount>
+    </PsfDataContext>
+    <PSFParameters>
+      <NAObjective>1.4</NAObjective>
+      <OptovarMagnification>1</OptovarMagnification>
+      <ObjectiveMagnification>63</ObjectiveMagnification>
+      <TransverseScale>0.102381</TransverseScale>
+      <AxialScale>0.24</AxialScale>
+      <GratingPeriod>NaN</GratingPeriod>
+      <ImmersionRefractiveIndex>1.515</ImmersionRefractiveIndex>
+      <CoverSlipRefractiveIndex>1.515</CoverSlipRefractiveIndex>
+      <CoverSlipThickness>170</CoverSlipThickness>
+      <EmbeddingThickness>12.96</EmbeddingThickness>
+      <EmbeddingRefractiveIndex>1.515</EmbeddingRefractiveIndex>
+      <DesignImmersionRefractiveIndex>1.515</DesignImmersionRefractiveIndex>
+      <DesignCoverSlipRefractiveIndex>1.515</DesignCoverSlipRefractiveIndex>
+      <DesignCoverSlipThickness>170</DesignCoverSlipThickness>
+      <DesignWorkingDistance>193</DesignWorkingDistance>
+      <IsAxialSymmetric>true</IsAxialSymmetric>
+      <IsTheoretical>true</IsTheoretical>
+      <PupilGeometry>Circular</PupilGeometry>
+      <PinholeGeometry>Circular</PinholeGeometry>
+      <Orientation>Descending</Orientation>
+      <Source>ScalarTheory</Source>
+      <Instrument>ConventionalMicroscope</Instrument>
+      <PsfDimension>ThreeDimensional</PsfDimension>
+      <Channels>
+        <c0>
+          <Name>DAPI</Name>
+          <Index>0</Index>
+          <PSFSource>ScalarTheory</PSFSource>
+          <Instrument>ConventionalMicroscope</Instrument>
+          <ImageFormation>Incoherent</ImageFormation>
+          <Illumination>EpiFluorescent</Illumination>
+          <UseDepthVariantPsf>false</UseDepthVariantPsf>
+          <IlluminationWavelength>353</IlluminationWavelength>
+          <DetectionWavelength>465</DetectionWavelength>
+          <PinholeSize>NaN</PinholeSize>
+          <NACondensor>0.55</NACondensor>
+          <NALightSheet>NaN</NALightSheet>
+          <AiryScanMagnification>NaN</AiryScanMagnification>
+          <AttachedPsfName>None</AttachedPsfName>
+          <IsValid>true</IsValid>
+          <IsAxialSymmetric>true</IsAxialSymmetric>
+          <Info>
+            <AxialAiryUnit>0.7189 µm</AxialAiryUnit>
+            <TransverseAiryUnit>0.2026 µm</TransverseAiryUnit>
+            <AxialFWHM>0.4786 µm</AxialFWHM>
+            <TransverseFWHM>0.1775 µm</TransverseFWHM>
+            <TransverseRayleigh>0.2106 µm</TransverseRayleigh>
+            <AxialSampling>1.994</AxialSampling>
+            <TransverseSampling>2.0568</TransverseSampling>
+            <FocusShiftDueToSA>0 µm</FocusShiftDueToSA>
+          </Info>
+        </c0>
+        <c1>
+          <Name>Alexa Fluor 488</Name>
+          <Index>1</Index>
+          <PSFSource>ScalarTheory</PSFSource>
+          <Instrument>ConventionalMicroscope</Instrument>
+          <ImageFormation>Incoherent</ImageFormation>
+          <Illumination>EpiFluorescent</Illumination>
+          <UseDepthVariantPsf>false</UseDepthVariantPsf>
+          <IlluminationWavelength>493</IlluminationWavelength>
+          <DetectionWavelength>517</DetectionWavelength>
+          <PinholeSize>NaN</PinholeSize>
+          <NACondensor>0.55</NACondensor>
+          <NALightSheet>NaN</NALightSheet>
+          <AiryScanMagnification>NaN</AiryScanMagnification>
+          <AttachedPsfName>None</AttachedPsfName>
+          <IsValid>true</IsValid>
+          <IsAxialSymmetric>true</IsAxialSymmetric>
+          <Info>
+            <AxialAiryUnit>0.7992 µm</AxialAiryUnit>
+            <TransverseAiryUnit>0.2253 µm</TransverseAiryUnit>
+            <AxialFWHM>0.5321 µm</AxialFWHM>
+            <TransverseFWHM>0.1974 µm</TransverseFWHM>
+            <TransverseRayleigh>0.2341 µm</TransverseRayleigh>
+            <AxialSampling>2.217</AxialSampling>
+            <TransverseSampling>2.2868</TransverseSampling>
+            <FocusShiftDueToSA>0 µm</FocusShiftDueToSA>
+          </Info>
+        </c1>
+        <c2>
+          <Name>Alexa Fluor 594</Name>
+          <Index>2</Index>
+          <PSFSource>ScalarTheory</PSFSource>
+          <Instrument>ConventionalMicroscope</Instrument>
+          <ImageFormation>Incoherent</ImageFormation>
+          <Illumination>EpiFluorescent</Illumination>
+          <UseDepthVariantPsf>false</UseDepthVariantPsf>
+          <IlluminationWavelength>280</IlluminationWavelength>
+          <DetectionWavelength>618</DetectionWavelength>
+          <PinholeSize>NaN</PinholeSize>
+          <NACondensor>0.55</NACondensor>
+          <NALightSheet>NaN</NALightSheet>
+          <AiryScanMagnification>NaN</AiryScanMagnification>
+          <AttachedPsfName>None</AttachedPsfName>
+          <IsValid>true</IsValid>
+          <IsAxialSymmetric>true</IsAxialSymmetric>
+          <Info>
+            <AxialAiryUnit>0.9554 µm</AxialAiryUnit>
+            <TransverseAiryUnit>0.2693 µm</TransverseAiryUnit>
+            <AxialFWHM>0.636 µm</AxialFWHM>
+            <TransverseFWHM>0.2359 µm</TransverseFWHM>
+            <TransverseRayleigh>0.2799 µm</TransverseRayleigh>
+            <AxialSampling>2.6501</AxialSampling>
+            <TransverseSampling>2.7336</TransverseSampling>
+            <FocusShiftDueToSA>0 µm</FocusShiftDueToSA>
+          </Info>
+        </c2>
+      </Channels>
+    </PSFParameters>
+  </ViewModelParameters>
+</ProcessingParameters>
