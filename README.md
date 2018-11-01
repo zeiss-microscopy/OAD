@@ -1,6 +1,6 @@
 # Open Application Development (OAD)
 
-ZEN Blue is an open, flexible and powerful image acquisition platform that allows controlling a wide range of microscopes systems. Additionally it offers various tools to automate workflows including acquisition and image analysis tasks.
+ZEN Blue is an open, flexible and powerful image acquisition platform that allows controlling a wide range of microscopes systems. Additionally it offers various tools to automate microscopy workflows including acquisition, image analysis and image processing tasks.
 
 In order to fulfill the request for automation the ZEN Blue platform offers various features and options, which are combined inside a concept called Open Application Development (OAD).
 
@@ -21,9 +21,12 @@ Its main components are:
 
 * **Analyze** and **Exchange** data with applications like **Fiji, Python, Knime, CellProfiler, Icy, MATLAB, Excel** and …
 
-* The** CZI-API for .NET (ZeissImgLib)** and for **C++ (libCZI)** and **BioFormats(CZIReader)** allow easy access to CZI files from many external applications. (OME-TIFF Export and Import in ZEN Blue is possible)
+* API for reading CZI image data using custom software
+    * **ZeissImgLib (.NET)** to be used on Windows-based systems
+    * **libCZI (C++)** for cross-platform applications
+    * **BioFormats (CZIReader)** allow easy access to CZI files from many external applications using the BioFormats library
 
-* **BioFormats Import**t as a module inside ZEN Blue
+* **BioFormats Import** as a module inside ZEN Blue as well as **OME-TIFF Export**
 
 * Create **“smart”** experiments with **Experiment Feedback** and modify the acquisition **On-the-fly** based on **Online Image Analysis** and **External Inputs** 
 
@@ -64,4 +67,4 @@ Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those sof
 
 By using any of thos examples you agree to this disclaimer.
 
-Version: 2018.10.14
+Version: 2018.11.01
