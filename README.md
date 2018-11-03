@@ -34,7 +34,7 @@ Its main components are:
 
 ***
 
-![OAD Interfaces](/images/OAD_Overview.png "OAD Interfaces)*OAD Interfaces*
+![OAD Interfaces](/images/OAD_Overview.png)*OAD Interfaces*
 
 ***
 
