@@ -13,7 +13,7 @@ Its main components are:
 
 ***
 
-![ZEN OAD Tools](/images/ZEN_OAD_Tools_Slide.png)
+![ZEN OAD Tools](/images/ZEN_OAD_Tools_Slide.png)*ZEN OAD Tools*
 
 ***
 
@@ -34,15 +34,15 @@ Its main components are:
 
 ***
 
-![ZEN OAD Interfaces](/images/OAD_Overview.png)
+![OAD Interfaces](/images/OAD_Overview.png "OAD Interfaces)*OAD Interfaces*
 
 ***
 
-![Example - Automated Dynamics](/videos/Automated_Physiology_IA.gif)
+![Example - Automated Dynamics](/videos/Automated_Physiology_IA.gif)*Automated Dynamics*
 
 ***
 
-![Example - External Tools](/videos/GuidedAcquisition_ZEN_Fiji.gif)
+![Example - External Tools](/videos/GuidedAcquisition_ZEN_Fiji.gif)*External Software from OAD*
 
 ***
 
