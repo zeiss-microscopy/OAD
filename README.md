@@ -12,7 +12,7 @@ Its main components are:
 *    **Experiment Feedback - Adaptive Acquistion with Online Image Analysis**
 
 ***
-![Screenshot of GUI](/images/ZEN_OAD_Tools_Slide.png)
+![Screenshot of GUI](/Images/ZEN_OAD_Tools_Slide.png)
 ***
 
 ## OAD - General Concept and Key Features
@@ -32,15 +32,15 @@ Its main components are:
 
 ***
 
-![Screenshot of GUI](/images/OAD_Overview.png)
+![Screenshot of GUI](/Images/OAD_Overview.png)
 
 ***
 
-![Example - Online Ratio](/videos/Automated_Physiology_IA.gif)
+![Example - Online Ratio](Videos/Automated_Physiology_IA.gif)
 
 ***
 
-![Example - Adaptive Feedback Microscopy](/videos/GuidedAcquisition_ZEN_Fiji.gif)
+![Example - Adaptive Feedback Microscopy](/Videos/GuidedAcquisition_ZEN_Fiji.gif)
 
 ***
 
