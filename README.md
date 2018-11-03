@@ -42,7 +42,7 @@ Its main components are:
 
 ***
 
-[Example - External Tools](/videos/GuidedAcquisition_ZEN_Fiji.gif)
+![Example - External Tools](/videos/GuidedAcquisition_ZEN_Fiji.gif)
 
 ***
 
