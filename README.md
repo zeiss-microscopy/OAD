@@ -38,13 +38,14 @@ Its main components are:
 
 ***
 
-![Example - Online Ratio](videos/Automated_Physiology_IA.gif)
+<a href="url"><img src="videos/Automated_Physiology_IA.gif" align="left" ></a>
 
 ***
 
-![Example - Adaptive Feedback Microscopy](/videos/GuidedAcquisition_ZEN_Fiji.gif)
+<a href="url"><img src="videos/GuidedAcquisition_ZEN_Fiji.gif" align="left" ></a>
 
 ***
+
 
 ## Links and References
 
