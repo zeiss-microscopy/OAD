@@ -34,15 +34,15 @@ Its main components are:
 
 ***
 
-![OAD - Interfaces](/images/OAD_Overview.png)
+![ZEN OAD Interfaces](/images/OAD_Overview.png)
 
 ***
 
-<a href="url"><img src="videos/Automated_Physiology_IA.gif" align="left" ></a>
+![Example - Automated Dynamics](/videos/Automated_Physiology_IA.gif)
 
 ***
 
-<a href="url"><img src="videos/GuidedAcquisition_ZEN_Fiji.gif" align="left" ></a>
+[Example - External Tools](/videos/GuidedAcquisition_ZEN_Fiji.gif)
 
 ***
 
