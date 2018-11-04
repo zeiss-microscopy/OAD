@@ -39,6 +39,11 @@ Its main components are:
 
 ***
 
+![Automated Dynamics](/Images/Automated_Physiology_IA.gif)*Automated Dynamics*
+
+![External Software](/Images/GuidedAcquisition_ZEN_Fiji.gif)*External Software*
+
+
 ## Links and References
 
 * CZI Image Data Format for microscopes: http://www.zeiss.com/czi
