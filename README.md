@@ -38,7 +38,7 @@ Its main components are:
 
 ***
 
-![Experiment Feedback](/images/ExpFeedback_Examples.png)*Experiment Feedback*
+![Experiment Feedback](/images/ExpFeedback_Examples.png)
 
 ***
 
