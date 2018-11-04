@@ -38,6 +38,10 @@ Its main components are:
 
 ***
 
+![Experiment Feedback](/images/ExpFeedback_Examples.png)*Experiment Feedback*
+
+***
+
 ## Links and References
 
 * CZI Image Data Format for microscopes: http://www.zeiss.com/czi
