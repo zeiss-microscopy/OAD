@@ -17,6 +17,7 @@ Its main components are:
 
 ***
 
+
 ## OAD - General Concept and Key Features
 
 * **Open Application Development** (OAD) uses powerful **Python Scripts** to **simplify, customize** and **automate** your workflows.
@@ -35,10 +36,6 @@ Its main components are:
 ***
 
 ![OAD Interfaces](/images/OAD_Overview.png)*OAD Interfaces*
-
-***
-
-![Experiment Feedback](/images/ExpFeedback_Examples.png)
 
 ***
 
