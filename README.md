@@ -39,9 +39,9 @@ Its main components are:
 
 ***
 
-![Automated Dynamics](/Images/Automated_Physiology_IA.gif)*Automated Dynamics*
+![Automated Dynamics](/Videos/Automated_Physiology_IA.gif)*Automated Dynamics*
 
-![External Software](/Images/GuidedAcquisition_ZEN_Fiji.gif)*External Software*
+![External Software](/Videos/GuidedAcquisition_ZEN_Fiji.gif)*External Software*
 
 
 ## Links and References
