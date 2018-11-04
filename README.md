@@ -13,7 +13,7 @@ Its main components are:
 
 ***
 
-![OAD Tools](/images/ZEN_OAD_Tools_Slide.png)*ZEN OAD Tools*
+![OAD Tools](/Images/ZEN_OAD_Tools_Slide.png)*ZEN OAD Tools*
 
 ***
 
@@ -35,7 +35,7 @@ Its main components are:
 
 ***
 
-![OAD Interfaces](/images/OAD_Overview.png)*OAD Interfaces*
+![OAD Interfaces](/Images/OAD_Overview.png)*OAD Interfaces*
 
 ***
 
