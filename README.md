@@ -13,7 +13,7 @@ Its main components are:
 
 ***
 
-![ZEN OAD Tools](/images/ZEN_OAD_Tools_Slide.png)*ZEN OAD Tools*
+![OAD Tools](/images/ZEN_OAD_Tools_Slide.png)*ZEN OAD Tools*
 
 ***
 
