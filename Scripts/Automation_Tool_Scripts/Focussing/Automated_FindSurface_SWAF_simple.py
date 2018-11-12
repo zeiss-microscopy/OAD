@@ -1,13 +1,12 @@
 ﻿"""  
 Author: Sebastian Rhode
 Date: 2018_10_14
-File: Automated_FindSurface_SWAF.py
+File: Automated_FindSurface_SWAF_simple.py
 Version: 1.0
 """
 
 from System import ApplicationException
 from System import TimeoutException
-
 
 def runSWAF(SWAF_exp,
             delay=1,
@@ -40,7 +39,6 @@ def runSWAF(SWAF_exp,
 
 ################## Define Parameters ##################
 
-
 run_findsurface = True
 store_for_recall = True
 
@@ -66,7 +64,7 @@ zSWAF = runSWAF_special(DetailScan_reloaded,
                         relativeRangeSize=500,
                         timeout=0)
 
-# store resulting Z-Value inside the Definite Focus
+# store resulting Z-Value inside the Definite Focus                       
 if store_for_recall:
     try:
         # store current focus position inside DF to use it with RecallFocus
