@@ -12,7 +12,7 @@ Collection of tools that deal with various aspects of image metadata. Some requi
 
 ***
 
-![Screenshot of GUI](/images/export_bfconvert1.png)
+![Screenshot of GUI](/Images/export_bfconvert1.png)
 
 ***
 
@@ -23,7 +23,7 @@ Since python-bioformats does not support the new multi-resolution interface of B
 
 ***
 
-![Screenshot of ZEN Blue with showing the tool UI](/images/zsurface_tool1.png)
+![Screenshot of ZEN Blue with showing the tool UI](/Images/zsurface_tool1.png)
 
 ***
 
@@ -31,7 +31,7 @@ This shows the actual surface of a 96 wellplate, where one position was recorded
 
 ***
 
-![2D Z-Surface Plot of Wellplate](/images/zsurface_tool2.png)
+![2D Z-Surface Plot of Wellplate](/Images/zsurface_tool2.png)
 
 ***
 
@@ -43,7 +43,7 @@ The **PlaneData** can be also saved inside a CSV table.
 
 ***
 
-![The PlaneData from the CSV file in Excel](/images/zsurface_tool4.png)
+![The PlaneData from the CSV file in Excel](/Images/zsurface_tool4.png)
 
 ***
 
@@ -55,7 +55,7 @@ The tools extracts all important metadata and:
 * **saves it as CSV or TXT file.**
 * **opens Excel to fill in the metadata into a sheet.**
 
-![Screenshot of GUI](/images/MetaData_Report_Tool1.png)
+![Screenshot of GUI](/Images/MetaData_Report_Tool1.png)
 
 ***
 
@@ -67,4 +67,4 @@ The tools extracts all single tiles from an tile image:
 * **specify the desired output folder**
 * **select the desired output format for the single tile**
 
-![Screenshot of GUI](/images/extract_tiles.png)
+![Screenshot of GUI](/Images/extract_tiles.png)
