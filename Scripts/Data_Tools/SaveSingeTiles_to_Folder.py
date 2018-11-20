@@ -62,7 +62,7 @@ print('Number of Tiles detected: ', nTiles)
 for m in range(1, nTiles + 1):
     imgTile = img.CreateSubImage('M(' + str(m) + ')')
     imgTile.Name = nameParent[:-4] + '-T' + str(m) + ft[1:]
-    print imgTile.Name
+    print(imgTile.Name)
     # save current tile with the specified format
     Zen.Application.Save(imgTile, Path.Combine(SavePath, imgTile.Name), False)
     imgTile.Close()

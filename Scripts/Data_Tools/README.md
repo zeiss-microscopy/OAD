@@ -56,3 +56,15 @@ The tools extracts all important metadata and:
 * **opens Excel to fill in the metadata into a sheet.**
 
 ![Screenshot of GUI](/images/MetaData_Report_Tool1.png)
+
+***
+
+### SaveSingeTiles_to_Folder.py
+
+The tools extracts all single tiles from an tile image:
+
+* **select the image to be split from the active documents**
+* **specify the desired output folder**
+* **select the desired output format for the single tile**
+
+![Screenshot of GUI](/images/extract_tiles.png)
