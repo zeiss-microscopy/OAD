@@ -67,4 +67,4 @@ The tools extracts all single tiles from an tile image:
 * **specify the desired output folder**
 * **select the desired output format for the single tile**
 
-![Screenshot of GUI](/Images/extract_tiles.png)
+![Screenshot of GUI](/Images/extracttiles.png)
