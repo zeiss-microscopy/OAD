@@ -37,7 +37,7 @@ This shows the actual surface of a 96 wellplate, where one position was recorded
 
 Optionally it is possible to also display the surface in 3D.
 
-![3D Z-Surface Plot of Wellplate](/images/zsurface_tool3.png)
+![3D Z-Surface Plot of Wellplate](/Images/zsurface_tool3.png)
 
 The **PlaneData** can be also saved inside a CSV table.
 
@@ -67,4 +67,4 @@ The tools extracts all single tiles from an tile image:
 * **specify the desired output folder**
 * **select the desired output format for the single tile**
 
-![Screenshot of GUI](/Images/extract_tiles.png)
+![Screenshot of GUI](/Images/extracttiles.png)
