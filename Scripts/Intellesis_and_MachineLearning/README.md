@@ -31,11 +31,15 @@ ZEN can basically read any image data format using the BioFormats Import and Int
 
 ***
 
-![ZEN Python](/Images/intellesis_ms_apps.png)*Intellesis - Material Science Applications*
+![ZEN Python](/Images/intellesis_ms_apps.png)
+
+*Intellesis - Material Science Applications*
 
 ***
 
-![ZEN Python](/Images/intellesis_ls_apps.png)*Intellesis - Life Science Applications*
+![ZEN Python](/Images/intellesis_ls_apps.png)
+
+*Intellesis - Life Science Applications*
 
 ***
 
@@ -47,13 +51,17 @@ To be able to handle even large multi-dimensional datasets, the software has a b
 
 ***
 
-![ZEN Python](/Images/intellesis_dataflow.png)*Intellesis - DataFlow*
+![ZEN Python](/Images/intellesis_dataflow.png)
+
+*Intellesis - DataFlow*
 
 ***
 
 Due to the fact that the SegmentationService is written completely in Python is can be used a module on the APEER platform. The complete SegmenationService is running inside a Linux-based docker container.
 
-![Intellesis on APEER](/Images/intellesis_apeer.png)*APEER Workflow using the Intellesis SegmentationService as a module*
+![Intellesis on APEER](/Images/intellesis_apeer.png)
+
+*APEER Workflow using the Intellesis SegmentationService as a module*
 
 ***
 
@@ -79,7 +87,8 @@ This simple script demonstrated the different possibilities to segment an image 
 
 ### Intellesis_Batch_Tool.py
 
-![ZEN Python](/Images/intellesis_batch.png)*Intellesis - Batch Tool*
+![ZEN Python](/Images/intellesis_batch.png)
+*Intellesis - Batch Tool*
 
 ***
 
