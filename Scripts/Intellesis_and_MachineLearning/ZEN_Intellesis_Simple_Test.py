@@ -1,10 +1,10 @@
-﻿"""
+﻿"""  
 Author: Sebastian Rhode
 Date: 2018_11_27
 File: Intellesis_Batch_Tool.py
 Version: 0.5
 
-Requires ZEN Blue 2.6
+Requires ZEN Blue 2.6 
 
 """
 
@@ -14,6 +14,8 @@ import clr
 clr.AddReference('System.Xml')
 import System.Xml
 from System import ApplicationException
+
+version = 0.5
 
 
 def is_empty(any_structure):
@@ -192,24 +194,23 @@ modelnames_short.sort(key=str.lower)
 
 # initialize Dialog
 IntellesisBatchDialog = ZenWindow()
-IntellesisBatchDialog.Initialize('Intellesis - Segment all images inside folder')
+IntellesisBatchDialog.Initialize('Intellesis Batch Tool - Version: ' + str(version))
 # add components to dialog
 IntellesisBatchDialog.AddLabel('1) Select Intellesis Model for Segmentation')
 IntellesisBatchDialog.AddDropDown('modelnames', 'Intellesis Model', modelnames_short, 0)
 IntellesisBatchDialog.AddLabel('2) Select SegmentationFormat type')
 IntellesisBatchDialog.AddDropDown('segformat', 'SegmentationFormat Output', ['MultiChannel', 'Labels'], 0)
-IntellesisBatchDialog.AddCheckbox('use_probability', 'Use Probability Threshold', False)
-IntellesisBatchDialog.AddIntegerRange('prob_threshold', 'Specify Probality Threshold for Classification', 90, 0, 99)
+IntellesisBatchDialog.AddCheckbox('use_probability', 'Use Probality Threshold', False)
+IntellesisBatchDialog.AddIntegerRange('prob_threshold', 'Specify Probability Threshold for Classification', 90, 0, 99)
 IntellesisBatchDialog.AddLabel('3) Class Extraction Option')
 IntellesisBatchDialog.AddCheckbox('extract_class', 'Extract (requires MultiChannel as Output Format)', False)
 IntellesisBatchDialog.AddDropDown('extract_class_list', 'Select Class ID', classlist, 0)
-IntellesisBatchDialog.AddLabel('4) Select Folder containing Images')
+IntellesisBatchDialog.AddLabel('4) Additional Tools')
+IntellesisBatchDialog.AddCheckbox('addsegm', 'Add Segmentation Mask to Original Image', False)
+IntellesisBatchDialog.AddLabel('5) Select Folder containing Images')
 IntellesisBatchDialog.AddFolderBrowser('sourcedir', 'Source Folder with Images: ', imgfolder)
-IntellesisBatchDialog.AddLabel('5) Filter File Extensions')
 IntellesisBatchDialog.AddDropDown('extension', 'Image File Extension Filter', [
                                   '*.czi', '*.jpg', '*.tif', '*.tiff', '*.png', '*.ome.tiff', '*.ome.tif'], 0)
-IntellesisBatchDialog.AddLabel('6) Additional Tools')
-IntellesisBatchDialog.AddCheckbox('addsegm', 'Add Segmentation Mask to Original Image', False)
 
 # show the window
 result = IntellesisBatchDialog.Show()
@@ -295,7 +296,7 @@ for imagefile in imagefiles:
     if number_of_classes < extract_id:
         message = 'Not enough classes inside model to extract class : ', extract_id
         print message
-        print'Number of classes in model : ', modelname, ' = ', number_of_classes
+        print 'Number of classes in model : ', modelname, ' = ', number_of_classes
         print 'Exit.'
         raise SystemExit
 
