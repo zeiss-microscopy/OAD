@@ -51,7 +51,7 @@ To be able to handle even large multi-dimensional datasets, the software has a b
 
 ***
 
-Due to the fact that the SegmentationService is written completely in Python is can be used a module on the APEER platform. The complete SegmenationService is running inside a Linux-based docker conatiner.
+Due to the fact that the SegmentationService is written completely in Python is can be used a module on the APEER platform. The complete SegmenationService is running inside a Linux-based docker container.
 
 ![Intellesis on APEER](/Images/intellesis_apeer.png)*APEER Workflow using the Intellesis SegmentationService as a module*
 
