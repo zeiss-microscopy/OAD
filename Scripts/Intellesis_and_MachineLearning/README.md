@@ -88,6 +88,7 @@ This simple script demonstrated the different possibilities to segment an image 
 ### Intellesis_Batch_Tool.py
 
 ![ZEN Python](/Images/intellesis_batch.png)
+
 *Intellesis - Batch Tool*
 
 ***
