@@ -5,6 +5,8 @@
 @REM
 @REM Must be used from command line:
 @REM C:\mydir>czi2ometiff_xml2.bat dir2process option2 option3 option4 bftoolsdir splioption
+@REM
+@REM Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
 @REM #######################################################################################
 
 @echo off

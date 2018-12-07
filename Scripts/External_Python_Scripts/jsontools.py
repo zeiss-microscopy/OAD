@@ -1,14 +1,18 @@
-"""
-File: jsontools.py
-Author: Sebastian Rhode
-Date: 2018_03_14
-"""
-version = 0.1
+#################################################################
+# File       : jsontools.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
+from System.Web.Script.Serialization import JavaScriptSerializer
 import clr
 from System.IO import Directory, Path, File, FileInfo
 clr.AddReference('System.Web.Extensions')
-from System.Web.Script.Serialization import JavaScriptSerializer
 
 
 # Write output json

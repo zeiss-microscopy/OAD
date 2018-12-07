@@ -1,8 +1,13 @@
-"""  
-Author: Sebastian Rhode
-File: FijiTools.py
-Version: 1.1
-"""
+#################################################################
+# File       : FijiTools.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
 import csv
 from System import Array

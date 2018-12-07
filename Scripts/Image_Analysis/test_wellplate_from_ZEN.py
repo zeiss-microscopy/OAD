@@ -1,4 +1,13 @@
-# coding: utf-8
+#################################################################
+# File       : test_wellplate_from_ZEN.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
 import pandas as pd
 import wellplate_tools_pandas as wpt

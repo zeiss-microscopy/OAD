@@ -1,9 +1,15 @@
-﻿"""  
-File: OAD_Automated_Physiology_IA.py
-Author: Sebastian Rhode
-Date: 2018_10_17
-Version: 1.2
+﻿#################################################################
+# File       : OAD_Automated_Physiology.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
+"""  
 Workflow Description
 -----------------------
 
@@ -12,7 +18,6 @@ Workflow Description
 - Create ExperimentRegions based on their shape
 - Use those created regions during Acquistion for MeanROI and Dynamics
 
-Last Test with: c:\ServerBuild\Main\3.0-Autumn2018_18284.1\
 """
 
 #############################################################################
@@ -101,7 +106,6 @@ Zen.Application.MacroEditor.ClearMessages()
 
 # define files
 iasname = r'Physiology_340_380_Automatic.czias'
-#imagefile = r'c:\Users\M1SRH\Documents\Testdata_Zeiss\CCD_Testimages_Folder\Calcium_340_380_SNAP.czi'
 
 # define and load experiment
 expname = r'OAD_Smart_Physiology3.czexp'
@@ -127,6 +131,6 @@ output = Zen.Acquisition.Execute(exp)
 
 # close the snap image and the experiment
 snap.Close()
-#exp.Close()
+# exp.Close()
 
 print('Done. Experiment finished')

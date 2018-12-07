@@ -1,9 +1,15 @@
-﻿"""  
-Author: Sebastian Rhode
-Date: 2018_10_22
-File: SaveSingleTiles_to_Folder.czexp
-Version: 0.2
+﻿#################################################################
+# File       : SaveSingleTiles_to_Folder.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
+"""  
 Save the selected image as single tiles into the specified folder
 using the selected format.
 

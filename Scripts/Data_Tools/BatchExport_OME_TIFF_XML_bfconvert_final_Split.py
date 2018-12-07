@@ -1,9 +1,13 @@
-"""
-File: BatchExport_OME_TIFF_XML_bfconvert_final.czmac
-Author: Sebastian Rhode
-Date: 2017_05_19
-"""
-version = 2.2
+#################################################################
+# File       : BatchExport_OME_TIFF_XML_bfconvert_final_Split.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
 import sys
 import clr

@@ -1,12 +1,16 @@
-﻿"""  
-Author: Sebastian Rhode
-Date: 2018_10_12
-File: CreateImagefromImageAnaylsisResults.py
-Version: 0.2
-"""
+﻿#################################################################
+# File       : CreateImagefromImageAnalysisResults.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
 # define the image file location here
-imagefile = r'c:\Users\m1srh\Documents\Testdata_Zeiss\Zen_Output\Count_Cells_DAPI_10_Frames.czi'
+imagefile = r'c:\Zen_Output\Count_Cells_DAPI_10_Frames.czi'
 
 # this the the CZIAS created by the Image Analyis Wizard or manually
 iasname = 'Count_Cells_DAPI.czias'

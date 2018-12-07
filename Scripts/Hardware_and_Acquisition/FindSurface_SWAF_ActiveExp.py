@@ -1,9 +1,14 @@
-"""  
-Author: Sebastian Rhode
-Date: 2016_10_07
-File: FindSurface_SWAF_ActiveExp.czmac
-Version: 1.0
-"""
+#################################################################
+# File       : FindSurface_SWAF_ActiveExp.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
+
 # clear output
 Zen.Application.MacroEditor.ClearMessages()
 

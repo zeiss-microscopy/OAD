@@ -1,8 +1,15 @@
-﻿"""  
-Author: Sebastian Rhode
-Date: 2018_10_12
-File: Display_ZSurface_BF_Python
-Version: 0.3
+﻿#################################################################
+# File       : Display_ZSurface_BF_Python.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
+
+"""  
 
 The script call a batch file that internally calls a python script.
 This python script used python-bioformats to read the CZI and extract
@@ -55,7 +62,7 @@ wd.AddDropDown('format_opt', 'Select image format for saving', saveformat_list, 
 wd.AddCheckbox('show_opt', 'Show additional surfcae plot', False)
 wd.AddCheckbox('show_fig', 'Open saved figure in ZEN', True)
 # show the window
-result=wd.Show()
+result = wd.Show()
 # check, if Cancel button was clicked
 if result.HasCanceled == True:
     sys.exit('Macro aborted with Cancel!')
@@ -78,12 +85,12 @@ if wcsv_result:
     writecsv = 'True'
 elif not wcsv_result:
     writecsv = 'False'
-    
+
 if save_result:
     save = 'True'
 elif not save_result:
     save = 'False'
-    
+
 if surface_result:
     surface = 'True'
 elif not surface_result:
@@ -92,15 +99,15 @@ elif not surface_result:
 
 # define the actual CZI file to be analyzed
 czifile = CZIdict[cziname]
-czifile_cmd = '"' + CZIdict[cziname] +'"'
+czifile_cmd = '"' + CZIdict[cziname] + '"'
 params = czifile_cmd + ' ' + writecsv + ' ' + separator + ' ' + save + ' ' + saveformat_result + ' ' + surface
 print 'CZI file to be used: ', czifile
 print 'Parameter : ', params
 
 # when option to save the figure was set
 if save_result:
-    
-    savename =  Path.GetFileNameWithoutExtension(czifile) + '_planetable_XYZ-Pos.' + saveformat_result
+
+    savename = Path.GetFileNameWithoutExtension(czifile) + '_planetable_XYZ-Pos.' + saveformat_result
     savename_full = Path.Combine(Path.GetDirectoryName(czifile), savename)
     print 'Savename: ', savename_full
     # delete older version of the figure if existing
@@ -125,8 +132,7 @@ if show_fig_result:
         print 'Saved figure not found.'
 
 print 'Done.'
-    else:
+else:
         print 'Saved figure not found.'
 
 print 'Done.'
-

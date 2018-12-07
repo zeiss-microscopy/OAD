@@ -1,9 +1,13 @@
-﻿>"""
-File: Analyze_Image_Plot_Pandas.czmac
-Author: Sebastian Rhode
-Date: 2018_10_12
-Verison: 1.4
-"""
+﻿#################################################################
+# File       : Analyze_Image_Plot_Pandas.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
 from System.Diagnostics import Process
 from System.IO import File, Path, Directory

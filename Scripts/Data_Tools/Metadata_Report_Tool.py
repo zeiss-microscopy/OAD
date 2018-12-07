@@ -1,9 +1,15 @@
-﻿"""
-File: Metadata_Report_Tool.czmac
-Author: SRh
-Date: 2018_05_04
-Version: 1.2
+﻿#################################################################
+# File       : Metadata_Report_Tool.py
+# Version    : 1.2
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
+"""
 The scripts creates a table with useful metainformation.
 - it creates a ZenTable
 - allows saving as CSV file
