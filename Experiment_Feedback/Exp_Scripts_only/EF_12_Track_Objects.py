@@ -1,3 +1,14 @@
+#################################################################
+# File       : EF_12_Track_Objects.py
+# Version    : 1.0
+# Author     : czmla
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
+
 ### -------------------- PreScript ---------------------------------------------- ###
 
 
@@ -39,7 +50,7 @@ intensities = ZenService.Analysis.SingleParticle.IntensityMean_EGFP
 # get ID of the brightest detected particle
 ID = Array.IndexOf(intensities, max(intensities))
 
-## move the stage to the position of the brightest particle
+# move the stage to the position of the brightest particle
 ZenService.HardwareActions.SetStagePosition(posx[ID], posy[ID])
 
 """"
@@ -50,7 +61,8 @@ INTS = createstr(intensities)   # array with all intensities
 """
 
 # write positions to data log file
-logfile = ZenService.Xtra.System.AppendLogLine(str(frame)+'\t'+str(ID+1)+'\t'+ str(posx[ID])+'\t'+str(posy[ID])+'\t'+ str(imgX)+'\t'+str(imgY))
+logfile = ZenService.Xtra.System.AppendLogLine(str(frame)+'\t'+str(ID+1)+'\t' +
+                                               str(posx[ID])+'\t'+str(posy[ID])+'\t' + str(imgX)+'\t'+str(imgY))
 
 
 ### -------------------- PostScript --------------------------------------------- ###

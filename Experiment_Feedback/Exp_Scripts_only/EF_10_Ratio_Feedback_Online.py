@@ -1,3 +1,14 @@
+#################################################################
+# File       : EF_010_Ratio_Feedback_Online.py
+# Version    : 1.0
+# Author     : czmla
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
+
 ### -------------------- PreScript ---------------------------------------------- ###
 
 
@@ -5,6 +16,8 @@ from System import Array
 from System.Diagnostics import Process
 
 # calculate ratio
+
+
 def ArrayDiv(a, b):
     out = Array.CreateInstance(float, len(a))
     outstr = ''
@@ -13,22 +26,21 @@ def ArrayDiv(a, b):
         outstr = outstr + str(round(out[i], 2)) + '\t'
     return out, outstr
 
+
 filename = ZenService.Experiment.ImageFileName[:-4] + '_Log.txt'
 exeloc = 'python'
-script = r'C:\TFS\Doc\3-ZIS\3-Development\Discussions\ExpFeedback\DVD_2_5\Python_Scripts\dynamic_MeanROI_Cells.py'
+script = r'C:\Python_Scripts\dynamic_MeanROI_Cells.py'
 cmd = script + ' -f ' + filename
 
 
-## start Python Option 1
+# start Python Option 1
 #ZenService.Xtra.System.ExecuteExternalProgram(script, ' -f ' + filename)
 
-## start Python Option 2
-app = Process();
+# start Python Option 2
+app = Process()
 app.StartInfo.FileName = exeloc
 app.StartInfo.Arguments = cmd
 app.Start()
-
-
 
 
 ### -------------------- LoopScript --------------------------------------------- ###

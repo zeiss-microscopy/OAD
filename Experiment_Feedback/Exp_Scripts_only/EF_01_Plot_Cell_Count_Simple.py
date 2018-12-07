@@ -1,3 +1,14 @@
+#################################################################
+# File       : EF_01_Plot_Cell_Count_Simple.py
+# Version    : 1.0
+# Author     : czmla
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
+
 ### -------------------- PreScript ---------------------------------------------- ###
 
 
@@ -13,7 +24,7 @@ index = ZenService.Analysis.Cells.ImageIndexTime
 # get the number of cells for the current frame
 cn = ZenService.Analysis.Cells.RegionsCount
 
-# write data to log file: index and number of cells 
+# write data to log file: index and number of cells
 logfile = ZenService.Xtra.System.AppendLogLine(str(index) + "\t" + str(cn))
 
 
@@ -25,14 +36,14 @@ ZenService.Xtra.System.ExecuteExternalProgram(r"C:\Program Files\Notepad++\notep
 
 filename = ZenService.Experiment.ImageFileName[:-4] + '_Log.txt'
 exeloc = 'python'
-script = r'C:\TFS\Doc\3-ZIS\3-Development\Discussions\ExpFeedback\DVD_2_5\Python_Scripts\display_results_simple.py'
+script = r'C:\Python_Scripts\display_results_simple.py'
 cmd = script + ' -f ' + filename
 
-## start Python Option 1
+# start Python Option 1
 #ZenService.Xtra.System.ExecuteExternalProgram(script, ' -f ' + filename)
 
-## start Python Option 2
-app = Process();
+# start Python Option 2
+app = Process()
 app.StartInfo.FileName = exeloc
 app.StartInfo.Arguments = cmd
 app.Start()

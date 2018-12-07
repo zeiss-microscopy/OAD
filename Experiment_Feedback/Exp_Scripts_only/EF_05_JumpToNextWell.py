@@ -1,8 +1,18 @@
+#################################################################
+# File       : EF_05_JumpToNextWell.py
+# Version    : 1.0
+# Author     : czmla
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
+
 ### -------------------- PreScript ---------------------------------------------- ###
 
 
-
-cells_per_well = 0 # total number of cells
+cells_per_well = 0  # total number of cells
 logfile = ZenService.Xtra.System.AppendLogLine('Well\tTile\tCells/Tile\tCell/Well')
 last_tile = 0
 
@@ -29,7 +39,7 @@ if tile != last_tile:
 
     # add cells from current tile to cell_per_well
     cells_per_well = cells_per_well + cpt
-    
+
 # write data into log file
 logfile = ZenService.Xtra.System.AppendLogLine(well+'\t'+str(tile)+'\t'+str(cpt)+'\t'+str(cells_per_well))
 
@@ -39,16 +49,12 @@ last_tile = tile
 # jump to next well if the desired cell number was reached
 if (cells_per_well > 2000):
     ZenService.Actions.JumpToNextContainer()
-    
+
     if last_tile < 25:
         logfile = ZenService.Xtra.System.AppendLogLine('Jumped to next well after ' + str(last_tile) + ' tiles')
-    
+
     if last_tile == 25:
         logfile = ZenService.Xtra.System.AppendLogLine('Well completed')
-
-
-
-
 
 
 ### -------------------- PostScript --------------------------------------------- ###
