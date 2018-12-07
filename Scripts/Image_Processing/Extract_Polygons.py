@@ -1,9 +1,16 @@
-﻿"""  
-Authors: CSc, SRh
-Date: 2018_11_28
-File: Extract_Polygons.py
-Version: 1.0
+﻿#################################################################
+# File       : Extract_Polygons.py
+# Version    : 1.0
+# Author     : czchs, czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
+from System.IO import File, Directory, FileInfo, Path
+"""  
 - Load image, extract scene and draw contours of ROIs
 - save ROIs as separate images
 """
@@ -12,7 +19,6 @@ Version: 1.0
 Zen.Application.MacroEditor.ClearMessages()
 
 # activate IO library
-from System.IO import File, Directory, FileInfo, Path
 
 # get image folder
 images = Zen.Application.Environment.GetFolderPath(ZenSpecialFolder.Images)

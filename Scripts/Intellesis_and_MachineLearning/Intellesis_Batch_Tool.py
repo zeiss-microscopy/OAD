@@ -1,19 +1,21 @@
-﻿"""
-Author: Sebastian Rhode
-Date: 2018_11_27
-File: Intellesis_Batch_Tool.py
-Version: 0.5
+﻿#################################################################
+# File       : Intellesis_Batch_Tool.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
-Requires ZEN Blue 2.6
 
-"""
-
+from System import ApplicationException
+import System.Xml
 from System.IO import File, Directory, Path, SearchOption
 import sys
 import clr
 clr.AddReference('System.Xml')
-import System.Xml
-from System import ApplicationException
 
 
 def is_empty(any_structure):

@@ -1,9 +1,14 @@
-﻿"""
-File: RMI_Nanoparticle_Analysis.py
-Author: Sebastian Rhode
-Date: 2018_08_31
-Verison: 0.1
-"""
+﻿#################################################################
+# File       : RMI_Nanoparticle_Analysis.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
+
 
 from System.Diagnostics import Process
 from System.IO import File, Path, Directory
@@ -25,7 +30,7 @@ image_to_analyze = r'c:\Data\Nanoparticles.tif'
 iasfilename = r'c:\Users\XYZ\Documents\Carl Zeiss\ZEN\Documents\Image Analysis Settings\Nanoparticle Segmentation ZEN25.czias'
 
 # define the external plot script or tool
-pythonexe =  r'C:\Anaconda3\python.exe'
+pythonexe = r'C:\Anaconda3\python.exe'
 script = r'c:\Data\External_Python_Scripts_for_OAD\RMI_plot_nanoparticles.py'
 
 # load imnage
@@ -46,14 +51,14 @@ if analyze_inplace:
 all_tables = Zen.Analyzing.AnalyzeToTable(image, ias)
 
 for class_table in all_tables:
-    
+
     if show_tables:
         Zen.Application.Documents.Add(class_table)
-    
+
     print('Saving table for class: ', class_table.Name + '.csv')
     class_table_filename = Path.Combine(outputpath,  class_table.Name + '.csv')
     class_table.Save(class_table_filename)
-    
+
     if not show_tables:
         class_table.Close()
 
@@ -74,15 +79,16 @@ title = 'Size Distribution'
 xlabel = 'Area [micron**2]'
 bins = 10
 savename = 'Size Distribution.png'
-savename_complete =  Path.Combine(Path.GetDirectoryName(csvfile), savename)
+savename_complete = Path.Combine(Path.GetDirectoryName(csvfile), savename)
 print 'Savename: ', savename_complete
 
 # construct the command line string
-params = ' -f '+'"'+csvfile+'"'+' -p '+ '"'+parameter2display+'"'+' -sp False -dpi 100'+' -t '+'"'+title+'"'+' -lx '+'"'+xlabel+'"'+' -bins '+str(bins)+' -s '+'"'+savename+'"'
+params = ' -f '+'"'+csvfile+'"'+' -p ' + '"'+parameter2display+'"'+' -sp False -dpi 100' + \
+    ' -t '+'"'+title+'"'+' -lx '+'"'+xlabel+'"'+' -bins '+str(bins)+' -s '+'"'+savename+'"'
 print 'Parameter: ', params
 
 # start the data display script as an external application
-app = Process();
+app = Process()
 app.StartInfo.FileName = pythonexe
 app.StartInfo.Arguments = script + params
 app.Start()
