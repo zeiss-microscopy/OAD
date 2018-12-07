@@ -1,22 +1,27 @@
-﻿"""
-File: Run_3D_Object_Detection_Fiji_Headless_special.czmac
-Author: Sebastian Rhode
-Date: 2018_10_11
-"""
-version = 0.5
+﻿#################################################################
+# File       : Run_3D_Object_Detection_Fiji_Headless_special.py
+# Version    : 0.5
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
+
+from System.Web.Script.Serialization import JavaScriptSerializer
+from System.IO import Directory, Path, File, FileInfo
+from System.Diagnostics import Process
+import time
+import clr
+import FijiTools as ft
+import jsontools as jt
+import ConvertTools as ct
 import sys
 # adapt this path depending on your system
-sys.path.append(r'c:\Users\m1srh\Documents\External_Python_Scripts_for_OAD')
-import ConvertTools as ct
-import jsontools as jt
-import FijiTools as ft
-import clr
-import time
-from System.Diagnostics import Process
-from System.IO import Directory, Path, File, FileInfo
+sys.path.append(r'c:\External_Python_Scripts_for_OAD')
 clr.AddReference('System.Web.Extensions')
-from System.Web.Script.Serialization import JavaScriptSerializer
 
 # clear output console
 Zen.Application.MacroEditor.ClearMessages()
@@ -30,9 +35,9 @@ Zen.Application.Documents.Add(img)
 metadata = jt.fill_metadata(img)
 
 
-IMAGEJ = 'c:\\Users\\m1srh\\Documents\\Fiji\\ImageJ-win64.exe'
+IMAGEJ = 'c:\\Fiji\\ImageJ-win64.exe'
 IMAGEJDIR = Path.GetDirectoryName(IMAGEJ)
-SCRIPT = 'c:\\Users\\m1srh\\Documents\\Fiji\\scripts\\3d_analytics_fromZEN.py'
+SCRIPT = 'c:\\Fiji\\scripts\\3d_analytics_fromZEN.py'
 
 # define script parameters
 params = {}

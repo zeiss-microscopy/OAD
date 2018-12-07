@@ -20,7 +20,7 @@ Zen.Application.MacroEditor.ClearMessages()
 
 # define model and image to load
 model = 'XRM_Sandstone_Default_Features'
-imagefile = r'c:\Users\M1SRH\Documents\Testdata_Zeiss\Atomic\XRM\XRM_Testimage.czi'
+imagefile = r'c:\XRM\XRM_Testimage.czi'
 
 # load and show image
 image = Zen.Application.LoadImage(imagefile, False)

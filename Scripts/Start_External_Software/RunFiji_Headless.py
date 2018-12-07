@@ -1,20 +1,25 @@
-﻿"""
-File: RunFiji_Headless.czmac
-Author: Sebastian Rhode
-Date: 2017_11_24
-"""
-version = 0.2
+﻿#################################################################
+# File       : RunFiji_Headless.py
+# Version    : 0.2
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
+
+import FijiTools as ft
+import jsontools as jt
+from System.Web.Script.Serialization import JavaScriptSerializer
 import sys
 import clr
 import time
 from System.Diagnostics import Process
 from System.IO import Directory, Path, File, FileInfo
 clr.AddReference('System.Web.Extensions')
-from System.Web.Script.Serialization import JavaScriptSerializer
-sys.path.append(r'c:\Users\m1srh\Documents\External_Python_Scripts_for_OAD')
-import jsontools as jt
-import FijiTools as ft
+sys.path.append(r'c:\External_Python_Scripts_for_OAD')
 
 
 # clear output console
@@ -28,9 +33,9 @@ img = Zen.Application.LoadImage(czifile, False)
 Zen.Application.Documents.Add(img)
 
 
-IMAGEJ = 'c:\\Users\\m1srh\\Documents\\Fiji\\ImageJ-win64.exe'
+IMAGEJ = 'c:\\Fiji\\ImageJ-win64.exe'
 IMAGEJDIR = Path.GetDirectoryName(IMAGEJ)
-SCRIPT = 'c:\\Users\\m1srh\\Documents\\Fiji\\scripts\\GuidedAcq_fromZEN.py'
+SCRIPT = 'c:\\Fiji\\scripts\\GuidedAcq_fromZEN.py'
 
 # define script parameters
 params = {}
