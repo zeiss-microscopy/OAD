@@ -64,8 +64,8 @@ Its main components are:
 
 # Disclaimer
 
-This is an collection of OAD scripts that is free to use for everybody.
-Carl Zeiss Microscopy GmbH's ZEN software undertakes no warranty concerning the use of those scripts. Use them on your own risk.
+This is an collection of OAD scripts that is free to use for everybody. 
+Carl Zeiss Microscopy GmbH's ZEN software undertakes no warranty concerning the use of those scripts, image analysis settings and ZEN experiments. Use them on your own risk.
 
 Additionally Carl Zeiss Microscopy GmbH's ZEN software allows connection to the third party software packages.
 

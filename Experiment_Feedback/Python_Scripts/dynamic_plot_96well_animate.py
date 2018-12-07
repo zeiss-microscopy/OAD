@@ -1,3 +1,14 @@
+#################################################################
+# File       : dynamic_plot_96well_animate.py
+# Version    : 1.0
+# Author     : czmla
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
+
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import optparse
@@ -10,23 +21,23 @@ import numpy as np
 parser = optparse.OptionParser()
     
 parser.add_option('-f', '--file',
-action="store", dest="filename",
-help="query string", default="No filename passed.")
+                    action="store", dest="filename",
+                    help="query string", default="No filename passed.")
     
 parser.add_option('-c', '--columns',
-action="store", dest="columns",
-help="query string", default="No number of columns passed.")
+                    action="store", dest="columns",
+                    help="query string", default="No number of columns passed.")
     
 parser.add_option('-r', '--rows',
-action="store", dest="rows",
-help="query string", default="No number of rows passed.")
+                    action="store", dest="rows",
+                    help="query string", default="No number of rows passed.")
 
 # read command line arguments 
 options, args = parser.parse_args()     
 savename = options.filename[:-4] + '.png'
            
-print ('Filename: ', options.filename)
-print ('Savename: ', savename)
+print('Filename: ', options.filename)
+print('Savename: ', savename)
 
 # read in cell numbers
 Nr = int(options.rows)      

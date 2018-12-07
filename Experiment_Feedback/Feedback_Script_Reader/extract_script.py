@@ -1,24 +1,27 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-"""
-@author: SRh
-File: extract_script.py
-Date: 26.05.2017
-Version. 1.0
+##############################################################################################
+# File       : XYZ
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution :
+#
+# Extract the python script from ZEN OAD macro or the Feedback Scripts from ZEN Experiments.
+# Can be used on single files or on a complete folder.
+#
+# Usage:
+#
+# C: \mydir > extract_script - f experiment.czexp - -> experiment.py
+# C: \mydir > extract_script - f oadmacro.czmac - -> oadmacro.py
+# C: \mydir > extract_script - f mydir\experiment_and_macros - -> loops over all files
+#
+# !!! Attention: It does overwrite existing * .py files inside that directory !!!
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+################################################################################################
 
-Extract the python script from ZEN OAD macro or the Feedback Scripts from ZEN Experiments.
-Can be used on single files or on a complete folder.
-
-Usage:
-
-C:\mydir>extract_script -f experiment.czexp --> experiment.py
-C:\mydir>extract_script -f oadmacro.czmac --> oadmacro.py
-C:\mydir>extract_script -f mydir\experiment_and_macros --> loops over all files 
-
-!!! Attention: It does overwrite existing *.py files inside that directory !!!
-
-"""
 
 import argparse
 import os
@@ -138,4 +141,3 @@ elif os.path.isfile(name):
     # convert the Feedback Script or ZEN Macro to Python script
     newfilename = writefile(name)
     print('Converted: ', name, ' to: ', newfilename)
-
