@@ -1,7 +1,14 @@
-% Analyze Series - Cycles through all existing series inside the data set
+% #################################################################
+% File       : AnalyzeSeries.m
+% Version    : 1.0
+% Author     : czsrh
+% Date       : 06.12.2018
+% Insitution : Carl Zeiss Microscopy GmbH
 %
-% Date: 13.10.2014
-% Version: 1.0
+%
+% Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+% #################################################################
+
 
 function [numObjects, img2show, show] = AnalyzeSeries(image6d)
 

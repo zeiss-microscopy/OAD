@@ -1,9 +1,13 @@
-# -*- coding: utf-8 -*-
-"""
-Date: 14.11.2014
-Author: Sebastian Rhode
-Version: 1.0
-"""
+#################################################################
+# File       : wellplatetool.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -29,28 +33,25 @@ def ExtractLabels(Nr, Nc):
 
 def ShowPlateData(data, Nr, Nc, parameter):
     
-    #print np.shape(data), Nr, Nc
-    
-    ## reshape data to create 2D matrix
+    # reshape data to create 2D matrix
     WellData = data.reshape(Nr, Nc)
     [labelx, labely] = ExtractLabels(Nr, Nc)
 
-    ## create figure
+    # create figure
     fig = plt.figure(figsize=(6, 4), dpi=100)
     ax1 = fig.add_subplot(111)
-    ## set colormap
+    # set colormap
     cmap = cm.jet
-    ## show the well plate as an image
+    # show the well plate as an image
     cax = ax1.imshow(WellData, interpolation='nearest', cmap=cmap)
-    #cax = ax1.matshow(WellData, interpolation='nearest', cmap=cmap)
-    ## determine an appropriate font size
+    # determine an appropriate font size
     if Nr <= 32 and Nr > 16:
         fs = 7
     elif Nr <= 16 and Nr > 8:
         fs = 9
     elif Nr <= 8:
         fs = 11
-    ## format the display
+    # format the display
     ax1.set_xticks(np.arange(0, Nc, 1))
     ax1.set_xticklabels(labelx, fontsize=fs)
     ax1.set_yticks(np.arange(0, Nr, 1))
@@ -60,13 +61,14 @@ def ShowPlateData(data, Nr, Nc, parameter):
     
     #return fig
 
+
 def ReturnPlateHeatmap(data, Nr, Nc):
 
-    ## reshape data to create 2D matrix
+    # reshape data to create 2D matrix
     WellData = data.reshape(Nr, Nc)
     [labelx, labely] = ExtractLabels(Nr, Nc)
 
-    ## determine an appropriate font size
+    # determine an appropriate font size
     if Nr <= 32 and Nr > 16:
         fs = 7
     elif Nr <= 16 and Nr > 8:

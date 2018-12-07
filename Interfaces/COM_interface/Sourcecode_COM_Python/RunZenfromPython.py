@@ -1,10 +1,15 @@
-# -*- coding: utf-8 -*-
-"""
-File: RunZenfromPython.py
-Date: 03.05.2017
-Author: Sebastian Rhode
-Version: 1.1
+#################################################################
+# File       : RunZenfromPython.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
+"""
 This Python script demonstrates the capabilities of the .COM interface
 to establish a connection between ZEN Blue and Python.
 This connection allows to use ZEN Blue OAD Simple-API objects from

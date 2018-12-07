@@ -1,11 +1,13 @@
-# -*- coding: utf-8 -*-
-"""
-@author: Sebi
-
-File: bftools.py
-Date: 29.05.2017
-Version. 2.3.1
-"""
+#################################################################
+# File       : bftools.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
 from __future__ import print_function
 import javabridge as jv

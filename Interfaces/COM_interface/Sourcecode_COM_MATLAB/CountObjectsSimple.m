@@ -1,7 +1,13 @@
-% Simple Object Count inside a single frame
+% #################################################################
+% File       : CountObjectsSimple.m
+% Version    : 1.0
+% Author     : czsrh
+% Date       : 06.12.2018
+% Insitution : Carl Zeiss Microscopy GmbH
 %
-% Date: 13.10.2014
-% Version: 1.0
+%
+% Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+% #################################################################
 
 function result = CountObjectsSimple(img, show)
 

@@ -1,7 +1,13 @@
-% File: GetOMEData.m
-% Author: Sebastian Rhode
-% Date: 13.09.2015
-% Version: 1.3
+% #################################################################
+% File       : GetOMEData.m
+% Version    : 1.0
+% Author     : czsrh
+% Date       : 06.12.2018
+% Insitution : Carl Zeiss Microscopy GmbH
+%
+%
+% Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+% #################################################################
 
 function OMEData = GetOMEData(filename)
 %

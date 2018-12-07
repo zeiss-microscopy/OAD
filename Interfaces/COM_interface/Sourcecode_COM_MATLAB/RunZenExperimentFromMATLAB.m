@@ -1,5 +1,13 @@
-% Date: 17.03.2015
-% Version: 1.1
+% #################################################################
+% File       : RunZenExperimentFromMATLAB.m
+% Version    : 1.0
+% Author     : czsrh
+% Date       : 06.12.2018
+% Insitution : Carl Zeiss Microscopy GmbH
+%
+%
+% Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+% #################################################################
 
 % This MATLAB script demonstrates the capabilities of the .COM interface
 % used to establish a connection between ZEN Blue and MATLAB.

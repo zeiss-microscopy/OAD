@@ -1,11 +1,14 @@
-# -*- coding: utf-8 -*-
-"""
-@author: Sebi
+#################################################################
+# File       : misctools.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
-File: misctools.py
-Date: 18.05.2015
-Version. 0.2
-"""
 
 def calc_series_range(total_series, scenes, sceneID):
 
@@ -16,7 +19,6 @@ def calc_series_range(total_series, scenes, sceneID):
 
 
 def calc_series_range_well(wellnumber, imgperwell):
-
     """
     this function can be used when the number of positions or scenes per well is equal for every well.
     The well numbers start with Zero and have nothing to do with the actual wellID, e.g. C2

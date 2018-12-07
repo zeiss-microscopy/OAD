@@ -1,10 +1,15 @@
-% File: ReadImage6D.m
-% Author: Sebastian Rhode
-% Date: 19.09.2016
-% Version: 1.2
+% #################################################################
+% File       : ReadImage6D.m
+% Version    : 1.0
+% Author     : czsrh
+% Date       : 06.12.2018
+% Insitution : Carl Zeiss Microscopy GmbH
+%
+%
+% Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+% #################################################################
 
 % Read CZI image data into image6d array 
-
 function out = ReadImage6D(filename)
 
 % Get OME Meta-Information

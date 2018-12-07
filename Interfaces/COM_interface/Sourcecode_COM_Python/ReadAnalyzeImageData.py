@@ -1,10 +1,13 @@
-# -*- coding: utf-8 -*-
-"""
-File: ReadAnalyzeImageData.py
-Date: 03.05.2017
-Author: Sebastian Rhode
-Version: 0.3
-"""
+#################################################################
+# File       : ReadAnalyzeImageData.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
 from matplotlib import pyplot as plt, cm
 import numpy as np
@@ -24,10 +27,10 @@ def ReadImage(filename):
     # get image meta-information
     MetaInfo = bf.get_relevant_metainfo_wrapper(filename, namespace=urlnamespace, bfpath=bfpackage, showinfo=False)
     img6d, readstate = bf.get_image6d(filename, MetaInfo['Sizes'])
-    
+
     # show relevant image Meta-Information
     bf.showtypicalmetadata(MetaInfo, namespace=urlnamespace, bfpath=bfpackage)
-    
+
     return img6d
 
 
@@ -40,14 +43,14 @@ def CountObjects(img6d):
 
     # count cells with individual thresholds per frame
     for i in range(0, img6d.shape[0], 1):
-        
+
         img = img6d[i, 0, 0, 0, :, :]
         T = mahotas.otsu(img)
         img = (img > T)
         img = mahotas.gaussian_filter(img, 0.5)
         labeled, numobjects = mahotas.label(img)
         obj[i] = numobjects
-        if i%steps == 0:
+        if i % steps == 0:
             print('\b.',)
             sys.stdout.flush()
 
@@ -101,7 +104,7 @@ def DisplayData_2(obj, labeled):
     ax3 = fig.add_subplot(223)
     Nc = 12
     Nr = 8
-    WellData, labelx, labely, fs =  wp.ReturnPlateHeatmap(obj, Nr, Nc)
+    WellData, labelx, labely, fs = wp.ReturnPlateHeatmap(obj, Nr, Nc)
     cax = ax3.imshow(WellData, interpolation='nearest', cmap=cm.jet)
     cbar = fig.colorbar(cax)
     ax3.set_title('Objects per Well')
