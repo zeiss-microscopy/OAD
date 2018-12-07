@@ -1,9 +1,13 @@
-﻿"""  
-Author: Sebastian Rhode
-Date: 2018_10_14
-File: Automated_FindSurface_SWAF.py
-Version: 1.0
-"""
+﻿#################################################################
+# File       : Automated_FindSurface_SWAF.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
 from System import ApplicationException
 from System import TimeoutException

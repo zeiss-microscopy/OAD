@@ -1,14 +1,13 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
-"""
-@author: SRh, SAl
-File: tcpoad.py
-Date: 06.11.2017
-Version. 1.1
-
-Some useful TCP OAD helpers
-"""
+#################################################################
+# File       : tcpoad.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
 import os
 import telnetlib

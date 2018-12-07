@@ -1,4 +1,13 @@
-# coding: utf-8
+#################################################################
+# File       : tcpip_runscript.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
 import tcpoad as tcp
 
@@ -10,12 +19,12 @@ runczmac = False
 
 if runpy:
     # specify python script (*.py) containg the OAD commands
-    inputfile = r'c:\Users\m1srh\OneDrive - Carl Zeiss AG\Python_Projects\ZEN_TCPIP\oad.py'
+    inputfile = r'c:\Python_Projects\ZEN_TCPIP\oad.py'
     oadcommandlist = tcp.create_oadlist_frompy(inputfile, extension='.py')
 
 if runczmac:
     # define OAD macro
-    inputfile = r'c:\Users\m1srh\OneDrive - Carl Zeiss AG\Python_Projects\ZEN_TCPIP\oad.czmac'
+    inputfile = r'c:\Python_Projects\ZEN_TCPIP\oad.czmac'
     # convert it to text
     oadpyscript = tcp.read_macro(inputfile)
     # creat a list of tuples out of that

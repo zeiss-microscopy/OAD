@@ -1,4 +1,15 @@
-﻿# Run ApoTome Processing automatically after acquisition
+﻿#################################################################
+# File       : Automated_Apotome_Processing.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
+
+# Run ApoTome Processing automatically after acquisition
 
 Outputfolder = r'C:\\ZEN_Output'
 

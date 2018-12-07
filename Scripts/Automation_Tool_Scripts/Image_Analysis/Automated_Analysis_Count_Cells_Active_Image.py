@@ -1,4 +1,15 @@
-﻿# Run Image Analysis Script automatically after acquisition
+﻿#################################################################
+# File       : Automated_Analysis_Count_Cells_Active_Image.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
+
+# Run Image Analysis Script automatically after acquisition
 
 from System.IO import Path
 
@@ -17,22 +28,22 @@ method = 1
 #### Analyze, Create Table and Export tables explicitly #######
 if method == 1:
 
-    Zen.Analyzing.Analyze(image,ias)
+    Zen.Analyzing.Analyze(image, ias)
     # Create data list with results for all regions
     table_all = Zen.Analyzing.CreateRegionsTable(image)
     Zen.Application.Documents.Add(table_all)
     # Create data list with results for each region
     table_single = Zen.Analyzing.CreateRegionTable(image)
     Zen.Application.Documents.Add(table_single)
-    
+
     # Save data list for all regions
     table_all_filename = Path.Combine(outputpath, image.Name[:-4] + '_All.csv')
     table_all.Save(table_all_filename)
-    
+
     # Save data list for all single regions
     table_single_filename = Path.Combine(outputpath, image.Name[:-4] + '_Single.csv')
     table_single.Save(table_single_filename)
-    
+
 #### Analyze directly to CSV file #######
 if method == 2:
 

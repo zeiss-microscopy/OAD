@@ -1,4 +1,15 @@
-﻿# get the active document
+﻿#################################################################
+# File       : Automated_Apotome_Export.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
+
+# get the active document
 image = Zen.Application.Documents.ActiveDocument
 
 # rename it

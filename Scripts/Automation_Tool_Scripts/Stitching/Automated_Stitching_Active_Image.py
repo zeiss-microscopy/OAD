@@ -1,4 +1,15 @@
-﻿# Run Stitching automatically after acquisition
+﻿#################################################################
+# File       : Automated_Stitching_Active_Image.py
+# Version    : 1.0
+# Author     : czsrh
+# Date       : 06.12.2018
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
+
+# Run Stitching automatically after acquisition
 
 # get the active image document
 image = Zen.Application.Documents.ActiveDocument

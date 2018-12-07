@@ -74,3 +74,5 @@ Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those sof
 By using any of thos examples you agree to this disclaimer.
 
 Version: 2018.11.01
+
+Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
