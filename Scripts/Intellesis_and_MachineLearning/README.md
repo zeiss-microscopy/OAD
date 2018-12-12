@@ -18,7 +18,7 @@ The ZEN software platform has various built-in image segmentation function. One 
     - Real Multi-Channel Feature Extraction
     - Engineered Feature Sets and Deep Feature Extraction on GPU
     - Pixel Classification by Random Forrest Classifier
-    - Calssification post-processing by Conditional Random Field
+    - Classification post-processing by Conditional Random Field
     - Scriptable segmentation functions for advanced automation
     - SW Trial License and bundle with Image Analysis available
     - Client-Server Architecture using REST-APIs
