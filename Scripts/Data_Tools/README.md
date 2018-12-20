@@ -68,3 +68,18 @@ The tools extracts all single tiles from an tile image:
 * **select the desired output format for the single tile**
 
 ![Screenshot of GUI](/Images/extracttiles.png)
+
+
+***
+
+### DramaticZoom.py
+
+This scripts creates a "zoom movie" for a user-defined region:
+
+* **Macro to create a zoom-in or zoom-out movie**
+* **Draw a region around the area you want to focus on. Any of the solid-line shapes, but not the dotted-line ROI**
+* **A window will pop up asking for some user input, and then it will create a movie from the entire image to the region you selected**
+* **Final output has the aspect ratio of the entire image (or scene, if a multiscene file) and contains the entire drawn ROI.**
+* **The most zoomed-in frame will be at native resolution, all other images are downsampled**
+
+The tool was kindly provided by Sara McArdle from the La Jolla Institute for Immunology - LJI Microscopy Core.
