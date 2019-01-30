@@ -83,3 +83,12 @@ This scripts creates a "zoom movie" for a user-defined region:
 * **The most zoomed-in frame will be at native resolution, all other images are downsampled**
 
 The tool was kindly provided by Sara McArdle from the La Jolla Institute for Immunology - LJI Microscopy Core.
+
+
+***
+
+### ExtractPlaneTable.py
+
+This scripts creates a table with all indicies and XYZ coordinates for every tile of the active CZI image.
+
+![Screenshot of GUI](/Images/ExtractPlaneTable.png)
