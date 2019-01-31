@@ -1,13 +1,4 @@
-#################################################################
-# File       : wellplate_tools_pandas.py
-# Version    : 1.0
-# Author     : czsrh
-# Date       : 06.12.2018
-# Insitution : Carl Zeiss Microscopy GmbH
-#
-#
-# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
-#################################################################
+# coding: utf-8
 
 import pandas as pd
 import csv
@@ -327,8 +318,9 @@ def showheatmap(heatmap, parameter2display,
                 save=False,
                 savename='Heatmap.png',
                 robust=True,
-                filename='Test.czi',
-                dpi=100):
+                filename='test.csv',
+                dpi=100,
+                apeer=False):
 
     # create figure with subplots
     fig, ax = plt.subplots(1, 1, figsize=(10, 8))
@@ -359,7 +351,11 @@ def showheatmap(heatmap, parameter2display,
     cax.tick_params(labelsize=fontsize_label)
 
     if save:
-        savename = filename[:-4] + '_HM_' + parameter2display + '.png'
+        if not apeer:
+            savename = filename[:-4] + '_HM_' + parameter2display + '.png'
+        elif apeer:
+            pass
+        
         fig.savefig(savename,
                     dpi=dpi,
                     orientation='portrait',
