@@ -72,7 +72,8 @@ bf.set_bfpath(bfpackage)
 # create plane info from CZI image file and write CSV file (optional)
 planetable, filenamecsv = bf.get_planetable(filenameczi,
                                             writecsv=wcsv,
-                                            separator=separator)
+                                            separator=separator,
+                                            showinfo=True)
 
 # show the dataframe
 print(planetable[:10])
@@ -82,14 +83,14 @@ figuresavename = os.path.splitext(filenamecsv)[0] + '_XYZ-Pos' + '.' + saveforma
 
 # display the XYZ positions
 fig1, fig2 = bf.scatterplot(planetable,
-                             ImageID=0,
-                             T=0,
-                             CH=0,
-                             Z=0,
-                             size=250,
-                             savefigure=save,
-                             figsavename=figuresavename,
-                             showsurface=surface)
+                            ImageID=0,
+                            T=0,
+                            CH=0,
+                            Z=0,
+                            size=250,
+                            savefigure=save,
+                            figsavename=figuresavename,
+                            showsurface=surface)
 
 # show the plot
 plt.show()

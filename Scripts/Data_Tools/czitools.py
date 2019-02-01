@@ -87,6 +87,28 @@ def read_dimensions_czi(filename):
     return czishape, cziorder
 
 
+def get_numscenes(filename):
+    """
+    Currently the number of scenes cannot be read directly using BioFormats so
+    czifile.py is used to determine the number of scenes.
+    """
+
+    # Read the dimensions of the image stack and their order
+    czi = zis.CziFile(filename)
+
+    # find the index of the "S" inside the dimension string
+    try:
+        si = czi.axes.index("S")
+        numscenes = czi.shape[si]
+    except:
+        # if no scene was found set to 1
+        numscenes = 1
+
+    czi.close()
+
+    return numscenes
+
+
 def get_shapeinfo_cziread(filename):
     # get CZI shape and dimension order using czifile.py
 
@@ -147,8 +169,6 @@ def get_metainfo_cziread(filename):
     except:
 
         print('czifile.py did not detect an CZI file.')
-        czishape = 'unknown'
-        cziorder = 'unknown'
 
     return objNA, objMag, objName, objImm, CamName, totalMag
 

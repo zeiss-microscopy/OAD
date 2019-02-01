@@ -313,13 +313,19 @@ def get_metainfo_pixeltype(jmd):
     return pixtype
 
 
-def get_metainfo_numscenes(filename):
+def get_metainfo_numscenes(czishape, cziorder):
     """
     Currently the number of scenes cannot be read directly using BioFormats so
     czifile.py is used to determine the number of scenes.
     """
-    czidim, cziorder = czt.read_dimensions(filename)
-    numscenes = czidim[1]
+
+    # find the index of the "S" inside the dimension string
+    try:
+        si = cziorder.index("S")
+        numscenes = czishape[si]
+    except:
+        # if no scene was found set to 1
+        numscenes = 1
 
     return numscenes
 
@@ -389,20 +395,38 @@ def get_dimension_only(imagefile, imageID=0):
     return sizes
 
 
-def get_planetable(imagefile, writecsv=False, separator='\t'):
+def get_planetable(imagefile, writecsv=False, separator='\t', imageID=0, showinfo=True):
 
     MetaInfo = create_metainfo_dict()
 
     # get JavaMetaDataStore and SeriesCount
     try:
-        jmd, MetaInfo['TotalSeries'], MetaInfo['ImageIDs'], MetaInfo['SeriesDimensions'], MetaInfo['MultiResolution'] = get_java_metadata_store(
-            imagefile)
+        jmd, MetaInfo['TotalSeries'], MetaInfo['ImageIDs'], MetaInfo['SeriesDimensions'], MetaInfo['MultiResolution'] = get_java_metadata_store(imagefile)
+        MetaInfo['XScale'], MetaInfo['YScale'], MetaInfo['ZScale'] = get_metainfo_scaling(jmd)
+        MetaInfo['SizeC'] = np.int(jmd.getPixelsSizeC(imageID).getValue().floatValue())
+        MetaInfo['SizeT'] = np.int(jmd.getPixelsSizeT(imageID).getValue().floatValue())
+        MetaInfo['SizeZ'] = np.int(jmd.getPixelsSizeZ(imageID).getValue().floatValue())
+        MetaInfo['SizeX'] = np.int(jmd.getPixelsSizeX(imageID).getValue().floatValue())
+        MetaInfo['SizeY'] = np.int(jmd.getPixelsSizeY(imageID).getValue().floatValue())
     except:
         print('Problem retrieving Java Metadata Store or Series size:', sys.exc_info()[0])
         raise
 
     # get dimension information and MetaInfo
     MetaInfo = get_metainfo_dimension(jmd, MetaInfo)
+
+    if showinfo:
+        # show relevant image Meta-Information
+        print('\n')
+        print('-------------------------------------------------------------')
+        print('MutiResolution       : ', MetaInfo['MultiResolution'])
+        print('Series Dimensions    : ', MetaInfo['SeriesDimensions'])
+        print('Images Dim Sizes [0] : ', MetaInfo['Sizes'])
+        print('Image Dimensions     : ', MetaInfo['TotalSeries'], MetaInfo['SizeT'],
+              MetaInfo['SizeZ'], MetaInfo['SizeC'], MetaInfo['SizeY'], MetaInfo['SizeX'])
+        print('Scaling XYZ [micron] : ', MetaInfo['XScale'], MetaInfo['YScale'], MetaInfo['ZScale'])
+        print('ImageIDs             : ', MetaInfo['ImageIDs'])
+        print('\n')
 
     id = []
     plane = []
@@ -462,7 +486,7 @@ def get_planetable(imagefile, writecsv=False, separator='\t'):
     if not writecsv:
         csvfile = None
 
-    return df, csvfile
+    return df, csvfile, MetaInfo
 
 
 def get_image6d(imagefile, sizes, pyramid='single',
@@ -875,14 +899,16 @@ def create_metainfo_dict():
                 'Detector Model': [],
                 'Detector Name': [],
                 'DetectorID': 'n.a.',
-                'InstrumentID': 0,
+                'InstrumentID': None,
                 'Dyes': [],
                 'Channels': [],
                 'ChDesc': 'n.a.',
-                'Sizes': 0,
+                'Sizes': None,
                 'ImageIDs': [],
                 'SeriesDimensions': [],
-                'MutiResolution': False}
+                'MutiResolution': False,
+                'PyLevels': None,
+                'NumScenes': None}
 
     return MetaInfo
 
@@ -917,7 +943,7 @@ def get_relevant_metainfo_wrapper(imagefile,
         # get objective information using cziread
         print('Using czifile.py to get CZI Shape info.')
         MetaInfo['ShapeCZI'], MetaInfo['OrderCZI'] = czt.get_shapeinfo_cziread(imagefile)
-        MetaInfo['NumScenes'] = MetaInfo['ShapeCZI'][0]
+        MetaInfo['NumScenes'] = get_metainfo_numscenes(MetaInfo['ShapeCZI'], MetaInfo['OrderCZI'])
 
     MetaInfo['PyLevels'] = len(set(MetaInfo['SeriesDimensions']))
 
@@ -983,10 +1009,9 @@ def get_relevant_metainfo_wrapper(imagefile,
         print('Problem reading DetectorID from OME-XML.')
 
     if showinfo:
-        showtypicalmetadata(MetaInfo, namespace=namespace, bfpath=bfpath)
+        showtypicalmetadata(MetaInfo)
 
     return MetaInfo
-
 
 def calc_series_range(total_series, scenes, sceneID):
 
@@ -1351,12 +1376,10 @@ def output2file(scriptname, output_name='output.txt', targetdir=os.getcwd()):
     return filepath_output
 
 
-def showtypicalmetadata(MetaInfo, namespace='n.a.', bfpath='n.a.'):
+def showtypicalmetadata(MetaInfo):
 
     # show relevant image Meta-Information
     print('\n')
-    print('OME NameSpace used   : ', namespace)
-    print('BF Version used      : ', bfpath)
     print('-------------------------------------------------------------')
     print('Image Directory      : ', MetaInfo['Directory'])
     print('Image Filename       : ', MetaInfo['Filename'])
