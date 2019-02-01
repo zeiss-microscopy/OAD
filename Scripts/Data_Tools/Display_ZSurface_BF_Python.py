@@ -53,7 +53,7 @@ SCRIPT = r'showZsurface.bat'
 
 # activate GUI
 wd = ZenWindow()
-wd.Initialize('PlaneZable Tool')
+wd.Initialize('PlaneTable Tool')
 # add components to dialog
 wd.AddLabel('Extract PlaneData from CZI using Python-BioFormats.')
 wd.AddDropDown('czi', 'Select CZI Image Data', CZIfiles_short, 0)
