@@ -1,16 +1,4 @@
 # -*- coding: utf-8 -*-
-
-#################################################################
-# File       : bftools.py
-# Version    : 1.0
-# Author     : czsrh
-# Date       : 13.12.2018
-# Insitution : Carl Zeiss Microscopy GmbH
-#
-# Beta Version: Use at your own risk!
-#
-# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
-#################################################################
 """
 @author: Sebi
 
@@ -40,7 +28,7 @@ VM_STARTED = False
 VM_KILLED = False
 
 # define default path to bioformats_package.jar globally
-BFPATH = r'bioformats_package_5_9_2.jar'
+BFPATH = r'bfpackage/5.9.2/bioformats_package.jar'
 
 BF2NP_DTYPE = {
     0: np.int8,
@@ -196,7 +184,7 @@ def get_java_metadata_store(imagefile):
 
     rdr.close()
 
-    # kill_jvm()
+    #kill_jvm()
 
     return javametadata, totalseries, imageIDs, series_dimensions, multires
 
@@ -478,12 +466,10 @@ def get_planetable(imagefile, writecsv=False, separator='\t'):
 
 
 def get_image6d(imagefile, sizes, pyramid='single',
-                seriesIDsinglepylevel=0):
+                                  seriesIDsinglepylevel=0):
     """
     This function will read the image data and store them into a 6D numpy array.
     The 6D array has the following dimension order: [Series, T, Z, C, X, Y].
-
-    This function is still in beta! Use at your own risk!
     """
     if not VM_STARTED:
         start_jvm()
@@ -491,13 +477,16 @@ def get_image6d(imagefile, sizes, pyramid='single',
         jvm_error()
 
     rdr = bioformats.ImageReader(imagefile, perform_init=True)
+    # img6d = np.zeros(sizes, dtype=BF2NP_DTYPE[rdr.rdr.getPixelType()])
+    # img6d = np.moveaxis(np.zeros(sizes, dtype=BF2NP_DTYPE[rdr.rdr.getPixelType()]), 4, 5)
 
     readstate = 'OK'
     readproblems = []
 
     if pyramid == 'single':
 
-        # sizes[0] = 1 # adapt the sizes to reflect that only one pyramid level will be read
+        #sizes[0] = 1 # adapt the sizes to reflect that only one pyramid level will be read
+        #print(sizes)
         img6d = np.zeros(sizes, dtype=BF2NP_DTYPE[rdr.rdr.getPixelType()])
 
         # main loop to read the images from the data file
@@ -507,6 +496,8 @@ def get_image6d(imagefile, sizes, pyramid='single',
                 for zplane in range(0, sizes[2]):
                     for channel in range(0, sizes[3]):
                         try:
+                            # img6d[seriesID, timepoint, zplane, channel, :, :] = \
+                            #    rdr.read(series=seriesID, c=channel, z=zplane, t=timepoint, rescale=False)
                             img6d[0, timepoint, zplane, channel, :, :] = \
                                 rdr.read(series=seriesID, c=channel, z=zplane, t=timepoint, rescale=False)
                         except:
@@ -531,11 +522,303 @@ def get_image6d(imagefile, sizes, pyramid='single',
                             readstate = 'NOK'
                             readproblems = sys.exc_info()[1]
 
+    # # main loop to read the images from the data file
+    # for seriesID in range(0, sizes[0]):
+    #     for timepoint in range(0, sizes[1]):
+    #         for zplane in range(0, sizes[2]):
+    #             for channel in range(0, sizes[3]):
+    #                 try:
+    #                     img6d[seriesID, timepoint, zplane, channel, :, :] = rdr.read(series=seriesID,
+    #                                                                                  c=channel,
+    #                                                                                  z=zplane,
+    #                                                                                  t=timepoint,
+    #                                                                                  rescale=False)
+    #                 except:
+    #                     print('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1])
+    #                     readstate = 'NOK'
+    #                     readproblems = sys.exc_info()[1]
+
     rdr.close()
 
     kill_jvm()
 
     return img6d, readstate
+
+
+def write_ometiff(filepath, img6d,
+                  scalex=0.1,
+                  scaley=0.1,
+                  scalez=1.0,
+                  dimorder='STZCYX',
+                  pixeltype='uint16',
+                  swapxyaxes=True):
+    """
+    This function will write an OME-TIFF file to disk.
+    The out 6D array has the following dimension order:
+
+    [Series, T, Z, C, Y, X] if swapxyaxes = True
+
+    [Series, T, Z, C, Y, X] if swapxyaxes = False
+    """
+
+    # Dimension STZCXY
+    if swapxyaxes:
+        # sway xy to write the OME-Stack with the correct shape
+        Series = img6d.shape[0]
+        SizeT = img6d.shape[1]
+        SizeZ = img6d.shape[2]
+        SizeC = img6d.shape[3]
+        SizeX = img6d.shape[5]
+        SizeY = img6d.shape[4]
+
+    if not swapxyaxes:
+        Series = img6d.shape[0]
+        SizeT = img6d.shape[1]
+        SizeZ = img6d.shape[2]
+        SizeC = img6d.shape[3]
+        SizeX = img6d.shape[4]
+        SizeY = img6d.shape[5]
+
+    # Getting metadata info
+    omexml = bioformats.omexml.OMEXML()
+    omexml.image(Series-1).Name = filepath
+
+    for series in range(Series):
+        p = omexml.image(series).Pixels
+        p.ID = str(series)
+        p.SizeX = SizeX
+        p.SizeY = SizeY
+        p.SizeC = SizeC
+        p.SizeT = SizeT
+        p.SizeZ = SizeZ
+        p.PhysicalSizeX = np.float(scalex)
+        p.PhysicalSizeY = np.float(scaley)
+        p.PhysicalSizeZ = np.float(scalez)
+        p.PixelType = pixeltype
+        p.channel_count = SizeC
+        p.plane_count = SizeZ * SizeT * SizeC
+        p = writeOMETIFFplanes(p, SizeT=SizeT, SizeZ=SizeZ, SizeC=SizeC, order=dimorder)
+
+        for c in range(SizeC):
+            if pixeltype == 'unit8':
+                p.Channel(c).SamplesPerPixel = 1
+            if pixeltype == 'unit16':
+                p.Channel(c).SamplesPerPixel = 2
+
+        omexml.structured_annotations.add_original_metadata(bioformats.omexml.OM_SAMPLES_PER_PIXEL, str(SizeC))
+
+    # Converting to omexml
+    xml = omexml.to_xml()
+
+    # write file and save OME-XML as description
+    tifffile.imwrite(filepath, img6d, metadata={'axes': dimorder}, description=xml)
+
+    return filepath
+
+
+def care_getimages(imagefile, sizes):
+    """
+    Still experimental. Use at your own risk !!!
+    """
+    if not VM_STARTED:
+        start_jvm()
+    if VM_KILLED:
+        jvm_error()
+
+    rdr = bioformats.ImageReader(imagefile, perform_init=True)
+    img_care = np.zeros(sizes, dtype=BF2NP_DTYPE[rdr.rdr.getPixelType()])
+    readstate = 'OK'
+    readproblems = []
+
+    # main loop to read the images from the data file
+    for seriesID in range(0, sizes[0]):
+        for channel in range(0, sizes[3]):
+            try:
+                img_care[seriesID, :, :, channel] = rdr.read(series=seriesID, c=channel, z=0, t=0, rescale=False)
+            except:
+                print('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1])
+                readstate = 'NOK'
+                readproblems = sys.exc_info()[1]
+
+    rdr.close()
+
+    return img_care, readstate
+
+
+def get_image6d_subset(imagefile, sizes,
+                       seriesstart=0, seriesend=0,
+                       tstart=0, tend=0,
+                       zstart=0, zend=0,
+                       chstart=0, chend=0):
+    """
+
+    Attention: Still Experimental !!!
+
+    This function will read a subset of the image file store them into a 6D numpy array.
+    The 6D array has the following dimension order: [Series, T, Z, C, X, Y].
+    """
+    if not VM_STARTED:
+        start_jvm()
+    if VM_KILLED:
+        jvm_error()
+
+    rdr = bioformats.ImageReader(imagefile, perform_init=True)
+
+    subsetSizeS = seriesend - seriesstart
+    subsetSizeT = tend - tstart
+    subsetSizeZ = zend - zstart
+    subsetSizeC = chend - chstart
+
+    subsetsizes = [subsetSizeS, subsetSizeT, subsetSizeZ, subsetSizeC, sizes[4], sizes[5]]
+
+    img6dsubset = np.zeros(subsetsizes, dtype=BF2NP_DTYPE[rdr.rdr.getPixelType()])
+    readstate = 'OK'
+    readproblems = []
+
+    # main loop to read the images from the data file
+    for seriesID in range(seriesstart, seriesend):
+        for timepoint in range(tstart, tend):
+            for zplane in range(zstart, zend):
+                for channel in range(chstart, chend):
+                    try:
+                        img6dsubset[seriesID, timepoint, zplane, channel, :, :] =\
+                            rdr.read(series=seriesID, c=channel, z=zplane, t=timepoint, rescale=False)
+                    except:
+                        print('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1])
+                        readstate = 'NOK'
+                        readproblems = sys.exc_info()[1]
+
+    rdr.close()
+
+    return img6dsubset, readstate
+
+
+def get_image6d_multires(imagefile, MetaInfo):
+    """
+    This function will read the image data series by series.
+    Every series will be stored inside a tuple as a 5D numpy array.
+    The 5D array has the following dimension order: [T, Z, C, X, Y].
+    """
+    if not VM_STARTED:
+        start_jvm()
+    if VM_KILLED:
+        jvm_error()
+
+    rdr = bioformats.ImageReader(imagefile, perform_init=True)
+
+    readstate = 'OK'
+    readproblems = []
+
+    # initialize the empty list that will hold all the 5D image arrays
+    series_list = []
+
+    numseries = MetaInfo['Sizes'][0]
+    sizeT = MetaInfo['Sizes'][1]
+    sizeZ = MetaInfo['Sizes'][2]
+    sizeC = MetaInfo['Sizes'][3]
+
+    for seriesID in range(0, numseries):
+        # read the XY dimension of the first series
+        current_sizeX = MetaInfo['SeriesDimensions'][seriesID][0]
+        current_sizeY = MetaInfo['SeriesDimensions'][seriesID][1]
+
+        newsize = [sizeT, sizeZ, sizeC, current_sizeX, current_sizeY]
+
+        # create the 5D numpy array
+        img5d = np.zeros(newsize, dtype=BF2NP_DTYPE[rdr.rdr.getPixelType()])
+
+        # main loop to read the images from the data file
+        for timepoint in range(0, sizeT):
+            for zplane in range(0, sizeZ):
+                for channel in range(0, sizeC):
+                    try:
+                        img5d[timepoint, zplane, channel, :, :] =\
+                            rdr.read(series=seriesID, c=channel, z=zplane, t=timepoint, rescale=False)
+                    except:
+                        print('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1])
+                        readstate = 'NOK'
+                        readproblems = sys.exc_info()[1]
+
+        # store the 5D array inside a tuple
+        series_list.append(img5d)
+        # clear the array from memory
+        img5d = None
+
+    rdr.close()
+
+    kill_jvm()
+
+    return series_list, readstate
+
+
+def get_image6d_pylevel(imagefile, MetaInfo, pylevel=0):
+    """
+    This function will read the image data only at a specific pyramid level.
+    Every series will be stored inside a tuple as a 5D numpy array.
+    The 6D array has the following dimension order: [T, Z, C, X, Y].
+    """
+    if not VM_STARTED:
+        start_jvm()
+    if VM_KILLED:
+        jvm_error()
+
+    rdr = bioformats.ImageReader(imagefile, perform_init=True)
+
+    print('Reading MultiRes File.')
+    readstate = 'OK'
+    readproblems = []
+
+    seriesID = pylevel
+    sizeT = MetaInfo['Sizes'][1]
+    sizeZ = MetaInfo['Sizes'][2]
+    sizeC = MetaInfo['Sizes'][3]
+
+    # read the XY dimension of the first series
+    #current_sizeX = MetaInfo['SeriesDimensions'][seriesID][0]
+    #current_sizeY = MetaInfo['SeriesDimensions'][seriesID][1]
+
+    current_sizeX = MetaInfo['SeriesDimensions'][seriesID][1]
+    current_sizeY = MetaInfo['SeriesDimensions'][seriesID][0]
+
+    newsize = [1, sizeT, sizeZ, sizeC, current_sizeX, current_sizeY]
+
+    # create the 6D numpy array
+    img6d = np.zeros(newsize, dtype=BF2NP_DTYPE[rdr.rdr.getPixelType()])
+
+    # main loop to read the images from the data file
+    for timepoint in range(0, sizeT):
+        for zplane in range(0, sizeZ):
+            for channel in range(0, sizeC):
+                try:
+                    img6d[seriesID, timepoint, zplane, channel, :, :] =\
+                        rdr.read(series=seriesID, c=channel, z=zplane, t=timepoint, rescale=False)
+                except:
+                    print('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1])
+                    readstate = 'NOK'
+                    readproblems = sys.exc_info()[1]
+
+    rdr.close()
+
+    kill_jvm()
+
+    return img6d, readstate
+
+
+def get_image2d(imagefile, seriesID, channel, zplane, timepoint):
+    """
+    This will just read a single plane from an image data set.
+    """
+    if not VM_STARTED:
+        start_jvm()
+    if VM_KILLED:
+        jvm_error()
+
+    rdr = bioformats.ImageReader(imagefile, perform_init=True)
+    img2d = rdr.read(series=seriesID, c=channel, z=zplane, t=timepoint, rescale=False)
+
+    rdr.close()
+
+    return img2d
 
 
 def get_series_from_well(imagefile, sizes, seriesseq):
@@ -606,7 +889,7 @@ def create_metainfo_dict():
 
 def get_relevant_metainfo_wrapper(imagefile,
                                   namespace='http://www.openmicroscopy.org/Schemas/OME/2016-01',
-                                  bfpath=r'bioformats_package_5_9_2.jar',
+                                  bfpath=r'bfpackage/5.9.2/bioformats_package.jar',
                                   showinfo=False,
                                   xyorder='YX'):
 
@@ -678,14 +961,20 @@ def get_relevant_metainfo_wrapper(imagefile,
     try:
         MetaInfo['Detector Model'] = getinfofromOMEXML(omexml, ['Instrument', 'Detector'], namespace)[0]['Model']
     except:
-        print('Problem reading Detector Model.')
-        MetaInfo['Detector Model'] = 'n.a.'
+        try:
+            MetaInfo['Detector Model'] = czt.get_metainfo_cziread_camera(imagefile)
+        except:
+            print('Problem reading Detector Model.')
+            MetaInfo['Detector Model'] = 'n.a.'
 
     try:
         MetaInfo['Detector Name'] = getinfofromOMEXML(omexml, ['Instrument', 'Detector'], namespace)[0]['ID']
     except:
-        print('Problem reading Detector Name.')
-        MetaInfo['Detector Name'] = 'n.a.'
+        try:
+            MetaInfo['Detector Name'] = czt.get_metainfo_cziread_detetcor(imagefile)
+        except:
+            print('Problem reading Detector Name.')
+            MetaInfo['Detector Name'] = 'n.a.'
 
     # try to get detector information - 2
     try:
@@ -1004,6 +1293,47 @@ def getImageSeriesIDforWell(welllist, wellID):
     return imageseriesindices
 
 
+def getPlanesAndPixelsFromCZI(imagefile):
+    """
+      This function can be used to extract information about the <Plane> and <Pixel> Elements in the
+      inside the XML meta-information tree. Returns two lists of dictionaries, each dictionary element corresponds to one <Plane> element
+      of the XML tree, with key/values of the XML tree mapped to respective key/values of the dictionary.
+      Attention: works for CZI image data sets only!
+      Added by Volker.Hilsenstein@embl.de
+    """
+    #if not VM_STARTED:
+    #    start_jvm()
+    #if VM_KILLED:
+    #    jvm_error()
+
+    # Create OME-XML using BioFormats from CZI file
+    omexml = get_OMEXML(imagefile)
+
+    # Get the tree and define namespace
+    tree = etl.fromstring(omexml)
+    # had wrong schema here SA instead of OME and was searching
+    # like crazy for the bug ...
+    # Maybe leave out schema completely and only search for *Plane*
+    # and *Pixels*
+    namespace = "{http://www.openmicroscopy.org/Schemas/OME/2015-01}"
+    planes = []
+    pixels = []
+    # for child in root:
+    #    m = re.match('.*Image.*', child.tag)
+    #    if m:
+    #        first_tag = m.group(0)
+    for element in tree.iter():
+        # print element.tag
+        if "{}Plane".format(namespace) in element.tag:
+            tmpdict = dict(zip(element.keys(), element.values()))
+            planes.append(tmpdict)
+        if "{}Pixels".format(namespace) in element.tag:
+            tmpdict = dict(zip(element.keys(), element.values()))
+            pixels.append(tmpdict)
+
+    return planes, pixels
+
+
 def output2file(scriptname, output_name='output.txt', targetdir=os.getcwd()):
 
     # log output to file
@@ -1055,6 +1385,28 @@ def showtypicalmetadata(MetaInfo, namespace='n.a.', bfpath='n.a.'):
     print('ImageIDs             : ', MetaInfo['ImageIDs'])
 
     return None
+
+
+def writeOMETIFFplanes(pixel, SizeT=1, SizeZ=1, SizeC=1, order='STZCXY', verbose=False):
+    
+    if order == 'STZCXY':
+
+        pixel.DimensionOrder = bioformats.omexml.DO_XYCZT
+        counter = 0
+        for t in range(SizeT):
+            for z in range(SizeZ):
+                for c in range(SizeC):
+
+                    if verbose:
+                        print('Write PlaneTable: ', t, z, c),
+                        sys.stdout.flush()
+
+                    pixel.Plane(counter).TheT = t
+                    pixel.Plane(counter).TheZ = z
+                    pixel.Plane(counter).TheC = c
+                    counter = counter + 1
+
+    return pixel
 
 
 def calcimageid(scene, numpylevels, pylevel=0):
@@ -1138,7 +1490,7 @@ def scatterplot(planetable, ImageID=0, T=0, Z=0, CH=0, size=35,
     ax1.autoscale(enable=True, axis='y', tight=True)
 
     # define the labels
-    ax1.set_title('XYZ-Positions (norm) : ' + 'ImageID=' + str(ImageID) + ' T=' + str(T) + ' Z=' + str(Z) + ' CH=' + str(CH))
+    ax1.set_title('XYZ-Positions (norm) : ' + 'ImageID=' + str(ImageID) + ' T=' + str(T) + ' Z='+ str(Z) + ' CH=' + str(CH))
     ax1.set_xlabel('Stage X-Axis [micron]')
     ax1.set_ylabel('Stage Y-Axis [micron]')
 

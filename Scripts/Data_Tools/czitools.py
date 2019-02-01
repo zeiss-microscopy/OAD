@@ -1,16 +1,4 @@
 # -*- coding: utf-8 -*-
-#################################################################
-# File       : czitools.py
-# Version    : 1.0
-# Author     : czsrh
-# Date       : 13.12.2018
-# Insitution : Carl Zeiss Microscopy GmbH
-#
-# Beta Version: Use at your own risk!
-#
-# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
-#################################################################
-
 """
 @author: Sebi
 
@@ -24,6 +12,7 @@ import czifile as zis
 import numpy as np
 import re
 from collections import Counter
+import xml.etree.ElementTree as ET
 
 
 def get_metainfo_channel_description(filename):
@@ -168,15 +157,36 @@ def get_metainfo_cziread_camera(filename):
 
     czi = zis.CziFile(filename)
 
-    # Iterate over the metadata
-    for elem in czi.metadata.getiterator():
+    md = czi.metadata
+    tree = ET.ElementTree(ET.fromstring(md))
+    root = ET.fromstring(md)
 
+    # Iterate over the metadata
+    for elem in tree.iter():
         if elem.tag == 'CameraName':
             cameraname = elem.text
 
     czi.close()
 
     return cameraname
+
+
+def get_metainfo_cziread_detetcor(filename):
+
+    czi = zis.CziFile(filename)
+
+    md = czi.metadata
+    tree = ET.ElementTree(ET.fromstring(md))
+    root = ET.fromstring(md)
+
+    # Iterate over the metadata
+    for elem in tree.iter():
+        if elem.tag == 'Detetctor':
+            detectorname = elem.text
+
+    czi.close()
+
+    return detectorname
 
 
 def getWellInfofromCZI(wellstring):
