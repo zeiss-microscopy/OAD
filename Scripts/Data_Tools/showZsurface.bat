@@ -16,7 +16,8 @@
 @REM #################################################################################
 
 @echo off
-set DEFAULT_SCRIPT_DIR=c:\Users\m1srh\OneDrive - Carl Zeiss AG\Python_Projects\BioFormatsRead\
+@REM This location has to be adapted
+set DEFAULT_SCRIPT_DIR=c:\BioFormatsRead\
 set DEFAULT_SCRIPT=showZsurface.py
 
 @REM Get the direcotry and options to be processed from the command line arguments

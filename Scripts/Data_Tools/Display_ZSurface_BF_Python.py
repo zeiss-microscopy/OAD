@@ -16,11 +16,12 @@ This python script used python-bioformats to read the CZI and extract
 the planetable data.
 
 For whatever reason calling a python script that start a JVM cannot be
-started directly from within an OAD script (at least I could not figure it out yet ...)
-while normal python scripts work fine withou any problems.
+started directly from within an OAD script (at least I could not figure
+it out yet ...) while normal python scripts work fine withou any problems.
 
-The advantage of that additional layer using the batch script is the possibility to use
-it directly even without ZEN is running on other microscope image files as well.
+The advantage of that additional layer using the batch script
+is the possibility to use it directly even without ZEN is
+running on other microscope image files as well.
 
 """
 
@@ -47,7 +48,8 @@ separator_list = ['tab', 'comma', 'semicolon']
 # define image formats for saving figure
 saveformat_list = ['jpg', 'png', 'tiff']
 
-SCRIPT = r'c:\Users\m1srh\OneDrive - Carl Zeiss AG\Python_Projects\BioFormatsRead\showZsurface.bat'
+# this location might have to be adapted
+SCRIPT = r'showZsurface.bat'
 
 # activate GUI
 wd = ZenWindow()
@@ -64,7 +66,7 @@ wd.AddCheckbox('show_fig', 'Open saved figure in ZEN', True)
 # show the window
 result = wd.Show()
 # check, if Cancel button was clicked
-if result.HasCanceled == True:
+if result.HasCanceled:
     sys.exit('Macro aborted with Cancel!')
 
 # get the input values and store them
@@ -129,10 +131,6 @@ if show_fig_result:
         plotfigure = Zen.Application.LoadImage(savename_full, False)
         Zen.Application.Documents.Add(plotfigure)
     else:
-        print 'Saved figure not found.'
-
-print 'Done.'
-else:
         print 'Saved figure not found.'
 
 print 'Done.'
