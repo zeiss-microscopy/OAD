@@ -19,7 +19,13 @@ Collection of tools that deal with various aspects of image metadata. Some requi
 ### Display_ZSurface_BF_Python.py
 
 The main idea here is to acquire an image data set and extract the **PlaneData** from the metadata to display those using python tools.
-Since python-bioformats does not support the new multi-resolution interface of BioFormats' CZIReader for reading images containing an image pyramid, its is recommend to use BioFormats =< 5.1.10, if the data contains an image pyramid.
+Since python-bioformats does not support the new multi-resolution interface of BioFormat's CZIReader for reading images containing an image pyramid, its is recommend to use BioFormats =< 5.1.10, if the data contains an image pyramid. The ZEN script will call a batch script that will call the respective scripts that will do the plotting.
+
+The batch script showZsurface.bat can be also used directly from the command line using:
+
+```bash
+C:\mydir>showZsurface.bat path_to_czifile True tab True png True
+```
 
 ***
 
