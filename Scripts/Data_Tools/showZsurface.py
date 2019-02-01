@@ -70,10 +70,10 @@ bfpackage = r'bioformats_package_5_1_10.jar'
 bf.set_bfpath(bfpackage)
 
 # create plane info from CZI image file and write CSV file (optional)
-planetable, filenamecsv = bf.get_planetable(filenameczi,
-                                            writecsv=wcsv,
-                                            separator=separator,
-                                            showinfo=True)
+planetable, filenamecsv, MetaInfo = bf.get_planetable(filenameczi,
+                                                      writecsv=wcsv,
+                                                      separator=separator,
+                                                      showinfo=True)
 
 # show the dataframe
 print(planetable[:10])
