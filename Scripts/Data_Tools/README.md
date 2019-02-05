@@ -27,6 +27,10 @@ The batch script showZsurface.bat can be also used directly from the command lin
 C:\mydir>showZsurface.bat path_to_czifile True tab True png True
 ```
 
+Additionally there is Jupyter Notebook exploring this tool without using ZEN. It can be found here:
+
+[DisplayZSurface Jupyter Notebook](https://github.com/zeiss-microscopy/OAD/blob/master/notebooks/DisplayZsurface/Display_Z-Surface_from_Image.ipynb)
+
 ***
 
 ![Screenshot of ZEN Blue with showing the tool UI](/Images/zsurface_tool1.png)
