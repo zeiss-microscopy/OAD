@@ -20,7 +20,10 @@
 # !!! Attention: It does overwrite existing * .py files inside that directory !!!
 #
 # Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
-################################################################################################
+#
+# Permission is granted to use, modify and distribute this code,
+# as long as this copyright notice remains part of the code.
+#################################################################
 
 
 import argparse

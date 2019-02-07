@@ -4,9 +4,10 @@
 # Author     : czsrh
 # Date       : 21.06.2016
 # Insitution : Carl Zeiss Microscopy GmbH
+# Copyright(c) 2019 Carl Zeiss AG, Germany. All Rights Reserved.
 #
-#
-# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+# Permission is granted to use, modify and distribute this code,
+# as long as this copyright notice remains part of the code.
 #################################################################
 
 

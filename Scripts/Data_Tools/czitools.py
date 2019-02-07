@@ -1,11 +1,15 @@
-# -*- coding: utf-8 -*-
-"""
-@author: Sebi
-
-File: czitools.py
-Date: 01.02.2019
-Version. 1.2
-"""
+#################################################################
+# File       : czitools.py
+# Version    : 1.2
+# Author     : czsrh
+# Date       : 07.02.2019
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+# Copyright(c) 2019 Carl Zeiss AG, Germany. All Rights Reserved.
+#
+# Permission is granted to use, modify and distribute this code,
+# as long as this copyright notice remains part of the code.
+#################################################################
 
 import misctools as misc
 import czifile as zis

@@ -5,9 +5,11 @@
 # Date       : 06.12.2018
 # Insitution : Carl Zeiss Microscopy GmbH
 #
-#
 # Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
-# or: M1MALANG
+#
+# Permission is granted to use, modify and distribute this code,
+# as long as this copyright notice remains part of the code.
+#################################################################
 
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
