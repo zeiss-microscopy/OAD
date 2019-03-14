@@ -49,6 +49,7 @@ def runSWAF(SWAF_exp,
 
 run_findsurface = True
 store_for_recall = True
+hwdelay = 1
 
 # get the active experiment
 SWAF_exp = Zen.Acquisition.Experiments.ActiveExperiment
@@ -64,13 +65,13 @@ if run_findsurface:
         print('FindSurface (Definite Focus) failed.')
 
 # run SWAF
-zSWAF = runSWAF_special(DetailScan_reloaded,
-                        delay=hwdelay,
-                        searchStrategy='Full',
-                        sampling=ZenSoftwareAutofocusSampling.Coarse,
-                        relativeRangeIsAutomatic=False,
-                        relativeRangeSize=500,
-                        timeout=0)
+zSWAF = runSWAF(DetailScan_reloaded,
+                delay=hwdelay,
+                searchStrategy='Full',
+                sampling=ZenSoftwareAutofocusSampling.Coarse,
+                relativeRangeIsAutomatic=False,
+                relativeRangeSize=500,
+                timeout=0)
 
 # store resulting Z-Value inside the Definite Focus
 if store_for_recall:
