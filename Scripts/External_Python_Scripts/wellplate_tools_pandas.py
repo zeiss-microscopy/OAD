@@ -1,15 +1,4 @@
-#################################################################
-# File       : wellplate_tools_pandas.py
-# Version    : 1.0
-# Author     : czsrh
-# Date       : 06.12.2018
-# Insitution : Carl Zeiss Microscopy GmbH
-#
-# Copyright(c) 2019 Carl Zeiss AG, Germany. All Rights Reserved.
-#
-# Permission is granted to use, modify and distribute this code,
-# as long as this copyright notice remains part of the code.
-#################################################################
+# coding: utf-8
 
 import pandas as pd
 import csv
@@ -125,8 +114,10 @@ def rename_columns(dfs, paramlist, verbose=False):
         # rename the columns with measured parameters and correct types
         if verbose:
             print('Renamed : ', dfs.columns[i], ' to ', paramlist[i])
-
-        dfs.rename(columns={dfs.columns[i]: paramlist[i]}, inplace=True)
+        try:
+            dfs.rename(columns={dfs.columns[i]: paramlist[i]}, inplace=True)
+        except:
+            print('Column not find inside table for renaming. Doing nothing.')
 
     return dfs
 
@@ -329,8 +320,9 @@ def showheatmap(heatmap, parameter2display,
                 save=False,
                 savename='Heatmap.png',
                 robust=True,
-                filename='Test.czi',
-                dpi=100):
+                filename='test.csv',
+                dpi=100,
+                apeer=False):
 
     # create figure with subplots
     fig, ax = plt.subplots(1, 1, figsize=(10, 8))
@@ -361,7 +353,11 @@ def showheatmap(heatmap, parameter2display,
     cax.tick_params(labelsize=fontsize_label)
 
     if save:
-        savename = filename[:-4] + '_HM_' + parameter2display + '.png'
+        if not apeer:
+            savename = filename[:-4] + '_HM_' + parameter2display + '.png'
+        elif apeer:
+            pass
+        
         fig.savefig(savename,
                     dpi=dpi,
                     orientation='portrait',
