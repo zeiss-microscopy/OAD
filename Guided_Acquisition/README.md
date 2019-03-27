@@ -44,17 +44,17 @@ The goal of this tutorial is to create an automated workflow that can be used to
 
 ***
 
-![Workflow - Actionable Information ](/images/GuidedAcq_NEW.png)*Workflow Guided Acquisition*
+![Workflow - Actionable Information ](/Images/GuidedAcq_NEW.png)*Workflow Guided Acquisition*
 
 ***
 
-![Workflow - Actionable Information using OAD](/images/Guided_Acquisition_PPTX_Slide.png)*Guided Acquisition using scripting*
+![Workflow - Actionable Information using OAD](/Images/Guided_Acquisition_PPTX_Slide.png)*Guided Acquisition using scripting*
 
 ***
 
 ### Detailed WorkFlow Diagram
 
-![Workflow - Guided Acquisition diagram](/images/GuidedAcq_Script_Diagram_v2.png)*General Worklow diagram for Guided Acquisition*
+![Workflow - Guided Acquisition diagram](/Images/GuidedAcq_Script_Diagram_v2.png)*General Worklow diagram for Guided Acquisition*
 
 ***
 
