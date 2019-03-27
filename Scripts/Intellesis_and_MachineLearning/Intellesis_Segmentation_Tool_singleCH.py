@@ -1,8 +1,8 @@
 ﻿"""  
 Author: Sebastian Rhode
-Date: 2019_03_22
+Date: 2019_03_25
 File: Intellesis_Segmentation_Tool_singleCH.py
-Version: 0.1
+Version: 0.2
 
 Requires ZEN Blue 2.6 
 
@@ -15,8 +15,7 @@ clr.AddReference('System.Xml')
 import System.Xml
 from System import ApplicationException
 
-version = 0.1
-
+version = 0.2
 
 def is_empty(any_structure):
     if any_structure:
@@ -107,7 +106,8 @@ def classify(image, model,
              format='MultiChannel',
              extractclass=False,
              addseg=False,
-             classid=1):
+             classid=1,
+             adapt_pixeltype=True):
 
     if format == 'MultiChannel':
         segf = ZenSegmentationFormat.MultiChannel
@@ -136,6 +136,12 @@ def classify(image, model,
         except ApplicationException as e:
             seg_image = None
             print 'Application Exception : ', e.Message
+
+    if adapt_pixeltype:
+        # adapt the pixeltype to match the type of the original image
+        pxtype = image.Metadata.PixelType
+        seg_image = Zen.Processing.Utilities.ChangePixelType(seg_image, pxtype)
+        print 'New PixelTyper for Segmented Image : ', seg_image.Metadata.PixelType
 
     if extractclass:
         # create subset string
@@ -257,6 +263,7 @@ IntellesisDialog.AddLabel('2) Select Class from Model')
 IntellesisDialog.AddDropDown('extract_classname', 'Select Classname', classnames, 0)
 IntellesisDialog.AddLabel('3) Additional Tools')
 IntellesisDialog.AddCheckbox('addsegm', 'Add Segmentation Mask to Original Image', False)
+IntellesisDialog.AddCheckbox('adapt', 'Adapt PixelType of Segmented Mask to match Original Image', True)
 
 # show the window
 result = IntellesisDialog.Show()
@@ -273,19 +280,20 @@ classname = result.GetValue('extract_classname')
 extract_id = classdict[classname]
 extract = True
 addseg2orig = result.GetValue('addsegm')
+adaptpx = result.GetValue('adapt')
 
 print 'Selected Classname : ', classname
 print 'ClassID : ', extract_id
 print 'Use Confidence threshold : ', use_conf
 print 'Confidence Threshold Value : ', conf_th
-print 'Add Segmentation Mask : ', addseg2orig
+print 'Add Segmented Image to Original : ', addseg2orig
+print 'Adapt PixelType of Segmented Image : ', adaptpx
 print '-----------------------------------------------------------------------------'
 print 'Segmenting ...'
 
 # extract select channel from active image
 substr = 'C(' + str(chdict[channelname]) + ')'
 image = Zen.Processing.Utilities.CreateSubset(activeimage, substr, False)
-
 
 # do the pixel classification for the current image
 seg = classify(image, modelname,
@@ -294,7 +302,8 @@ seg = classify(image, modelname,
                format=segmentationformat,
                extractclass=extract,
                addseg=False,
-               classid=extract_id+1)
+               classid=extract_id+1,
+               adapt_pixeltype=adaptpx)
 
 if addseg2orig:
     # add segmentation result to the original image

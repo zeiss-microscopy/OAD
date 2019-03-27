@@ -1,8 +1,8 @@
 ﻿"""  
 Author: Sebastian Rhode
-Date: 2019_03_24
+Date: 2019_03_25
 File: Intellesis_Segmentation_Tool.py
-Version: 0.8
+Version: 0.9
 
 Requires ZEN Blue 2.6 
 
@@ -15,8 +15,7 @@ clr.AddReference('System.Xml')
 import System.Xml
 from System import ApplicationException
 
-version = 0.8
-
+version = 0.9
 
 def is_empty(any_structure):
     if any_structure:
@@ -88,7 +87,8 @@ def classify(image, model,
              format='MultiChannel',
              extractclass=False,
              addseg=False,
-             classid=1):
+             classid=1,
+             adapt_pixeltype=True):
 
     if format == 'MultiChannel':
         segf = ZenSegmentationFormat.MultiChannel
@@ -117,6 +117,12 @@ def classify(image, model,
         except ApplicationException as e:
             seg_image = None
             print 'Application Exception : ', e.Message
+
+    if adapt_pixeltype:
+        # adapt the pixeltype to match the type of the original image
+        pxtype = image.Metadata.PixelType
+        seg_image = Zen.Processing.Utilities.ChangePixelType(seg_image, pxtype)
+        print 'New PixelTyper for Segmented Image : ', seg_image.Metadata.PixelType
 
     if extractclass:
 
@@ -207,6 +213,7 @@ IntellesisBatchDialog.AddCheckbox('extract_class', 'Extract (requires MultiChann
 IntellesisBatchDialog.AddDropDown('extract_class_list', 'Select Class ID', classlist, 0)
 IntellesisBatchDialog.AddLabel('4) Additional Tools')
 IntellesisBatchDialog.AddCheckbox('addsegm', 'Add Segmentation Mask to Original Image', False)
+IntellesisBatchDialog.AddCheckbox('adapt', 'Adapt PixelType of Segmented Mask to match Original Image', False)
 IntellesisBatchDialog.AddCheckbox('segactive', 'Segment Active Image only (Do not use Folder !)', True)
 IntellesisBatchDialog.AddLabel('5) Select Folder containing Images')
 IntellesisBatchDialog.AddFolderBrowser('sourcedir', 'Source Folder with Images: ', imgfolder)
@@ -231,6 +238,7 @@ extract = result.GetValue('extract_class')
 extract_id = int(result.GetValue('extract_class_list'))
 addseg2orig = result.GetValue('addsegm')
 segactiveimg = result.GetValue('segactive')
+adaptpx = result.GetValue('adapt')
 
 # get class number of select model
 number_of_classes = getmodelclassnumber(modeldict[modelname])
@@ -244,6 +252,9 @@ print 'File Extension Filter : ', fileext
 print 'Use Confidence threshold : ', use_conf
 print 'Confidence Threshold Value : ', conf_th
 print 'Extract Class Option : ', extract
+print 'Add Segmented Image to Original : ', addseg2orig
+print 'Segment Active Image only : ', segactiveimg
+print 'Adapt PixelType of Segmented Image : ', adaptpx
 
 if extract:
     if segmentationformat == 'Labels':
@@ -295,7 +306,6 @@ if segactiveimg:
     if Zen.Application.Documents.ActiveDocument.IsZenImage:
        image = Zen.Application.ActiveDocument
        imagefiles.append(image.FileName)
-    
 
 print '-----------------------------------------------------------------------------'
 

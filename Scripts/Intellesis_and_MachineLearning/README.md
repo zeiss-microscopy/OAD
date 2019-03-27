@@ -133,4 +133,4 @@ Beside this tool is is alos possible to run a segmenation using the ZEN built-in
 
 ![ZEN Intellesis Segmentation Tool - Single Channel](/Images/intellesis_batch_singleCH_result.png)
 
-*Segmented green channel (Bottom Left)*
+*Segmented green channel (bottom left)*
