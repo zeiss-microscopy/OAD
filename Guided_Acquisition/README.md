@@ -66,15 +66,15 @@ Since ZEN Blue 2.5 this software has a module called **ZEN Connect**, which allo
 
 More information about ZEN Connect can be found here: [ZEN Connect](https://www.zeiss.com/microscopy/int/products/microscope-software/zen-connect-image-overlay-and-correlative-microscopy.html)
 
-![Overview Scan inside the Correlative Workspace](/images/GA_Mitosis_CWS_Overview.png)*Overview Scan inside the Correlative Workspace*
+![Overview Scan inside the Correlative Workspace](/Images/GA_Mitosis_CWS_Overview.png)*Overview Scan inside the Correlative Workspace*
 
 ***
 
-![Overlay of "positive" object and detailed image](/images/GA_Mitosis_CWS_Overlay.png)*Overlay of "positive" object and detailed image* 
+![Overlay of "positive" object and detailed image](/Images/GA_Mitosis_CWS_Overlay.png)*Overlay of "positive" object and detailed image* 
 
 ***
 
-![Side-by-Side view of overview in CWS and detailed image](/images/GA_Mitosis_CWS_Detail_ZEN.png)*Side-by-Side view of overview in CWS and detailed image*
+![Side-by-Side view of overview in CWS and detailed image](/Images/GA_Mitosis_CWS_Detail_ZEN.png)*Side-by-Side view of overview in CWS and detailed image*
 
 ***
 
