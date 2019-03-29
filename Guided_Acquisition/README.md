@@ -80,6 +80,6 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
 
 ## Disclaimer
 
-**This is an application note that is free to use for everybody. Use it on your own risk. Especially be aware of the fact that automated stage movements might damage hardware if the system is setup properly. Please check everything in simulation mode first!**
+**This is an application note that is free to use for everybody. Use it on your own risk. Especially be aware of the fact that automated stage movements might damage hardware if the system is not setup properly. Please check everything in simulation mode first!**
 
 Carl Zeiss Microscopy GmbH's ZEN software allows connection to the third party software, Python. Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning Python, makes no representation that Python will work on your hardware, and will not be liable for any damages caused by the use of this extension. By running this example you agree to this disclaimer.
