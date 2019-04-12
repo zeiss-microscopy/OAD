@@ -1,8 +1,8 @@
 ﻿#################################################################
 # File       : Guided_Acquisition_shortUI.py
-# Version    : 6.9
+# Version    : 7.0
 # Author     : czsrh, czmla
-# Date       : 27.02.2019
+# Date       : 12.04.2019
 # Insitution : Carl Zeiss Microscopy GmbH
 #
 # !!! Requires with ZEN >=2.6 HF3 - Use at your own Risk !!!
@@ -35,7 +35,7 @@ import sys
 
 
 # version number for dialog window
-version = 6.9
+version = 7.0
 # file name for overview scan
 ovscan_name = 'OverviewScan.czi'
 
@@ -52,6 +52,8 @@ dy_detector = 0.0
 blockindex = 0
 # delay for specific hardware movements in [seconds]
 hwdelay = 1
+# posprocessing switch
+do_postprocess = False
 
 
 def dircheck(basefolder):
@@ -170,6 +172,27 @@ def checktableentry(datatable, entry2check='ImageSceneContainerName'):
             break
 
     return entry_exits, column
+
+
+def run_postprocessing(image, parameters={}, func='topography'):
+
+    if func == 'topography':
+
+        noise_low = parameters['noise_low']
+        noise_high = parameters['noise_high']
+        outputfolder = parameters['outputfolder']
+        ext = parameters['extension']
+
+        # converting to topo, with defined FZ noisecut
+        # in filter settings: 0-255 means no filter, 1-254 means cut one gray scale from top and from bottom
+        imgtop = Zen.Processing.Transformation.Topography.CreateTopography(image, noise_low, noise_high)
+        # saving file to the directory
+        topo_filepath = Path.Combine(outputfolder, Path.GetFileNameWithoutExtension(image.FileName) + ext)
+        Zen.Processing.Utilities.ExportHeightmapFromTopography(imgtop, topo_filepath)
+        print('Exported to : ', topo_filepath)
+        imgtop.Close()
+
+    image.Close()
 
 
 ###########################################################################
@@ -463,7 +486,7 @@ for i in range(0, num_POI, 1):
 
     # in case Image Scene Container Name is not defined
     if not wellid_exist:
-        message = 'Missing column ImageSceneContainerName in Image Analysis Results.\nPlease Select Features inside the Image Analysis.'
+        message = 'Missing column ImageSceneContainerName in Image Analysis Results.\nPlease Select Features inside the Image Analysis when needed.'
         print(message)
         container_name = 'empty'
 
@@ -479,8 +502,27 @@ for i in range(0, num_POI, 1):
         # wellID was found inside table
         well_id = SingleObj.GetValue(i, column_wellid)
         newname_dtscan = 'DTScan_Well_' + str(wellid) + '_ID_' + str(POI_ID) + '.czi'
+    
     print('Renaming File: ' + dtscan_name + ' to: ' + newname_dtscan + '\n')
     File.Move(Path.Combine(OutputFolder, dtscan_name), Path.Combine(OutputFolder, newname_dtscan))
+
+    ############ OPTIONAL POSTPROCESSING ###############
+
+    if do_postprocess:
+
+        # do the postprocessing
+        image2process = Zen.Application.LoadImage(newname_dtscan, False)
+
+        # define the parameters for processing: Topography Export
+        parameters = {}
+        parameters['noise_low'] = 1
+        parameters['noise_high'] = 254
+        parameters['outputfolder'] = OutputFolder
+        parameters['extension'] = '.sur'
+
+        # run the processing and export and close the image
+        run_postprocessing(image2process, func='topography', parameters)
+        image2process.Close()
 
 ############# END DETAILED SCAN EXPERIMENT #############
 
