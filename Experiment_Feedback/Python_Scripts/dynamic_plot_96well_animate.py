@@ -1,20 +1,12 @@
-#################################################################
-# File       : dynamic_plot_96well_animate.py
-# Version    : 1.0
-# Author     : czmla
-# Date       : 06.12.2018
-# Insitution : Carl Zeiss Microscopy GmbH
-#
-# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
-#
-# Permission is granted to use, modify and distribute this code,
-# as long as this copyright notice remains part of the code.
-#################################################################
+import os
+env = os.environ
+env.update({'QT_API':'pyside'})
 
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import optparse
 import numpy as np
+import time
     
 ##############################  
 # configure parsing option for command line usage
@@ -23,23 +15,31 @@ import numpy as np
 parser = optparse.OptionParser()
     
 parser.add_option('-f', '--file',
-                    action="store", dest="filename",
-                    help="query string", default="No filename passed.")
+action="store", dest="filename",
+help="query string", default="No filename passed.")
     
 parser.add_option('-c', '--columns',
-                    action="store", dest="columns",
-                    help="query string", default="No number of columns passed.")
+action="store", dest="columns",
+help="query string", default="No number of columns passed.")
     
 parser.add_option('-r', '--rows',
-                    action="store", dest="rows",
-                    help="query string", default="No number of rows passed.")
+action="store", dest="rows",
+help="query string", default="No number of rows passed.")
+
+parser.add_option('-b', '--block',
+    action="store", dest="block",
+    help="set to False for non interactive behaviour", default="True")
 
 # read command line arguments 
 options, args = parser.parse_args()     
 savename = options.filename[:-4] + '.png'
            
-print('Filename: ', options.filename)
-print('Savename: ', savename)
+print ('Filename: ', options.filename)
+print ('Savename: ', savename)
+
+block = True
+if options.block == 'False':
+	block = False
 
 # read in cell numbers
 Nr = int(options.rows)      
@@ -70,10 +70,9 @@ labely = LabelY[0:Nr]
 ##############################
 # Main part
 ##############################
- 
 
 def animate(i):          
-  
+
     try: 
                         
         datain = np.genfromtxt(options.filename, delimiter='\t', usecols=(1,2,3))
@@ -99,15 +98,21 @@ def animate(i):
         cbar = plt.colorbar(cax, ticks=[cn_min, round((cn_min+cn_max)/2), cn_max], shrink = 0.7) 
         # plot ticks on positions
         plt.xticks(posX,labelx) 
-        plt.yticks(posY,labely)                         
-                     
-        # if last well is reached, save figure 
-        if (datain.shape[0] == Nr*Nc):                       
-            fig.savefig(savename)                   
-            plt.close()
-                    
+        plt.yticks(posY,labely)
+
+        # figure cannot be saved in first iteration.
+		# if all data is available in the first iteration, nevertheless do one more with the same data
+		# to be able to save the figure.
+        if i != 0:
+			# if last well is reached, save figure
+            if datain.shape[0] == Nr * Nc:
+                fig.savefig(savename)
+                if block == False:
+                    plt.close()
+
     except:
         print('No file loaded')
 
 ani = animation.FuncAnimation(fig, animate, interval=500, repeat=False)
 plt.show()
+
