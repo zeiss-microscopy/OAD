@@ -1,6 +1,6 @@
 ﻿#################################################################
 # File       : Guided_Acquisition_shortUI.py
-# Version    : 7.0
+# Version    : 7.1
 # Author     : czsrh, czmla
 # Date       : 12.04.2019
 # Insitution : Carl Zeiss Microscopy GmbH
@@ -35,7 +35,7 @@ import sys
 
 
 # version number for dialog window
-version = 7.0
+version = 7.1
 # file name for overview scan
 ovscan_name = 'OverviewScan.czi'
 
@@ -192,7 +192,7 @@ def run_postprocessing(image, parameters={}, func='topography'):
         print('Exported to : ', topo_filepath)
         imgtop.Close()
 
-    image.Close()
+    return image
 
 
 ###########################################################################
@@ -502,7 +502,7 @@ for i in range(0, num_POI, 1):
         # wellID was found inside table
         well_id = SingleObj.GetValue(i, column_wellid)
         newname_dtscan = 'DTScan_Well_' + str(wellid) + '_ID_' + str(POI_ID) + '.czi'
-    
+
     print('Renaming File: ' + dtscan_name + ' to: ' + newname_dtscan + '\n')
     File.Move(Path.Combine(OutputFolder, dtscan_name), Path.Combine(OutputFolder, newname_dtscan))
 
@@ -521,7 +521,7 @@ for i in range(0, num_POI, 1):
         parameters['extension'] = '.sur'
 
         # run the processing and export and close the image
-        run_postprocessing(image2process, func='topography', parameters)
+        image2process = run_postprocessing(image2process, parameters=parameters, func='topography')
         image2process.Close()
 
 ############# END DETAILED SCAN EXPERIMENT #############
