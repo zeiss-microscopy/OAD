@@ -43,7 +43,7 @@ ovscan_name = 'OverviewScan.czi'
 Additional XY offest for possible 2nd port relative to the 1st port
 Example: 1st port Camera and 2nd port LSM
 Can be set to Zero, when system is correctly calibrated
-!!! Only use when OverView and DetailedScan are using differnet detector !!!
+!!! Only use when overview and detailed scan are using diffrent detector !!!
 """
 dx_detector = 0.0
 dy_detector = 0.0
