@@ -109,7 +109,7 @@
                   <Name>ThresholdHistogram1</Name>
                   <Source>ThresholdHistogram</Source>
                   <Minimum1>0</Minimum1>
-                  <ValueLower1>49</ValueLower1>
+                  <ValueLower1>55</ValueLower1>
                   <ValueUpper1>255</ValueUpper1>
                   <Maximum1>255</Maximum1>
                   <Minimum2>0</Minimum2>
@@ -149,7 +149,6 @@
                   <Minimum>1</Minimum>
                   <Value>20</Value>
                   <Maximum>1000</Maximum>
-                  <SmallChange>1</SmallChange>
                 </Parameter>
                 <Parameter Key="Fill1">
                   <Name>@ImageAnalysisWizard_SegmentationFill</Name>
@@ -268,7 +267,7 @@
       </RegionClass>
     </RegionClass>
   </RegionClass>
-  <CommonParameters>
+  <CommonParameters Key="Segmentation" Name="SegmenterClassBuiltinDefault">
     <Parameter Key="RegionsNoOverlap">
       <Name>@ImageAnalysisWizard_SegmentationRegionsNoOverlap</Name>
       <Source>Boolean</Source>
@@ -365,7 +364,6 @@
               <Minimum>1</Minimum>
               <Value>1</Value>
               <Maximum>1000</Maximum>
-              <SmallChange>1</SmallChange>
             </Parameter>
             <Parameter Key="Fill1">
               <Name>@ImageAnalysisWizard_SegmentationFill</Name>
