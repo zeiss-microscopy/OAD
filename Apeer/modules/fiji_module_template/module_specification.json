@@ -1,0 +1,112 @@
+{
+    "spec": {
+        "inputs": {
+            "IMAGEPATH": {
+                "type:file": {
+                    "format": [
+                        "czi",
+                        "tiff",
+                        "png",
+                        "jpeg",
+                        "ome-tiff"
+                    ]
+                }
+            },
+            "FILTERTYPE": {
+                "type:choice_single": [
+                    "NONE",
+                    "MEAN",
+                    "MIN",
+                    "MAX",
+                    "MEDIAN",
+                    "VARIANCE",
+                    "OPEN",
+                    "DESPECKLE"
+                ],
+                "default": "MEDIAN"
+            },
+            "FILTER_RADIUS": {
+                "type:integer": {
+                    "min": 1,
+                    "max": 20
+                },
+                "default": 5
+            }
+        },
+        "outputs": {
+            "FILTERED_IMAGE": {
+                "type:file": {
+                    "format": [
+                        "ome-tiff"
+                    ]
+                }
+            }
+        }
+    },
+    "ui": {
+        "inputs": {
+            "IMAGEPATH": {
+                "label": "Input Image",
+                "index": 1,
+                "widget:none": null,
+                "description": "Choose the image to be processed"
+            },
+            "FILTERTYPE": {
+                "label": "Filter Method",
+                "index": 2,
+                "widget:dropdown": {
+                    "items": [
+                        {
+                            "key": "NONE",
+                            "label": "NONE"
+                        },
+                        {
+                            "key": "MEAN",
+                            "label": "MEAN"
+                        },
+                        {
+                            "key": "MIN",
+                            "label": "MIN"
+                        },
+                        {
+                            "key": "MAX",
+                            "label": "MAX"
+                        },
+                        {
+                            "key": "MEDIA",
+                            "label": "MEDIAN"
+                        },
+                        {
+                            "key": "VARIANCE",
+                            "label": "VARIANCE"
+                        },
+                        {
+                            "key": "OPEN",
+                            "label": "OPEN"
+                        },
+                        {
+                            "key": "DESPECKLE",
+                            "label": "DESPECKLE"
+                        }
+                    ]
+                },
+                "description": "Choose filter method"
+            },
+            "FILTER_RADIUS": {
+                "label": "Kernel Size",
+                "index": 3,
+                "widget:slider": {
+                    "step": 1
+                },
+                "description": "Choose kernel size for filter"
+            }
+        },
+        "outputs": {
+            "FILTERED_IMAGE": {
+                "label": "Filtered image",
+                "index": 1,
+                "description": "Filtered Image as OME-TIFF"
+            }
+        }
+    }
+}
