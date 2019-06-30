@@ -48,6 +48,10 @@ The goal of this tutorial is to create an automated workflow that can be used to
 
 ***
 
+![Workflow - Guided Acquistion User Interface](/Images/Guided_Acquisition_Dialog_71.png)*Guided Acquisition User Interface created by python scripting*
+
+***
+
 ![Workflow - Actionable Information using OAD](/Images/Guided_Acquisition_PPTX_Slide.png)*Guided Acquisition using scripting*
 
 ***
