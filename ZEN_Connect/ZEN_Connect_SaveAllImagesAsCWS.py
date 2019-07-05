@@ -31,7 +31,7 @@ imagefiles = []
 
 initialpath = r'%Userprofile%'
 CWSDialog = ZenWindow()
-CWSDialog.Initialize('Save all open images to new ZEN Connect workspace - Version:' + str(version))
+CWSDialog.Initialize('Save all open images to new ZEN Connect workspace - Version: ' + str(version))
 CWSDialog.AddFolderBrowser('projectfolder', 'ZEN Connect Project Target Folder:', initialpath)
 CWSDialog.AddCheckbox('copy', 'Move Images to new CWS Data Folder', False)
 CWSDialog.AddCheckbox('addatt', 'Include Preview or Label Images (if found)', False)
