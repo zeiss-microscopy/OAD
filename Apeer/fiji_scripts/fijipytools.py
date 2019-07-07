@@ -95,6 +95,12 @@ class ImportTools:
         metainfo['SizeX'] = omeMeta.getPixelsSizeX(imageID).getValue()
         metainfo['SizeY'] = omeMeta.getPixelsSizeY(imageID).getValue()
 
+        # store info about stack
+        if metainfo['SizeZ'] == 1:
+            metainfo['is3d'] = False
+        elif metainfo['SizeZ'] > 1:
+            metainfo['is3d'] = True
+
         # get the scaling for XYZ
         physSizeX = omeMeta.getPixelsPhysicalSizeX(0)
         physSizeY = omeMeta.getPixelsPhysicalSizeY(0)
@@ -468,13 +474,33 @@ class WaterShedTools:
                       mj_normalize=True,
                       mj_dynamic=1,
                       mj_connectivity=6,
-                      force_mj=False):
+                      force_mj=False,
+                      is3d=False):
+        """
+        try:
+            if imp.getNSlices() == 1:
+                isStack = False
+                print('Watershed: 2D image')
+            elif imp.getNSlices() > 1:
+                isStack = True
+                print('Watershed: 3D Stack')
+                # convert to new ImagePlus incase it was already a stack
+                imp = imp.getImagePlus()
+        except:
+            # is already is a stack
+            isStack = True
+            print('Watershed: 3D Stack')
+            imp = ImagePlus('ws', imp)
 
-        numZ = imp.getNSlices()
+        #isStack = imp.isStack()
+        #numZ = imp.getNSlices()
+        """
 
-        if numZ == 1:
+        if not is3d:
+            # if numZ == 1:
             if not force_mj:
                 # run watershed on 2D image
+                print('Watershed : 2D image')
                 imp = WaterShedTools.edm_watershed(imp)
 
             if force_mj:
@@ -484,22 +510,25 @@ class WaterShedTools:
                     mj_connectivity = 8
                     print('Only 4 or 8 connectivity for 2D images is allowed. Using 8.')
 
+                print('Watershed MJ: 2D image')
                 imp = WaterShedTools.mj_watershed2d(imp,
                                                     normalize=mj_normalize,
                                                     dynamic=mj_dynamic,
                                                     connectivity=mj_connectivity)
 
-        if numZ > 1:
+        if is3d:
+            # if numZ > 1:
 
             # for 3D Stacks only connectivity 6 or 26 is allowed
             if mj_connectivity not in [6, 26]:
                 mj_connectivity = 6
                 print('Only 6 or 26 connectivity for 3D stacks is allowed. Using 6.')
 
-            imp = WaterShedTools.mj_watershed(imp,
-                                              normalize=mj_normalize,
-                                              dynamic=mj_dynamic,
-                                              connectivity=mj_connectivity)
+            print('Watershed MJ: 3D image')
+            imp = WaterShedTools.mj_watershed3d(imp,
+                                                normalize=mj_normalize,
+                                                dynamic=mj_dynamic,
+                                                connectivity=mj_connectivity)
 
         return imp
 
@@ -521,17 +550,19 @@ class WaterShedTools:
         return imp
 
     @staticmethod
-    def mj_watershed(imp,
-                     normalize=True,
-                     dynamic=1,
-                     connectivity=6):
+    def mj_watershed3d(stack,
+                       normalize=True,
+                       dynamic=1,
+                       connectivity=6):
 
         # run watershed on stack
         weights = ChamferWeights3D.BORGEFORS.getFloatWeights()
-        # calc distance map and invert
-        dist = BinaryImages.distanceMap(imp.getStack(), weights, normalize)
+        # calc distance map and invert - works on ImageProcessor or ImageStack
+        dist = BinaryImages.distanceMap(stack, weights, normalize)
+        #dist = BinaryImages.distanceMap(imp.getStack(), weights, normalize)
         Images3D.invert(dist)
-        basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, imp.getStack(), dynamic, connectivity, False)
+        #basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, imp.getStack(), dynamic, connectivity, False)
+        basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, stack, dynamic, connectivity, False)
         imp = ImagePlus("basins", basins)
         ip = imp.getProcessor()
         ip.setThreshold(1, 255, ImageProcessor.NO_LUT_UPDATE)
@@ -551,11 +582,11 @@ class WaterShedTools:
         dist.invert()
         # Images3D.invert(dist)
         basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, imp.getProcessor(), dynamic, connectivity, False)
-        imp = ImagePlus("basins", basins)
-        ip = imp.getProcessor()
+        imp2 = ImagePlus("basins", basins)
+        ip = imp2.getProcessor()
         ip.setThreshold(1, 255, ImageProcessor.NO_LUT_UPDATE)
 
-        return imp
+        return imp2
 
 
 class ImageTools:
