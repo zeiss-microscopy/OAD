@@ -467,13 +467,27 @@ class WaterShedTools:
     def run_watershed(imp,
                       mj_normalize=True,
                       mj_dynamic=1,
-                      mj_connectivity=6):
+                      mj_connectivity=6,
+                      force_mj=False):
 
         numZ = imp.getNSlices()
 
         if numZ == 1:
-            # run watershed on 2D image
-            imp = WaterShedTools.edm_watershed(imp)
+            if not force_mj:
+                # run watershed on 2D image
+                imp = WaterShedTools.edm_watershed(imp)
+
+            if force_mj:
+
+                # for 2D Stacks only connectivity 6 or 26 is allowed
+                if mj_connectivity not in [4, 8]:
+                    mj_connectivity = 8
+                    print('Only 4 or 8 connectivity for 2D images is allowed. Using 8.')
+
+                imp = WaterShedTools.mj_watershed2d(imp,
+                                                    normalize=mj_normalize,
+                                                    dynamic=mj_dynamic,
+                                                    connectivity=mj_connectivity)
 
         if numZ > 1:
 
@@ -518,6 +532,25 @@ class WaterShedTools:
         dist = BinaryImages.distanceMap(imp.getStack(), weights, normalize)
         Images3D.invert(dist)
         basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, imp.getStack(), dynamic, connectivity, False)
+        imp = ImagePlus("basins", basins)
+        ip = imp.getProcessor()
+        ip.setThreshold(1, 255, ImageProcessor.NO_LUT_UPDATE)
+
+        return imp
+
+    @staticmethod
+    def mj_watershed2d(imp,
+                       normalize=True,
+                       dynamic=1,
+                       connectivity=8):
+
+        # run watershed on stack
+        weights = ChamferWeights.BORGEFORS.getFloatWeights()
+        # calc distance map and invert
+        dist = BinaryImages.distanceMap(imp.getProcessor(), weights, normalize)
+        dist.invert()
+        # Images3D.invert(dist)
+        basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, imp.getProcessor(), dynamic, connectivity, False)
         imp = ImagePlus("basins", basins)
         ip = imp.getProcessor()
         ip.setThreshold(1, 255, ImageProcessor.NO_LUT_UPDATE)
