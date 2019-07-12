@@ -3,8 +3,8 @@
 """
 File: fijipytoools.py
 Author: Sebastian Rhode
-Version: 1.0
-Date: 2019_06_28
+Version: 1.1
+Date: 2019_07_12
 """
 
 import os
@@ -19,6 +19,7 @@ from ij.plugin.filter import GaussianBlur, RankFilters
 from ij.plugin.filter import BackgroundSubtracter, Binary
 from ij.plugin.filter import ParticleAnalyzer as PA
 from ij.plugin.filter import EDM
+from ij.plugin import Filters3D
 from ij.plugin.frame import RoiManager
 from ij.plugin import ChannelSplitter
 from ij.io import FileSaver
@@ -419,7 +420,7 @@ class FilterTools:
         # initialize filter
         filter = RankFilters()
 
-        # create filter dictionary
+        # create filter dictionary for 2D rank filters
         filterdict = {}
         filterdict['MEAN'] = RankFilters.MEAN
         filterdict['MIN'] = RankFilters.MIN
@@ -445,6 +446,36 @@ class FilterTools:
             # apply filter based on filtertype
             # if filtertype == 'MEDIAN':
             filter.rank(ip, radius, filterdict[filtertype])
+
+        return imp
+
+    @staticmethod
+    def apply_filter3d(imp,
+                       radiusx=5,
+                       radiusy=5,
+                       radiusz=5,
+                       filtertype='MEDIAN'):
+
+        # initialize filter
+        f3d = Filters3D()
+
+        # create filter dictionary for 3d filters
+        filterdict = {}
+        filterdict['MEAN'] = f3d.MEAN
+        filterdict['MIN'] = f3d.MIN
+        filterdict['MAX'] = f3d.MAX
+        #filterdict['MAXLOCAL'] = f3d.MAXLOCAL # did not work
+        filterdict['MEDIAN'] = f3d.MEDIAN
+        filterdict['VAR'] = f3d.VAR
+
+        stack = imp.getStack()  # get the stack within the ImagePlus
+        newstack = f3d.filter(stack,
+                              filterdict[filtertype],
+                              radiusx,
+                              radiusy,
+                              radiusz)
+        
+        imp = ImagePlus('Filtered 3D', newstack) 
 
         return imp
 
