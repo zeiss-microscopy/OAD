@@ -748,10 +748,16 @@ class AnalyzeTools:
     def analyzeParticles(imp, minsize, maxsize, mincirc, maxcirc,
                          filename='Test.czi',
                          addROIManager=True,
-                         headless=True,
+                         headless=False,
                          exclude=True):
 
         if addROIManager is True:
+
+            # get the ROI manager instance
+            rm = RoiManager.getInstance()
+            if rm is None:
+                rm = RoiManager()
+            rm.runCommand("Associate", "true")
 
             if exclude is False:
                 options = PA.SHOW_ROI_MASKS \
