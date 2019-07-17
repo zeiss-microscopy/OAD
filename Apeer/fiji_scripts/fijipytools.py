@@ -3,8 +3,8 @@
 """
 File: fijipytoools.py
 Author: Sebastian Rhode
-Version: 1.1
-Date: 2019_07_12
+Version: 1.2
+Date: 2019_07_16
 """
 
 import os
@@ -483,16 +483,20 @@ class FilterTools:
 class BinaryTools:
 
     @staticmethod
-    def fill_holes(imp):
+    def fill_holes(imp, is3d=False):
 
         numZ = imp.getNSlices()
 
-        if numZ == 1:
+        #if numZ == 1:
+        if not is3d:
             # 2D fill holes
+            print('Fill holes in 2d')
             Reconstruction.fillHoles(imp.getProcessor())
 
-        if numZ > 1:
+        #if numZ > 1:
+        if is3d:
             # 3D fill holes
+            print('Fill holes in 3d')
             imp = Reconstruction3D.fillHoles(imp.getImageStack())
 
         return imp
@@ -947,9 +951,14 @@ class MiscTools:
 
         nch = imp.getNChannels()
         print('Number of Channels: ' + str(nch))
+        if chindex > nch:
+        #if nch > 1:
+            print('Fallback : Using Channel 1')
+            chindex = 1
+            imps = ChannelSplitter.split(imp)
+            imp = imps[chindex - 1]
 
-        # extract the channel if there are more than one
-        if nch > 1:
+        if chindex <= nch:
             imps = ChannelSplitter.split(imp)
             imp = imps[chindex - 1]
 
