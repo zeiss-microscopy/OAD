@@ -19,7 +19,7 @@ using the selected format.
 
 from System.IO import Path, File, Directory, FileInfo
 
-version = 0.2
+version = 1.0
 
 CZIfiles_short = []
 
