@@ -1,8 +1,8 @@
 ﻿#################################################################
 # File       : Guided_Acquisition_shortUI.py
-# Version    : 7.1
-# Author     : czsrh, czmla
-# Date       : 12.04.2019
+# Version    : 7.2
+# Author     : czsrh, czmla, czkel
+# Date       : 03.08.2019
 # Insitution : Carl Zeiss Microscopy GmbH
 #
 # !!! Requires with ZEN >=2.6 HF3 - Use at your own Risk !!!
@@ -161,7 +161,7 @@ def runSWAF_special(SWAF_exp,
 def checktableentry(datatable, entry2check='ImageSceneContainerName'):
 
     num_col = datatable.ColumnCount
-    entry_exits = False
+    entry_exists = False
 
     for c in range(0, num_col):
         # get the current column name
@@ -171,7 +171,7 @@ def checktableentry(datatable, entry2check='ImageSceneContainerName'):
             entry_exists = True
             break
 
-    return entry_exits, column
+    return entry_exists, column
 
 
 def run_postprocessing(image, parameters={}, func='topography'):
@@ -408,8 +408,8 @@ if RecallFocus:
 zpos = Zen.Devices.Focus.ActualPosition
 
 # check for the column 'ID' which is required
-ID_exits, column_ID = checktableentry(SingleObj,
-                                      entry2check='ID')
+ID_exists, column_ID = checktableentry(SingleObj,
+                                       entry2check='ID')
 
 
 # execute detailed experiment at the position of every detected object
@@ -497,11 +497,11 @@ for i in range(0, num_POI, 1):
     # rename the CZI regarding to the object ID - Attention - IDs start with 2 !!!
     if not wellid_exist:
         # no wellID found inside table
-        newname_dtscan = 'DTScan_ID' + str(POI_ID) + '.czi'
+        newname_dtscan = 'DTScan_ID_' + str(POI_ID) + '.czi'
     if wellid_exist:
         # wellID was found inside table
         well_id = SingleObj.GetValue(i, column_wellid)
-        newname_dtscan = 'DTScan_Well_' + str(wellid) + '_ID_' + str(POI_ID) + '.czi'
+        newname_dtscan = 'DTScan_Well_' + str(well_id) + '_ID_' + str(POI_ID) + '.czi'
 
     print('Renaming File: ' + dtscan_name + ' to: ' + newname_dtscan + '\n')
     File.Move(Path.Combine(OutputFolder, dtscan_name), Path.Combine(OutputFolder, newname_dtscan))
