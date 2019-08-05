@@ -35,7 +35,7 @@ import sys
 
 
 # version number for dialog window
-version = 7.1
+version = 7.2
 # file name for overview scan
 ovscan_name = 'OverviewScan.czi'
 
@@ -43,7 +43,7 @@ ovscan_name = 'OverviewScan.czi'
 Additional XY offest for possible 2nd port relative to the 1st port
 Example: 1st port Camera and 2nd port LSM
 Can be set to Zero, when system is correctly calibrated
-!!! Only use when overview and detailed scan are using diffrent detector !!!
+!!! Only use when overview and detailed scan are using different detector !!!
 """
 dx_detector = 0.0
 dy_detector = 0.0
