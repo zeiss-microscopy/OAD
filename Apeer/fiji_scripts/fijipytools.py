@@ -349,9 +349,9 @@ class ExportTools:
             if not replace:
                 return None
 
-        # general safety check
-        if not extension:
-            extension = 'ome.tiff'
+        ## general safety check
+        #if not extension:
+        #    extension = 'ome.tiff'
 
         # check extension
         if extension in ['tiff', 'tif', 'ome.tiff', 'ome.tif', 'png', 'jpeg']:
@@ -380,9 +380,42 @@ class ExportTools:
 
         else:
             extension = 'ome.tiff'
+            print "save as OME-TIFF: " # savepath
             pstr = ExportTools.bfexporter(imp, savepath, useLOCI=True)
 
         return savepath
+
+    @staticmethod
+    def save_singleplanes(imp, savepath, metainfo, mode='TZC', format='tiff'):
+        """
+        This function is still in testing.
+        """
+        titleext = imp.getTitle()
+        title = os.path.splitext(titleext)[0]
+        
+        if mode == 'TZC':
+            
+            for c in range(metainfo['SizeT']):
+                for z in range(metainfo['SizeZ']):
+                    for t in range(metainfo['SizeC']):
+                        imp.setPosition(c+1, z+1, t+1)
+                        numberedtitle = title + "_t" + IJ.pad(t, 2) + "_z" + IJ.pad(z, 4) + "_c" + IJ.pad(c, 4) + "." + format
+                        stackindex = imp.getStackIndex(c + 1, z + 1, t + 1)
+                        aframe = ImagePlus(numberedtitle, imp.getStack().getProcessor(stackindex))
+                        outputpath = os.path.join(savepath, numberedtitle)
+                        IJ.saveAs(aframe, "TIFF", outputpath)
+
+        if mode == 'Z':
+            c = 0
+            t = 0
+            for z in range(metainfo['SizeZ']):
+                imp.setPosition(c+1, z+1, t+1)
+                znumber = MiscTools.addzeros(z)
+                numberedtitle = title +  "_z" + znumber + "." + format
+                stackindex = imp.getStackIndex(c + 1, z + 1, t + 1)
+                aframe = ImagePlus(numberedtitle, imp.getStack().getProcessor(stackindex))
+                outputpath = os.path.join(savepath, numberedtitle)
+                IJ.saveAs(aframe, "TIFF", outputpath)
 
 
 class FilterTools:
@@ -485,18 +518,17 @@ class BinaryTools:
     @staticmethod
     def fill_holes(imp, is3d=False):
 
-        numZ = imp.getNSlices()
-
-        #if numZ == 1:
         if not is3d:
             # 2D fill holes
-            print('Fill holes in 2d')
-            Reconstruction.fillHoles(imp.getProcessor())
+            stack = imp.getStack()  # get the stack within the ImagePlus
+            nslices = stack.getSize()  # get the number of slices
+            for index in range(1, nslices + 1):
+                ip = stack.getProcessor(index)
+                #Reconstruction.fillHoles(imp.getProcessor())
+                Reconstruction.fillHoles(ip)
 
-        #if numZ > 1:
         if is3d:
             # 3D fill holes
-            print('Fill holes in 3d')
             imp = Reconstruction3D.fillHoles(imp.getImageStack())
 
         return imp
@@ -511,48 +543,14 @@ class WaterShedTools:
                       mj_connectivity=6,
                       force_mj=False,
                       is3d=False):
-        """
-        try:
-            if imp.getNSlices() == 1:
-                isStack = False
-                print('Watershed: 2D image')
-            elif imp.getNSlices() > 1:
-                isStack = True
-                print('Watershed: 3D Stack')
-                # convert to new ImagePlus incase it was already a stack
-                imp = imp.getImagePlus()
-        except:
-            # is already is a stack
-            isStack = True
-            print('Watershed: 3D Stack')
-            imp = ImagePlus('ws', imp)
-
-        #isStack = imp.isStack()
-        #numZ = imp.getNSlices()
-        """
 
         if not is3d:
-            # if numZ == 1:
-            if not force_mj:
-                # run watershed on 2D image
-                print('Watershed : 2D image')
-                imp = WaterShedTools.edm_watershed(imp)
-
-            if force_mj:
-
-                # for 2D Stacks only connectivity 6 or 26 is allowed
-                if mj_connectivity not in [4, 8]:
-                    mj_connectivity = 8
-                    print('Only 4 or 8 connectivity for 2D images is allowed. Using 8.')
-
-                print('Watershed MJ: 2D image')
-                imp = WaterShedTools.mj_watershed2d(imp,
-                                                    normalize=mj_normalize,
-                                                    dynamic=mj_dynamic,
-                                                    connectivity=mj_connectivity)
+            
+            # run watershed on 2D image
+            print('Watershed : 2D image')
+            imp = WaterShedTools.edm_watershed(imp)
 
         if is3d:
-            # if numZ > 1:
 
             # for 3D Stacks only connectivity 6 or 26 is allowed
             if mj_connectivity not in [6, 26]:
@@ -569,18 +567,20 @@ class WaterShedTools:
 
     @staticmethod
     def edm_watershed(imp):
-
-        # get the image processor
-        ip = imp.getProcessor()
-
-        if ip.isBinary is False:
-            # convert to 8bit without rescaling
-            ImageConverter.setDoScaling(False)
-            ImageConverter(imp).convertToGray8()
-        else:
-            edm = EDM()
-            edm.setup("watershed", None)
-            edm.run(ip)
+        
+        stack = imp.getStack()  # get the stack within the ImagePlus
+        nslices = stack.getSize()  # get the number of slices
+        for index in range(1, nslices + 1):
+            # get the image processor
+            ip = stack.getProcessor(index)
+            if ip.isBinary is False:
+                # convert to 8bit without rescaling
+                ImageConverter.setDoScaling(False)
+                ImageConverter(imp).convertToGray8()
+            else:
+                edm = EDM()
+                edm.setup("watershed", None)
+                edm.run(ip)
 
         return imp
 
@@ -594,34 +594,15 @@ class WaterShedTools:
         weights = ChamferWeights3D.BORGEFORS.getFloatWeights()
         # calc distance map and invert - works on ImageProcessor or ImageStack
         dist = BinaryImages.distanceMap(stack, weights, normalize)
-        #dist = BinaryImages.distanceMap(imp.getStack(), weights, normalize)
+        # dist = BinaryImages.distanceMap(imp.getStack(), weights, normalize)
         Images3D.invert(dist)
-        #basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, imp.getStack(), dynamic, connectivity, False)
+        # basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, imp.getStack(), dynamic, connectivity, False)
         basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, stack, dynamic, connectivity, False)
         imp = ImagePlus("basins", basins)
         ip = imp.getProcessor()
         ip.setThreshold(1, 255, ImageProcessor.NO_LUT_UPDATE)
 
         return imp
-
-    @staticmethod
-    def mj_watershed2d(imp,
-                       normalize=True,
-                       dynamic=1,
-                       connectivity=8):
-
-        # run watershed on stack
-        weights = ChamferWeights.BORGEFORS.getFloatWeights()
-        # calc distance map and invert
-        dist = BinaryImages.distanceMap(imp.getProcessor(), weights, normalize)
-        dist.invert()
-        # Images3D.invert(dist)
-        basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, imp.getProcessor(), dynamic, connectivity, False)
-        imp2 = ImagePlus("basins", basins)
-        ip = imp2.getProcessor()
-        ip.setThreshold(1, 255, ImageProcessor.NO_LUT_UPDATE)
-
-        return imp2
 
 
 class ImageTools:
@@ -678,6 +659,7 @@ class ThresholdTools:
     # helper function to apply threshold to whole stack
     # using one corrected value for the stack
     def apply_threshold_stack_corr(imp, lowth_corr, method='Otsu'):
+        
         # get the stacks
         stack = imp.getStack()
         nslices = stack.getSize()
@@ -702,18 +684,18 @@ class ThresholdTools:
 
         # one threshold value for the whole stack with correction
         if stackopt:
-
+            
             # create argument string for the IJ.setAutoThreshold
             thcmd = method + ' ' + background_threshold + ' stack'
-
+            
             # set threshold and get the lower threshold value
             IJ.setAutoThreshold(imp, thcmd)
             ip = imp.getProcessor()
-
+            
             # get the threshold value and correct it
             lowth = ip.getMinThreshold()
             lowth_corr = int(round(lowth * corrf, 0))
-
+            
             # process stack with corrected threshold value
             imp = ThresholdTools.apply_threshold_stack_corr(imp, lowth_corr,
                                                             method=method)
@@ -963,6 +945,49 @@ class MiscTools:
             imp = imps[chindex - 1]
 
         return imp
+
+    @staticmethod
+    def addzeros(number):
+
+        if number < 10:
+            zerostring = '000000' + str(number)
+        if number >= 10 and number < 100:
+            zerostring = '00000' + str(number)
+        if number >= 100 and number < 1000:
+            zerostring = '0000' + str(number)
+        if number >= 1000 and number < 10000:
+            zerostring = '000' + str(number)
+        if number >= 10000 and number < 100000:
+            zerostring = '00' + str(number)
+        if number >= 100000 and number < 1000000:
+            zerostring = '0' + str(number)
+
+        return zerostring
+    
+    @staticmethod
+    def createdir(path):
+        try:
+            os.mkdir(path)
+        except OSError:
+            print ("Creation of the directory %s failed" % path)
+            dir_created = False
+        else:
+            print ("Successfully created the directory %s " % path)
+            dir_created = True
+
+        return dir_created
+        
+    @staticmethod
+    def getfiles(path, filter='ome.tiff'):
+    
+        files = []
+        # r=root, d=directories, f = files
+        for r, d, f in os.walk(path):
+            for file in f:
+                if filter in file:
+                    files.append(os.path.join(r, file))
+                
+        return files
 
 
 class JSONTools:
