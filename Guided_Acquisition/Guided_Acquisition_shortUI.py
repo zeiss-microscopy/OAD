@@ -1,8 +1,8 @@
 ﻿#################################################################
 # File       : Guided_Acquisition_shortUI.py
-# Version    : 7.2
+# Version    : 7.3
 # Author     : czsrh, czmla, czkel
-# Date       : 03.08.2019
+# Date       : 19.08.2019
 # Insitution : Carl Zeiss Microscopy GmbH
 #
 # !!! Requires with ZEN >=2.6 HF3 - Use at your own Risk !!!
@@ -35,7 +35,7 @@ import sys
 
 
 # version number for dialog window
-version = 7.2
+version = 7.3
 # file name for overview scan
 ovscan_name = 'OverviewScan.czi'
 
@@ -162,6 +162,7 @@ def checktableentry(datatable, entry2check='ImageSceneContainerName'):
 
     num_col = datatable.ColumnCount
     entry_exists = False
+    column = None
 
     for c in range(0, num_col):
         # get the current column name
