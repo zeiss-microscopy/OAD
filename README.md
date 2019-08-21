@@ -13,9 +13,7 @@
 
 - **4-7 November 2019**
 
-For more information and registration:
-
-[**https://miap.eu/miap-events/miap-workshops/2019-11-zeiss-oad-apeer/**](https://miap.eu/miap-events/miap-workshops/2019-11-zeiss-oad-apeer/) or email to [**info@miap.eu**](mailto:info@miap.eu)
+For more information and registration: [**MIAP ZEISS OAD and APEER Workshop**](https://miap.eu/miap-events/miap-workshops/2019-11-zeiss-oad-apeer/) or email to [**info@miap.eu**](mailto:info@miap.eu)
 
 ### Goal of the workshop
 
@@ -40,6 +38,10 @@ Participants are invited to give a talk about their workshop-related projects, r
 - **Maximal number of participants: 15**
 
 - **Deadline for applications: 8th of September 2019**
+
+### Agenda
+
+The agenda as PDF can be found here: [Workshop Agenda (PDF)](/Workshops/2019_MIAP_ZEISS_OAD/Agenda_Zeiss_OAD_v3.pdf) and here a a web document: [Workshop Agenda](/Workshops/2019_MIAP_ZEISS_OAD/2019_miap_zeiss_oad_agenda.md)
 
 ***
 
