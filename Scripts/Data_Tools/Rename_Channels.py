@@ -12,7 +12,6 @@
 #################################################################
 
 import sys
-import os
 from System.IO import Directory, Path, File, FileInfo, DirectoryInfo
 
 # remove all messages
@@ -22,10 +21,14 @@ Zen.Application.MacroEditor.ClearMessages()
 filename = r'C:\Users\m1srh\Documents\Testdata_Zeiss\OAD_Testing\3CH.czi'
 image = Zen.Application.LoadImage(filename)
 
+#################################################
+
 # define dictionary with desired channel names
 newnames = {0: 'CH1',
             1: 'CH2',
             2: 'CH3'}
+
+#################################################
 
 # get number of channels in dict
 len(newnames.keys())
