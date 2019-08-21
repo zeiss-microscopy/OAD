@@ -1,8 +1,8 @@
 ﻿#################################################################
 # File       : Metadata_Report_Tool.py
-# Version    : 1.2
+# Version    : 1.3
 # Author     : czsrh
-# Date       : 06.12.2018
+# Date       : 21.08.2019
 # Insitution : Carl Zeiss Microscopy GmbH
 #
 # Copyright(c) 2019 Carl Zeiss AG, Germany. All Rights Reserved.
@@ -12,6 +12,7 @@
 #################################################################
 
 """
+
 The scripts creates a table with useful metainformation.
 - it creates a ZenTable
 - allows saving as CSV file
@@ -20,8 +21,9 @@ The scripts creates a table with useful metainformation.
 
 """
 
-version = 1.2
+version = 1.3
 
+from System import ApplicationException
 import clr
 
 try:
@@ -29,7 +31,7 @@ try:
     from Microsoft.Office.Interop import Excel
     excelimport = True
 except:
-    print('Could not import Excel functionality.')
+    print 'Could not import Excel functionality.'
     excelimport = False
 
 import os
@@ -38,7 +40,7 @@ try:
     from collections import Counter
     usecounter = False
 except:
-    print('Warning: Could not import module Collection.Counter.')
+    print 'Warning: Could not import module Collection.Counter.'
     usecounter = True
 
 #########################################################################
@@ -51,6 +53,7 @@ createexcelformdict = False
 Zen.Application.MacroEditor.ClearMessages()
 
 #########################################################################
+
 
 # get wellname from image metadata
 def GetWellNames(image, usecounter):
@@ -119,12 +122,29 @@ def getscale(image):
 def getLSMData(image):
 
     # get values for transmission and attenuation
-    laserpower = image.Metadata.GetMetadataWithPath('Metadata/Information/Image/Dimensions/Channels[]/ChannelLaserScanInfo/LaserAttenuatorMeas')
-    attstate = image.Metadata.GetMetadataWithPath('Metadata/Information/Image/Dimensions/Channels[current]/ChannelLaserScanInfo/AttenuatorState')
-    attbleach = image.Metadata.GetMetadataWithPath('Metadata/Information/Image/Dimensions/Channels[current]/ChannelLaserScanInfo/LaserAttenuatorBleach')
-    lli = image.Metadata.GetMetadataWithPath('Metadata/Information/Image/Dimensions/Channels[current]/LightSourceIntensity')
+    try:
+        laserpower = image.Metadata.GetMetadataWithPath('Metadata/Information/Image/Dimensions/Channels[]/ChannelLaserScanInfo/LaserAttenuatorMeas')
+    except ApplicationException as e:
+        laserpower = 'na'
+        print 'Problem reading Laser Power: ', e.Message
     
-    print('TR', laserpower, attstate, attbleach, lli)
+    try:
+        attstate = image.Metadata.GetMetadataWithPath('Metadata/Information/Image/Dimensions/Channels[current]/ChannelLaserScanInfo/AttenuatorState')
+    except ApplicationException as e:
+        attstate = 'na'
+        print 'Problem Reading Attenuator State : ', e.Message
+        
+    try:
+        attbleach = image.Metadata.GetMetadataWithPath('Metadata/Information/Image/Dimensions/Channels[current]/ChannelLaserScanInfo/LaserAttenuatorBleach')
+    except ApplicationException as e:
+        attbleach = 'na'
+        print 'Problem Reading Laser Attenuator Bleach: ', e.Message
+        
+    try:
+        lli = image.Metadata.GetMetadataWithPath('Metadata/Information/Image/Dimensions/Channels[current]/LightSourceIntensity')
+    except ApplicationException as e:
+        lli = 'na'
+        print 'Problem reading Light Source Intensity : ', e.Message
 
     return laserpower, attstate, attbleach, lli
 
@@ -135,8 +155,8 @@ def getNA(image):
     na = image.Metadata.GetMetadataWithPath('Metadata/Information/Instrument/Objectives[]/LensNA')
     
     return na
-    
-    
+
+
 def SortZenTable(table, columnname, option='asc'):
 
     # get the default view for the internal table object
@@ -159,15 +179,15 @@ def getMetaDataExtra(image, usecounter, list2str=True, fullwellinfo=False):
     Metadata = {}
     
     # get the number of scenes, tiles, dimensions and etc.
-    Metadata['NumberScenes'] = int(image.Bounds.SizeS)
-    Metadata['NumberTiles'] = int(image.Metadata.TilesCount)
-    Metadata['SizeT'] = int(image.Metadata.TimeSeriesCount)
-    Metadata['SizeZ'] = int(image.Metadata.ZStackCount)
-    Metadata['SizeC'] = int(image.Metadata.ChannelCount)
+    Metadata['NumberScenes'] = image.Bounds.SizeS
+    Metadata['NumberTiles'] = image.Metadata.TilesCount
+    Metadata['SizeT'] = image.Bounds.SizeT
+    Metadata['SizeZ'] = image.Bounds.SizeZ
+    Metadata['SizeC'] = image.Bounds.SizeC
     Metadata['SizeX'] = int(image.Bounds.SizeX)
     Metadata['SizeY'] = int(image.Bounds.SizeY)
-    Metadata['Dimensionality'] = int(image.Bounds.Dimensionality)
-    Metadata['NumberBlocks'] = int(image.Bounds.SizeB)
+    Metadata['Dimensionality'] = image.Bounds.Dimensionality
+    Metadata['NumberBlocks'] = image.Bounds.SizeB
     Metadata['ScalingUnit'] = image.Metadata.ScalingUnitInfo
     Metadata['ScalingMicron'] = image.Metadata.ScalingMicron
     
@@ -196,6 +216,9 @@ def getMetaDataExtra(image, usecounter, list2str=True, fullwellinfo=False):
     # read barcode
     Metadata['Barcode'], Metadata['BarcodeInfo'] = ReadBarCodefromImage(image)
 
+    # get laser data
+    Metadata['LaserAttenuator'], Metadata['AttenuatorState'], Metadata['AttenuatorBleach'], Metadata['LightSourceIntensity'] = getLSMData(image)
+
     return Metadata
 
 
@@ -211,7 +234,7 @@ def ReadBarCodefromImage(image):
         barcode = barcode_complete[max(indexlist)+1:]
         barcodeinfo = barcode_complete[:max(indexlist)]
     except:
-        print('No barcode was found.')
+        print 'No barcode was found.'
         barcode = 'None'
         barcodeinfo = 'None'
     
@@ -226,6 +249,7 @@ CZIdict = {}
 opendocs = Zen.Application.Documents
 for doc in opendocs:
     image = Zen.Application.Documents.GetByName(doc.Name)
+    
     if image.FileName.EndsWith('.czi'):
         # get the filename of the current document only when it ends with '.czi'
         CZIfiles_short.append(Path.GetFileName(image.FileName))
@@ -273,16 +297,16 @@ info = activeimage.Metadata.GetAllMetadata()
 
 # show optional output
 if verbose:
-    print('-----------------   GetAllMetadata()  -------------------------------')
+    print '-----------------   GetAllMetadata()  -------------------------------'
     for i in info: 
-        print(i.Key, '\t ', i.Value)
+        print i.Key, '\t ', i.Value
 
 # get additional metainformation
 metadata = getMetaDataExtra(activeimage, usecounter, fullwellinfo=fwinfo)
 
 if verbose:
     for k, v in metadata.iteritems():
-        print(k, '\t', v)
+        print k, '\t', v
 
 # concatenate the two python dictionaries
 metadata.update(info)
@@ -307,14 +331,14 @@ Zen.Application.Documents.Add(table1_sorted)
 if savecsv:
     # Save data table
     csvfilename = activeimage.FileName[:-4] + '_MetaData.csv'
-    print('CSV file to save: ', csvfilename)
+    print 'CSV file to save: ', csvfilename
     table1_sorted.Save(csvfilename)
 
 
 if savetxt:
     # write text file
     txtfilename = activeimage.FileName[:-4] + '_MetaData.txt'
-    print('TXT file to save: ', txtfilename)
+    print 'TXT file to save: ', txtfilename
     wFile = open(txtfilename,'w')
     
     for row in xrange(table1_sorted.RowCount):
@@ -335,8 +359,8 @@ if showxls:
     ws = workbook.Worksheets[1]
     
     # create headers inside the 1st row for the worksheet
-    excel.Cells(1, 1).Value = 'Name'
-    excel.Cells(1, 2).Value = 'Value'
+    excel.Cells(1,1).Value = 'Name'
+    excel.Cells(1,2).Value = 'Value'
     
     # create excel sheet from dictionary, but the it is not sorted
     if createexcelformdict:
@@ -365,16 +389,16 @@ if showxls:
     
     # save the worksheet with the metadata
     excelfilename = activeimage.FileName[:-4] + '_MetaData.xlsx'
-    print('Excel file to save: ', excelfilename)
+    print 'Excel file to save: ', excelfilename
     workbook.SaveAs(excelfilename)
 
     # close the workbook and excel
     if closetableexcel:
-        print('Closing Excel ...')
+        print 'Closing Excel.'
         workbook.Close()
         excel.Application.Quit()
 
 # close ZEN table
 if closetablezen:
-    print('Close the table in ZEN.')
+    print 'Close the table in ZEN.'
     table1_sorted.Close()
