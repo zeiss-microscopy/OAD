@@ -1,8 +1,8 @@
 ﻿#################################################################
 # File       : Metadata_Report_Tool.py
-# Version    : 1.3
+# Version    : 1.4
 # Author     : czsrh
-# Date       : 21.08.2019
+# Date       : 22.08.2019
 # Insitution : Carl Zeiss Microscopy GmbH
 #
 # Copyright(c) 2019 Carl Zeiss AG, Germany. All Rights Reserved.
@@ -21,7 +21,7 @@ The scripts creates a table with useful metainformation.
 
 """
 
-version = 1.3
+version = 1.4
 
 from System import ApplicationException
 import clr
@@ -214,7 +214,7 @@ def getMetaDataExtra(image, usecounter, list2str=True, fullwellinfo=False):
         Metadata['WellNumber'] = wellnumber
 
     # read barcode
-    Metadata['Barcode'], Metadata['BarcodeInfo'] = ReadBarCodefromImage(image)
+    Metadata['Barcode'], Metadata['BarcodeInfo'], barcode_found = ReadBarCodefromImage(image)
 
     # get laser data
     Metadata['LaserAttenuator'], Metadata['AttenuatorState'], Metadata['AttenuatorBleach'], Metadata['LightSourceIntensity'] = getLSMData(image)
@@ -228,17 +228,23 @@ def ReadBarCodefromImage(image):
         return [i for i, ltr in enumerate(s) if ltr == ch]
     
     # use the correct path to read the barcode from the image
-    try:
-        barcode_complete = image.Metadata.GetMetadataWithPath('Metadata/AttachmentInfos[]/Label/Barcodes[]/Content')
+    barcode_complete = image.Metadata.GetMetadataWithPath('Metadata/AttachmentInfos[]/Label/Barcodes[]/Content')
+    if len(barcode_complete) == 0:
+        print 'No barcode was found.'
+        barcode = 'n.a.'
+        barcodeinfo = 'n.a.'
+        barcode_found = False
+    
+    if len(barcode_complete) > 0:
         indexlist = find(barcode_complete, ':')
         barcode = barcode_complete[max(indexlist)+1:]
         barcodeinfo = barcode_complete[:max(indexlist)]
-    except:
-        print 'No barcode was found.'
-        barcode = 'None'
-        barcodeinfo = 'None'
-    
-    return barcode, barcodeinfo
+        barcode_found = True
+        # remove leading whitespace from barcode
+        barcode = barcode[1:]
+
+    return barcode, barcodeinfo, barcode_found
+
 
 ##################################### MAIN SCRIPT #######################################
 
