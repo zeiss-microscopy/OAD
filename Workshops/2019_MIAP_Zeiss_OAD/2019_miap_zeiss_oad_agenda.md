@@ -17,7 +17,7 @@
 | ------------------- | :--------------------------------------------------------------------------------------------------------------------: |
 | 09:00 - 10:30       | **Guided Acquistion - The smart way to automate and run your experiments**<br>Marion Lang (Carl Zeiss Microscopy GmbH) |
 | 10:30 - 10:45       |                                                      Coffee Break                                                      |
-| 09:00 - 11:30       |                                **ACQUIFER Talk (t.b.a.)**<br>Bettina Göppert (ACQUIFER)                                |
+| 09:00 - 11:30       |                        **Handling Gig Image Data in Microscopy**<br>Bettina Göppert (ACQUIFER)                         |
 | 11:30 - 12:15       |                                          **The new LSM 9 Series in ZEN Blue**                                          |
 | 12:00 - 13:00       |                                                      Lunch Break                                                       |
 | 13:00 - 14:45       |                **Hands-On: Using Guided Acquistion - 1**<br>Setup your own Guided Acquisition workflow                 |
