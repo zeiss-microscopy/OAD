@@ -2,7 +2,7 @@
 
 | Day 1: November 4th |                                                                                                   Topics   -   09:00 to 17:00                                                                                                    |
 | ------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
-| 09:00 - 10:30       |                              **Workshop Welcome & Introduction to OAD and APEER**<br><Roland Nitschke (Life Imaging Center, University of Freiburg)<br>Sebastian Rhode (Carl Zeiss Microscopy GmbH)                              |
+| 09:00 - 10:30       |                              **Workshop Welcome & Introduction to OAD and APEER**<br>Roland Nitschke (Life Imaging Center, University of Freiburg)<br>Sebastian Rhode (Carl Zeiss Microscopy GmbH)                               |
 | 10:30 - 10:45       |                                                                                                           Coffee Break                                                                                                           |
 | 10:45 - 12:00       | **Latest Developments in Image Analysis and Machine Learning inisde the ZEISS ecosystem**<br>Topics: Image Analysis incl. Machine Learning, Scripting, ZEN Connect<br>Marion Lang & Sebastian Rhode (Carl Zeiss Microscopy GmbH) |
 | 12:00 - 13:00       |                                                                                                           Lunch Break                                                                                                            |
