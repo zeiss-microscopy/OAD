@@ -28,7 +28,9 @@ def replaceZeroNaN(data, value=0):
     return data
 
 
-def readczi(filename, replacezero=True):
+def readczi(filename,
+            dim2none = False,
+            replacezero=True):
 
     # get CZI object and read array
     czi = zis.CziFile(filename)
@@ -64,26 +66,38 @@ def readczi(filename, replacezero=True):
     czimd['PixelType'] = czimd['Information']['Image']['PixelType']
     czimd['SizeX'] = czimd['Information']['Image']['SizeX']
     czimd['SizeY'] = czimd['Information']['Image']['SizeY'] 
-        
+
     try:
         czimd['SizeZ'] = czimd['Information']['Image']['SizeZ']
     except:
-        czimd['SizeZ'] = None
-        
+        if dim2none:
+            czimd['SizeZ'] = None
+        if not dim2none:
+            czimd['SizeZ'] = 1
+
     try:
         czimd['SizeC'] = czimd['Information']['Image']['SizeC']
     except:
-        czimd['SizeC'] = None
-        
+        if dim2none:
+            czimd['SizeC'] = None
+        if not dim2none:
+            czimd['SizeC'] = 1
+
     try:    
         czimd['SizeT'] = czimd['Information']['Image']['SizeT']
     except:
-        czimd['SizeT'] = None
-    
+        if dim2none:
+            czimd['SizeT'] = None
+        if not dim2none:
+            czimd['SizeT'] = 1
+
     try:
         czimd['SizeM'] = czimd['Information']['Image']['SizeM']
     except:
-        czimd['SizeM'] = None
+        if dim2none:
+            czimd['SizeM'] = None
+        if not dim2none:
+            czimd['SizeM'] = 1
 
     try:
         czimd['Scaling'] = metadata['ImageDocument']['Metadata']['Scaling']
@@ -92,7 +106,10 @@ def readczi(filename, replacezero=True):
         try:
             czimd['ScaleZ'] = float(czimd['Scaling']['Items']['Distance'][2]['Value']) * 1000000
         except:
-            czimd['ScaleZ'] = None
+            if dim2none:
+                czimd['ScaleZ'] = None
+            if not dim2none:
+                czimd['ScaleZ'] = 1.0
     except:
         czimd['Scaling'] = None
 
@@ -105,8 +122,8 @@ def readczi(filename, replacezero=True):
         czimd['Layers'] = metadata['ImageDocument']['Metadata']['Layers']
     except:
         czimd['Layers'] = None
-    
+
     if replacezero:
         array = replaceZeroNaN(array, value=0)
-    
+
     return array, czimd
