@@ -2,7 +2,7 @@
 # File       : czitool.py
 # Version    : 0.3
 # Author     : czsrh
-# Date       : 21.01.2019
+# Date       : 14.09.2019
 # Insitution : Carl Zeiss Microscopy GmbH
 #
 #
