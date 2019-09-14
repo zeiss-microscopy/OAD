@@ -12,7 +12,6 @@
 # as long as this copyright notice remains part of the code.
 #################################################################
 
-
 import sys
 import numpy as np
 import czifile as zis
