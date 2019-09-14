@@ -29,7 +29,7 @@ def replaceZeroNaN(data, value=0):
 
 
 def readczi(filename,
-            dim2none = False,
+            dim2none=False,
             replacezero=True):
 
     # get CZI object and read array
