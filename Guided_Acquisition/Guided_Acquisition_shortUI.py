@@ -1,8 +1,8 @@
 ﻿#################################################################
 # File       : Guided_Acquisition_shortUI.py
-# Version    : 7.3
+# Version    : 7.4
 # Author     : czsrh, czmla, czkel
-# Date       : 19.08.2019
+# Date       : 21.10.2019
 # Insitution : Carl Zeiss Microscopy GmbH
 #
 # !!! Requires with ZEN >=2.6 HF3 - Use at your own Risk !!!
@@ -35,7 +35,7 @@ import sys
 
 
 # version number for dialog window
-version = 7.3
+version = 7.4
 # file name for overview scan
 ovscan_name = 'OverviewScan.czi'
 
@@ -311,6 +311,10 @@ ovdoc = Zen.Application.Documents.GetByName(output_OVScan.Name)
 # save the overview scan image inside the select folder
 output_OVScan.Save(Path.Combine(OutputFolder, ovscan_name))
 
+# get the actula focus value for the overscan idependent from the z-value
+# before the start of the overview scan using the image metadata
+zvalue_ovscan = output_OVScan.Metadata.FocusPositionMicron
+
 ############# END OVERVIEW SCAN EXPERIMENT ###################
 
 # Load analysis setting created by the wizard or an separate macro
@@ -351,6 +355,14 @@ num_POI = SingleObj.RowCount
 
 print('Starting DetailScan ...')
 
+# move to 1st detected object to be at a XY-position that makes sense
+xpos_1st = SingleObj.GetValue(0, soi.CenterXColumnIndex)
+ypos_1st = SingleObj.GetValue(0, soi.CenterYColumnIndex)
+Zen.Devices.Stage.MoveTo(xpos_1st + dx_detector, ypos_1st + dy_detector)
+
+# and move the the z-values from the overview scan image
+Zen.Devices.Focus.MoveTo(zvalue_ovscan)
+
 # create an duplicate of the DetailScan experiment to work with
 DetailScan_reloaded = cloneexp(DetailExpName)
 
@@ -366,11 +378,6 @@ print('Acquire Test Snap using setting from DetailScan')
 testsnap.Close()
 # wait for moving hardware due to settings
 time.sleep(hwdelay)
-
-# move to 1st detected object
-xpos_1st = SingleObj.GetValue(0, soi.CenterXColumnIndex)
-ypos_1st = SingleObj.GetValue(0, soi.CenterYColumnIndex)
-Zen.Devices.Stage.MoveTo(xpos_1st + dx_detector, ypos_1st + dy_detector)
 
 if fs_beforeDT:
     try:
@@ -405,7 +412,7 @@ if RecallFocus:
 
 ############# START DETAILED SCAN EXPERIMENT #############
 
-# get the actual Focus position
+# again get the resulting focus position
 zpos = Zen.Devices.Focus.ActualPosition
 
 # check for the column 'ID' which is required
@@ -436,7 +443,7 @@ for i in range(0, num_POI, 1):
             Zen.Acquisition.RecallFocus()
             zpos = Zen.Devices.Focus.ActualPosition
             print('Recall Focus (Definite Focus) applied.')
-            print('Updatd Z-Position: ', zpos)
+            print('Updated Z-Position: ', zpos)
         except ApplicationException as e:
             print('Application Exception : ', e.Message)
             print('RecallFocus (Definite Focus) failed.')
