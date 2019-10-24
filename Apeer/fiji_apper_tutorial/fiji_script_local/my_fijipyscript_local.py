@@ -1,6 +1,6 @@
 # @File(label = "Image File", persist=True) FILENAME
 # @String(label = "Select Filter", choices={"NONE", "MEDIAN", "MIN", "MAX", "MEAN", "VARIANCE", "OPEN", "DESPECKLE"}, style="listBox", value="MEDIAN", persist=True) FILTERTYPE
-# @Integer(label = "Filter Radius", value=5.0, persist=False) FILTER_RADIUS
+# @Integer(label = "Filter Radius", value=5, persist=False) FILTER_RADIUS
 # @Boolean(label = "Run in headless mode", value=False, persist=False) HEADLESS
 # @OUTPUT String FILENAME
 # @OUTPUT String FILTERTYPE
@@ -24,7 +24,7 @@ from loci.plugins.out import Exporter
 from ij.io import FileSaver
 import time
 
-# helper function to apply the filetr
+# helper function to apply the filter
 def getImageStack(imp):
 
     # get the stacks

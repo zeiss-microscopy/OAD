@@ -48,7 +48,7 @@ The goal of this tutorial is to create an automated workflow that can be used to
 
 ***
 
-![Workflow - Guided Acquistion User Interface](/Images/Guided_Acquisition_Dialog_72.png)*Guided Acquisition User Interface created by python scripting*
+![Workflow - Guided Acquistion User Interface](/Images/Guided_Acquisition_Dialog_74.png)*Guided Acquisition User Interface created by python scripting*
 
 ***
 
@@ -79,6 +79,14 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
 ***
 
 ![Side-by-Side view of overview in CWS and detailed image](/Images/GA_Mitosis_CWS_Detail_ZEN.png)*Side-by-Side view of overview in CWS and detailed image*
+
+***
+
+### Guided Acquistion Software Module in ZEN Blue
+
+Starting with ZEN Blue 3.1 there will the option to purchase dedicated software module for Guided Acquisition, which has a streamlined UI interface and other additional functionality, like save settings.
+
+![ZEN Blue Guided Acquisition Software Module](/Images/Guided_Acquisition_ZEN31_overview.png)
 
 ***
 
