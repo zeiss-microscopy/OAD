@@ -1,5 +1,5 @@
 # Use exiszing image: Pull base Fiji baseimage from docker hub
-FROM czsip/fiji_linux64_baseimage:1.2.2
+FROM czsip/fiji_linux64_baseimage:latest
 
 # add Fiji to path
 ENV PATH $PATH:/Fiji.app/

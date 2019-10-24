@@ -3,8 +3,8 @@
 """
 File: my_fijipyscript.py
 Author: Sebastian Rhode
-Date: 2019_06_11
-Version: 0.5
+Date: 2019_10_22
+Version: 0.6
 
 The idea of this module is to provide a template showing some of the required
 code parts in order to create modules based on Fiji. The choosen processing step
@@ -115,7 +115,7 @@ SUFFIX_FL = '_FILTERED'
 
 # parameters for filter
 FILTERTYPE = INPUT_JSON['FILTERTYPE']
-FILTER_RADIUS = INPUT_JSON['FILTER_RADIUS']
+FILTER_RADIUS = int(INPUT_JSON['FILTER_RADIUS'])
 SAVEFORMAT = 'ome.tiff'
 
 log.info('Starting ...')
