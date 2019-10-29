@@ -1,4 +1,24 @@
-### AGENDA
+### MIAP Workshop Program 2019
+
+**Expanding the ZEISS Microscopy Platform: Automation and Image Analysis Solutions based on OAD and APEER**
+
+The goal of this 4-day workshop is to teach and train participants how to employ the ZEISS software
+ecosystem for their own projects in image processing, analysis and microscope automation. We will
+discuss the latest developments in image analysis and machine learning, including the novel free
+image-processing platform APEER, which enables users to exchange image-processing modules and
+assemble them into powerful processing workflows. You will learn how to use APEER in the cloud and
+how to set up a local APEER solution based on the ACQUIFER HIVE system.
+
+The workshop will include lectures, discussions and extensive hands-on sessions using the
+microscope infrastructure of the Life Imaging Center (LIC). Participants are invited to give a talk
+about their workshop-related projects, research (requirements) and custom solutions. Participants
+are also encouraged to bring their own samples or experimental workflows, discuss them with the
+experts and derive custom solutions for their individual microscopy and image analysis challenges.
+
+Please contact us in advance about the prerequisites.
+
+**Basic knowledge in light microscopy and scripting is required.**
+
 
 | Day 1: November 4th |                                                                                                   Topics   -   09:00 to 17:00                                                                                                    |
 | ------------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
