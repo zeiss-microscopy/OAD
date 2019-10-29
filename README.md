@@ -41,7 +41,7 @@ Participants are invited to give a talk about their workshop-related projects, r
 
 ### Agenda
 
-The agenda as PDF can be found here: [Workshop Agenda (PDF)](https://github.com/zeiss-microscopy/OAD/blob/master/Workshops/2019_MIAP_Zeiss_OAD/Agenda_Zeiss_OAD_v3.pdf) and here a a web document: [Workshop Agenda](https://github.com/zeiss-microscopy/OAD/blob/master/Workshops/2019_MIAP_Zeiss_OAD/2019_miap_zeiss_oad_agenda.md)
+The agenda as PDF can be found here: [Workshop Agenda (PDF)](https://github.com/zeiss-microscopy/OAD/blob/master/Workshops/2019_MIAP_Zeiss_OAD/Agenda_Zeiss_OAD_v3.pdf) and here a a web document: [Workshop Agenda](https://github.com/zeiss-microscopy/OAD/blob/master/Workshops/2019_MIAP_Zeiss_OAD/README.md)
 ***
 
 # Open Application Development (OAD)
