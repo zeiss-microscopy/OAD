@@ -25,7 +25,7 @@ For more details please see: **[APEER Home](https://www.apeer.com/home/)**
 
 #### Sneak Preview ZEN Blue 3.1 - What's new
 
-TBD
+For a preview of ZEN 3.1 see: **[ZEN Blue 3.1 Preview](https://github.com/zeiss-microscopy/OAD/blob/master/Workshops/2019_MIAP_Zeiss_OAD/02_latest_developments_in_image_analysis_machine_learning/Sneak_Preview_ZEN_Blue31.pdf)**
 
 ***
 
