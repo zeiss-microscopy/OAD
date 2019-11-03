@@ -23,5 +23,5 @@ The general goal of this session to:
 * Get a general understanding about the principles of Guided Acquistion
 * Getting to know the software module Guided Acquistion
 * Understand the scripting-based solution for Guided Acquistion
-* Try out both solution on rela system using real samples
+* Try out both solution on real systems using real samples
 * Last, but not least - have fun!

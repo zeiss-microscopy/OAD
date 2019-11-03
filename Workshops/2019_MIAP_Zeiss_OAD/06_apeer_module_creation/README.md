@@ -1,4 +1,4 @@
-### APEER - Create your won module
+### APEER - Create your own module
 
 The main idea of this session will to go through all the steps required to create your 1s own APEER module.
 As an example a simple Fiji based module will be created.
