@@ -31,4 +31,4 @@ For a preview of ZEN 3.1 see: **[ZEN - Latest Developments](https://github.com/z
 
 #### Workshop Content
 
-See agenda: [Workhop Agenda](./2019_MIAP_Zeiss_OAD/2019_miap_zeiss_oad_agenda.md)
+See agenda: [Workhop Agenda](/Workshops/2019_MIAP_Zeiss_OAD/README.md)

@@ -1,12 +1,15 @@
-﻿"""  
-Author: Sebastian Rhode
-Date: 2019_03_25
-File: Intellesis_Segmentation_Tool.py
-Version: 0.9
-
-Requires ZEN Blue 2.6 
-
-"""
+﻿#################################################################
+# File       : Intellesis_Segmentation_Tool.py
+# Version    : 0.9
+# Author     : czsrh
+# Date       : 25.03.2019
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+# Copyright(c) 2019 Carl Zeiss AG, Germany. All Rights Reserved.
+#
+# Permission is granted to use, modify and distribute this code,
+# as long as this copyright notice remains part of the code.
+#################################################################
 
 from System.IO import File, Directory, Path, SearchOption
 import sys
@@ -16,6 +19,7 @@ import System.Xml
 from System import ApplicationException
 
 version = 0.9
+
 
 def is_empty(any_structure):
     if any_structure:
@@ -281,7 +285,7 @@ if not segactiveimg:
 
     # check for existing subfolder inside source folder
     seg_subfolder = Path.Combine(sourcefolder, 'Seg')
-    
+
     if Directory.Exists(seg_subfolder):
         if len(Directory.GetFiles(seg_subfolder)) != 0:
             # subfolder exist and is not empty - stop here
@@ -290,7 +294,7 @@ if not segactiveimg:
             raise SystemExit
         if len(Directory.GetFiles(seg_subfolder)) == 0:
             print 'Subfolder already exists but is empty. Proceed with Segmentation.'
-    
+
     if not Directory.Exists(seg_subfolder):
         # subfolder does not exist - create one
         Directory.CreateDirectory(seg_subfolder)
@@ -302,10 +306,10 @@ if segactiveimg:
         message = 'Active Document is not a ZenImage.'
         print message, sourcefolder
         raise SystemExit
-    
+
     if Zen.Application.Documents.ActiveDocument.IsZenImage:
-       image = Zen.Application.ActiveDocument
-       imagefiles.append(image.FileName)
+        image = Zen.Application.ActiveDocument
+        imagefiles.append(image.FileName)
 
 print '-----------------------------------------------------------------------------'
 

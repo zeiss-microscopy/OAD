@@ -1,12 +1,15 @@
-﻿"""  
-Author: Sebastian Rhode
-Date: 2019_03_25
-File: Intellesis_Segmentation_Tool_singleCH.py
-Version: 0.2
-
-Requires ZEN Blue 2.6 
-
-"""
+﻿#################################################################
+# File       : Intellesis_Segmentation_Tool_singleCH.py
+# Version    : 0.2
+# Author     : czsrh
+# Date       : 25.03.2019
+# Insitution : Carl Zeiss Microscopy GmbH
+#
+# Copyright(c) 2019 Carl Zeiss AG, Germany. All Rights Reserved.
+#
+# Permission is granted to use, modify and distribute this code,
+# as long as this copyright notice remains part of the code.
+#################################################################
 
 from System.IO import File, Directory, Path, SearchOption
 import sys
@@ -16,6 +19,7 @@ import System.Xml
 from System import ApplicationException
 
 version = 0.2
+
 
 def is_empty(any_structure):
     if any_structure:
@@ -68,7 +72,7 @@ def getclassnames(modelfile):
 
     classnames = []
     classnamedict = {}
-    
+
     # get name of classes of model from XML model file
     xmldoc = System.Xml.XmlDocument()
     xmldoc.Load(modelfile)
@@ -78,7 +82,7 @@ def getclassnames(modelfile):
         for n in node.GetEnumerator():
             classnames.append(n.GetAttribute('Name'))
             classnamedict[n.GetAttribute('Name')] = count
-            count = count +1
+            count = count + 1
 
     return classnames, classnamedict
 
@@ -211,10 +215,10 @@ if not Zen.Application.Documents.ActiveDocument.IsZenImage:
     raise SystemExit
 
 if Zen.Application.Documents.ActiveDocument.IsZenImage:
-   activeimage = Zen.Application.ActiveDocument
-   activeimagefilename = activeimage.FileName
-   activeimagename = activeimage.Name
-   
+    activeimage = Zen.Application.ActiveDocument
+    activeimagefilename = activeimage.FileName
+    activeimagename = activeimage.Name
+
 numCH = int(activeimage.Metadata.ChannelCount)
 
 # create dictionary with channel names
@@ -223,7 +227,7 @@ chdict = {}
 
 for ch in range(numCH):
     chnames.append(activeimage.Metadata.GetChannelName(ch))
-    chdict[activeimage.Metadata.GetChannelName(ch)] = ch+1
+    chdict[activeimage.Metadata.GetChannelName(ch)] = ch + 1
 
 # initialize Dialog
 SelectDialog = ZenWindow()
@@ -302,7 +306,7 @@ seg = classify(image, modelname,
                format=segmentationformat,
                extractclass=extract,
                addseg=False,
-               classid=extract_id+1,
+               classid=extract_id + 1,
                adapt_pixeltype=adaptpx)
 
 if addseg2orig:

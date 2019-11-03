@@ -10,13 +10,20 @@
 # as long as this copyright notice remains part of the code.
 #################################################################
 
+###########   !!!   ATENTION   !!!   ##############
+#
+# Date: 03.11.2019
+# Currently not working due to an open issue in ZEN!
+#
+###########   !!!   ATENTION   !!!   ##############
+
 
 def SortZenTable(table, columnname, option='asc'):
 
     # get the default view for the internal table object
     dv = table.Core.DefaultView
     # sort the table
-    dv.Sort  = columnname + ' ' + option
+    dv.Sort = columnname + ' ' + option
     # convert the table to ZenTable object
     dt = dv.ToTable('Test')
     # clear the original ZenTable
@@ -24,8 +31,9 @@ def SortZenTable(table, columnname, option='asc'):
     # fill in the new values
     for dr in dt.Rows:
         table.Rows.Add(dr.ItemArray)
-    
+
     return table
+
 
 # clear console output
 Zen.Application.MacroEditor.ClearMessages()
@@ -37,7 +45,7 @@ nameParent = img.Name
 # define time unit ms, s, min, h, d
 tunit = '[s]'
 
-# create initial plane table 
+# create initial plane table
 table = ZenTable(nameParent[:-4] + '_PlaneTable')
 table.Columns.Add('Scene', int)
 table.Columns.Add('Tile', int)
@@ -60,16 +68,17 @@ print 'Overall Image Count: ', scenes * tiles * SizeT * SizeZ * SizeC
 
 count = 0
 # open each subimage from the current active image
-for scene in range(1, scenes+1):
-    for tile in range(1, tiles+1):
+for scene in range(1, scenes + 1):
+    for tile in range(1, tiles + 1):
         # very simple progress bar
         print '\b.',
-        for time in range(1, SizeT+1):
-            for z in range (1, SizeZ+1):
-                for ch in range(1, SizeC+1):
+        for time in range(1, SizeT + 1):
+            for z in range(1, SizeZ + 1):
+                for ch in range(1, SizeC + 1):
                     count = count + 1
                     # retrieve the actual subimage using the correct path
-                    subimg = img.CreateSubImage('S('+str(scene)+')|M('+str(tile)+')|T('+str(time)+')|Z('+str(z)+')|C('+str(ch)+')')
+                    subimg = img.CreateSubImage('S(' + str(scene) + ')|M(' + str(tile) + ')|T(' +
+                                                str(time) + ')|Z(' + str(z) + ')|C(' + str(ch) + ')')
                     # extract relevant imformation from the metadata
                     if tunit == '[ms]':
                         tr = float(subimg.Metadata.GetMetadataWithPath('ImageRelativeTime')[1].TotalMilliseconds)
@@ -85,25 +94,25 @@ for scene in range(1, scenes+1):
                     # fill the ZEN table with the extracted values
                     table.Rows.Add()
                     # add scene index
-                    table.SetValue(count-1, 0, scene)
+                    table.SetValue(count - 1, 0, scene)
                     # add tile index
-                    table.SetValue(count-1, 1, tile)
+                    table.SetValue(count - 1, 1, tile)
                     # add time index
-                    table.SetValue(count-1, 2, time)
+                    table.SetValue(count - 1, 2, time)
                     # add z index
-                    table.SetValue(count-1, 3, z)
+                    table.SetValue(count - 1, 3, z)
                     # add channel index
-                    table.SetValue(count-1, 4, ch)
+                    table.SetValue(count - 1, 4, ch)
                     # add xyz position
-                    table.SetValue(count-1, 5, subimg.Metadata.StagePositionMicron.X)
-                    table.SetValue(count-1, 6, subimg.Metadata.StagePositionMicron.Y)
-                    table.SetValue(count-1, 7, subimg.Metadata.FocusPositionMicron)
+                    table.SetValue(count - 1, 5, subimg.Metadata.StagePositionMicron.X)
+                    table.SetValue(count - 1, 6, subimg.Metadata.StagePositionMicron.Y)
+                    table.SetValue(count - 1, 7, subimg.Metadata.FocusPositionMicron)
                     # add timestamps
-                    table.SetValue(count-1, 8, tr)
-                                    
+                    table.SetValue(count - 1, 8, tr)
+
                     # close the subimage
                     subimg.Close()
-                    
+
 print '\nFinished - PlaneTable created.'
 
 # sort the table
