@@ -1,0 +1,24 @@
+{
+    "spec": {
+        "inputs": {
+            "ihc_image": {
+                "type:file": {}
+            }
+        },
+        "outputs": {
+            "processed_images": {
+                "type:list[file]": {}
+            }
+        }
+    },
+    "ui": {
+        "inputs": {
+            "ihc_image": {
+                "index": 1,
+                "label": "IHC Image",
+                "widget:textbox": {}
+            }
+        },
+        "outputs": {}
+    }
+}
