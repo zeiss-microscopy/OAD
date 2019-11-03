@@ -12,6 +12,12 @@ The following topics will be discussed:
 * Why is ZEISS doing this?
 * What about the buisness model behind APEER?
 
+More detailed information about APEER can be found here:
+
+[APEER - Open And Scalable Image and Data Processing Platform](APEER_short.pdf)
+
+***
+
 ![APEER - Combine Modules](apeer_picture1.jpg)
 
 ***
