@@ -4,7 +4,7 @@ dask==0.20.2
 decorator==4.3.0
 networkx==2.2
 numpy==1.15.4
-Pillow==5.3.0
+Pillow==6.2.0
 PyWavelets==1.0.1
 scikit-image==0.14.1
 six==1.11.0
