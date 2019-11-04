@@ -25,8 +25,8 @@ imagefolder = r'c:\myimages'
 
 # define model and image to load
 modelname = 'XRM_Sandstone_Default_Features_Demo'
-modelfile = Path.Combine(basefolder, Path.Combine('Testdata', modelname + '.czmodel'))
-imagefile = Path.Combine(basefolder, r'Testdata\XRM_Testimage.czi')
+modelfile = Path.Combine(basefolder, modelname + '.czmodel')
+imagefile = Path.Combine(basefolder, 'XRM_Testimage.czi')
 
 print 'Model Name : ', modelname
 print 'Modelfile  : ', modelfile
