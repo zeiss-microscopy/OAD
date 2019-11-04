@@ -17,6 +17,9 @@ functionality of the Intellesis segmentation module
 
 """
 
+from System.IO import File, Path, Directory
+from System import ApplicationException
+
 # clear output console
 Zen.Application.MacroEditor.ClearMessages()
 
