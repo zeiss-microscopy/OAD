@@ -52,7 +52,7 @@ for m in available_models:
         break
 
 if not model_exists:
-    ZenIntellesis. ImportModel(modelfile, False)
+    ZenIntellesis.ImportModel(modelfile, False)
 
 ##### ZEN Blue 3.1 code - END ########
 
