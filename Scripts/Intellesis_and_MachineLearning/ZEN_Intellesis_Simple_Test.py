@@ -20,13 +20,13 @@ functionality of the Intellesis segmentation module
 # clear output console
 Zen.Application.MacroEditor.ClearMessages()
 
-modelfolder = r'c:\mymodels'
-imagefolder = r'c:\myimages'
+modelfolder = r'c:\models'
+imagefolder = r'c:\images'
 
 # define model and image to load
 modelname = 'XRM_Sandstone_Default_Features_Demo'
-modelfile = Path.Combine(basefolder, modelname + '.czmodel')
-imagefile = Path.Combine(basefolder, 'XRM_Testimage.czi')
+modelfile = Path.Combine(modelfolder, modelname + '.czmodel')
+imagefile = Path.Combine(imagefolder, 'XRM_Testimage.czi')
 
 print 'Model Name : ', modelname
 print 'Modelfile  : ', modelfile
