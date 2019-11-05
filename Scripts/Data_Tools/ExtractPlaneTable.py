@@ -22,12 +22,16 @@ def SortZenTable(table, columnname, option='asc'):
 
     # get the default view for the internal table object
     dv = table.Core.DefaultView
+
     # sort the table
     dv.Sort = columnname + ' ' + option
+
     # convert the table to ZenTable object
     dt = dv.ToTable('Test')
+
     # clear the original ZenTable
     table.Rows.Clear()
+
     # fill in the new values
     for dr in dt.Rows:
         table.Rows.Add(dr.ItemArray)
@@ -64,6 +68,11 @@ SizeT = img.Bounds.SizeT
 SizeZ = img.Bounds.SizeZ
 SizeC = img.Bounds.SizeC
 
+print 'Scenes     : ', scenes
+print 'Tiles      : ', tiles
+print 'TimePoints : ', SizeT
+print 'Z-Planes   : ', SizeZ
+print 'Channels   : ', SizeC
 print 'Overall Image Count: ', scenes * tiles * SizeT * SizeZ * SizeC
 
 count = 0
@@ -73,12 +82,19 @@ for scene in range(1, scenes + 1):
         # very simple progress bar
         print '\b.',
         for time in range(1, SizeT + 1):
+            print '\b.',
             for z in range(1, SizeZ + 1):
+                print '\b.',
                 for ch in range(1, SizeC + 1):
                     count = count + 1
                     # retrieve the actual subimage using the correct path
-                    subimg = img.CreateSubImage('S(' + str(scene) + ')|M(' + str(tile) + ')|T(' +
-                                                str(time) + ')|Z(' + str(z) + ')|C(' + str(ch) + ')')
+                    if tiles > 1:
+                        # only try to extract tiles if there are more than one
+                        subimg = img.CreateSubImage('S(' + str(scene) + ')|M(' + str(tile) + ')|T(' +
+                                                    str(time) + ')|Z(' + str(z) + ')|C(' + str(ch) + ')')
+                    if tiles == 1:
+                        subimg = img.CreateSubImage('S(' + str(scene) + ')|T(' + str(time) + ')|Z(' + str(z) + ')|C(' + str(ch) + ')')
+
                     # extract relevant imformation from the metadata
                     if tunit == '[ms]':
                         tr = float(subimg.Metadata.GetMetadataWithPath('ImageRelativeTime')[1].TotalMilliseconds)
