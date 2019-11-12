@@ -1,48 +1,4 @@
-# Announcement
 
-![MIAP ZEISS OAD Workshop](/Images/Advertise_Zeiss_OAD_Workshop.png)
-
-
-## MIAP Workshop: Expanding the ZEISS Microscopy Platform - Automation and Image Analysis Solutions based on OAD and APEER
-
-### Location and Date
-
-- **Center for Biological Systems Analysis (ZBSA) - Life Imaging Center (LIC)**
-
-- **Albert-Ludwigs University Freiburg, Habsburgerstr. 49, 79104 Freiburg im Breisgau**
-
-- **4-7 November 2019**
-
-For more information and registration: [**MIAP ZEISS OAD and APEER Workshop**](https://miap.eu/miap-events/miap-workshops/2019-11-zeiss-oad-apeer/) or email to [**info@miap.eu**](mailto:info@miap.eu)
-
-### Goal of the workshop
-
- The goal of this 4-day workshop is to teach and train participants how to employ the ZEISS software ecosystem for their own projects in image processing, analysis and microscope automation.
-
-We will discuss the latest developments in image analysis and machine learning, including the novel free image processing platform [APEER](https://www.apeer.com), which enables users to exchange image processing modules and assemble them into powerful processing workflows. You will learn how to use APEER in the cloud and how to set up a local APEER solution based on the [ACQUIFER](https://www.acquifer.de/) HIVE system.
-
-We will show best practices and application examples in a hands-on session focused on:
-
-- How to automate image acquisition and analysis using OAD scripts ([Open Application Development](https://github.com/zeiss-microscopy/OAD))
-- How to set up adaptive feedback experiment workflows in combination with APEER, Fiji/ImageJ etc.
-- How to leverage the full potential of ZEN Blue and 3rd party image processing in your image processing and analysis workflows
-- How to create your own APEER modules
-- How to build your own local APEER server using the HIVE solution from ACQUIFER.
-
-The workshop will include lectures, discussions and extensive hands-on sessions using the microscope infrastructure of the Life Imaging Center (LIC).
-
-Participants are invited to give a talk about their workshop-related projects, research (requirements) and custom solutions. Participants are also encouraged to bring their own samples or experimental workflows, discuss them with the teachers and derive custom solutions for their individual microscopy and image analysis challenges. Please contact us in advance about the prerequisites.
-
-- **Basic knowledge in light microscopy and scripting is required.**
-
-- **Maximal number of participants: 15**
-
-- **Deadline for applications: 8th of September 2019**
-
-### Agenda
-
-The agenda as PDF can be found here: [Workshop Agenda (PDF)](https://github.com/zeiss-microscopy/OAD/blob/master/Workshops/2019_MIAP_Zeiss_OAD/Agenda_Zeiss_OAD_v3.pdf) and here a a web document: [Workshop Agenda](https://github.com/zeiss-microscopy/OAD/blob/master/Workshops/2019_MIAP_Zeiss_OAD/README.md)
-***
 
 # Open Application Development (OAD)
 
