@@ -137,7 +137,7 @@ class ImportTools:
         if metainfo['Extension'] != '.czi':
 
             # read the imagefile using the correct method
-            if metainfo['Extension'] == ('.jpg' or '.JPG' or '.jpeg' or '.JPEG'):
+            if metainfo['Extension'].lower() == ('.jpg' or '.jpeg'):
                 # use dedicated method for jpg
                 imp, metainfo = ImageTools.openjpg(imagefile, method='IJ')
             else:
@@ -195,33 +195,22 @@ class ImportTools:
     @staticmethod
     def openjpg(imagefile,
                 method='IJ'):
+        allowed_methods = {"IJ": IJ.openImage, 
+                           "Opener": Opener().openImage, 
+                           "BF": BF.openImagePlus}
+        if method in allowed_methods:
+            method_func = allowed_methods[method]
+            imp = method_func(imagefile)
+            if method == "BF":
+                imp, slices, width, height, pylevel = ImageTools.getImageSeries(imps, series=readpylevel)
 
-        if method == 'IJ':
+                metainfo['Output Slices'] = slices
+                metainfo['Output SizeX'] = width
+                metainfo['Output SizeY'] = height
 
-            # using IJ static method
-            imp = IJ.openImage(imagefile)
-
-        if method == 'Opener':
-
-            # Using Opener class
-            imp = Opener().openImage(imagefile)
-
-        if method == 'BF':
-
-            # using BioFormats library
-            imps = BF.openImagePlus(imagefile)
-
-            # read image data using the specified pyramid level
-            imp, slices, width, height, pylevel = ImageTools.getImageSeries(imps, series=readpylevel)
-
-            metainfo['Output Slices'] = slices
-            metainfo['Output SizeX'] = width
-            metainfo['Output SizeY'] = height
-
-            imp = imps[0]
-
-        return imp
-
+                imp = imps[0]
+            return imp
+           
     @staticmethod
     def readCZI(imagefile,
                 metainfo,
@@ -288,7 +277,8 @@ class ImportTools:
 
         # calc scaling in case of pyramid
         # scale = float(metainfo['Output SizeX']) / float(metainfo['SizeX'])
-        scale = float(metainfo['SizeX']) / float(metainfo['Output SizeX'])
+        scale = float(metainfo['SizeX']) / metainfo['Output SizeX']
+        # was this ported from python 2? I think you only need to float one of the inputs to the division
 
         metainfo['Pyramid Scale Factor'] = scale
         metainfo['ScaleX Output'] = metainfo['ScaleX'] * scale
@@ -321,18 +311,19 @@ class ExportTools:
     def bfexporter(imp, savepath, useLOCI=True):
 
         if useLOCI:
-
-            paramstring = "outfile=" + savepath + " " + "windowless=true compression=Uncompressed saveROI=false"
+            paramstring = "outfile={} windowless=true compression=Uncompressed saveROI=false".format(savepath)
+            # paramstring = "outfile=" + savepath + " " + "windowless=true compression=Uncompressed saveROI=false"
             plugin = LociExporter()
             plugin.arg = paramstring
             exporter = Exporter(plugin, imp)
             exporter.run()
 
         # save as OME-TIFF using BioFormats library using the IJ.run method
-        if not useLOCI:
+        else:
 
             # 2019-04-25: This does not seem to work in headless anymore
-            paramstring = "save=[" + savepath + "] compression=Uncompressed"
+            paramstring = "save=[{}] compression=Uncompressed".format(savepath)
+            # paramstring = "save=[" + savepath + "] compression=Uncompressed"
             IJ.run(imp, "Bio-Formats Exporter", paramstring)
 
         return paramstring
@@ -380,7 +371,7 @@ class ExportTools:
 
         else:
             extension = 'ome.tiff'
-            print "save as OME-TIFF: " # savepath
+            print("save as OME-TIFF: ") # savepath
             pstr = ExportTools.bfexporter(imp, savepath, useLOCI=True)
 
         return savepath
@@ -477,8 +468,10 @@ class FilterTools:
             ip = stack.getProcessor(index)
 
             # apply filter based on filtertype
-            # if filtertype == 'MEDIAN':
-            filter.rank(ip, radius, filterdict[filtertype])
+            if filtertype in filterdict:
+                filter.rank(ip, radius, filterdict[filtertype])
+            else:
+                print(f"Argument 'filtertype': {filtertype} not found")
 
         return imp
 
@@ -633,27 +626,26 @@ class ThresholdTools:
 
     @staticmethod
     def apply_autothreshold(hist, method='Otsu'):
-
-        if method == 'Otsu':
-            lowthresh = Auto_Threshold.Otsu(hist)
-        if method == 'Triangle':
-            lowthresh = Auto_Threshold.Triangle(hist)
-        if method == 'IJDefault':
-            lowthresh = Auto_Threshold.IJDefault(hist)
-        if method == 'Huang':
-            lowthresh = Auto_Threshold.Huang(hist)
-        if method == 'MaxEntropy':
-            lowthresh = Auto_Threshold.MaxEntropy(hist)
-        if method == 'Mean':
-            lowthresh = Auto_Threshold.Mean(hist)
-        if method == 'Shanbhag':
-            lowthresh = Auto_Threshold.Shanbhag(hist)
-        if method == 'Yen':
-            lowthresh = Auto_Threshold.Yen(hist)
-        if method == 'Li':
-            lowthresh = Auto_Threshold.Li(hist)
-
-        return lowthresh
+        # I think the use of a dict here makes it a little easier to see what's going on, and avoids repetition
+        method_dict = {'Otsu': Auto_Threshold.Otsu,
+                      'Triangle': Auto_Threshold.Triangle,
+                      'IJDefault': Auto_Threshold.IJDefault,
+                      'Huang': Auto_Threshold.Huang,
+                      'MaxEntropy': Auto_Threshold.MaxEntropy,
+                      'Mean': Auto_Threshold.Mean,
+                      'Shanbhag': Auto_Threshold.Shanbhag,
+                      'Yen': Auto_Threshold.Yen,
+                      'Li': Auto_Threshold.Li
+                      }
+        if method in method_dict:
+            method_func = method_dict[method]
+            lowthresh = method_func(hist)
+            return lowthresh
+        else:
+            print(f"Method passed not found: {method}")
+            # or print("Method passed not found: {}".format(method) or print("Method passed not found: %s" % method)
+            # whichever works best for you
+            return None
 
     @staticmethod
     # helper function to apply threshold to whole stack
@@ -686,7 +678,7 @@ class ThresholdTools:
         if stackopt:
             
             # create argument string for the IJ.setAutoThreshold
-            thcmd = method + ' ' + background_threshold + ' stack'
+            thcmd = " ".join((method, background_threshold, 'stack'))
             
             # set threshold and get the lower threshold value
             IJ.setAutoThreshold(imp, thcmd)
@@ -701,12 +693,12 @@ class ThresholdTools:
                                                             method=method)
 
         # threshold slice-by-slice with correction
-        if not stackopt:
+        else:
 
             # get the stack
             stack = imp.getStack()  # get the stack within the ImagePlus
             nslices = stack.getSize()  # get the number of slices
-            print('Slices: ' + str(nslices))
+            print('Slices: {}'.format(nslices))
             print('Thresholding slice-by-slice')
 
             for index in range(1, nslices + 1):
@@ -843,7 +835,8 @@ class MiscTools:
     @staticmethod
     def apply_binning(imp, binning=4, method="Sum"):
 
-        IJ.run(imp, "Bin...", "x=" + str(binning) + " y=" + str(binning) + " bin=" + method)
+        # IJ.run(imp, "Bin...", "x=" + str(binning) + " y=" + str(binning) + " bin=" + method)
+        IJ.run(imp, "Bin...", f"x={binning} y={binning} bin={method}")
 
         return imp
 
@@ -858,7 +851,7 @@ class MiscTools:
             # extension = str(splitresult[1] + splitresult[2])
 
             ext2 = splitresult[-2]
-            if ext2 != ('.ome' or '.OME'):
+            if ext2.lower() != '.ome':
                 # set ext2 empty in case it is not .ome or .OME
                 ext2 = ''
 
@@ -947,22 +940,16 @@ class MiscTools:
         return imp
 
     @staticmethod
-    def addzeros(number):
+    def addzeros(number: int):
+        # If you're using Python version > 3.6 then I would use string formatting here:
+        # That is if you need a dedicated function for it - it might be better to do it in place
+        if isinstance(number, int):
+            return f"{number:06d}"
+            # alternatively
+            # return "{:06d}".format(number) would also work for Python < 3.6
+        else:
+            return f"{number}"
 
-        if number < 10:
-            zerostring = '000000' + str(number)
-        if number >= 10 and number < 100:
-            zerostring = '00000' + str(number)
-        if number >= 100 and number < 1000:
-            zerostring = '0000' + str(number)
-        if number >= 1000 and number < 10000:
-            zerostring = '000' + str(number)
-        if number >= 10000 and number < 100000:
-            zerostring = '00' + str(number)
-        if number >= 100000 and number < 1000000:
-            zerostring = '0' + str(number)
-
-        return zerostring
     
     @staticmethod
     def createdir(path):
@@ -1013,9 +1000,9 @@ class JSONTools:
     @staticmethod
     def convert2bool(inputstring):
 
-        if inputstring == 'False' or inputstring == 'false':
+        if inputstring.lower() == 'false':
             outputbool = False
-        if inputstring == 'True' or inputstring == 'true':
+        elif inputstring.lower() == 'true':
             outputbool = True
 
         return outputbool
