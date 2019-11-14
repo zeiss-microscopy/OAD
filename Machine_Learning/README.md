@@ -73,8 +73,6 @@ Starting from the ZEN Blue 3.1 release the software allows to download pre-train
 
 ZEN can basically read any image data format using the BioFormats Import and Intellesis can therefore be used to segment **any multi-dimensional dataset** that can be imported into the software. Shown below are imaged segmented using Intellesis.
 
-***
-
 ![ZEN Python](../Images/intellesis_ms_apps.png)
 
 *Intellesis - Material Science Applications*
@@ -97,9 +95,6 @@ To be able to handle even large multi-dimensional datasets, the software has a b
 
 ![ZEN Python](../Images/intellesis_dataflow.png)
 *Intellesis - DataFlow*
-
-#### U
-
 
 ***
 
