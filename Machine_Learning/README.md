@@ -31,26 +31,26 @@ The ZEN software platform has various built-in image segmentation function. One 
 
 ### Technical Specfications
 
-* Machine-Learning Tool for Pixel Classification powered by Python
-Dask, Scikit-Learn and Tensorflow 
-* Real Multi-Channel Feature Extraction – all channels will be used to segment a pixel
-* Class Segmentation – hierarchical structures with independent segmentation per class
-* Engineered Feature Sets and Deep Feature Extraction (GPU) and pre-trained networks
+* Machine-Learning Tool for Pixel Classification powered by **Python
+Dask, Scikit-Learn and Tensorflow** 
+* Real **Multi-Channel Feature Extraction** – all channels will be used to segment a pixel
+* **Class Segmentation** – hierarchical structures with independent segmentation per class
+* **Engineered Feature Sets** and **Deep Feature Extraction** (GPU) and pre-trained networks
     * Engineered Default Feature Sets (CPU)
         * 25 or 33 Features
     * Neural Network (vgg19) Layers for Feature Extraction (GPU)
         * 64, 128 (red. 50) or 256 (red. 70) Features for 1st, 2nd or 3rd layer
 
-* Pixel Classification by proven and established Random Forrest Classifier
+* Pixel Classification by proven and established **Random Forrest Classifier**
 * Option to **download** pre-trained DNNs for image segmentation
   * currently 3 pre-trained networks are available
   * import of external networks will come soon
-* Post processing by Conditional Random Fields (CRF)
-* Option to apply confidence thresholds
-* IP-Functions for creating masks and scripting integration for advanced automation
-* Client-Server Architecture (Zen Client - Python-Server) with using REST-API
-* client-side tiling functionality to deal with large multidimensional datasets
-* universal automated build pipeline for ZeissPython established and integrated in official Zeiss installer
+* Post processing by **Conditional Random Fields** (CRF)
+* Option to apply **confidence thresholds**
+* IP-Functions for creating masks and **scripting integration** for advanced automation
+* **Client-Server Architecture** (Zen Client - Python-Server) with using REST-API
+* client-side tiling functionality to deal with large **mult-idimensional datasets**
+* universal automated build pipeline for **ZeissPython** established and integrated in official Zeiss installer
 
 
 ### Workflows
