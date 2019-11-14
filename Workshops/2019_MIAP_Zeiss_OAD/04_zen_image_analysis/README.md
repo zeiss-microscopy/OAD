@@ -21,4 +21,4 @@ In this session the latest tools available within the ZEN Blue Image Analysis fr
 
 ***
 
-More Information about ZEN Intellesis and Example Scripts can be found here: [ZEN Intellesis Trainable Segmentation](/Scripts/Intellesis_and_MachineLearning/README.md)
+More Information about ZEN Intellesis and Example Scripts can be found here: [Machine Learning - ZEN Intellesis Trainable Segmentation](/Machine_Learning/README.md)
