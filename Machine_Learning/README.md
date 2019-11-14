@@ -31,13 +31,13 @@ ZEN can basically read any image data format using the BioFormats Import and Int
 
 ***
 
-![ZEN Python](/Images/intellesis_ms_apps.png)
+![ZEN Python](../Images/intellesis_ms_apps.png)
 
 *Intellesis - Material Science Applications*
 
 ***
 
-![ZEN Python](/Images/intellesis_ls_apps.png)
+![ZEN Python](../Images/intellesis_ls_apps.png)
 
 *Intellesis - Life Science Applications*
 
@@ -51,7 +51,7 @@ To be able to handle even large multi-dimensional datasets, the software has a b
 
 ***
 
-![ZEN Python](/Images/intellesis_dataflow.png)
+![ZEN Python](../Images/intellesis_dataflow.png)
 
 *Intellesis - DataFlow*
 
@@ -59,7 +59,7 @@ To be able to handle even large multi-dimensional datasets, the software has a b
 
 Due to the fact that the SegmentationService is written completely in Python is can be used a module on the APEER platform. The complete SegmenationService is running inside a Linux-based docker container.
 
-![Intellesis on APEER](/Images/intellesis_apeer.png)
+![Intellesis on APEER](../Images/intellesis_apeer.png)
 
 *APEER Workflow using the Intellesis SegmentationService as a module*
 
@@ -81,13 +81,13 @@ To read about the newest developments on APEER read the blog:
 
 This simple script demonstrated the different possibilities to segment an image using a trained model. The result of such a segmentation is a mask image, which has either as many channels as the models has classes, or one channel containing a distinct label for every class.
 
-![ZEN Intellesis Segmentation Options](/Images/intellesis_segoptions.png)
+![ZEN Intellesis Segmentation Options](../Images/intellesis_segoptions.png)
 
 *(top left) - raw image data data (top right) segmented image (bottom left) segmeneted with confidence threshold and (bottom right) probobility map image*
 
 ### Intellesis_Segmentation_Tool.py
 
-![ZEN Intellesis Segmentation Tool](/Images/intellesis_batch.png)
+![ZEN Intellesis Segmentation Tool](../Images/intellesis_batch.png)
 
 *ZEN Intellesis Segmentation Tool*
 
@@ -107,13 +107,13 @@ Beside this tool is is alos possible to run a segmenation using the ZEN built-in
 
 ### Intellesis_Segmentation_Tool_singleCH.py
 
-![ZEN Intellesis Segmentation Tool - Single Channel](/Images/intellesis_batch_singleCH1.png)
+![ZEN Intellesis Segmentation Tool - Single Channel](../Images/intellesis_batch_singleCH1.png)
 
 *Intellesis Segmentation Tool Single Channel - Step 1*
 
 ***
 
-![ZEN Intellesis Segmentation Tool - Single Channel](/Images/intellesis_batch_singleCH2.png)
+![ZEN Intellesis Segmentation Tool - Single Channel](../Images/intellesis_batch_singleCH2.png)
 
 *Intellesis Segmentation Tool Single Channel - Step 2*
 
@@ -131,6 +131,6 @@ Beside this tool is is alos possible to run a segmenation using the ZEN built-in
 
 ***
 
-![ZEN Intellesis Segmentation Tool - Single Channel](/Images/intellesis_batch_singleCH_result.png)
+![ZEN Intellesis Segmentation Tool - Single Channel](../Images/intellesis_batch_singleCH_result.png)
 
 *Segmented green channel (bottom left)*
