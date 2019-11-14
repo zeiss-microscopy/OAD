@@ -9,19 +9,63 @@ The ZEN software platform has various built-in image segmentation function. One 
 
 ***
 
-### Main Features of Software Module
+![ZEN Python Modules](../Images/ZEN_Python_Tools.png)
+
+***
+
+### Key Features
 
 * **Simple User Interface for Labelling and Training**
+
+    * The tool aims for the non-expert by providing an “easy-to-use” interface
+    * Not all “parameters” in machine-learning (an expert might expect) can be adjusted. They are hidden “on purpose” 
+
 * **Integration into ZEN Measurement Framework**
+
+    * As segmentation is only the required first step for subsequent measurements the integration into the actual measurement tools is key
+
 * **Support for Multi-dimensional Datasets**
 
-    - Real Multi-Channel Feature Extraction
-    - Engineered Feature Sets and Deep Feature Extraction on GPU
-    - Pixel Classification by Random Forest Classifier
-    - Classification post-processing by Conditional Random Field
-    - Scriptable segmentation functions for advanced automation
-    - SW Trial License and bundle with Image Analysis available
-    - Client-Server Architecture using REST-APIs
+    * Intellesis, especially when considering the BioFormats option, can be used to segment any image even from non-Zeiss systems. 3D stacks, Tiles, Multi-Channel, …
+
+
+### Technical Specfications
+
+* Machine-Learning Tool for Pixel Classification powered by Python
+Dask, Scikit-Learn and Tensorflow 
+* Real Multi-Channel Feature Extraction – all channels will be used to segment a pixel
+* Class Segmentation – hierarchical structures with independent segmentation per class
+* Engineered Feature Sets and Deep Feature Extraction (GPU) and pre-trained networks
+    * Engineered Default Feature Sets (CPU)
+        * 25 or 33 Features
+    * Neural Network (vgg19) Layers for Feature Extraction (GPU)
+        * 64, 128 (red. 50) or 256 (red. 70) Features for 1st, 2nd or 3rd layer
+
+* Pixel Classification by proven and established Random Forrest Classifier
+* Option to **download** pre-trained DNNs for image segmentation
+  * currently 3 pre-trained networks are available
+  * import of external networks will come soon
+* Post processing by Conditional Random Fields (CRF)
+* Option to apply confidence thresholds
+* IP-Functions for creating masks and scripting integration for advanced automation
+* Client-Server Architecture (Zen Client - Python-Server) with using REST-API
+* client-side tiling functionality to deal with large multidimensional datasets
+* universal automated build pipeline for ZeissPython established and integrated in official Zeiss installer
+
+
+### Workflows
+
+![Intellesis - Workflows](../Images/intellesis_workflows.png)
+
+#### Downloading Networks
+
+Starting from the ZEN Blue 3.1 release the software allows to download pre-trained networks from ZEISS. Such networks are fully integrate into the ZEN Image Analysis framework and can be used the same way as the classical Intellesis models using pixle classification
+
+![ZEN Intellesis - Model Download](../Images/intellesis_model_download.png)
+
+#### Conditions of Use
+
+*This pre-trained network was trained wizh "best-effort" on the availbale training data and is provided "as is" without warranty of any kind. The licensor assumes no responsibility for the functionality and fault-free condition of the pre-trained network under conditions which are not in the decribed scope. For details see the respective chapter in the Online Help / Documentation. By downloading I agree to the above terms.*
 
 ***
 
@@ -52,10 +96,14 @@ To be able to handle even large multi-dimensional datasets, the software has a b
 ***
 
 ![ZEN Python](../Images/intellesis_dataflow.png)
-
 *Intellesis - DataFlow*
 
+#### U
+
+
 ***
+
+#### APEER Integration
 
 Due to the fact that the SegmentationService is written completely in Python is can be used a module on the APEER platform. The complete SegmenationService is running inside a Linux-based docker container.
 
@@ -67,7 +115,7 @@ Due to the fact that the SegmentationService is written completely in Python is 
 
 If you want to test this platform, register here:
 
-[APEER Platfrom](https://www.apeer.com/app/#/home)
+[APEER Platform](https://www.apeer.com/app/#/home)
 
 To read about the newest developments on APEER read the blog:
 
