@@ -138,13 +138,13 @@ This simple script demonstrated the different possibilities to segment an image 
 
 The Intellesis Segmentation Tool allows you to automate and simplify the following tasks:
 
-- Select a model to segment images
-- Specify the desired output format for the mask image
-- Optional Confidence Threshold that can be appied to mask image
-- Optional Extraction of a specific singkle class
-- Option to add the mask image to the original image
-- Selection of output folder with file extension filter
-- Option to segment all image iside a folder or only apply to active image
+* Select a model to segment images
+* Specify the desired output format for the mask image
+* Optional Confidence Threshold that can be appied to mask image
+* Optional Extraction of a specific singkle class
+* Option to add the mask image to the original image
+* Selection of output folder with file extension filter
+* Option to segment all image iside a folder or only apply to active image
 
 Beside this tool is is alos possible to run a segmenation using the ZEN built-in batch tool, which does not require this script but offers less addtional options.
 
@@ -164,11 +164,11 @@ Beside this tool is is alos possible to run a segmenation using the ZEN built-in
 
 The Intellesis Segmentation Tool Single Channel allows you to automate and simplify the following tasks:
 
-- It uses the current active image as an input
-- Specify the channel to be segmented and the model to be uses in step 1
-- Specify the desired class (for the selected model) and other option in step 2
-- Apply segementation to the selected channel
-- Optionally add the mask to the original multi-channel image
+* It uses the current active image as an input
+* Specify the channel to be segmented and the model to be uses in step 1
+* Specify the desired class (for the selected model) and other option in step 2
+* Apply segementation to the selected channel
+* Optionally add the mask to the original multi-channel image
 
 Beside this tool is is alos possible to run a segmenation using the ZEN built-in batch tool, which does not require this script but offers less addtional options.
 
