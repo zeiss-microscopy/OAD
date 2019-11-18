@@ -1,6 +1,6 @@
 ## Intellesis and Machine Learning
 
-The ZEN software platform has various built-in image segmentation function. One of those tolls is called ZEN Intellesis Trainable Segmentation, which is using machine-learning algorithms to segment images. More information can be found here:
+The ZEN software platform has various built-in image segmentation function. One of those tools is called ZEN Intellesis Trainable Segmentation, which is using machine-learning algorithms to segment images. More information can be found here:
 
 
 [Intellesis Trainable Segmentation](https://www.zeiss.com/microscopy/int/website/landingpages/zen-intellesis.html)
@@ -44,7 +44,7 @@ Dask, Scikit-Learn and Tensorflow**
 * Pixel Classification by proven and established **Random Forrest Classifier**
 * Option to **download** pre-trained DNNs for image segmentation
   * currently 3 pre-trained networks are available
-  * import of external networks will come soon
+  * import of external networks will come soon (see the [ANN Model Specification](docs/ann_model_specification.md))
 * Post processing by **Conditional Random Fields** (CRF)
 * Option to apply **confidence thresholds**
 * IP-Functions for creating masks and **scripting integration** for advanced automation
