@@ -26,7 +26,7 @@ The general Experiment feedback workflow has three major parts, where the so-cal
 
 ***
 
-![Screenshot of GUI](/Images/ExpFeedback_Workflow.png)
+![Screenshot of GUI](../Images/ExpFeedback_Workflow.png)
 
 ***
 
@@ -34,7 +34,7 @@ Those Experiment Feedback scripts use similar to the other ZEN python scripts Ir
 
 ***
 
-![Screenshot of GUI](/Images/ExpFeedback_Script_Editor.png)
+![Screenshot of GUI](../Images/ExpFeedback_Script_Editor.png)
 
 ***
 
@@ -42,6 +42,6 @@ Those Experiment Feedback scripts use similar to the other ZEN python scripts Ir
 
 The tutorial contains several ready-to-use examples for instructive and typical workflows that allow to get familar with the possibilities of that tool.
 
-![Screenshot of GUI](/Images/ExpFeedback_Examples.png)
+![Screenshot of GUI](../Images/ExpFeedback_Examples.png)
 
 
