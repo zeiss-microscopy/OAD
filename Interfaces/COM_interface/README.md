@@ -13,12 +13,12 @@ For more detailed information please goto: [Control ZEN Blue and the microscope 
 
 ***
 
-![COM MATLAB_Running](/images/ZEN_ML_Running.png)
+![COM MATLAB_Running](../../images/ZEN_ML_Running.png)
 
 ***
 
 
-![COM_MATLAB_Result](/images/ZEN_MATLAB_Result_Figure.png)
+![COM_MATLAB_Result](../../images/ZEN_MATLAB_Result_Figure.png)
 
 ***
 
@@ -33,8 +33,8 @@ When the experiment is fnished, the CZI data are imported into Python using BioF
 
 ***
 
-![COM_Python_Running Result](/images/ZEN_Python_Running_Results_1.png)
+![COM_Python_Running Result](../../images/ZEN_Python_Running_Results_1.png)
 
 ***
 
-![COM_Python_Running Result](/images/ZEN_Python_Running_Results_2.png)
+![COM_Python_Running Result](../../images/ZEN_Python_Running_Results_2.png)

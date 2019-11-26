@@ -44,21 +44,21 @@ The goal of this tutorial is to create an automated workflow that can be used to
 
 ***
 
-![Workflow - Actionable Information ](/Images/GuidedAcq_NEW.png)*Workflow Guided Acquisition*
+![Workflow - Actionable Information ](../Images/GuidedAcq_NEW.png)*Workflow Guided Acquisition*
 
 ***
 
-![Workflow - Guided Acquistion User Interface](/Images/Guided_Acquisition_Dialog_74.png)*Guided Acquisition User Interface created by python scripting*
+![Workflow - Guided Acquistion User Interface](../Images/Guided_Acquisition_Dialog_74.png)*Guided Acquisition User Interface created by python scripting*
 
 ***
 
-![Workflow - Actionable Information using OAD](/Images/Guided_Acquisition_PPTX_Slide.png)*Guided Acquisition using scripting*
+![Workflow - Actionable Information using OAD](../Images/Guided_Acquisition_PPTX_Slide.png)*Guided Acquisition using scripting*
 
 ***
 
 ### Detailed WorkFlow Diagram
 
-![Workflow - Guided Acquisition diagram](/Images/GuidedAcq_Script_Diagram_v2.png)*General Worklow diagram for Guided Acquisition*
+![Workflow - Guided Acquisition diagram](../Images/GuidedAcq_Script_Diagram_v2.png)*General Worklow diagram for Guided Acquisition*
 
 ***
 
@@ -70,15 +70,15 @@ Since ZEN Blue 2.5 this software has a module called **ZEN Connect**, which allo
 
 More information about ZEN Connect can be found here: [ZEN Connect](https://www.zeiss.com/microscopy/int/products/microscope-software/zen-connect-image-overlay-and-correlative-microscopy.html)
 
-![Overview Scan inside the Correlative Workspace](/Images/GA_Mitosis_CWS_Overview.png)*Overview Scan inside the Correlative Workspace*
+![Overview Scan inside the Correlative Workspace](../Images/GA_Mitosis_CWS_Overview.png)*Overview Scan inside the Correlative Workspace*
 
 ***
 
-![Overlay of "positive" object and detailed image](/Images/GA_Mitosis_CWS_Overlay.png)*Overlay of "positive" object and detailed image* 
+![Overlay of "positive" object and detailed image](../Images/GA_Mitosis_CWS_Overlay.png)*Overlay of "positive" object and detailed image* 
 
 ***
 
-![Side-by-Side view of overview in CWS and detailed image](/Images/GA_Mitosis_CWS_Detail_ZEN.png)*Side-by-Side view of overview in CWS and detailed image*
+![Side-by-Side view of overview in CWS and detailed image](../Images/GA_Mitosis_CWS_Detail_ZEN.png)*Side-by-Side view of overview in CWS and detailed image*
 
 ***
 
@@ -86,7 +86,7 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
 
 Starting with ZEN Blue 3.1 there will the option to purchase dedicated software module for Guided Acquisition, which has a streamlined UI interface and other additional functionality, like save settings.
 
-![ZEN Blue Guided Acquisition Software Module](/Images/Guided_Acquisition_ZEN31_overview.png)
+![ZEN Blue Guided Acquisition Software Module](../Images/Guided_Acquisition_ZEN31_overview.png)
 
 ***
 

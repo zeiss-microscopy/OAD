@@ -12,7 +12,7 @@ Collection of tools that deal with various aspects of image metadata. Some requi
 
 ***
 
-![Screenshot of GUI](/Images/export_bfconvert1.png)
+![Screenshot of GUI](../../Images/export_bfconvert1.png)
 
 ***
 
@@ -33,7 +33,7 @@ Additionally there is Jupyter Notebook exploring this tool without using ZEN. It
 
 ***
 
-![Screenshot of ZEN Blue with showing the tool UI](/Images/zsurface_tool1.png)
+![Screenshot of ZEN Blue with showing the tool UI](../../Images/zsurface_tool1.png)
 
 ***
 
@@ -65,7 +65,7 @@ The tools extracts all important metadata and:
 * **saves it as CSV or TXT file.**
 * **opens Excel to fill in the metadata into a sheet.**
 
-![Screenshot of GUI](/Images/MetaData_Report_Tool1.png)
+![Screenshot of GUI](../../Images/MetaData_Report_Tool1.png)
 
 ***
 
@@ -77,7 +77,7 @@ The tools extracts all single tiles from an tile image:
 * **specify the desired output folder**
 * **select the desired output format for the single tile**
 
-![Screenshot of GUI](/Images/extracttiles.png)
+![Screenshot of GUI](../../Images/extracttiles.png)
 
 
 ***
@@ -101,4 +101,4 @@ The tool was kindly provided by Sara McArdle from the La Jolla Institute for Imm
 
 This scripts creates a table with all indicies and XYZ coordinates for every tile of the active CZI image.
 
-![Screenshot of GUI](/Images/ExtractPlaneTable.png)
+![Screenshot of GUI](../../Images/ExtractPlaneTable.png)

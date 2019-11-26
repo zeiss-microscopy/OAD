@@ -51,8 +51,8 @@ bring new images to the microscope.
 
 ***
 
-![TCP-IP_Interface_Kitty](/images/TCP-IP_Kitty.png)
+![TCP-IP_Interface_Kitty](../../images/TCP-IP_Kitty.png)
 
 ***
 
-![TCP-IP_Interface_Example](/images/Send_Single_Commands_TCP-IP.gif)
+![TCP-IP_Interface_Example](../../images/Send_Single_Commands_TCP-IP.gif)

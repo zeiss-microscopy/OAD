@@ -14,11 +14,11 @@ More information can be found here: [ZEN Connect](https://www.zeiss.com/microsco
 
 ### Applications
 
-![ZEN Connect - Project Workspace](/Images/cws_cd7_brain1.png)*ZEN Connect project workspace with all the imported images incl. sample carrier image*
+![ZEN Connect - Project Workspace](../Images/cws_cd7_brain1.png)*ZEN Connect project workspace with all the imported images incl. sample carrier image*
 
 ***
 
-![ZEN Connect - Zoomed-in view of object](/Images/cws_cd7_brain2.png)*Zoomed-in image of one of the objects acquired with high resolution*
+![ZEN Connect - Zoomed-in view of object](../Images/cws_cd7_brain2.png)*Zoomed-in image of one of the objects acquired with high resolution*
 
 ***
 

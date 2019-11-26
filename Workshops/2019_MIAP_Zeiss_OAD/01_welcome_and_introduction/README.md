@@ -49,4 +49,4 @@ For more details please see: **[APEER Home](https://www.apeer.com/home/)**
 
 #### Workshop Content
 
-See agenda: [Workhop Agenda](/Workshops/2019_MIAP_Zeiss_OAD/README.md)
+See agenda: [Workshop Agenda](/Workshops/2019_MIAP_Zeiss_OAD/README.md)

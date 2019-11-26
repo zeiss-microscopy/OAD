@@ -1,7 +1,7 @@
 ### MIAP Workshop Program 2019
 
 
-![MIAP ZEISS OAD Workshop](/Images/Advertise_Zeiss_OAD_Workshop.png)
+![MIAP ZEISS OAD Workshop](../../Images/Advertise_Zeiss_OAD_Workshop.png)
 
 
 ## MIAP Workshop: Expanding the ZEISS Microscopy Platform - Automation and Image Analysis Solutions based on OAD and APEER

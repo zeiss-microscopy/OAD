@@ -5,7 +5,7 @@ The ZEN software platform has various built-in image segmentation function. One 
 
 [Intellesis Trainable Segmentation](https://www.zeiss.com/microscopy/int/website/landingpages/zen-intellesis.html)
 
-![ZEN Intellesis Trainable Segmentation](/Images/ZEN_Intellesis_Cover.png)
+![ZEN Intellesis Trainable Segmentation](../Images/ZEN_Intellesis_Cover.png)
 
 ***
 
