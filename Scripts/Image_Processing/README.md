@@ -32,7 +32,7 @@ This script will run a processing pipline on an image and do the following tasks
 * separate binary objects
 * use mask to cutout part from the original image
 
-To modify and adapt the actual parameters
+To modify and adapt the actual parameters please edit thge script.
 
 ***
 
