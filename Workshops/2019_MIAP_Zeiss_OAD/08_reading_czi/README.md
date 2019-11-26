@@ -27,4 +27,4 @@ For easily reading CZI and OME-TIFF images with various options have a look at t
 
 For reading and displaying CZI and OME_TIFF files inside a Jupyter notebook please go here:
 
-* **[Read_and_Display_Images_using_Widgets_and_Napari](https://github.com/zeiss-microscopy/OAD/tree/master/notebooks/Read_And_Display_Images_using_Widgets_and_Napari)**
+* **[Read_and_Display_Images_using_Widgets_and_Napari](https://github.com/zeiss-microscopy/OAD/tree/master/jupyter_notebooks/Read_CZI_and_OMETIFF_and_display_widgets_and_napari)**
