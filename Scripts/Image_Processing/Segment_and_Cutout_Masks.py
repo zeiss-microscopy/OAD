@@ -58,6 +58,8 @@ wd.AddCheckbox('useRBsub', 'Use RollingBall Background Substraction', True)
 wd.AddCheckbox('useFilter', 'Apply Filtering', True)
 wd.AddLabel('---   Select Thresholding Method   ---')
 wd.AddDropDown('thmethod', 'Algorithm', thlist, 0)
+wd.AddCheckbox('lightbgrd', 'Light Background', False)
+wd.AddLabel('--------------------------------------')
 wd.AddCheckbox('useRemove', 'Remove small Objects', True)
 wd.AddCheckbox('useFill', 'Fill Holes', True)
 wd.AddCheckbox('useSeparate', 'Separate Binary Objects', True)
@@ -79,6 +81,7 @@ fillHoles = result.GetValue('useFill')
 separateOB = result.GetValue('useSeparate')
 thm = result.GetValue('thmethod')
 useCR = result.GetValue('useCORR')
+lbg = result.GetValue('lightbgrd')
 
 # get the correct thrsehold method
 th_method = thdict[thm]
@@ -129,7 +132,7 @@ if useFT:
 print 'Applying Automated Thresholding ...'
 #th_method = ZenThresholdingMethod.Otsu
 createBinary = True
-invertResult = True
+invertResult = lbg
 img = Zen.Processing.Segmentation.ThresholdAutomatic(img, th_method, createBinary, invertResult, False)
 
 if removeOB:
