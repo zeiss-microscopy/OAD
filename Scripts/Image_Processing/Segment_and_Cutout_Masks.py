@@ -133,14 +133,15 @@ print 'Applying Automated Thresholding ...'
 #th_method = ZenThresholdingMethod.Otsu
 createBinary = True
 invertResult = lbg
+print 'Invert result : ', invertResult
 img = Zen.Processing.Segmentation.ThresholdAutomatic(img, th_method, createBinary, invertResult, False)
 
 if removeOB:
     # remove small objects
     print 'Removing small objects ...'
-    minarea = 50 
-    maxarea = 100000
-    inrange=True
+    minarea = 1 
+    maxarea = 100000000
+    inrange = True
     img = Zen.Processing.Binary.Scrap(img, minarea, maxarea, inrange, False)
 
 if fillHoles:
