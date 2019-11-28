@@ -15,13 +15,11 @@
 import time
 from datetime import datetime
 import errno
-#from System import Array
 from System import ApplicationException
-#from System import TimeoutException
 from System.IO import File, Directory, Path
 import sys
 
-version = 0.1
+version = 0.2
 
 # clear output
 Zen.Application.MacroEditor.ClearMessages()
@@ -59,7 +57,7 @@ wd.AddCheckbox('useCORR', 'Correct illumination', True)
 wd.AddCheckbox('useRBsub', 'Use RollingBall Background Substraction', True)
 wd.AddCheckbox('useFilter', 'Apply Filtering', True)
 wd.AddLabel('---   Select Thresholding Method   ---')
-wd.AddDropDown('thmethod', 'Algorithm', thlist, 1)
+wd.AddDropDown('thmethod', 'Algorithm', thlist, 0)
 wd.AddCheckbox('useRemove', 'Remove small Objects', True)
 wd.AddCheckbox('useFill', 'Fill Holes', True)
 wd.AddCheckbox('useSeparate', 'Separate Binary Objects', True)
@@ -82,6 +80,10 @@ separateOB = result.GetValue('useSeparate')
 thm = result.GetValue('thmethod')
 useCR = result.GetValue('useCORR')
 
+# get the correct thrsehold method
+th_method = thdict[thm]
+print(th_method)
+
 # get the active image document
 img_orig = Zen.Application.Documents.GetByName(cziname)
 img = Zen.Application.Documents.GetByName(cziname)
@@ -90,9 +92,11 @@ Zen.Application.Documents.ActiveDocument = img
 """
 Usage Instructions
 
+!!! Check the script parameters carefully and adapt it to your image !!!
+
 - Select on active image from the Zen
 - Comment out processing steps that are not needed
-- Feel free to rearrange the order of processing steps
+- Feel free to re-arrange the order of processing steps
 - Add new proceesing steps as needed
 
 """
@@ -112,6 +116,7 @@ if useRB:
     # apply background subtraction
     print 'Applying RollingBall Background Substraction ...'
     rb_radius = 50
+    isLightBackground=False
     img = Zen.Processing.Adjust.BackgroundSubtraction(img, rb_radius, doPreSmooth=False, createBackground=False, isLightBackground=False)
 
 if useFT:
@@ -122,9 +127,9 @@ if useFT:
 
 # apply threshold
 print 'Applying Automated Thresholding ...'
-th_method = ZenThresholdingMethod.Otsu
+#th_method = ZenThresholdingMethod.Otsu
 createBinary = True
-invertResult = False
+invertResult = True
 img = Zen.Processing.Segmentation.ThresholdAutomatic(img, th_method, createBinary, invertResult, False)
 
 if removeOB:
