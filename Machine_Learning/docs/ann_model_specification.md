@@ -34,8 +34,12 @@ Meta information for the ANN model must be provided in a separate JSON file adhe
   - **Bgr192ComplexFloat**: A triple of 2 x 4 byte IEEE float, representing real and imaginary part of a complex number, for the color channels Blue, Green and Red
 - **Classes (Type: array, Value type: string)**: A list of class names corresponding to the output dimensions of the predicted segmentation mask. If the last dimension of the prediction has shape n the provided list must be of length n.
 - **ModelFile (Type: string)**: The path to the exported neural network model file. Can be absolute or relative to the JSON file.
+
+
+The file may also contain the following optional attributes:
 - **TestImageFile (Type: string)**: The path to a test image in a format supported by ZEN. This image is used for basic validation of the converted model inside ZEN. Can be absolute or relative to the JSON file.
 - **LicenseFile (Type: string)**: The path to a license file that is added to the generated CZModel. Can be absolute or relative to the JSON file.
+
 Json files can contain escape sequences and \\-characters in paths must be escaped with \\\\.  
 
 The following code snippet shows an example for a valid metadata file:
