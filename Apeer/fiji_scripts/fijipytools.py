@@ -395,9 +395,10 @@ class ExportTools:
         
         if mode == 'TZC':
             
-            for c in range(metainfo['SizeT']):
+            for t in range(metainfo['SizeT']):
                 for z in range(metainfo['SizeZ']):
-                    for t in range(metainfo['SizeC']):
+                    for c in range(metainfo['SizeC']):
+                        # set position - channel, slice, frame
                         imp.setPosition(c+1, z+1, t+1)
                         numberedtitle = title + "_t" + IJ.pad(t, 2) + "_z" + IJ.pad(z, 4) + "_c" + IJ.pad(c, 4) + "." + format
                         stackindex = imp.getStackIndex(c + 1, z + 1, t + 1)
@@ -409,6 +410,7 @@ class ExportTools:
             c = 0
             t = 0
             for z in range(metainfo['SizeZ']):
+                # set position - channel, slice, frame
                 imp.setPosition(c+1, z+1, t+1)
                 znumber = MiscTools.addzeros(z)
                 numberedtitle = title +  "_z" + znumber + "." + format
@@ -896,7 +898,23 @@ class MiscTools:
                + " pixel_width=" + str(scaleX)
                + " pixel_height=" + str(scaleY)
                + " voxel_depth=" + str(scaleZ))
+        
+        # create new Calibration object
+        newCal = Calibration()
 
+        # set the new paramters
+        newCal.pixelWidth = scaleX
+        newCal.pixelHeight = scaleY
+        newCal.pixelDepth = scaleZ
+
+        # set the correct unit fro the scaling
+        newCal.setXUnit(unit)
+        newCal.setYUnit(unit)
+        newCal.setZUnit(unit)
+
+        # apply the new calibratiion
+        imp.setCalibration(newCal)     
+        
         return imp
 
     @staticmethod
@@ -988,6 +1006,36 @@ class MiscTools:
                     files.append(os.path.join(r, file))
                 
         return files
+
+    @staticmethod
+    def import_sequence(inputdir,
+                        number=10,
+                        start=1,
+                        increment=1,
+                        scale=100,
+                        filepattern='*.',
+                        sort=True,
+                        use_virtualstack=False):
+
+        args = "open=" + inputdir
+        args += " number=" + str(number)
+        args += " starting=" + str(start)
+        args += " increment=" + str(increment)
+        args += " scale=" + str(scale)
+        args += " file=" + filepattern
+
+        if sort:
+            args += " sort"
+        if use_virtualstack:
+            args += " use"
+
+        print "Import Sequence Arguments : ", args
+
+        IJ.run("Image Sequence...", args)
+        imp = IJ.getImage()
+
+        return imp
+
 
 
 class JSONTools:
