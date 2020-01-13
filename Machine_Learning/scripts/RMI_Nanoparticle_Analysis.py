@@ -3,7 +3,7 @@
 # Version    : 1.0
 # Author     : czsrh
 # Date       : 06.12.2018
-# Insitution : Carl Zeiss Microscopy GmbH
+# Institution : Carl Zeiss Microscopy GmbH
 #
 # Copyright(c) 2019 Carl Zeiss AG, Germany. All Rights Reserved.
 #

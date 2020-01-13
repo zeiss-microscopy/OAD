@@ -3,7 +3,7 @@
 % Version    : 1.2
 % Author     : czsrh
 % Date       : 13.09.2019
-% Insitution : Carl Zeiss Microscopy GmbH
+% Institution : Carl Zeiss Microscopy GmbH
 %
 % Simple script to read CZI image data incl metaiformation using
 % the MATLAB wrapper for the BioFormtas library.

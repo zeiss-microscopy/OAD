@@ -6,7 +6,7 @@
 # Version    : 1.0
 # Author     : czsrh
 # Date       : 06.12.2018
-# Insitution :
+# Institution :
 #
 # Extract the python script from ZEN OAD macro or the Feedback Scripts from ZEN Experiments.
 # Can be used on single files or on a complete folder.

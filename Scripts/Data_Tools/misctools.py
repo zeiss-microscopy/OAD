@@ -5,7 +5,7 @@
 # Version    : 0.1
 # Author     : czsrh
 # Date       : 21.06.2016
-# Insitution : Carl Zeiss Microscopy GmbH
+# Institution : Carl Zeiss Microscopy GmbH
 #
 # Beta Version: Use at your own risk!
 #

@@ -3,7 +3,7 @@
 # Version    : 1.0
 # Author     : Sara McArdle
 # Date       : 03.12.2018
-# Insitution : La Jolla Institute for Immunology, LJI Microscopy Core
+# Institution : La Jolla Institute for Immunology, LJI Microscopy Core
 #
 #
 # Macro to create a zoom-in or zoom-out movie

@@ -3,7 +3,7 @@
 % Version    : 1.3
 % Author     : czsrh
 % Date       : 13.09.2019
-% Insitution : Carl Zeiss Microscopy GmbH
+% Institution : Carl Zeiss Microscopy GmbH
 %
 % Simple script to get "some" not, but not all metainformation using
 % the MATLAB wrapper for the BioFormats library.

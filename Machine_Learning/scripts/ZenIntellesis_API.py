@@ -3,7 +3,7 @@
 # Version    : 0.1
 # Author     : czsrh
 # Date       : 03.11.2019
-# Insitution : Carl Zeiss Microscopy GmbH
+# Institution : Carl Zeiss Microscopy GmbH
 #
 # Very simple test script to demonstrate the segmentation
 # functionality of the Intellesis segmentation module

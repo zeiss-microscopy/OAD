@@ -3,7 +3,7 @@
 # Version    : 0.1
 # Author     : czsrh, czswg
 # Date       : 05.07.2019
-# Insitution : Carl Zeiss Microscopy GmbH
+# Institution : Carl Zeiss Microscopy GmbH
 #
 # - Save all open image documents to a new CWS project
 # - Check if image contains preview or label images and add the as well

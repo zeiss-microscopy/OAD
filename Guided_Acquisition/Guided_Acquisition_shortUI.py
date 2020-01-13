@@ -3,7 +3,7 @@
 # Version    : 7.4
 # Author     : czsrh, czmla, czkel
 # Date       : 21.10.2019
-# Insitution : Carl Zeiss Microscopy GmbH
+# Institution : Carl Zeiss Microscopy GmbH
 #
 # !!! Requires with ZEN >=2.6 HF3 - Use at your own Risk !!!
 #

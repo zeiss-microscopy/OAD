@@ -3,7 +3,7 @@
 # Version    : 1.0
 # Author     : czmla
 # Date       : 06.12.2018
-# Insitution : Carl Zeiss Microscopy GmbH
+# Institution : Carl Zeiss Microscopy GmbH
 #
 #
 # Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
