@@ -123,6 +123,8 @@ class ImportTools:
         if metainfo['Extension'] == '.czi':
 
             # read the CZI file using the CZIReader
+            # pylevel = 0 - read the full resolution image
+
             imp, metainfo = ImportTools.readCZI(imagefile, metainfo,
                                                 stitchtiles=stitchtiles,
                                                 setflatres=setflatres,
@@ -261,7 +263,7 @@ class ImportTools:
         metainfo['SizeX'] = czireader.getSizeX()
         metainfo['SizeY'] = czireader.getSizeY()
 
-        # check for autostitching and possibility to read attchmenst
+        # check for autostitching and possibility to read attachment
         metainfo['AllowAutoStitching'] = czireader.allowAutostitching()
         metainfo['CanReadAttachments'] = czireader.canReadAttachments()
 
@@ -853,10 +855,10 @@ class MiscTools:
     def getextension(splitresult):
 
         if len(splitresult) == 2:
-            # only one extension part, eg *.czi detetected
+            # only one extension part, eg *.czi detected
             extension = str(splitresult[-1])
         if len(splitresult) >= 3:
-            # two extension part, eg *.ome.tiff detetected
+            # two extension part, eg *.ome.tiff detected
             # extension = str(splitresult[1] + splitresult[2])
 
             ext2 = splitresult[-2]
@@ -912,7 +914,7 @@ class MiscTools:
         newCal.setYUnit(unit)
         newCal.setZUnit(unit)
 
-        # apply the new calibratiion
+        # apply the new calibration
         imp.setCalibration(newCal)     
         
         return imp

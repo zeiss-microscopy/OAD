@@ -39,10 +39,10 @@ class MiscTools:
     def getextension(splitresult):
 
         if len(splitresult) == 2:
-            # only one extension part, eg *.czi detetected
+            # only one extension part, eg *.czi detected
             extension = str(splitresult[-1])
         if len(splitresult) >= 3:
-            # two extension part, eg *.ome.tiff detetected
+            # two extension part, eg *.ome.tiff detected
             # extension = str(splitresult[1] + splitresult[2])
 
             ext2 = splitresult[-2]
@@ -111,7 +111,7 @@ class MiscTools:
         newCal.setYUnit(unit)
         newCal.setZUnit(unit)
 
-        # apply the new calibratiion
+        # apply the new calibration
         imp.setCalibration(newCal)
 
         return imp
@@ -134,7 +134,7 @@ def readczi(imagefile,
     metainfo['Extension'] = MiscTools.getextension(MiscTools.splitext_recurse(imagefile))
     log.info('Detected File Extension : ' + metainfo['Extension'])
 
-    # initialite the reader and get the OME metadata
+    # initialize the reader and get the OME metadata
     reader = ImageReader()
     omeMeta = MetadataTools.createOMEXMLMetadata()
     #metainfo['ImageCount_OME'] = omeMeta.getImageCount()
@@ -188,7 +188,7 @@ def readczi(imagefile,
     metainfo['SizeX'] = czireader.getSizeX()
     metainfo['SizeY'] = czireader.getSizeY()
 
-    # check for autostitching and possibility to read attchmenst
+    # check for autostitching and possibility to read attachment
     metainfo['AllowAutoStitching'] = czireader.allowAutostitching()
     metainfo['CanReadAttachments'] = czireader.canReadAttachments()
 
@@ -214,7 +214,7 @@ def readczi(imagefile,
         imp = imps[0]
         pylevelout = 0
         metainfo['Pyramid Level Output'] = pylevelout
-        
+
     # get the stack and some info
     imgstack = imp.getImageStack()
     metainfo['Output Slices'] = imgstack.getSize()
@@ -259,18 +259,18 @@ autoscale = True
 
 # get the FILENAME as string
 imagefile = FILENAME.toString()
-SETFLATRES=False
+SETFLATRES = False
 
 # check for meaningful pyramid level
 if READPYLEVEL == 0:
-	log.info('PyLevel = 0 is not valid. Use 1')
-	READPYLEVEL = 1
+    log.info('PyLevel = 0 is not valid. Use 1')
+    READPYLEVEL = 1
 
 # read the CZI image
 imp, info = readczi(imagefile,
                     stitchtiles=STITCHTILES,
                     setflatres=SETFLATRES,
-                    readpylevel=READPYLEVEL-1,
+                    readpylevel=READPYLEVEL - 1,
                     setconcat=SETCONCAT,
                     openallseries=OPENALLSERIES,
                     showomexml=SHOWOMEXML,
