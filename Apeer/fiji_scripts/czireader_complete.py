@@ -18,6 +18,17 @@
 # @UIService uiService
 # @LogService log
 
+#################################################################
+# File        : czireader_complete.py
+# Version     : 0.1
+# Author      : czsrh
+# Date        : 17.01.2020
+# Institution : Carl Zeiss Microscopy GmbH
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
+
+
 import os
 from loci.formats import MetadataTools
 from loci.formats import ImageReader

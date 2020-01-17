@@ -1,11 +1,14 @@
 # @LogService log
 
-"""
-File: fijipytoools.py
-Author: Sebastian Rhode
-Version: 1.2
-Date: 2019_07_16
-"""
+#################################################################
+# File        : fijipytools.py
+# Version     : 1.3
+# Author      : czsrh
+# Date        : 17.01.2020
+# Institution : Carl Zeiss Microscopy GmbH
+#
+# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+#################################################################
 
 import os
 import json
