@@ -138,7 +138,6 @@ class ImportTools:
 
             # read the imagefile using the correct method
             if metainfo['Extension'].lower() == ('.jpg' or '.jpeg'):
-                # use dedicated method for jpg
                 imp, metainfo = ImageTools.openjpg(imagefile, method='IJ')
             else:
                 # if not jpg - use BioFormats
@@ -276,9 +275,7 @@ class ImportTools:
         metainfo['Output SizeY'] = height
 
         # calc scaling in case of pyramid
-        # scale = float(metainfo['Output SizeX']) / float(metainfo['SizeX'])
         scale = float(metainfo['SizeX']) / metainfo['Output SizeX']
-        # was this ported from python 2? I think you only need to float one of the inputs to the division
 
         metainfo['Pyramid Scale Factor'] = scale
         metainfo['ScaleX Output'] = metainfo['ScaleX'] * scale
@@ -312,7 +309,6 @@ class ExportTools:
 
         if useLOCI:
             paramstring = "outfile={} windowless=true compression=Uncompressed saveROI=false".format(savepath)
-            # paramstring = "outfile=" + savepath + " " + "windowless=true compression=Uncompressed saveROI=false"
             plugin = LociExporter()
             plugin.arg = paramstring
             exporter = Exporter(plugin, imp)
@@ -323,7 +319,6 @@ class ExportTools:
 
             # 2019-04-25: This does not seem to work in headless anymore
             paramstring = "save=[{}] compression=Uncompressed".format(savepath)
-            # paramstring = "save=[" + savepath + "] compression=Uncompressed"
             IJ.run(imp, "Bio-Formats Exporter", paramstring)
 
         return paramstring
@@ -626,7 +621,6 @@ class ThresholdTools:
 
     @staticmethod
     def apply_autothreshold(hist, method='Otsu'):
-        # I think the use of a dict here makes it a little easier to see what's going on, and avoids repetition
         method_dict = {'Otsu': Auto_Threshold.Otsu,
                       'Triangle': Auto_Threshold.Triangle,
                       'IJDefault': Auto_Threshold.IJDefault,
@@ -637,15 +631,9 @@ class ThresholdTools:
                       'Yen': Auto_Threshold.Yen,
                       'Li': Auto_Threshold.Li
                       }
-        if method in method_dict:
-            method_func = method_dict[method]
-            lowthresh = method_func(hist)
-            return lowthresh
-        else:
-            print(f"Method passed not found: {method}")
-            # or print("Method passed not found: {}".format(method) or print("Method passed not found: %s" % method)
-            # whichever works best for you
-            return None
+        method_func = method_dict[method]
+        lowthresh = method_func(hist)
+        return lowthresh
 
     @staticmethod
     # helper function to apply threshold to whole stack
@@ -941,14 +929,10 @@ class MiscTools:
 
     @staticmethod
     def addzeros(number: int):
-        # If you're using Python version > 3.6 then I would use string formatting here:
-        # That is if you need a dedicated function for it - it might be better to do it in place
         if isinstance(number, int):
-            return f"{number:06d}"
-            # alternatively
-            # return "{:06d}".format(number) would also work for Python < 3.6
+            return "{:06d}".format(number)
         else:
-            return f"{number}"
+            return "{}".format(number)
 
     
     @staticmethod
