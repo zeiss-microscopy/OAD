@@ -462,10 +462,7 @@ class FilterTools:
             ip = stack.getProcessor(index)
 
             # apply filter based on filtertype
-            if filtertype in filterdict:
-                filter.rank(ip, radius, filterdict[filtertype])
-            else:
-                print(f"Argument 'filtertype': {filtertype} not found")
+            filter.rank(ip, radius, filterdict[filtertype])
 
         return imp
 
