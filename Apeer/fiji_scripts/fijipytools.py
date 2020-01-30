@@ -197,18 +197,17 @@ class ImportTools:
         allowed_methods = {"IJ": IJ.openImage, 
                            "Opener": Opener().openImage, 
                            "BF": BF.openImagePlus}
-        if method in allowed_methods:
-            method_func = allowed_methods[method]
-            imp = method_func(imagefile)
-            if method == "BF":
-                imp, slices, width, height, pylevel = ImageTools.getImageSeries(imps, series=readpylevel)
+        method_func = allowed_methods[method]
+        imp = method_func(imagefile)
+        if method == "BF":
+            imp, slices, width, height, pylevel = ImageTools.getImageSeries(imps, series=readpylevel)
 
-                metainfo['Output Slices'] = slices
-                metainfo['Output SizeX'] = width
-                metainfo['Output SizeY'] = height
+            metainfo['Output Slices'] = slices
+            metainfo['Output SizeX'] = width
+            metainfo['Output SizeY'] = height
 
-                imp = imps[0]
-            return imp
+            imp = imps[0]
+        return imp
            
     @staticmethod
     def readCZI(imagefile,
