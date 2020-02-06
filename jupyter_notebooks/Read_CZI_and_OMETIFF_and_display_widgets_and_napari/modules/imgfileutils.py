@@ -640,7 +640,7 @@ def create_ipyviewer_ome_tiff(array, metadata):
         ui = widgets.VBox([t, c, z, r])
 
         def get_TZC_czi(t_ind, c_ind, z_ind, r):
-            display_image(array, metadata, sliders, t=t_ind, c=t_ind, z=z_ind, vmin=r[0], vmax=r[1])
+            display_image(array, metadata, sliders, t=t_ind, c=c_ind, z=z_ind, vmin=r[0], vmax=r[1])
 
         out = widgets.interactive_output(get_TZC_czi, {'t_ind': t, 'c_ind': c, 'z_ind': z, 'r': r})
 
