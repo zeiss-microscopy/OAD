@@ -4,10 +4,8 @@ This document specifies the requirements for an artificial neural network (ANN) 
 ## Core network structure and file format  
 
 To be usable in the SegmentationService infrastructure a neural network model must comply with the specified rules below.
-- The model must be provided as a TensorFlow proto-buffer (.pb file, compatible with TensorFlow 1.13.1, [https://developers.google.com/protocol-buffers/docs/reference/overview]()).
-- The name of the input node must be “input”.
-- The name of the output node must be “output”.  
-- All operations in the contained execution graph must be supported by TensorFlow 1.13.1.
+- The model must be provided as a [TensorFlow SavedModel](https://www.tensorflow.org/guide/saved_model). 
+- All operations in the contained execution graph must be supported by TensorFlow 2.0.0.
 - The model currently must provide one input and one output node. Multiple inputs and outputs are not supported.
 - The shape of the input node must have 4 dimensions where the first dimension specifies the batch size, the second and third dimensions specify the width and height of the expected input image and the third dimension represents the number of color channels.
 - The batch dimension of the input node must be undefined or 1.
@@ -16,8 +14,8 @@ To be usable in the SegmentationService infrastructure a neural network model mu
 - All types of pre-processing and post-processing (except the currently supported Conditional Random Field post-processing) e.g. normalization, standardization, down-sampling etc. must be included in the provided TensorFlow model so that no further action by the inference engine is needed before or after inference to obtain the expected results. 
 
 ## Model Metadata
-Executing an ANN model within the Intellesis infrastructure requires additional meta information that needs to be provided by the creator of the neural network model. The expected format of a serialized model is a Google proto-buffer file as described in [Core network structure and file format](#core-network-structure-and-file-format).
-Meta information for the ANN model must be provided in a separate JSON file adhering to [https://tools.ietf.org/html/rfc8259](RFC8259) that must contain the following attributes:
+Executing an ANN model within the Intellesis infrastructure requires additional meta information that needs to be provided along with the serialized model specified by the [Core network structure and file format](#core-network-structure-and-file-format).
+Meta information for the ANN model must be provided in a separate JSON file adhering to [RFC8259](https://tools.ietf.org/html/rfc8259) that must contain the following attributes:
 - **BorderSize (Type: int)**: For Intellesis models this attribute defines the size of the border that needs to be added to an input image such that there are no border effects visible in the required area of the generated segmentation mask. For deep architectures this value can be infeasibly large so that the border size must be defined in a way that the border effects are “acceptable” in the ANN model creator’s opinion.
 - **ColorHandling (Type: string)**: Specifies how color (RGB and RGBA) pixel data are converted to one or more channels of scalar pixel data. Possible values are: 
   - ConvertToMonochrome (Converts color to gray scale)
