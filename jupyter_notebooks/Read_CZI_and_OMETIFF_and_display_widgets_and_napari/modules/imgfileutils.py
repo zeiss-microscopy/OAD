@@ -328,7 +328,7 @@ def get_metadata_czi(filename, dim2none=False):
         metadata['SizeM'] = np.int(metadata['Information']['Image']['SizeM'])
     except:
         if dim2none:
-            metadatada['SizeM'] = None
+            metadata['SizeM'] = None
         if not dim2none:
             metadata['SizeM'] = 1
 
@@ -337,7 +337,7 @@ def get_metadata_czi(filename, dim2none=False):
     except:
 
         if dim2none:
-            metadatada['SizeB'] = None
+            metadata['SizeB'] = None
         if not dim2none:
             metadata['SizeB'] = 1
 
@@ -345,7 +345,7 @@ def get_metadata_czi(filename, dim2none=False):
         metadata['SizeS'] = np.int(metadata['Information']['Image']['SizeS'])
     except:
         if dim2none:
-            metadatada['SizeS'] = None
+            metadata['SizeS'] = None
         if not dim2none:
             metadata['SizeS'] = 1
 
@@ -429,6 +429,7 @@ def get_metadata_czi(filename, dim2none=False):
         try:
             metadata['ObjNominalMag'] = np.float(metadata['Instrument']['Objectives']['Objective']['NominalMagnification'])
         except KeyError as e:
+            print('Key not found:', e)
             metadata['ObjNominalMag'] = None
 
         try:
