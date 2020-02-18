@@ -1,0 +1,1264 @@
+<!-- Warning: this comment is an OME-XML metadata block, which contains crucial dimensional parameters and other important metadata. Please edit cautiously (if at all), and back up the original data before doing so. For more information, see the OME-TIFF web site: https://docs.openmicroscopy.org/latest/ome-model/ome-tiff/. -->
+<OME xmlns="http://www.openmicroscopy.org/Schemas/OME/2016-06" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Creator="OME Bio-Formats 6.3.0" UUID="urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb" xsi:schemaLocation="http://www.openmicroscopy.org/Schemas/OME/2016-06 http://www.openmicroscopy.org/Schemas/OME/2016-06/ome.xsd">
+  <Experimenter ID="Experimenter:0" UserName="M1SRH"/>
+  <Instrument ID="Instrument:0">
+    <Microscope Type="Inverted"/>
+    <Detector ID="Detector:506" Model="Axiocam506m"/>
+    <Objective ID="Objective:1" Immersion="Water" LensNA="1.2" Model="Plan-Apochromat 50x/1.2" NominalMagnification="50.0" WorkingDistance="800.0" WorkingDistanceUnit="µm"/>
+    <FilterSet ID="FilterSet:1">
+      <EmissionFilterRef ID="Filter:1"/>
+      <EmissionFilterRef ID="Filter:2"/>
+      <EmissionFilterRef ID="Filter:3"/>
+      <EmissionFilterRef ID="Filter:4"/>
+    </FilterSet>
+    <FilterSet ID="FilterSet:2">
+      <EmissionFilterRef ID="Filter:5"/>
+      <EmissionFilterRef ID="Filter:6"/>
+      <EmissionFilterRef ID="Filter:7"/>
+      <EmissionFilterRef ID="Filter:8"/>
+    </FilterSet>
+    <Filter ID="Filter:1">
+      <TransmittanceRange CutIn="412.0" CutInUnit="nm" CutOut="438.0" CutOutUnit="nm"/>
+    </Filter>
+    <Filter ID="Filter:2">
+      <TransmittanceRange CutIn="501.0" CutInUnit="nm" CutOut="527.0" CutOutUnit="nm"/>
+    </Filter>
+    <Filter ID="Filter:3">
+      <TransmittanceRange CutIn="583.0" CutInUnit="nm" CutOut="601.0" CutOutUnit="nm"/>
+    </Filter>
+    <Filter ID="Filter:4">
+      <TransmittanceRange CutIn="662.0" CutInUnit="nm" CutOut="756.0" CutOutUnit="nm"/>
+    </Filter>
+    <Filter ID="Filter:5">
+      <TransmittanceRange CutIn="412.0" CutInUnit="nm" CutOut="438.0" CutOutUnit="nm"/>
+    </Filter>
+    <Filter ID="Filter:6">
+      <TransmittanceRange CutIn="501.0" CutInUnit="nm" CutOut="527.0" CutOutUnit="nm"/>
+    </Filter>
+    <Filter ID="Filter:7">
+      <TransmittanceRange CutIn="583.0" CutInUnit="nm" CutOut="601.0" CutOutUnit="nm"/>
+    </Filter>
+    <Filter ID="Filter:8">
+      <TransmittanceRange CutIn="662.0" CutInUnit="nm" CutOut="756.0" CutOutUnit="nm"/>
+    </Filter>
+  </Instrument>
+  <Image ID="Image:0" Name="CellDivision_T=10_Z=15_CH=2_DCV_small.czi #1">
+    <AcquisitionDate>2016-02-12T09:41:02.491</AcquisitionDate>
+    <ExperimenterRef ID="Experimenter:0"/>
+    <InstrumentRef ID="Instrument:0"/>
+    <ObjectiveSettings ID="Objective:1" Medium="Water" RefractiveIndex="1.33"/>
+    <StageLabel Name="Scene position #0" X="16977.153" XUnit="µm" Y="18621.489" YUnit="µm" Z="1113.21" ZUnit="µm"/>
+    <Pixels BigEndian="false" DimensionOrder="XYCZT" ID="Pixels:0" Interleaved="false" PhysicalSizeX="0.09057667415221031" PhysicalSizeXUnit="µm" PhysicalSizeY="0.09057667415221031" PhysicalSizeYUnit="µm" PhysicalSizeZ="0.32" PhysicalSizeZUnit="µm" SignificantBits="16" SizeC="2" SizeT="10" SizeX="256" SizeY="256" SizeZ="15" TimeIncrement="60.00144577026367" TimeIncrementUnit="s" Type="uint16">
+      <Channel AcquisitionMode="WideField" Color="-8519425" EmissionWavelength="568.0" EmissionWavelengthUnit="nm" ExcitationWavelength="553.0" ExcitationWavelengthUnit="nm" Fluor="Alexa Fluor 555" ID="Channel:0:0" IlluminationType="Other" Name="LED555" SamplesPerPixel="1">
+        <DetectorSettings Binning="1x1" Gain="0.0" ID="Detector:506"/>
+        <FilterSetRef ID="FilterSet:1"/>
+        <LightPath/>
+      </Channel>
+      <Channel AcquisitionMode="WideField" Color="16724991" EmissionWavelength="517.0" EmissionWavelengthUnit="nm" ExcitationWavelength="493.0" ExcitationWavelengthUnit="nm" Fluor="Alexa Fluor 488" ID="Channel:0:1" IlluminationType="Other" Name="LED470" SamplesPerPixel="1">
+        <DetectorSettings Binning="1x1" Gain="0.0" ID="Detector:506"/>
+        <FilterSetRef ID="FilterSet:2"/>
+        <LightPath/>
+      </Channel>
+      <TiffData FirstC="0" FirstT="0" FirstZ="0" IFD="0" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="0" IFD="1" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="1" IFD="2" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="1" IFD="3" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="2" IFD="4" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="2" IFD="5" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="3" IFD="6" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="3" IFD="7" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="4" IFD="8" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="4" IFD="9" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="5" IFD="10" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="5" IFD="11" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="6" IFD="12" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="6" IFD="13" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="7" IFD="14" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="7" IFD="15" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="8" IFD="16" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="8" IFD="17" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="9" IFD="18" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="9" IFD="19" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="10" IFD="20" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="10" IFD="21" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="11" IFD="22" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="11" IFD="23" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="12" IFD="24" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="12" IFD="25" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="13" IFD="26" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="13" IFD="27" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="0" FirstZ="14" IFD="28" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="0" FirstZ="14" IFD="29" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="0" IFD="30" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="0" IFD="31" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="1" IFD="32" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="1" IFD="33" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="2" IFD="34" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="2" IFD="35" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="3" IFD="36" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="3" IFD="37" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="4" IFD="38" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="4" IFD="39" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="5" IFD="40" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="5" IFD="41" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="6" IFD="42" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="6" IFD="43" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="7" IFD="44" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="7" IFD="45" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="8" IFD="46" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="8" IFD="47" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="9" IFD="48" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="9" IFD="49" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="10" IFD="50" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="10" IFD="51" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="11" IFD="52" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="11" IFD="53" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="12" IFD="54" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="12" IFD="55" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="13" IFD="56" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="13" IFD="57" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="1" FirstZ="14" IFD="58" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="1" FirstZ="14" IFD="59" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="0" IFD="60" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="0" IFD="61" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="1" IFD="62" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="1" IFD="63" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="2" IFD="64" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="2" IFD="65" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="3" IFD="66" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="3" IFD="67" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="4" IFD="68" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="4" IFD="69" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="5" IFD="70" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="5" IFD="71" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="6" IFD="72" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="6" IFD="73" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="7" IFD="74" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="7" IFD="75" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="8" IFD="76" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="8" IFD="77" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="9" IFD="78" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="9" IFD="79" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="10" IFD="80" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="10" IFD="81" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="11" IFD="82" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="11" IFD="83" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="12" IFD="84" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="12" IFD="85" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="13" IFD="86" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="13" IFD="87" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="2" FirstZ="14" IFD="88" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="2" FirstZ="14" IFD="89" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="0" IFD="90" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="0" IFD="91" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="1" IFD="92" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="1" IFD="93" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="2" IFD="94" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="2" IFD="95" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="3" IFD="96" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="3" IFD="97" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="4" IFD="98" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="4" IFD="99" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="5" IFD="100" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="5" IFD="101" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="6" IFD="102" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="6" IFD="103" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="7" IFD="104" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="7" IFD="105" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="8" IFD="106" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="8" IFD="107" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="9" IFD="108" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="9" IFD="109" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="10" IFD="110" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="10" IFD="111" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="11" IFD="112" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="11" IFD="113" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="12" IFD="114" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="12" IFD="115" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="13" IFD="116" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="13" IFD="117" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="3" FirstZ="14" IFD="118" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="3" FirstZ="14" IFD="119" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="0" IFD="120" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="0" IFD="121" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="1" IFD="122" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="1" IFD="123" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="2" IFD="124" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="2" IFD="125" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="3" IFD="126" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="3" IFD="127" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="4" IFD="128" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="4" IFD="129" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="5" IFD="130" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="5" IFD="131" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="6" IFD="132" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="6" IFD="133" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="7" IFD="134" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="7" IFD="135" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="8" IFD="136" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="8" IFD="137" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="9" IFD="138" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="9" IFD="139" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="10" IFD="140" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="10" IFD="141" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="11" IFD="142" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="11" IFD="143" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="12" IFD="144" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="12" IFD="145" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="13" IFD="146" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="13" IFD="147" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="4" FirstZ="14" IFD="148" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="4" FirstZ="14" IFD="149" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="0" IFD="150" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="0" IFD="151" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="1" IFD="152" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="1" IFD="153" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="2" IFD="154" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="2" IFD="155" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="3" IFD="156" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="3" IFD="157" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="4" IFD="158" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="4" IFD="159" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="5" IFD="160" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="5" IFD="161" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="6" IFD="162" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="6" IFD="163" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="7" IFD="164" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="7" IFD="165" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="8" IFD="166" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="8" IFD="167" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="9" IFD="168" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="9" IFD="169" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="10" IFD="170" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="10" IFD="171" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="11" IFD="172" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="11" IFD="173" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="12" IFD="174" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="12" IFD="175" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="13" IFD="176" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="13" IFD="177" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="5" FirstZ="14" IFD="178" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="5" FirstZ="14" IFD="179" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="0" IFD="180" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="0" IFD="181" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="1" IFD="182" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="1" IFD="183" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="2" IFD="184" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="2" IFD="185" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="3" IFD="186" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="3" IFD="187" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="4" IFD="188" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="4" IFD="189" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="5" IFD="190" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="5" IFD="191" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="6" IFD="192" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="6" IFD="193" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="7" IFD="194" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="7" IFD="195" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="8" IFD="196" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="8" IFD="197" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="9" IFD="198" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="9" IFD="199" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="10" IFD="200" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="10" IFD="201" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="11" IFD="202" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="11" IFD="203" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="12" IFD="204" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="12" IFD="205" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="13" IFD="206" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="13" IFD="207" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="6" FirstZ="14" IFD="208" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="6" FirstZ="14" IFD="209" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="0" IFD="210" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="0" IFD="211" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="1" IFD="212" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="1" IFD="213" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="2" IFD="214" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="2" IFD="215" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="3" IFD="216" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="3" IFD="217" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="4" IFD="218" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="4" IFD="219" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="5" IFD="220" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="5" IFD="221" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="6" IFD="222" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="6" IFD="223" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="7" IFD="224" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="7" IFD="225" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="8" IFD="226" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="8" IFD="227" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="9" IFD="228" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="9" IFD="229" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="10" IFD="230" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="10" IFD="231" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="11" IFD="232" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="11" IFD="233" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="12" IFD="234" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="12" IFD="235" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="13" IFD="236" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="13" IFD="237" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="7" FirstZ="14" IFD="238" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="7" FirstZ="14" IFD="239" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="0" IFD="240" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="0" IFD="241" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="1" IFD="242" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="1" IFD="243" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="2" IFD="244" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="2" IFD="245" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="3" IFD="246" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="3" IFD="247" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="4" IFD="248" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="4" IFD="249" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="5" IFD="250" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="5" IFD="251" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="6" IFD="252" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="6" IFD="253" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="7" IFD="254" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="7" IFD="255" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="8" IFD="256" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="8" IFD="257" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="9" IFD="258" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="9" IFD="259" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="10" IFD="260" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="10" IFD="261" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="11" IFD="262" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="11" IFD="263" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="12" IFD="264" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="12" IFD="265" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="13" IFD="266" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="13" IFD="267" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="8" FirstZ="14" IFD="268" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="8" FirstZ="14" IFD="269" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="0" IFD="270" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="0" IFD="271" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="1" IFD="272" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="1" IFD="273" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="2" IFD="274" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="2" IFD="275" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="3" IFD="276" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="3" IFD="277" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="4" IFD="278" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="4" IFD="279" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="5" IFD="280" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="5" IFD="281" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="6" IFD="282" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="6" IFD="283" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="7" IFD="284" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="7" IFD="285" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="8" IFD="286" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="8" IFD="287" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="9" IFD="288" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="9" IFD="289" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="10" IFD="290" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="10" IFD="291" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="11" IFD="292" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="11" IFD="293" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="12" IFD="294" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="12" IFD="295" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="13" IFD="296" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="13" IFD="297" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="0" FirstT="9" FirstZ="14" IFD="298" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <TiffData FirstC="1" FirstT="9" FirstZ="14" IFD="299" PlaneCount="1">
+        <UUID FileName="CellDivision_T=10_Z=15_CH=2_DCV_small.ome.tiff">urn:uuid:1f729fff-e5cb-4330-b567-c8f84fc337fb</UUID>
+      </TiffData>
+      <Plane DeltaT="122.19400000572205" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="0" TheT="0" TheZ="0"/>
+      <Plane DeltaT="122.51600003242493" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="1" TheT="0" TheZ="0"/>
+      <Plane DeltaT="123.09800004959106" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="0" TheT="0" TheZ="1"/>
+      <Plane DeltaT="123.42300009727478" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="1" TheT="0" TheZ="1"/>
+      <Plane DeltaT="123.98600006103516" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="0" TheT="0" TheZ="2"/>
+      <Plane DeltaT="124.31000018119812" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="1" TheT="0" TheZ="2"/>
+      <Plane DeltaT="124.88000011444092" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="0" TheT="0" TheZ="3"/>
+      <Plane DeltaT="125.20500016212463" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="1" TheT="0" TheZ="3"/>
+      <Plane DeltaT="125.76800012588501" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="0" TheT="0" TheZ="4"/>
+      <Plane DeltaT="126.09400010108948" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="1" TheT="0" TheZ="4"/>
+      <Plane DeltaT="126.66000008583069" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="0" TheT="0" TheZ="5"/>
+      <Plane DeltaT="127.01400017738342" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="1" TheT="0" TheZ="5"/>
+      <Plane DeltaT="127.58000016212463" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="0" TheT="0" TheZ="6"/>
+      <Plane DeltaT="127.91300010681152" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="1" TheT="0" TheZ="6"/>
+      <Plane DeltaT="128.4850001335144" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="0" TheT="0" TheZ="7"/>
+      <Plane DeltaT="128.81200003623962" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="1" TheT="0" TheZ="7"/>
+      <Plane DeltaT="129.38199996948242" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="0" TheT="0" TheZ="8"/>
+      <Plane DeltaT="129.7079999446869" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="1" TheT="0" TheZ="8"/>
+      <Plane DeltaT="130.27900004386902" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="0" TheT="0" TheZ="9"/>
+      <Plane DeltaT="130.60599994659424" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="1" TheT="0" TheZ="9"/>
+      <Plane DeltaT="131.20000004768372" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="0" TheT="0" TheZ="10"/>
+      <Plane DeltaT="131.52600002288818" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="1" TheT="0" TheZ="10"/>
+      <Plane DeltaT="132.09300017356873" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.729" PositionZUnit="µm" TheC="0" TheT="0" TheZ="11"/>
+      <Plane DeltaT="132.4170000553131" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.729" PositionZUnit="µm" TheC="1" TheT="0" TheZ="11"/>
+      <Plane DeltaT="132.99300003051758" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="0" TheT="0" TheZ="12"/>
+      <Plane DeltaT="133.32000017166138" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="1" TheT="0" TheZ="12"/>
+      <Plane DeltaT="133.88199996948242" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="0" TheT="0" TheZ="13"/>
+      <Plane DeltaT="134.21399998664856" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="1" TheT="0" TheZ="13"/>
+      <Plane DeltaT="134.8140001296997" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="0" TheT="0" TheZ="14"/>
+      <Plane DeltaT="135.13900017738342" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="1" TheT="0" TheZ="14"/>
+      <Plane DeltaT="182.22900009155273" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="0" TheT="1" TheZ="0"/>
+      <Plane DeltaT="182.55599999427795" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="1" TheT="1" TheZ="0"/>
+      <Plane DeltaT="183.11600017547607" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="0" TheT="1" TheZ="1"/>
+      <Plane DeltaT="183.44600009918213" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="1" TheT="1" TheZ="1"/>
+      <Plane DeltaT="184.0199999809265" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="0" TheT="1" TheZ="2"/>
+      <Plane DeltaT="184.3470001220703" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="1" TheT="1" TheZ="2"/>
+      <Plane DeltaT="184.92000007629395" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="0" TheT="1" TheZ="3"/>
+      <Plane DeltaT="185.24500012397766" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="1" TheT="1" TheZ="3"/>
+      <Plane DeltaT="185.80700016021729" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="0" TheT="1" TheZ="4"/>
+      <Plane DeltaT="186.1340000629425" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="1" TheT="1" TheZ="4"/>
+      <Plane DeltaT="186.70099997520447" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="0" TheT="1" TheZ="5"/>
+      <Plane DeltaT="187.02600002288818" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="1" TheT="1" TheZ="5"/>
+      <Plane DeltaT="187.59899997711182" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="0" TheT="1" TheZ="6"/>
+      <Plane DeltaT="187.94900012016296" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="1" TheT="1" TheZ="6"/>
+      <Plane DeltaT="188.51900005340576" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="0" TheT="1" TheZ="7"/>
+      <Plane DeltaT="188.84500002861023" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="1" TheT="1" TheZ="7"/>
+      <Plane DeltaT="189.4100000858307" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="0" TheT="1" TheZ="8"/>
+      <Plane DeltaT="189.74200010299683" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="1" TheT="1" TheZ="8"/>
+      <Plane DeltaT="190.30700016021729" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="0" TheT="1" TheZ="9"/>
+      <Plane DeltaT="190.6360001564026" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="1" TheT="1" TheZ="9"/>
+      <Plane DeltaT="191.22000002861023" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="0" TheT="1" TheZ="10"/>
+      <Plane DeltaT="191.5460000038147" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="1" TheT="1" TheZ="10"/>
+      <Plane DeltaT="192.1470000743866" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="0" TheT="1" TheZ="11"/>
+      <Plane DeltaT="192.4720001220703" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="1" TheT="1" TheZ="11"/>
+      <Plane DeltaT="193.03800010681152" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="0" TheT="1" TheZ="12"/>
+      <Plane DeltaT="193.364000082016" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="1" TheT="1" TheZ="12"/>
+      <Plane DeltaT="193.9300000667572" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="0" TheT="1" TheZ="13"/>
+      <Plane DeltaT="194.2630000114441" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="1" TheT="1" TheZ="13"/>
+      <Plane DeltaT="194.83100008964539" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="0" TheT="1" TheZ="14"/>
+      <Plane DeltaT="195.1560001373291" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="1" TheT="1" TheZ="14"/>
+      <Plane DeltaT="242.20700001716614" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="0" TheT="2" TheZ="0"/>
+      <Plane DeltaT="242.54100012779236" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="1" TheT="2" TheZ="0"/>
+      <Plane DeltaT="243.10800004005432" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="0" TheT="2" TheZ="1"/>
+      <Plane DeltaT="243.42700004577637" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="1" TheT="2" TheZ="1"/>
+      <Plane DeltaT="243.99699997901917" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="0" TheT="2" TheZ="2"/>
+      <Plane DeltaT="244.32299995422363" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="1" TheT="2" TheZ="2"/>
+      <Plane DeltaT="244.89800000190735" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="0" TheT="2" TheZ="3"/>
+      <Plane DeltaT="245.22300004959106" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="1" TheT="2" TheZ="3"/>
+      <Plane DeltaT="245.81700015068054" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="0" TheT="2" TheZ="4"/>
+      <Plane DeltaT="246.14800000190735" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="1" TheT="2" TheZ="4"/>
+      <Plane DeltaT="246.70900011062622" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="0" TheT="2" TheZ="5"/>
+      <Plane DeltaT="247.0350000858307" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="1" TheT="2" TheZ="5"/>
+      <Plane DeltaT="247.59599995613098" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="0" TheT="2" TheZ="6"/>
+      <Plane DeltaT="247.92400002479553" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="1" TheT="2" TheZ="6"/>
+      <Plane DeltaT="248.48800015449524" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="0" TheT="2" TheZ="7"/>
+      <Plane DeltaT="248.81700015068054" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="1" TheT="2" TheZ="7"/>
+      <Plane DeltaT="249.39199995994568" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="0" TheT="2" TheZ="8"/>
+      <Plane DeltaT="249.71900010108948" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="1" TheT="2" TheZ="8"/>
+      <Plane DeltaT="250.28200006484985" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="0" TheT="2" TheZ="9"/>
+      <Plane DeltaT="250.60800004005432" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="1" TheT="2" TheZ="9"/>
+      <Plane DeltaT="251.17000007629395" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="0" TheT="2" TheZ="10"/>
+      <Plane DeltaT="251.4960000514984" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="1" TheT="2" TheZ="10"/>
+      <Plane DeltaT="252.0640001296997" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="0" TheT="2" TheZ="11"/>
+      <Plane DeltaT="252.39000010490417" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="1" TheT="2" TheZ="11"/>
+      <Plane DeltaT="252.9650001525879" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="0" TheT="2" TheZ="12"/>
+      <Plane DeltaT="253.28800010681152" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="1" TheT="2" TheZ="12"/>
+      <Plane DeltaT="253.85199999809265" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="0" TheT="2" TheZ="13"/>
+      <Plane DeltaT="254.17600011825562" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="1" TheT="2" TheZ="13"/>
+      <Plane DeltaT="254.74500012397766" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="0" TheT="2" TheZ="14"/>
+      <Plane DeltaT="255.07200002670288" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="1" TheT="2" TheZ="14"/>
+      <Plane DeltaT="302.22500014305115" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="0" TheT="3" TheZ="0"/>
+      <Plane DeltaT="302.5880000591278" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="1" TheT="3" TheZ="0"/>
+      <Plane DeltaT="303.15300011634827" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="0" TheT="3" TheZ="1"/>
+      <Plane DeltaT="303.478000164032" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="1" TheT="3" TheZ="1"/>
+      <Plane DeltaT="304.047000169754" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="0" TheT="3" TheZ="2"/>
+      <Plane DeltaT="304.36899995803833" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="1" TheT="3" TheZ="2"/>
+      <Plane DeltaT="304.9370000362396" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="0" TheT="3" TheZ="3"/>
+      <Plane DeltaT="305.2640001773834" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="1" TheT="3" TheZ="3"/>
+      <Plane DeltaT="305.84500002861023" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="0" TheT="3" TheZ="4"/>
+      <Plane DeltaT="306.1690001487732" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="1" TheT="3" TheZ="4"/>
+      <Plane DeltaT="306.77100014686584" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="0" TheT="3" TheZ="5"/>
+      <Plane DeltaT="307.0970001220703" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="1" TheT="3" TheZ="5"/>
+      <Plane DeltaT="307.66600012779236" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="0" TheT="3" TheZ="6"/>
+      <Plane DeltaT="307.9910001754761" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="1" TheT="3" TheZ="6"/>
+      <Plane DeltaT="308.5550000667572" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="0" TheT="3" TheZ="7"/>
+      <Plane DeltaT="308.8910000324249" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="1" TheT="3" TheZ="7"/>
+      <Plane DeltaT="309.4680001735687" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="0" TheT="3" TheZ="8"/>
+      <Plane DeltaT="309.79299998283386" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="1" TheT="3" TheZ="8"/>
+      <Plane DeltaT="310.39400005340576" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="0" TheT="3" TheZ="9"/>
+      <Plane DeltaT="310.7180001735687" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="1" TheT="3" TheZ="9"/>
+      <Plane DeltaT="311.28600001335144" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="0" TheT="3" TheZ="10"/>
+      <Plane DeltaT="311.6119999885559" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="1" TheT="3" TheZ="10"/>
+      <Plane DeltaT="312.17700004577637" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="0" TheT="3" TheZ="11"/>
+      <Plane DeltaT="312.5" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="1" TheT="3" TheZ="11"/>
+      <Plane DeltaT="313.0859999656677" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="0" TheT="3" TheZ="12"/>
+      <Plane DeltaT="313.41200017929077" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="1" TheT="3" TheZ="12"/>
+      <Plane DeltaT="314.0130000114441" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="0" TheT="3" TheZ="13"/>
+      <Plane DeltaT="314.335000038147" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="1" TheT="3" TheZ="13"/>
+      <Plane DeltaT="314.91100001335144" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="0" TheT="3" TheZ="14"/>
+      <Plane DeltaT="315.23600006103516" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="1" TheT="3" TheZ="14"/>
+      <Plane DeltaT="362.2090001106262" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="0" TheT="4" TheZ="0"/>
+      <Plane DeltaT="362.5350000858307" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="1" TheT="4" TheZ="0"/>
+      <Plane DeltaT="363.1010000705719" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="0" TheT="4" TheZ="1"/>
+      <Plane DeltaT="363.4279999732971" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="1" TheT="4" TheZ="1"/>
+      <Plane DeltaT="364.00100016593933" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="0" TheT="4" TheZ="2"/>
+      <Plane DeltaT="364.32599997520447" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="1" TheT="4" TheZ="2"/>
+      <Plane DeltaT="364.89400005340576" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="0" TheT="4" TheZ="3"/>
+      <Plane DeltaT="365.220999956131" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="1" TheT="4" TheZ="3"/>
+      <Plane DeltaT="365.7880001068115" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="0" TheT="4" TheZ="4"/>
+      <Plane DeltaT="366.1160001754761" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="1" TheT="4" TheZ="4"/>
+      <Plane DeltaT="366.6820001602173" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="0" TheT="4" TheZ="5"/>
+      <Plane DeltaT="367.00800013542175" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="1" TheT="4" TheZ="5"/>
+      <Plane DeltaT="367.58000016212463" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="0" TheT="4" TheZ="6"/>
+      <Plane DeltaT="367.90499997138977" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="1" TheT="4" TheZ="6"/>
+      <Plane DeltaT="368.4690001010895" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="0" TheT="4" TheZ="7"/>
+      <Plane DeltaT="368.79500007629395" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="1" TheT="4" TheZ="7"/>
+      <Plane DeltaT="369.37400007247925" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="0" TheT="4" TheZ="8"/>
+      <Plane DeltaT="369.72900009155273" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="1" TheT="4" TheZ="8"/>
+      <Plane DeltaT="370.29100012779236" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="0" TheT="4" TheZ="9"/>
+      <Plane DeltaT="370.61899995803833" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="1" TheT="4" TheZ="9"/>
+      <Plane DeltaT="371.1950001716614" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="0" TheT="4" TheZ="10"/>
+      <Plane DeltaT="371.52100014686584" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="1" TheT="4" TheZ="10"/>
+      <Plane DeltaT="372.0900001525879" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="0" TheT="4" TheZ="11"/>
+      <Plane DeltaT="372.41100001335144" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="1" TheT="4" TheZ="11"/>
+      <Plane DeltaT="372.99399995803833" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="0" TheT="4" TheZ="12"/>
+      <Plane DeltaT="373.3250000476837" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="1" TheT="4" TheZ="12"/>
+      <Plane DeltaT="373.9190001487732" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="0" TheT="4" TheZ="13"/>
+      <Plane DeltaT="374.24500012397766" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="1" TheT="4" TheZ="13"/>
+      <Plane DeltaT="374.8140001296997" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="0" TheT="4" TheZ="14"/>
+      <Plane DeltaT="375.1419999599457" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="1" TheT="4" TheZ="14"/>
+      <Plane DeltaT="422.21399998664856" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="0" TheT="5" TheZ="0"/>
+      <Plane DeltaT="422.5390000343323" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="1" TheT="5" TheZ="0"/>
+      <Plane DeltaT="423.1010000705719" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="0" TheT="5" TheZ="1"/>
+      <Plane DeltaT="423.44200015068054" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="1" TheT="5" TheZ="1"/>
+      <Plane DeltaT="424.02500009536743" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="0" TheT="5" TheZ="2"/>
+      <Plane DeltaT="424.35000014305115" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="1" TheT="5" TheZ="2"/>
+      <Plane DeltaT="424.9230000972748" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="0" TheT="5" TheZ="3"/>
+      <Plane DeltaT="425.2480001449585" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="1" TheT="5" TheZ="3"/>
+      <Plane DeltaT="425.8129999637604" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="0" TheT="5" TheZ="4"/>
+      <Plane DeltaT="426.1360001564026" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="1" TheT="5" TheZ="4"/>
+      <Plane DeltaT="426.7039999961853" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="0" TheT="5" TheZ="5"/>
+      <Plane DeltaT="427.02800011634827" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="1" TheT="5" TheZ="5"/>
+      <Plane DeltaT="427.59800004959106" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="0" TheT="5" TheZ="6"/>
+      <Plane DeltaT="427.922000169754" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="1" TheT="5" TheZ="6"/>
+      <Plane DeltaT="428.48600006103516" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="0" TheT="5" TheZ="7"/>
+      <Plane DeltaT="428.8120000362396" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="1" TheT="5" TheZ="7"/>
+      <Plane DeltaT="429.375" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="0" TheT="5" TheZ="8"/>
+      <Plane DeltaT="429.69799995422363" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="1" TheT="5" TheZ="8"/>
+      <Plane DeltaT="430.26200008392334" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="0" TheT="5" TheZ="9"/>
+      <Plane DeltaT="430.63499999046326" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="1" TheT="5" TheZ="9"/>
+      <Plane DeltaT="431.20300006866455" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="0" TheT="5" TheZ="10"/>
+      <Plane DeltaT="431.5260000228882" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="1" TheT="5" TheZ="10"/>
+      <Plane DeltaT="432.09500002861023" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="0" TheT="5" TheZ="11"/>
+      <Plane DeltaT="432.4210000038147" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="1" TheT="5" TheZ="11"/>
+      <Plane DeltaT="432.9930000305176" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="0" TheT="5" TheZ="12"/>
+      <Plane DeltaT="433.31500005722046" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="1" TheT="5" TheZ="12"/>
+      <Plane DeltaT="433.8949999809265" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="0" TheT="5" TheZ="13"/>
+      <Plane DeltaT="434.220999956131" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="1" TheT="5" TheZ="13"/>
+      <Plane DeltaT="434.81700015068054" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="0" TheT="5" TheZ="14"/>
+      <Plane DeltaT="435.143000125885" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="1" TheT="5" TheZ="14"/>
+      <Plane DeltaT="482.2630000114441" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="0" TheT="6" TheZ="0"/>
+      <Plane DeltaT="482.5880000591278" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="1" TheT="6" TheZ="0"/>
+      <Plane DeltaT="483.14800000190735" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="0" TheT="6" TheZ="1"/>
+      <Plane DeltaT="483.47500014305115" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="1" TheT="6" TheZ="1"/>
+      <Plane DeltaT="484.039999961853" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="0" TheT="6" TheZ="2"/>
+      <Plane DeltaT="484.3770000934601" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="1" TheT="6" TheZ="2"/>
+      <Plane DeltaT="484.94900012016296" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="0" TheT="6" TheZ="3"/>
+      <Plane DeltaT="485.2740001678467" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="1" TheT="6" TheZ="3"/>
+      <Plane DeltaT="485.8789999485016" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="0" TheT="6" TheZ="4"/>
+      <Plane DeltaT="486.2039999961853" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="1" TheT="6" TheZ="4"/>
+      <Plane DeltaT="486.77100014686584" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="0" TheT="6" TheZ="5"/>
+      <Plane DeltaT="487.09500002861023" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="1" TheT="6" TheZ="5"/>
+      <Plane DeltaT="487.65900015830994" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="0" TheT="6" TheZ="6"/>
+      <Plane DeltaT="487.9830000400543" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="1" TheT="6" TheZ="6"/>
+      <Plane DeltaT="488.5680000782013" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="0" TheT="6" TheZ="7"/>
+      <Plane DeltaT="488.8990001678467" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="1" TheT="6" TheZ="7"/>
+      <Plane DeltaT="489.5020000934601" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="0" TheT="6" TheZ="8"/>
+      <Plane DeltaT="489.8270001411438" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="1" TheT="6" TheZ="8"/>
+      <Plane DeltaT="490.4130001068115" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="0" TheT="6" TheZ="9"/>
+      <Plane DeltaT="490.74000000953674" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="1" TheT="6" TheZ="9"/>
+      <Plane DeltaT="491.2980000972748" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="0" TheT="6" TheZ="10"/>
+      <Plane DeltaT="491.61899995803833" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="1" TheT="6" TheZ="10"/>
+      <Plane DeltaT="492.1909999847412" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="0" TheT="6" TheZ="11"/>
+      <Plane DeltaT="492.5169999599457" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="1" TheT="6" TheZ="11"/>
+      <Plane DeltaT="493.11100006103516" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="0" TheT="6" TheZ="12"/>
+      <Plane DeltaT="493.4350001811981" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="1" TheT="6" TheZ="12"/>
+      <Plane DeltaT="494.0" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="0" TheT="6" TheZ="13"/>
+      <Plane DeltaT="494.3250000476837" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="1" TheT="6" TheZ="13"/>
+      <Plane DeltaT="494.8910000324249" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="0" TheT="6" TheZ="14"/>
+      <Plane DeltaT="495.21200013160706" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="1" TheT="6" TheZ="14"/>
+      <Plane DeltaT="542.1870000362396" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="0" TheT="7" TheZ="0"/>
+      <Plane DeltaT="542.5160000324249" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="1" TheT="7" TheZ="0"/>
+      <Plane DeltaT="543.1260001659393" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="0" TheT="7" TheZ="1"/>
+      <Plane DeltaT="543.4509999752045" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="1" TheT="7" TheZ="1"/>
+      <Plane DeltaT="544.0190000534058" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="0" TheT="7" TheZ="2"/>
+      <Plane DeltaT="544.3440001010895" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="1" TheT="7" TheZ="2"/>
+      <Plane DeltaT="544.9049999713898" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="0" TheT="7" TheZ="3"/>
+      <Plane DeltaT="545.2439999580383" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="1" TheT="7" TheZ="3"/>
+      <Plane DeltaT="545.808000087738" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="0" TheT="7" TheZ="4"/>
+      <Plane DeltaT="546.1330001354218" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="1" TheT="7" TheZ="4"/>
+      <Plane DeltaT="546.6970000267029" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="0" TheT="7" TheZ="5"/>
+      <Plane DeltaT="547.0210001468658" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="1" TheT="7" TheZ="5"/>
+      <Plane DeltaT="547.5889999866486" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="0" TheT="7" TheZ="6"/>
+      <Plane DeltaT="547.920000076294" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="1" TheT="7" TheZ="6"/>
+      <Plane DeltaT="548.4869999885559" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="0" TheT="7" TheZ="7"/>
+      <Plane DeltaT="548.8400001525879" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="1" TheT="7" TheZ="7"/>
+      <Plane DeltaT="549.4130001068115" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="0" TheT="7" TheZ="8"/>
+      <Plane DeltaT="549.7400000095367" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="1" TheT="7" TheZ="8"/>
+      <Plane DeltaT="550.3100001811981" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="0" TheT="7" TheZ="9"/>
+      <Plane DeltaT="550.6670000553131" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="1" TheT="7" TheZ="9"/>
+      <Plane DeltaT="551.2620000839233" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="0" TheT="7" TheZ="10"/>
+      <Plane DeltaT="551.5889999866486" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="1" TheT="7" TheZ="10"/>
+      <Plane DeltaT="552.1610000133514" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="0" TheT="7" TheZ="11"/>
+      <Plane DeltaT="552.489000082016" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="1" TheT="7" TheZ="11"/>
+      <Plane DeltaT="553.0590000152588" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="0" TheT="7" TheZ="12"/>
+      <Plane DeltaT="553.3849999904633" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="1" TheT="7" TheZ="12"/>
+      <Plane DeltaT="553.9479999542236" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="0" TheT="7" TheZ="13"/>
+      <Plane DeltaT="554.2750000953674" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="1" TheT="7" TheZ="13"/>
+      <Plane DeltaT="554.8410000801086" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="0" TheT="7" TheZ="14"/>
+      <Plane DeltaT="555.1660001277924" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="1" TheT="7" TheZ="14"/>
+      <Plane DeltaT="602.1970000267029" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="0" TheT="8" TheZ="0"/>
+      <Plane DeltaT="602.529000043869" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="1" TheT="8" TheZ="0"/>
+      <Plane DeltaT="603.0950000286102" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="0" TheT="8" TheZ="1"/>
+      <Plane DeltaT="603.4230000972748" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="1" TheT="8" TheZ="1"/>
+      <Plane DeltaT="604.0250000953674" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="0" TheT="8" TheZ="2"/>
+      <Plane DeltaT="604.3510000705719" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="1" TheT="8" TheZ="2"/>
+      <Plane DeltaT="604.9170000553131" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="0" TheT="8" TheZ="3"/>
+      <Plane DeltaT="605.2439999580383" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="1" TheT="8" TheZ="3"/>
+      <Plane DeltaT="605.8040001392365" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="0" TheT="8" TheZ="4"/>
+      <Plane DeltaT="606.1440000534058" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="1" TheT="8" TheZ="4"/>
+      <Plane DeltaT="606.7070000171661" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="0" TheT="8" TheZ="5"/>
+      <Plane DeltaT="607.0320000648499" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="1" TheT="8" TheZ="5"/>
+      <Plane DeltaT="607.5989999771118" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="0" TheT="8" TheZ="6"/>
+      <Plane DeltaT="607.9230000972748" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="1" TheT="8" TheZ="6"/>
+      <Plane DeltaT="608.4860000610352" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="0" TheT="8" TheZ="7"/>
+      <Plane DeltaT="608.8100001811981" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="1" TheT="8" TheZ="7"/>
+      <Plane DeltaT="609.3780000209808" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="0" TheT="8" TheZ="8"/>
+      <Plane DeltaT="609.7039999961853" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="1" TheT="8" TheZ="8"/>
+      <Plane DeltaT="610.2829999923706" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="0" TheT="8" TheZ="9"/>
+      <Plane DeltaT="610.6100001335144" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="1" TheT="8" TheZ="9"/>
+      <Plane DeltaT="611.1770000457764" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="0" TheT="8" TheZ="10"/>
+      <Plane DeltaT="611.529000043869" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="1" TheT="8" TheZ="10"/>
+      <Plane DeltaT="612.1010000705719" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="0" TheT="8" TheZ="11"/>
+      <Plane DeltaT="612.4260001182556" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="1" TheT="8" TheZ="11"/>
+      <Plane DeltaT="612.9920001029968" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="0" TheT="8" TheZ="12"/>
+      <Plane DeltaT="613.3489999771118" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="1" TheT="8" TheZ="12"/>
+      <Plane DeltaT="613.914999961853" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="0" TheT="8" TheZ="13"/>
+      <Plane DeltaT="614.2410001754761" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="1" TheT="8" TheZ="13"/>
+      <Plane DeltaT="614.8159999847412" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="0" TheT="8" TheZ="14"/>
+      <Plane DeltaT="615.1390001773834" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="1" TheT="8" TheZ="14"/>
+      <Plane DeltaT="662.2070000171661" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="0" TheT="9" TheZ="0"/>
+      <Plane DeltaT="662.5310001373291" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.21" PositionZUnit="µm" TheC="1" TheT="9" TheZ="0"/>
+      <Plane DeltaT="663.0950000286102" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="0" TheT="9" TheZ="1"/>
+      <Plane DeltaT="663.4190001487732" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.53" PositionZUnit="µm" TheC="1" TheT="9" TheZ="1"/>
+      <Plane DeltaT="663.9869999885559" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="0" TheT="9" TheZ="2"/>
+      <Plane DeltaT="664.3120000362396" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1113.85" PositionZUnit="µm" TheC="1" TheT="9" TheZ="2"/>
+      <Plane DeltaT="664.8800001144409" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="0" TheT="9" TheZ="3"/>
+      <Plane DeltaT="665.2360000610352" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.17" PositionZUnit="µm" TheC="1" TheT="9" TheZ="3"/>
+      <Plane DeltaT="665.8070001602173" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="0" TheT="9" TheZ="4"/>
+      <Plane DeltaT="666.1310000419617" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.49" PositionZUnit="µm" TheC="1" TheT="9" TheZ="4"/>
+      <Plane DeltaT="666.6960000991821" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="0" TheT="9" TheZ="5"/>
+      <Plane DeltaT="667.0520000457764" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1114.81" PositionZUnit="µm" TheC="1" TheT="9" TheZ="5"/>
+      <Plane DeltaT="667.6170001029968" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="0" TheT="9" TheZ="6"/>
+      <Plane DeltaT="667.9409999847412" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.13" PositionZUnit="µm" TheC="1" TheT="9" TheZ="6"/>
+      <Plane DeltaT="668.5050001144409" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="0" TheT="9" TheZ="7"/>
+      <Plane DeltaT="668.8270001411438" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.45" PositionZUnit="µm" TheC="1" TheT="9" TheZ="7"/>
+      <Plane DeltaT="669.4000000953674" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="0" TheT="9" TheZ="8"/>
+      <Plane DeltaT="669.7239999771118" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1115.77" PositionZUnit="µm" TheC="1" TheT="9" TheZ="8"/>
+      <Plane DeltaT="670.297000169754" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="0" TheT="9" TheZ="9"/>
+      <Plane DeltaT="670.6230001449585" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.09" PositionZUnit="µm" TheC="1" TheT="9" TheZ="9"/>
+      <Plane DeltaT="671.1920001506805" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="0" TheT="9" TheZ="10"/>
+      <Plane DeltaT="671.5169999599457" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.41" PositionZUnit="µm" TheC="1" TheT="9" TheZ="10"/>
+      <Plane DeltaT="672.0900001525879" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="0" TheT="9" TheZ="11"/>
+      <Plane DeltaT="672.414999961853" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1116.73" PositionZUnit="µm" TheC="1" TheT="9" TheZ="11"/>
+      <Plane DeltaT="672.9769999980927" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="0" TheT="9" TheZ="12"/>
+      <Plane DeltaT="673.3050000667572" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.05" PositionZUnit="µm" TheC="1" TheT="9" TheZ="12"/>
+      <Plane DeltaT="673.8789999485016" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="0" TheT="9" TheZ="13"/>
+      <Plane DeltaT="674.2000000476837" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.37" PositionZUnit="µm" TheC="1" TheT="9" TheZ="13"/>
+      <Plane DeltaT="674.7990000247955" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="0" TheT="9" TheZ="14"/>
+      <Plane DeltaT="675.1240000724792" DeltaTUnit="s" ExposureTime="100.0" ExposureTimeUnit="s" PositionX="16977.153" PositionXUnit="µm" PositionY="18621.489" PositionYUnit="µm" PositionZ="1117.69" PositionZUnit="µm" TheC="1" TheT="9" TheZ="14"/>
+    </Pixels>
+  </Image>
+</OME>

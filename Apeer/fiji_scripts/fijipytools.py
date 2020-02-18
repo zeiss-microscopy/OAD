@@ -2,9 +2,9 @@
 
 #################################################################
 # File        : fijipytools.py
-# Version     : 1.3
+# Version     : 1.4
 # Author      : czsrh
-# Date        : 17.01.2020
+# Date        : 18.02.2020
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
@@ -552,7 +552,7 @@ class WaterShedTools:
                       is3d=False):
 
         if not is3d:
-            
+            print('Detected 2D image.')
             # run watershed on 2D image
             print('Watershed : 2D image')
             imp = WaterShedTools.edm_watershed(imp)
@@ -580,15 +580,16 @@ class WaterShedTools:
         for index in range(1, nslices + 1):
             # get the image processor
             ip = stack.getProcessor(index)
-            if ip.isBinary is False:
-                # convert to 8bit without rescaling
-                ImageConverter.setDoScaling(False)
-                ImageConverter(imp).convertToGray8()
-            else:
-                edm = EDM()
-                edm.setup("watershed", None)
-                edm.run(ip)
-
+            
+            if not ip.isBinary():
+                ip = BinaryImages.binarize(ip)
+            print('Apply Watershed to Binary image ...')
+            print(type(ip))
+            print('isBinary : ', ip.isBinary())
+            edm = EDM()
+            edm.setup("watershed", None)
+            edm.run(ip)
+            
         return imp
 
     @staticmethod
@@ -738,13 +739,17 @@ class ThresholdTools:
 class AnalyzeTools:
 
     @staticmethod
-    def analyzeParticles(imp, minsize, maxsize, mincirc, maxcirc,
+    def analyzeParticles(imp,
+                         minsize,
+                         maxsize,
+                         mincirc,
+                         maxcirc,
                          filename='Test.czi',
-                         addROIManager=True,
+                         addROIManager=False,
                          headless=False,
                          exclude=True):
 
-        if addROIManager is True:
+        if addROIManager:
 
             # get the ROI manager instance
             rm = RoiManager.getInstance()
@@ -752,14 +757,14 @@ class AnalyzeTools:
                 rm = RoiManager()
             rm.runCommand("Associate", "true")
 
-            if exclude is False:
+            if not exclude:
                 options = PA.SHOW_ROI_MASKS \
                     + PA.SHOW_RESULTS \
                     + PA.DISPLAY_SUMMARY \
                     + PA.ADD_TO_MANAGER \
                     + PA.ADD_TO_OVERLAY \
 
-            if exclude is True:
+            if exclude:
                 options = PA.SHOW_ROI_MASKS \
                     + PA.SHOW_RESULTS \
                     + PA.DISPLAY_SUMMARY \
@@ -767,15 +772,15 @@ class AnalyzeTools:
                     + PA.ADD_TO_OVERLAY \
                     + PA.EXCLUDE_EDGE_PARTICLES
 
-        if addROIManager is False:
+        if not addROIManager:
 
-            if exclude is False:
+            if not exclude:
                 options = PA.SHOW_ROI_MASKS \
                     + PA.SHOW_RESULTS \
                     + PA.DISPLAY_SUMMARY \
                     + PA.ADD_TO_OVERLAY \
 
-            if exclude is True:
+            if exclude:
                 options = PA.SHOW_ROI_MASKS \
                     + PA.SHOW_RESULTS \
                     + PA.DISPLAY_SUMMARY \
@@ -801,6 +806,7 @@ class AnalyzeTools:
             particlestack.addSlice(mmap.getProcessor())
 
         return particlestack, results
+
 
     @staticmethod
     def create_resultfilename(filename, suffix='_Results', extension='txt'):
