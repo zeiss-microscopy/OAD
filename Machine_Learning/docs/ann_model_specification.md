@@ -47,7 +47,7 @@ The following code snippet shows an example for a valid metadata file:
   "ColorHandling": "ConvertToMonochrome",
   "PixelType": "Gray16",
   "Classes": ["Background", "Interesting Object", "Foreground"],
-  "ModelFile": "C:\\model.pb",
+  "ModelPath": "C:\\tf\\saved\\model\\folder\\",
   "TestImageFile": "C:\\test-image.png",
   "LicenseFile": "C:\\LICENSE.txt"
 }
