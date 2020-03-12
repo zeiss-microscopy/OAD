@@ -43,7 +43,7 @@ The ZEN software platform has various built-in image segmentation function. One 
 - Pixel Classification by proven and established **Random Forrest Classifier**
 - Option to **download** pre-trained DNNs for image segmentation
   - currently 3 pre-trained networks are available
-  - import of external networks will come soon (see the [ANN Model Specification](docs/ann_model_specification.md))
+  - import of external networks will come soon (see the [ANN Model Specification](https://pypi.org/project/czmodel/))
 - Post processing by **Conditional Random Fields** (CRF)
 - Option to apply **confidence thresholds**
 - IP-Functions for creating masks and **scripting integration** for advanced automation
