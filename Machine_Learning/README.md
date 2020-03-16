@@ -41,14 +41,17 @@ The ZEN software platform has various built-in image segmentation function. One 
     - 64, 128 (red. 50) or 256 (red. 70) Features for 1st, 2nd or 3rd layer
 
 - Pixel Classification by proven and established **Random Forrest Classifier**
-- Option to **download** pre-trained DNNs for image segmentation
+- Option to **download** or pre-trained DNNs for image segmentation (ZEN blue 3.1)
+- Option to **Import**  pre-trained DNNs for image segmentation(> ZEN blue 3.2)  
   - currently 3 pre-trained networks are available
-  - import of external networks will come soon (see the [ANN Model Specification](docs/ann_model_specification.md))
+  - public model specification for import: [ANN Model Specification](docs/ann_model_specification.md)
+  - [czmodel package](https://pypi.org/project/czmodel/) to convert trained TF2 models into 'czmodel'
 - Post processing by **Conditional Random Fields** (CRF)
 - Option to apply **confidence thresholds**
 - IP-Functions for creating masks and **scripting integration** for advanced automation
 - **Client-Server Architecture** (Zen Client - Python-Server) with using REST-API
-- client-side tiling functionality to deal with large **mult-idimensional datasets**
+- client-side tiling & fusion functionality to deal with large **mult-idimensional datasets**
+- support for Nvidia GPUs
 - universal automated build pipeline for **ZeissPython** established and integrated in official Zeiss installer
 
 ### Workflows
@@ -57,13 +60,19 @@ The ZEN software platform has various built-in image segmentation function. One 
 
 #### Downloading Networks
 
-Starting from the ZEN Blue 3.1 release the software allows to download pre-trained networks from ZEISS. Such networks are fully integrate into the ZEN Image Analysis framework and can be used the same way as the classical Intellesis models using pixel classification
+ZEN Blue 3.1 release the software allows to download pre-trained networks from ZEISS. Such networks are fully integrate into the ZEN Image Analysis framework and can be used the same way as the classical Intellesis models using pixel classification
 
 ![ZEN Intellesis - Model Download](../Images/intellesis_model_download.png)
 
+#### Importing networks
+
+Starting with ZEN blue 3.2 it will be possible to import externally trained models into ZEN. For more details please se the [Importing External Networks](../Machine_Learning/docs/importing_external_networks_in_ZEN.md)
+
+![Importing External Networks](../Images/intellesis_dataflow_czmodel.png)
+
 #### Conditions of Use
 
-_This pre-trained network was trained with "best-effort" on the available training data and is provided "as is" without warranty of any kind. The licensor assumes no responsibility for the functionality and fault-free condition of the pre-trained network under conditions which are not in the decribed scope. For details see the respective chapter in the Online Help / Documentation. By downloading I agree to the above terms._
+_This pre-trained network was trained with "best-effort" on the available training data and is provided "as is" without warranty of any kind. The licensor assumes no responsibility for the functionality and fault-free condition of the pre-trained network under conditions which are not in the described scope. For details see the respective chapter in the Online Help / Documentation. By downloading I agree to the above terms._
 
 ---
 

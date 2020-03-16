@@ -1,0 +1,7 @@
+{
+"BorderSize": 8,
+"ColorHandling": "ConvertToMonochrome",
+"PixelType": "Gray16",
+"Classes": ["Background", "Nuclei"],
+"ModelPath": "saved_tf2_model_output"
+}
