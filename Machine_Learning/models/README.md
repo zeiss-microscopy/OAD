@@ -1,6 +1,6 @@
-# Pre-trained Model
+# Pre-trained Models for Download
 
-## How to import
+## How to import a model in ZEN
 
 This is simple - just use the **Import** model function inside ZEN.
 
@@ -20,7 +20,7 @@ It can be applied to [3D XRM Stack Sandstone](../Machine_Learning/../testdata/XR
 
 ---
 
-## Models - Pre-Trained ANN for Segmentation
+## Models - Pre-Trained CNN for Segmentation
 
 ZEN allows to import pre-trained neural networks. Currently ZEISS provided the following examples for such networks:
 
