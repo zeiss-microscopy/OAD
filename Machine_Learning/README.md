@@ -23,7 +23,7 @@ The ZEN software platform has various built-in image segmentation function. One 
 
   - As segmentation is only the required first step for subsequent measurements the integration into the actual measurement tools is key
 
-- **Support for Multi-dimensional Datasets**
+- **Support for Multi-dimensional Data Sets**
 
   - Intellesis, especially when considering the BioFormats option, can be used to segment any image even from non-Zeiss systems. 3D stacks, Tiles, Multi-Channel, …
 
@@ -41,7 +41,7 @@ The ZEN software platform has various built-in image segmentation function. One 
     - 64, 128 (red. 50) or 256 (red. 70) Features for 1st, 2nd or 3rd layer
 
 - Pixel Classification by proven and established **Random Forrest Classifier**
-- Option to **download** or pre-trained DNNs for image segmentation (ZEN blue 3.1)
+- Option to **Download** or pre-trained DNNs for image segmentation (ZEN blue 3.1)
 - Option to **Import** pre-trained DNNs for image segmentation(> ZEN blue 3.2)
   - currently 3 pre-trained networks are available
   - [PyPi package czmodel & public ANN Model Specification](https://pypi.org/project/czmodel/) to convert trained TF2 models into ``czmodel`
@@ -49,7 +49,7 @@ The ZEN software platform has various built-in image segmentation function. One 
 - Option to apply **confidence thresholds**
 - IP-Functions for creating masks and **scripting integration** for advanced automation
 - **Client-Server Architecture** (Zen Client - Python-Server) with using REST-API
-- client-side tiling & fusion functionality to deal with large **multi-dimensional data sets**
+- client-side tiling & fusion functionality to deal with large **Multi-Dimensional Data Sets**
 - support for Nvidia GPUs
 - universal automated build pipeline for **ZeissPython** established and integrated in official Zeiss installer
 
