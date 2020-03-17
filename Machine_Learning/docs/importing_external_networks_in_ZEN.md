@@ -1,4 +1,3 @@
-
 # Importing External Networks in ZEN
 
 ## Bringing ANNs and Intellesis together
@@ -17,7 +16,7 @@ The [ZEN Intellesis](https://www.zeiss.com/microscopy/int/products/microscope-so
 
 Starting with ZEN Blue 3.2 it will be possible to run prediction with custom segmentation models implemented in TensorFlow 2. To be compatible with the Intellesis infrastructure, a TensorFlow/Keras model has to comply with our specification and some meta data must be provided that is described in detail in the official ANN model specification in the project description of our [czmodel package](https://pypi.org/project/czmodel/). This blog post introduces a python library called czmodel that offers a set of tools to easily convert a trained TensorFlow/Keras model to a CZMODEL file that can be directly loaded into ZEN Intellesis. Generating a CZMODEL file this way is just a matter of a few lines of code and can therefore easily be integrated into any training pipeline as well as custom Apeer modules.
 
-Assuming that there is some kind of training pipeline in place that generates trained TensorFlow/Keras models as instances of `tensorflow.keras.Model`. For a simple example of such a pipeline see the attached Jupyter notebook (ready to be executed) in our **[Microsoft Azure Jupyter Notebook](https://notebooks.azure.com/. Note that the notebook is not to be understood as a best practice guide for training ANN models but rather illustrates the use of the **[czmodel](https://pypi.org/project/czmodel/)** library with a very simple model generation process that will usually be more sophisticated.
+Assuming that there is some kind of training pipeline in place that generates trained TensorFlow/Keras models as instances of `tensorflow.keras.Model`. For a simple example of such a pipeline see the attached Jupyter notebook (ready to be executed) in our **[Microsoft Azure Jupyter Notebook](https://notebooks.azure.com/sebastian-soyer/projects/czmodel)**. Note that the notebook is not to be understood as a best practice guide for training ANN models but rather illustrates the use of the **[czmodel](https://pypi.org/project/czmodel/)** library with a very simple model generation process that will usually be more sophisticated.
 
 The entire `czmodel` package operates on so called `ModelSpec` objects that contain all information needed to convert a TensorFlow/Keras model to CZMODEL. Specifically, it contains the trained model itself and a metadata object called ´ModelMetadata´ that reflects the JSON metadata described in the **[ANN model specification](https://pypi.org/project/czmodel/)** as a python class.
 
@@ -91,7 +90,7 @@ convert_from_model_spec(model_spec,
 
 The current implementation of `czmodel` heavily relies on the SavedModel import/export functionality in TensorFlow 2. We therefore recommend to always use the latest version of TensorFlow 2 compatible to `czmodel` as there are continuously released improvements and bugfixes in the TensorFlow code base.
 
-***
+---
 
 ## Jupyter Notebook - Train a simple network to be imported in ZEN
 
@@ -109,7 +108,6 @@ This is basically the same jupyter notebook as the one from above hosted on Azur
 #! pip install czmodel
 ```
 
-
 ```python
 # this can be used to switch on/off warnings
 import warnings
@@ -121,10 +119,9 @@ warnings.simplefilter('ignore')
 
 This notebook the entire workflow of training an ANN with [TensorFlow 2](https://www.tensorflow.org/) using the keras API and exporting the trained model to the [CZModel format](https://github.com/zeiss-microscopy/OAD/blob/master/Machine_Learning/docs/ann_model_specification.md) to be ready for use within the [Intellesis](https://www.zeiss.de/mikroskopie/produkte/mikroskopsoftware/zen-intellesis-image-segmentation-by-deep-learning.html) infrastructure.
 
-* The trained model is rather simple (for demo purposed) and trained on a small test dataset.
-* **Therefore, this notebook is meant to be understood as a guide for exporting trained models**
-* **The notebook does not show how train a model correctly.**
-
+- The trained model is rather simple (for demo purposed) and trained on a small test dataset.
+- **Therefore, this notebook is meant to be understood as a guide for exporting trained models**
+- **The notebook does not show how train a model correctly.**
 
 ```python
 # required imports to train a simple TF2 + Keras model for segmentation and package it as CZMODEL
@@ -141,7 +138,6 @@ from czmodel.model_metadata import ModelMetadata, ModelSpec
 from czmodel import convert_from_model_spec, convert_from_json_spec
 ```
 
-
 ```python
 # Optional: suppress TF warnings
 import logging
@@ -150,14 +146,13 @@ print(tf.version.GIT_VERSION, tf.__version__)
 ```
 
     v2.0.0-69-g765ac8d16e 2.0.1
-    
 
 ### Training Pipeline
+
 This section describes a simple training procedure that creates a trained Keras model.
 
-* Therefore, it only represents the custom training procedure
-* Such procedure will vary from case to case and will contain more sophisticated ways to generate an optimized Keras model
-
+- Therefore, it only represents the custom training procedure
+- Such procedure will vary from case to case and will contain more sophisticated ways to generate an optimized Keras model
 
 ```python
 # Define the parameters for loading the training data
@@ -171,24 +166,23 @@ MASKS_FOLDER = 'data/nuclei_masks/'
 
 # define the number of channels
 # this means using a grayscale image with one channel only
-CHANNELS = 1 
+CHANNELS = 1
 ```
-
 
 ```python
 # Read the images
 # This part contains the logic to read pairs of images and label masks for training !
 
 # the the sample images
-sample_images = sorted([os.path.join(IMAGES_FOLDER, f) for f in os.listdir(IMAGES_FOLDER) 
+sample_images = sorted([os.path.join(IMAGES_FOLDER, f) for f in os.listdir(IMAGES_FOLDER)
                         if os.path.isfile(os.path.join(IMAGES_FOLDER, f))])
 
 # get the maks
-sample_masks = sorted([os.path.join(MASKS_FOLDER, f) for f in os.listdir(MASKS_FOLDER) 
+sample_masks = sorted([os.path.join(MASKS_FOLDER, f) for f in os.listdir(MASKS_FOLDER)
                        if os.path.isfile(os.path.join(MASKS_FOLDER, f))])
 
 # load images as numpy arrays
-images_loaded = np.asarray([tf.image.decode_image(tf.io.read_file(sample_path), channels=CHANNELS).numpy() 
+images_loaded = np.asarray([tf.image.decode_image(tf.io.read_file(sample_path), channels=CHANNELS).numpy()
                             for sample_path in sample_images])
 
 # load labels as numpy arrays
@@ -201,16 +195,16 @@ Remark: For details see [tf.one_hot](https://www.tensorflow.org/api_docs/python/
 `tf.one_hot creates X channels from X labels: 1 => [0.0, 1.0], 0 => [1.0, 0.0]`
 
 #### Define a simple model
+
 This part defines a simple Keras model with two convolutional layers and softmax activation at the output node. It is also possible to add pre.processing layers to the model here.
 
 In order to make the model robust to input scaling we standardize each image before training with the PerImageStandardization layer provided by the `czmodel` package.
-
 
 ```python
 # Define simple Keras model with two convolutional layers and softmax activation at the output node
 
 model = tf.keras.models.Sequential([PerImageStandardization(input_shape=(None, None, 1)),
-                                    tf.keras.layers.Conv2D(16, 3, padding='same'), 
+                                    tf.keras.layers.Conv2D(16, 3, padding='same'),
                                     tf.keras.layers.Conv2D(2, 1, activation='softmax', padding='same')])
 
 # compile the model
@@ -218,8 +212,8 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['categ
 ```
 
 #### Fit the model to the loaded data
-This part fits the model to the loaded data and evaluates it on the training data. In this test example we do not care about an actual evaluation of the model using validation and test datasets.
 
+This part fits the model to the loaded data and evaluates it on the training data. In this test example we do not care about an actual evaluation of the model using validation and test datasets.
 
 ```python
 # define number of training epochs
@@ -260,23 +254,24 @@ print("The model achieves {}% accuracy on the training data.".format(accuracy * 
     200/200 [==============================] - 1s 4ms/sample - loss: 0.4635 - categorical_accuracy: 0.8732
     200/1 [================================] - 0s 2ms/sample - loss: 0.4168 - categorical_accuracy: 0.8747
     The model achieves 87.46746778488159% accuracy on the training data.
-    
 
 ### Create a CZModel from the trained Keras model
+
 In this section we export the trained model to the CZModel format using the czmodel library and some additional meta data all possible parameter choices are described in the [ANN model specification](https://github.com/zeiss-microscopy/OAD/blob/master/Machine_Learning/docs/ann_model_specification.md).
 
 #### Define Meta-Data
+
 We first define the meta-data needed to run the model within the Intellesis infrastructure. The `czmodel` package offers a named tuple `ModelMetadata` that allows to either parse as JSON file as described in the [specification document](https://github.com/zeiss-microscopy/OAD/blob/master/Machine_Learning/docs/ann_model_specification.md) or to directly specify the parameters as shown below.
 
 #### Create a Model Specification Object
+
 The export functions provided by the `czmodel` package expect a `ModelSpec` tuple that features the Keras model to be exported and the corresponding model meda-data.
 
 Therefore, we wrap our model and the `model_metadata` instane into a `ModelSpec` object.
 
-
 ```python
 # Define the model metadata
-model_metadata = ModelMetadata.from_params(name='Simple_Nuclei_SegmentationModel', 
+model_metadata = ModelMetadata.from_params(name='Simple_Nuclei_SegmentationModel',
                                            color_handling='ConvertToMonochrome',
                                            pixel_type='Gray16',
                                            classes=["Background", "Nucleus"],
@@ -293,31 +288,31 @@ model_spec = ModelSpec(model=model, model_metadata=model_metadata)
 spatial_dims = 1024, 1024  # Optional: Define target spatial dimensions of the model for inference.
 ```
 
-#### Perform model export into *.czmodel file format
+#### Perform model export into \*.czmodel file format
 
-The `czmodel` library offers two functions to perform the actual export. 
+The `czmodel` library offers two functions to perform the actual export.
 
-* `convert_from_json_spec` allows to provide a JSON file with all information to convert a model in SavedModel format on disk to a `.czmodel` file that can be loaded with ZEN.
-* `convert_from_model_spec` expects a `ModelSpec` object, an output path and name and optionally target spatial dimensions for the expected input of the exported model. From this information it creates a `.czmodel` file containing the specified model.
+- `convert_from_json_spec` allows to provide a JSON file with all information to convert a model in SavedModel format on disk to a `.czmodel` file that can be loaded with ZEN.
+- `convert_from_model_spec` expects a `ModelSpec` object, an output path and name and optionally target spatial dimensions for the expected input of the exported model. From this information it creates a `.czmodel` file containing the specified model.
 
 ```python
-convert_from_model_spec(model_spec=model_spec, 
-                        output_path=folder_to_store_czmodel, 
-                        output_name=name_of_the_model, 
+convert_from_model_spec(model_spec=model_spec,
+                        output_path=folder_to_store_czmodel,
+                        output_name=name_of_the_model,
                         spatial_dims=spatial_dims)
 ```
 
-
 ```python
-convert_from_model_spec(model_spec=model_spec, 
-                        output_path='./czmodel_output', 
-                        output_name='simple_nuclei_segmodel', 
+convert_from_model_spec(model_spec=model_spec,
+                        output_path='./czmodel_output',
+                        output_name='simple_nuclei_segmodel',
                         spatial_dims=spatial_dims)
 
 # In the example above there will be a ""./czmodel_output/simple_nuclei_segmodel.czmodel" file saved on disk.
 ```
 
 ### Remarks
+
 The generated .czmodel file can be directly loaded into ZEN Intellesis to perform segmentation tasks with the trained model.
 If there is already a trained model in SavedModel format present on disk, it can also be converted by providing a meta-data JSON file as described in the [ANN Specification](https://github.com/zeiss-microscopy/OAD/blob/master/Machine_Learning/docs/ann_model_specification.md).
 
@@ -325,16 +320,15 @@ The following JSON document describes the same meta-data applied in the use case
 
 ```json
 {
-"BorderSize": 8,
-"ColorHandling": "ConvertToMonochrome",
-"PixelType": "Gray16",
-"Classes": ["Background", "Nuclei"],
-"ModelPath": "saved_tf2_model_output",
+  "BorderSize": 8,
+  "ColorHandling": "ConvertToMonochrome",
+  "PixelType": "Gray16",
+  "Classes": ["Background", "Nuclei"],
+  "ModelPath": "saved_tf2_model_output"
 }
 ```
 
 This information can be copied to a file e.g. in the current working directory `./model_spec.json` that also contains the trained model in SavedModel format e.g. generated by the following line:
-
 
 ```python
 # save the trained TF2.SavedModel as a folder structure
@@ -346,13 +340,11 @@ add_preprocessing_layers(model, layers=None, spatial_dims=spatial_dims).save('./
 
 The CZMODEL file (which is essentially a zip file) contains:
 
-* **model guid file**: modelid=e47aabbd-8269-439c-b142-78feec2ed2dd
-
+- **model guid file**: modelid=e47aabbd-8269-439c-b142-78feec2ed2dd
 
 * **model file**: modelid=e47aabbd-8269-439c-b142-78feec2ed2dd.model
 
-
-* **model description**: e47aabbd-8269-439c-b142-78feec2ed2dd.xml
+- **model description**: e47aabbd-8269-439c-b142-78feec2ed2dd.xml
 
 **Example of a model XML description**
 
@@ -383,18 +375,17 @@ Use the **`Select Model`** function to assign the trained model and the actual *
 
 <img src="../docs/demo_notebook_czmodel/mdpics/zen_import_model_IA2.png" >
 
-Now the trained model will be used to segment the image. The built-in ZEN Tiling Client automatically  to chucnk the image and deal with cmplex dimensions, like Use the **`Scenes`** etc.
+Now the trained model will be used to segment the image. The built-in ZEN Tiling Client automatically to chucnk the image and deal with cmplex dimensions, like Use the **`Scenes`** etc.
 
 Additional Porst-Processing option, incl. a Minimum Confidence Threshold can be applied to further refine the results.
 
 <img src="../docs/demo_notebook_czmodel/mdpics/zen_import_model_IA3.png" >
 
-Finally, the model can be loaded into ZEN by using the **Import** function on the **JSON file**. 
+Finally, the model can be loaded into ZEN by using the **Import** function on the **JSON file**.
 
 If the model is supposed to be provided to other parties it is usually easier to exchange .czmodel files instead of SavedModel directories with corresponding JSON meta-data files.
 
 The `czmodel` library also provides a `convert_from_json_spec` function that accepts the above mentioned JSON file and creates a CZModel:
-
 
 ```python
 # This is an additional way how to create a CZMODEL from a saved TF2 model on disk + JSON file.
@@ -407,17 +398,12 @@ convert_from_json_spec(model_spec_path='model_spec_dims_unset.json',
                        spatial_dims=spatial_dims)
 ```
 
-* the path to the saved model folder is defined in the JSON shown above
+- the path to the saved model folder is defined in the JSON shown above
 
-* **Remark: Due a TF 2.1 bug reloading a model does currently not work correctly.** See issue: https://github.com/tensorflow/tensorflow/issues/37158. This works with TF 2.0 and will be fixed again with TF 2.2. We currently do not have any information if there will be released a patch for TF 2.1 that fixes the issue there.
+- **Remark: Due a TF 2.1 bug reloading a model does currently not work correctly.** See issue: https://github.com/tensorflow/tensorflow/issues/37158. This works with TF 2.0 and will be fixed again with TF 2.2. We currently do not have any information if there will be released a patch for TF 2.1 that fixes the issue there.
 
 Use the commands below from a terminal to present the notebook as a slideshow.
 
-`
-jupyter nbconvert train_simple_TF2_segmentation_model.ipynb --to slides --post serve 
-    --SlidesExporter.reveal_theme=serif 
-    --SlidesExporter.reveal_scroll=True 
-    --SlidesExporter.reveal_transition=none
-`
+`jupyter nbconvert train_simple_TF2_segmentation_model.ipynb --to slides --post serve --SlidesExporter.reveal_theme=serif --SlidesExporter.reveal_scroll=True --SlidesExporter.reveal_transition=none`
 
 Or insatll the [RISE Extension](https://rise.readthedocs.io/en/stable/) to display a a slideshow directly from within the notebook
