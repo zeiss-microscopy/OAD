@@ -14,7 +14,7 @@ The [ZEN Intellesis](https://www.zeiss.com/microscopy/int/products/microscope-so
 
 ### czmodel – From TensorFlow to Intellesis
 
-Starting with ZEN Blue 3.2 it will be possible to run prediction with custom segmentation models implemented in TensorFlow 2. To be compatible with the Intellesis infrastructure, a TensorFlow/Keras model has to comply with our specification and some meta data must be provided that is described in detail in the official ANN model specification in the project description of our [czmodel package](https://pypi.org/project/czmodel/). This blog post introduces a python library called czmodel that offers a set of tools to easily convert a trained TensorFlow/Keras model to a CZMODEL file that can be directly loaded into ZEN Intellesis. Generating a CZMODEL file this way is just a matter of a few lines of code and can therefore easily be integrated into any training pipeline as well as custom Apeer modules.
+Starting with ZEN Blue 3.2 it will be possible to run prediction with custom segmentation models implemented in TensorFlow 2. To be compatible with the Intellesis infrastructure, a TensorFlow/Keras model has to comply with our specification and some meta data must be provided that is described in detail in the official ANN model specification in the project description of our **[czmodel package](https://pypi.org/project/czmodel/)**. This blog post introduces a python library called czmodel that offers a set of tools to easily convert a trained TensorFlow/Keras model to a CZMODEL file that can be directly loaded into ZEN Intellesis. Generating a CZMODEL file this way is just a matter of a few lines of code and can therefore easily be integrated into any training pipeline as well as custom Apeer modules.
 
 Assuming that there is some kind of training pipeline in place that generates trained TensorFlow/Keras models as instances of `tensorflow.keras.Model`. For a simple example of such a pipeline see the attached Jupyter notebook (ready to be executed) in our **[Microsoft Azure Jupyter Notebook](https://notebooks.azure.com/sebastian-soyer/projects/czmodel)**. Note that the notebook is not to be understood as a best practice guide for training ANN models but rather illustrates the use of the **[czmodel](https://pypi.org/project/czmodel/)** library with a very simple model generation process that will usually be more sophisticated.
 
@@ -117,7 +117,7 @@ warnings.simplefilter('ignore')
 
 ### Simple TF2 + Keras model for segmentation (to detect cell nuclei)
 
-This notebook the entire workflow of training an ANN with [TensorFlow 2](https://www.tensorflow.org/) using the keras API and exporting the trained model to the [CZModel format](https://github.com/zeiss-microscopy/OAD/blob/master/Machine_Learning/docs/ann_model_specification.md) to be ready for use within the [Intellesis](https://www.zeiss.de/mikroskopie/produkte/mikroskopsoftware/zen-intellesis-image-segmentation-by-deep-learning.html) infrastructure.
+This notebook the entire workflow of training an ANN with [TensorFlow 2](https://www.tensorflow.org/) using the Keras API and exporting the trained model to the [CZModel format](https://github.com/zeiss-microscopy/OAD/blob/master/Machine_Learning/docs/ann_model_specification.md) to be ready for use within the [Intellesis](https://www.zeiss.de/mikroskopie/produkte/mikroskopsoftware/zen-intellesis-image-segmentation-by-deep-learning.html) infrastructure.
 
 - The trained model is rather simple (for demo purposed) and trained on a small test dataset.
 - **Therefore, this notebook is meant to be understood as a guide for exporting trained models**
@@ -213,7 +213,7 @@ model.compile(optimizer='adam', loss='categorical_crossentropy', metrics=['categ
 
 #### Fit the model to the loaded data
 
-This part fits the model to the loaded data and evaluates it on the training data. In this test example we do not care about an actual evaluation of the model using validation and test datasets.
+This part fits the model to the loaded data and evaluates it on the training data. In this test example we do not care about an actual evaluation of the model using validation and test data sets.
 
 ```python
 # define number of training epochs
@@ -265,9 +265,9 @@ We first define the meta-data needed to run the model within the Intellesis infr
 
 #### Create a Model Specification Object
 
-The export functions provided by the `czmodel` package expect a `ModelSpec` tuple that features the Keras model to be exported and the corresponding model meda-data.
+The export functions provided by the `czmodel` package expect a `ModelSpec` tuple that features the Keras model to be exported and the corresponding model metadata.
 
-Therefore, we wrap our model and the `model_metadata` instane into a `ModelSpec` object.
+Therefore, we wrap our model and the `model_metadata` instance into a `ModelSpec` object.
 
 ```python
 # Define the model metadata
@@ -342,7 +342,7 @@ The CZMODEL file (which is essentially a zip file) contains:
 
 - **model guid file**: modelid=e47aabbd-8269-439c-b142-78feec2ed2dd
 
-* **model file**: modelid=e47aabbd-8269-439c-b142-78feec2ed2dd.model
+- **model file**: modelid=e47aabbd-8269-439c-b142-78feec2ed2dd.model
 
 - **model description**: e47aabbd-8269-439c-b142-78feec2ed2dd.xml
 
@@ -364,18 +364,18 @@ Use the IP-function **`Segmentation`** to segment an image using the imported CZ
 
 To use the trained model to analyse an image there are two main options
 
-1. directly create an Image Analysis Setting based on the model (no class hierachy, but very simple)
-2. assign the trained model to s specfic class inside a customized image analyssis setting (shown below)
+1. directly create an Image Analysis Setting based on the model (no class hierarchy, but very simple)
+2. assign the trained model to s specific class inside a customized image analysis setting (shown below)
 
 The crucial step (when not using option 1) is the Select the correct **`Class Segmentation Method`** inside the Image Analysis Wizard.
 
 <img src="../docs/demo_notebook_czmodel/mdpics/zen_import_model_IA1.png" >
 
-Use the **`Select Model`** function to assign the trained model and the actual **class** (from the trained model) of interes to assign the model / class to the respective object inside the image analysis setting.
+Use the **`Select Model`** function to assign the trained model and the actual **class** (from the trained model) of interest to assign the model / class to the respective object inside the image analysis setting.
 
 <img src="../docs/demo_notebook_czmodel/mdpics/zen_import_model_IA2.png" >
 
-Now the trained model will be used to segment the image. The built-in ZEN Tiling Client automatically to chucnk the image and deal with cmplex dimensions, like Use the **`Scenes`** etc.
+Now the trained model will be used to segment the image. The built-in ZEN Tiling Client automatically to chunk the image and deal with complex dimensions, like Use the **`Scenes`** etc.
 
 Additional Porst-Processing option, incl. a Minimum Confidence Threshold can be applied to further refine the results.
 
@@ -406,4 +406,4 @@ Use the commands below from a terminal to present the notebook as a slideshow.
 
 `jupyter nbconvert train_simple_TF2_segmentation_model.ipynb --to slides --post serve --SlidesExporter.reveal_theme=serif --SlidesExporter.reveal_scroll=True --SlidesExporter.reveal_transition=none`
 
-Or insatll the [RISE Extension](https://rise.readthedocs.io/en/stable/) to display a a slideshow directly from within the notebook
+Or install the [RISE Extension](https://rise.readthedocs.io/en/stable/) to display a a slideshow directly from within the notebook
