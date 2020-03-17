@@ -20,7 +20,7 @@ To be usable in the SegmentationService infrastructure a neural network model mu
 Executing an ANN model within the Intellesis infrastructure requires additional meta information that needs to be provided along with the serialized model specified by the [Core network structure and file format](#core-network-structure-and-file-format).
 Meta information for the ANN model must be provided in a separate JSON file adhering to [RFC8259](https://tools.ietf.org/html/rfc8259) that must contain the following attributes:
 
-- **BorderSize (Type: int)**: For Intellesis models this attribute defines the size of the border that needs to be added to an input image such that there are no border effects visible in the required area of the generated segmentation mask. For deep architectures this value can be infeasibly large so that the border size must be defined in a way that the border effects are “acceptable” in the ANN model creator’s opinion.
+- **BorderSize (Type: int)**: For Intellesis models this attribute defines the size of the border that needs to be added to an input image such that there are no border effects visible in the required area of the generated segmentation mask. For deep architectures this value can be infeasible large so that the border size must be defined in a way that the border effects are “acceptable” in the ANN model creator’s opinion.
 - **ColorHandling (Type: string)**: Specifies how color (RGB and RGBA) pixel data are converted to one or more channels of scalar pixel data. Possible values are:
   - ConvertToMonochrome (Converts color to gray scale)
   - SplitRgb (Keeps the pixel representation in RGB space)

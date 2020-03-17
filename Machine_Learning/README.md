@@ -42,15 +42,14 @@ The ZEN software platform has various built-in image segmentation function. One 
 
 - Pixel Classification by proven and established **Random Forrest Classifier**
 - Option to **download** or pre-trained DNNs for image segmentation (ZEN blue 3.1)
-- Option to **Import**  pre-trained DNNs for image segmentation(> ZEN blue 3.2)  
+- Option to **Import** pre-trained DNNs for image segmentation(> ZEN blue 3.2)
   - currently 3 pre-trained networks are available
-  - public model specification for import: [ANN Model Specification](docs/ann_model_specification.md)
-  - [czmodel package](https://pypi.org/project/czmodel/) to convert trained TF2 models into 'czmodel'
+  - [PyPi package czmodel & public ANN Model Specification](https://pypi.org/project/czmodel/) to convert trained TF2 models into 'czmodel'
 - Post processing by **Conditional Random Fields** (CRF)
 - Option to apply **confidence thresholds**
 - IP-Functions for creating masks and **scripting integration** for advanced automation
 - **Client-Server Architecture** (Zen Client - Python-Server) with using REST-API
-- client-side tiling & fusion functionality to deal with large **mult-idimensional datasets**
+- client-side tiling & fusion functionality to deal with large **multi-dimensional data sets**
 - support for Nvidia GPUs
 - universal automated build pipeline for **ZeissPython** established and integrated in official Zeiss installer
 
@@ -78,7 +77,7 @@ _This pre-trained network was trained with "best-effort" on the available traini
 
 ### Applications
 
-ZEN can basically read any image data format using the BioFormats Import and Intellesis can therefore be used to segment **any multi-dimensional dataset** that can be imported into the software. Shown below are imaged segmented using Intellesis.
+ZEN can basically read any image data format using the BioFormats Import and Intellesis can therefore be used to segment **any multi-dimensional data set** that can be imported into the software. Shown below are imaged segmented using Intellesis.
 
 ![ZEN Python](../Images/intellesis_ms_apps.png)
 
@@ -133,7 +132,7 @@ This simple script demonstrated the different possibilities to segment an image 
 
 ![ZEN Intellesis Segmentation Options](../Images/intellesis_segoptions.png)
 
-_(top left) - raw image data data (top right) segmented image (bottom left) segmeneted with confidence threshold and (bottom right) probability map image_
+_(top left) - raw image data data (top right) segmented image (bottom left) segmented with confidence threshold and (bottom right) probability map image_
 
 ### Intellesis_Segmentation_Tool.py
 
@@ -147,7 +146,7 @@ The Intellesis Segmentation Tool allows you to automate and simplify the followi
 
 - Select a model to segment images
 - Specify the desired output format for the mask image
-- Optional Confidence Threshold that can be appied to mask image
+- Optional Confidence Threshold that can be applied to mask image
 - Optional Extraction of a specific single class
 - Option to add the mask image to the original image
 - Selection of output folder with file extension filter
