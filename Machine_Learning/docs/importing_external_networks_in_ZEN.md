@@ -58,7 +58,7 @@ model_spec = ModelSpec(model=path, model_metadata=model_metadata)
 The `czmodel` library will automatically load the model from the given path before wrapping it into a CZMODEL.
 
 Convert a SavedModel on disk to CZMODEL by providing a JSON metadata file
-This functionality replicates the import functionality of ZEN Intellesis to load models via a [JSON specification](https://pypi.org/project/czmodel/). If models should e.g. be exchanged with third parties, it is usually easier to deliver CZMODEL files that contain everything needed to run the model within Intellesis than exchanging JSON files with the corresponding SavedModel folders that would, nonetheless, need to be bundled another way.
+This functionality replicates the import functionality of ZEN Intellesis to load models via a **[JSON specification](https://pypi.org/project/czmodel/)**. If models should e.g. be exchanged with third parties, it is usually easier to deliver CZMODEL files that contain everything needed to run the model within Intellesis than exchanging JSON files with the corresponding SavedModel folders that would, nonetheless, need to be bundled another way.
 The `czmodel` library provides a simple conversion routine that does all this in one line:
 
 ```python
@@ -94,9 +94,9 @@ The current implementation of `czmodel` heavily relies on the SavedModel import/
 
 ## Jupyter Notebook - Train a simple network to be imported in ZEN
 
-This section contains a Jupyter notebook demonstrating the usage of our [czmodel package](https://pypi.org/project/czmodel/) inside a simple training pipeline. The focus is on explaining the functionalities of the package, not to do proper training of a network.
+This section contains a Jupyter notebook demonstrating the usage of our **[czmodel package](https://pypi.org/project/czmodel/)** inside a simple training pipeline. The focus is on explaining the functionalities of the package, not to do proper training of a network.
 
-Link to Juypter notebook: [train_simple_TF2_segmentation_model.ipynb](../docs/demo_notebook_czmodel/train_simple_TF2_segmentation_model.ipynb)
+Link to Juypter notebook: **[train_simple_TF2_segmentation_model.ipynb](../docs/demo_notebook_czmodel/train_simple_TF2_segmentation_model.ipynb)**
 
 ## Train_simple_TF2_segmentation_model.ipynb
 
@@ -117,9 +117,9 @@ warnings.simplefilter('ignore')
 
 ### Simple TF2 + Keras model for segmentation (to detect cell nuclei)
 
-This notebook the entire workflow of training an ANN with [TensorFlow 2](https://www.tensorflow.org/) using the Keras API and exporting the trained model to the [CZModel format](https://github.com/zeiss-microscopy/OAD/blob/master/Machine_Learning/docs/ann_model_specification.md) to be ready for use within the [Intellesis](https://www.zeiss.de/mikroskopie/produkte/mikroskopsoftware/zen-intellesis-image-segmentation-by-deep-learning.html) infrastructure.
+This notebook the entire workflow of training an ANN with **[TensorFlow 2](https://www.tensorflow.org/)** using the Keras API and exporting the trained model to the **[czmodel format](https://pypi.org/project/czmodel/)** to be ready for use within the **[Intellesis](https://www.zeiss.com/microscopy/int/products/microscope-software/zen-intellesis-image-segmentation-by-deep-learning.html)** infrastructure.
 
-- The trained model is rather simple (for demo purposed) and trained on a small test dataset.
+- The trained model is rather simple (for demo purposed) and trained on a small test data set.
 - **Therefore, this notebook is meant to be understood as a guide for exporting trained models**
 - **The notebook does not show how train a model correctly.**
 
@@ -190,7 +190,7 @@ masks_loaded = np.asarray([tf.one_hot(tf.image.decode_image(tf.io.read_file(samp
                            for sample_path in sample_masks])
 ```
 
-Remark: For details see [tf.one_hot](https://www.tensorflow.org/api_docs/python/tf/one_hot)
+Remark: For details see **[tf.one_hot](https://www.tensorflow.org/api_docs/python/tf/one_hot)**
 
 `tf.one_hot creates X channels from X labels: 1 => [0.0, 1.0], 0 => [1.0, 0.0]`
 
@@ -257,11 +257,11 @@ print("The model achieves {}% accuracy on the training data.".format(accuracy * 
 
 ### Create a CZModel from the trained Keras model
 
-In this section we export the trained model to the CZModel format using the czmodel library and some additional meta data all possible parameter choices are described in the [ANN model specification](https://github.com/zeiss-microscopy/OAD/blob/master/Machine_Learning/docs/ann_model_specification.md).
+In this section we export the trained model to the CZModel format using the czmodel library and some additional meta data all possible parameter choices are described in the **[ANN model specification](https://pypi.org/project/czmodel/)**.
 
 #### Define Meta-Data
 
-We first define the meta-data needed to run the model within the Intellesis infrastructure. The `czmodel` package offers a named tuple `ModelMetadata` that allows to either parse as JSON file as described in the [specification document](https://github.com/zeiss-microscopy/OAD/blob/master/Machine_Learning/docs/ann_model_specification.md) or to directly specify the parameters as shown below.
+We first define the meta-data needed to run the model within the Intellesis infrastructure. The `czmodel` package offers a named tuple `ModelMetadata` that allows to either parse as JSON file as described or to directly specify the parameters as shown below.
 
 #### Create a Model Specification Object
 
@@ -314,7 +314,7 @@ convert_from_model_spec(model_spec=model_spec,
 ### Remarks
 
 The generated .czmodel file can be directly loaded into ZEN Intellesis to perform segmentation tasks with the trained model.
-If there is already a trained model in SavedModel format present on disk, it can also be converted by providing a meta-data JSON file as described in the [ANN Specification](https://github.com/zeiss-microscopy/OAD/blob/master/Machine_Learning/docs/ann_model_specification.md).
+If there is already a trained model in SavedModel format present on disk, it can also be converted by providing a meta-data JSON file as described in the **[ANN Specification](https://pypi.org/project/czmodel/)**.
 
 The following JSON document describes the same meta-data applied in the use case above:
 
