@@ -44,7 +44,7 @@ The ZEN software platform has various built-in image segmentation function. One 
 - Option to **download** or pre-trained DNNs for image segmentation (ZEN blue 3.1)
 - Option to **Import** pre-trained DNNs for image segmentation(> ZEN blue 3.2)
   - currently 3 pre-trained networks are available
-  - [PyPi package czmodel & public ANN Model Specification](https://pypi.org/project/czmodel/) to convert trained TF2 models into 'czmodel'
+  - [PyPi package czmodel & public ANN Model Specification](https://pypi.org/project/czmodel/) to convert trained TF2 models into ``czmodel`
 - Post processing by **Conditional Random Fields** (CRF)
 - Option to apply **confidence thresholds**
 - IP-Functions for creating masks and **scripting integration** for advanced automation
