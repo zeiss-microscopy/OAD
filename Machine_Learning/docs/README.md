@@ -404,6 +404,8 @@ convert_from_json_spec(model_spec_path='model_spec_dims_unset.json',
 
 Use the commands below from a terminal to present the notebook as a slideshow.
 
-`jupyter nbconvert train_simple_TF2_segmentation_model.ipynb --to slides --post serve --SlidesExporter.reveal_theme=serif --SlidesExporter.reveal_scroll=True --SlidesExporter.reveal_transition=none`
+```bash
+jupyter nbconvert train_simple_TF2_segmentation_model.ipynb --to slides --post serve --SlidesExporter.reveal_theme=serif --SlidesExporter.reveal_scroll=True --SlidesExporter.reveal_transition=none
+```
 
 Or install the [RISE Extension](https://rise.readthedocs.io/en/stable/) to display a a slideshow directly from within the notebook
