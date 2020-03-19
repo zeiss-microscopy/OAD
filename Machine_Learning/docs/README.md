@@ -149,7 +149,7 @@ print(tf.version.GIT_VERSION, tf.__version__)
 
 ### Training Pipeline
 
-This section describes a simple training procedure that creates a trained Keras model.
+This section describes a **simple** training procedure that creates a trained Keras model.
 
 - Therefore, it only represents the custom training procedure
 - Such procedure will vary from case to case and will contain more sophisticated ways to generate an optimized Keras model
