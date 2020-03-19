@@ -297,13 +297,6 @@ The `czmodel` library offers two functions to perform the actual export.
 
 ```python
 convert_from_model_spec(model_spec=model_spec,
-                        output_path=folder_to_store_czmodel,
-                        output_name=name_of_the_model,
-                        spatial_dims=spatial_dims)
-```
-
-```python
-convert_from_model_spec(model_spec=model_spec,
                         output_path='./czmodel_output',
                         output_name='simple_nuclei_segmodel',
                         spatial_dims=spatial_dims)
