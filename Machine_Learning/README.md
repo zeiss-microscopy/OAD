@@ -119,7 +119,7 @@ Starting with ZEN blue 3.2 and ZEN core 3.1 it will be possible to import extern
 - The **[PyPi package czmodel](https://pypi.org/project/czmodel/)** is used to concert and package the network into a CZMODEL file
 - the file is imported into ZEN using the normal **Import** mechanism
 
-For more details please se the **[Importing External Networks](../Machine_Learning/docs/importing_external_networks_in_ZEN.md)**
+For more details please se the **[Importing External Networks](../Machine_Learning/docs/README.md)**
 
 ### Downloading a model (ZEN blue 3.1 only)
 
