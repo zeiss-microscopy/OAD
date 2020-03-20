@@ -25,7 +25,7 @@ Since the concept of **Open Application Development** (OAD) is about connecting 
 
 ## Counting Cells - the Classical Example
 
-Those two short videos demonstrate how to do a simple cell count in ZEN blue abd display a heatmap. The [1st video](Count_Cells_Simple_Setup.gif) explains how to setup the IA analysis and the [2nd video](Run_Count_Cells_96wellplate_1GB_File_RealTime.gif) shows how is runs in Real Time (on a laptop).
+Those two short videos demonstrate how to do a simple cell count in ZEN blue and display a heatmap. The [1st video](Count_Cells_Simple_Setup.gif) explains how to setup the IA analysis and the [2nd video](Run_Count_Cells_96wellplate_1GB_File_RealTime.gif) shows how is runs in Real Time (on a laptop).
 
 Remark: The heatmap is shown at the end of the 2nd video.
 
