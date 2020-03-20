@@ -1,6 +1,6 @@
 ﻿#################################################################
 # File       : Intellesis_CampareTwoFeatureExtractors_UI.py
-# Version    : 0.1
+# Version    : 0.2
 # Author     : czmri, czsrh
 # Date       : 19.08.2019
 # Insitution : Carl Zeiss Microscopy GmbH
@@ -142,12 +142,12 @@ segmodels_list = []
 segdict = {}
 all_segmodels = ZenIntellesis.ListAvailableSegmentationModels()
 for sm in all_segmodels:
+    #print 'Model : ', sm
     segmodels_list.append(sm.Name)
     segdict[sm.Name] = sm
     
 # sort list for nicer dropdown menu later in dialog window
-#segmodels_list = sorted(segmodels_list, key=str.lower)
-#segmodels_list.sort(key=str.lower)
+segmodels_list.sort(key=str.lower)
 
 # get availbale feature extractors
 feature_extractor_list = []
@@ -176,6 +176,7 @@ SelectDialog.AddDropDown('fex1', 'Feature Extractor 1', feature_extractor_list, 
 SelectDialog.AddDropDown('pps1', 'Post-Processing 1', postprocessing_list, 0)
 SelectDialog.AddDropDown('fex2', 'Feature Extractor 2', feature_extractor_list, 1)
 SelectDialog.AddDropDown('pps2', 'Post-Processing 2', postprocessing_list, 0)
+SelectDialog.AddCheckbox('usesub', 'Use Substring', True)
 SelectDialog.AddTextBox('subsetstring', 'Define Subset String', 'T(1)')
 
 # show the window
@@ -191,6 +192,7 @@ feature_ex1 = result.GetValue('fex1')
 feature_ex2 = result.GetValue('fex2')
 postprocess1 = result.GetValue('pps1')
 postprocess2 = result.GetValue('pps2')
+use_subset = result.GetValue('usesub')
 subsetstring = result.GetValue('subsetstring')
 
 print 'Active Image        : ', imagename
@@ -199,7 +201,8 @@ print 'Feature Extractor 1 : ', feature_ex1
 print 'Post processing 1   : ', postprocess1
 print 'Feature Extractor 2 : ', feature_ex2
 print 'Post Processing 2   : ', postprocess2
-print 'Subset String       : ', subsetstring
+if use_subset:
+    print 'Subset String       : ', subsetstring
 
 # get the select image as an ZenImage
 image2seg = Zen.Application.Documents.GetByName(imagename)
@@ -226,12 +229,16 @@ def main():
     if model is None:
         model = ZenIntellesis.ImportModel(model_path)
     
-    # create the image subset
-    if subsetstring != '':
-        print 'Creating Subset ...'
-        input = create_subset(image2seg, subsetstring)
-    else:
-        print 'No Subset String specified. Using full image.'
+    if use_subset:
+        # create the image subset
+        if subsetstring != '':
+            print 'Creating Subset ...'
+            input = create_subset(image2seg, subsetstring)
+        else:
+            print 'No Subset String specified. Using full image.'
+            input = image2seg
+            
+    if not use_subset:
         input = image2seg
     
     segout = []
