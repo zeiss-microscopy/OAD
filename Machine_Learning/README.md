@@ -139,13 +139,21 @@ ZEN allows to import pre-trained neural networks and also provided some example 
 
 <p><img src="../Images/class_segmentation_cnn.png" title="Class Segmentation using pre-trained DNN" width="500"></p>
 
-### UNet Nucleus Detector (GrayScale)
+
+### Nucleus Detection using UNet
+
+The trained networks to detect cell nuclei are based on the well known UNet network architecture and are using a vgg16 encoder. The general architecture of the used network is shown below. The number below the network layers represent the actual number of feature maps (per layer) and the array size is shown above the layers.
+
+<p><img src="../Images/ZEN_UNet_vgg16_v1.png" title="UNet architecture for nucleus detetction network" ></p>
+
+
+#### UNet Nucleus Detector (GrayScale)
 
 UNet-based Deep Neural Network (TensorFlow 2) for cell nucleus detection (grayscale). This pre-trained network is suited for segmenting cell nuclei stained with a fluorescent dye. The output will be three different classes: nucleus, borders and background. It was trained with "best-effort" on the available training data and is provided "as is" without warranty of any kind
 
 **Download here: [UNet Nucleus Segmentation (GrayScale)](https://caprodstorage.blob.core.windows.net/320949c9-6d78-4a40-bd58-253d2a3e6d4f/nucleus_segmentation_grayscale_v2.czmodel?sv=2018-03-28&sr=b&sig=nQREzvO5673WA7M7EAUwa4FDgd%2BMKn96XS%2FrxFl%2BF04%3D&se=9999-12-31T23%3A59%3A59Z&sp=r)**
 
-### UNet Nucleus Detector (RGB)
+#### UNet Nucleus Detector (RGB)
 
 UNet-based Deep Neural Network (TensorFlow 2) for cell nucleus detection (RGB). This pre-trained network is suited for segmenting cell nuclei stained with a fluorescent dye. The output will be three different classes: nucleus, borders and background. It was trained with "best-effort" on the available training data and is provided "as is" without warranty of any kind
 
