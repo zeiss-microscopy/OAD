@@ -142,7 +142,7 @@ ZEN allows to import pre-trained neural networks and also provided some example 
 
 ### Nucleus Detection using UNet
 
-The trained networks to detect cell nuclei are based on the well known UNet network architecture and are using a vgg16 encoder. The general architecture of the used network is shown below. The number below the network layers represent the actual number of feature maps (per layer) and the array size is shown above the layers.
+The trained networks for cell nucleus detection (available for download) are based on the well known UNet network architecture and are using a vgg16 encoder. The general structure is shown below. The numbers below the network layers represent the actual number of feature maps (per layer) and the array size is shown above the layers.
 
 <p><img src="../Images/ZEN_UNet_vgg16_v1.png" title="UNet architecture for nucleus detetction network" ></p>
 
