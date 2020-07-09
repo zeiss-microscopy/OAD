@@ -11,10 +11,12 @@
 
 For a growing number of applications, it will be crucial to acquire data in a smart way. One way to achieve this goal is to build a smart microscope, which essentially means creating smart software workflows to control the hardware based on image analysis results.
 
+**Starting with ZEN blue 3.2 it will also be possible to train you own neural network for segmentation, [import it in ZEN](https://github.com/zeiss-microscopy/OAD/tree/39dbefaaaf4ede1492a4f9c8c12ea56f9b90cb0e/Machine_Learning#importing-externally-trained-networks-into-zen) and use it integrated into the Guided Acquisition workflow.**
+
 #### Idea or Task:
 
-* Scan or inspect a large area (or a long period of time).
-* Detect an "interesting" object.
+* Scan or inspect a large area.
+* Detect an "interesting" object or region using automated Image Analysis incl. Machine-Learning Segmentation.
 * Acquire detailed data for every event.
 * Automate the workflow to minimize user bias.
 
@@ -48,7 +50,24 @@ The goal of this tutorial is to create an automated workflow that can be used to
 
 ***
 
-![Workflow - Guided Acquistion User Interface](../Images/Guided_Acquisition_Dialog_74.png)*Guided Acquisition User Interface created by python scripting*
+#### UI for Guided Acquisition using the python script (OAD)
+
+* full flexibility
+* allows extending and customization for the advanced users
+
+<p><img src="../Images/Guided_Acquisition_Dialog_74.png" title="Workflow - Actionable Information using Pythonn Scripting (OAD)" width="500"></p>
+
+***
+
+#### UI for Guided Acquisition (ZEN blue module)
+
+* easy-to-use, no need for scripting knowledge
+* simple adding of post-processing function for the overview image
+* built-in checks if the Image Analysis contains the required parameters
+* easy handling of wellplate datasets
+
+<p><img src="../Images/Guided_Acquisition_ZEN32_gui.png" title="Workflow - Actionable Information using Pythonn Scripting (OAD)" width="500"></p>
+
 
 ***
 

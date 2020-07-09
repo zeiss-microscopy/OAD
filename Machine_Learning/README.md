@@ -118,6 +118,7 @@ Starting with ZEN blue 3.2 and ZEN core 3.1 it will be possible to import extern
 - the ZEISS Custom-Solution Team, a researcher or any 3rd party trains its specific neural network
 - The **[PyPi package czmodel](https://pypi.org/project/czmodel/)** is used to concert and package the network into a CZMODEL file
 - the file is imported into ZEN using the normal **Import** mechanism
+- from here on the network can be used inside the ZEN Image Analysis and Processing Function and also inside **[Guided Acquisition Workflows](https://github.com/zeiss-microscopy/OAD/tree/39dbefaaaf4ede1492a4f9c8c12ea56f9b90cb0e/Guided_Acquisition)**
 
 For more details please se the **[Importing External Networks](../Machine_Learning/docs/README.md)**
 

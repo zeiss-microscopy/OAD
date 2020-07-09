@@ -1,4 +1,4 @@
-﻿#################################################################
+#################################################################
 # File       : SaveImage_with_Barcode.py
 # Version    : 0.1
 # Author     : czsrh
@@ -16,7 +16,7 @@ Zen.Application.MacroEditor.ClearMessages()
 
 version = 0.1
 
-# set to true when reloading the image (afetr renaming) is desired
+# set to true when reloading the image (after renaming) is desired
 reload = True
 
 from System.IO import Directory, Path, File, FileInfo, DirectoryInfo
