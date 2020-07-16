@@ -1,8 +1,8 @@
 ﻿#################################################################
 # File        : Test_ApeerOnsite.py
-# Version     : 0.2
+# Version     : 0.3
 # Author      : czsrh
-# Date        : 22.01.2020
+# Date        : 16.07.2020
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # Copyright(c) 2020 Carl Zeiss AG, Germany. All Rights Reserved.
@@ -20,12 +20,12 @@ local_modules = ZenApeer.Onsite.ListLocalModules()
 for local_module in local_modules:
 
     # show the name of the module as a string
-    print 'Model Name : ', local_module.ModuleName
+    print('Model Name : ', local_module.ModuleName)
 
     # return string containing all available module versions as a string
     # Draft = 0
-    print 'Model Version : ', local_module.AvailableVersions
-    print '------------------------------------------------------------------'
+    print('Model Version : ', local_module.AvailableVersions)
+    print('------------------------------------------------------------------')
 
 # define a module name and version
 module_name = 'Particle-Analyzer-Cleanliness'
@@ -36,28 +36,28 @@ module_version = 4
 # get the module parameters for the specified module
 params = ZenApeer.Onsite.GetSampleModuleParameters(module_name, module_version)
 
-print '\n'
-print '------ Inputs ------'
+print('\n')
+print('------ Inputs ------')
 for ip in params.Inputs.GetEnumerator():
-    print ip.Key, ' : ', ip.Value
+    print(ip.Key, ' : ', ip.Value)
 
-print '\n'
-print '------ Parameters ------'
+print('\n')
+print('------ Parameters ------')
 for p in params.Parameters.GetEnumerator():
-    print p.Key, ' : ', p.Value
+    print(p.Key, ' : ', p.Value)
 
-print '\n'
-print '------ Outputs ------'
+print('\n')
+print('------ Outputs ------')
 for op in params.Outputs.GetEnumerator():
-    print op.Key, ' : ', op.Value
+    print(op.Key, ' : ', op.Value)
 
 # get the complete module description as a string
 module_description = ZenApeer.Onsite.GetModuleDescription(module_name, module_version)
 
-print '\n'
-print '------ Module Description ------'
-print module_description
-print '--------------------------------'
+print('\n')
+print('------ Module Description ------')
+print(module_description)
+print('--------------------------------')
 
 # define the input parameters
 input_image = {'particle_image': r'C:\Apeer_onsite_results\particle_TC\Filter_with_Particles_small.czi'}
@@ -84,20 +84,20 @@ out = ZenApeer.Onsite.RunModule(module_name,
                                 savepath)
 
 # show output results storage locations
-print '\n'
-print '------ Results Locations ------'
+print('\n')
+print('------ Results Locations ------')
 for o in out.Outputs.GetEnumerator():
-    print o.Key, ' : ', o.Value
+    print(o.Key, ' : ', o.Value)
 
 # show filename of logfile
-print '\n'
-print '------ Location of Logfile ------'
-print out.LogFile
+print('\n')
+print('------ Location of Logfile ------')
+print(out.LogFile)
 
 # show state of module completion
-print '\n'
-print '------ State of Module Completion ------'
-print out.State
+print('\n')
+print('------ State of Module Completion ------')
+print(out.State)
 
 
 # run the local APEER module with using keywords
@@ -108,17 +108,17 @@ runoutputs, status, log = ZenApeer.Onsite.RunModule(moduleName=module_name,
                                                     storagePath=savepath)
 
 # show output results storage locations
-print '\n'
-print '--- Results Locations ---'
+print('\n')
+print('--- Results Locations ---')
 for o in runoutputs.GetEnumerator():
-    print o.Key, ' : ', o.Value
+    print(o.Key, ' : ', o.Value)
 
 # show filename of logfile
-print '\n'
-print '--- Location of Logfile ---'
-print log
+print('\n')
+print('--- Location of Logfile ---')
+print(log)
 
 # show state of module completion
-print '\n'
-print '--- State of Module Completion ---'
-print status
+print('\n')
+print('--- State of Module Completion ---')
+print(status)
