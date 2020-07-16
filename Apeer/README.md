@@ -14,7 +14,7 @@ Inside ZEN the module specification is used to render the UI of an APEER module 
 
 The general scheme of this ZEN APEER integration is visualized below
 
-<p><img src="../Images/Apeer_Onsite_Local.png" title="ZEN APEER (on-site) Docker Module Integration" width="800"></p>
+<p><img src="../Images/Apeer_Onsite_Local.png" title="ZEN APEER (on-site) Docker Module Integration" width="1000"></p>
 
 ## Scripting Integration
 
