@@ -1,9 +1,9 @@
 ﻿#################################################################
 # File       : SaveSingleTiles_to_Folder.py
-# Version    : 1.0
+# Version    : 1.1
 # Author     : czsrh
-# Date       : 06.12.2018
-# Institution : Carl Zeiss Microscopy GmbH
+# Date       : 16.07.2020
+# Insitution : Carl Zeiss Microscopy GmbH
 #
 # Copyright(c) 2019 Carl Zeiss AG, Germany. All Rights Reserved.
 #
@@ -19,7 +19,30 @@ using the selected format.
 
 from System.IO import Path, File, Directory, FileInfo
 
-version = 1.0
+version = 1.1
+
+
+def addzeros(number):
+    """Convert a number into a string and add leading zeros.
+    Typically used to construct filenames with equal lengths.
+
+    :param number: the number
+    :type number: int
+    :return: zerostring - string with leading zeros
+    :rtype: str
+    """
+
+    if number < 10:
+        zerostring = '0000' + str(number)
+    if number >= 10 and number < 100:
+        zerostring = '000' + str(number)
+    if number >= 100 and number < 1000:
+        zerostring = '00' + str(number)
+    if number >= 1000 and number < 10000:
+        zerostring = '0' + str(number)
+
+    return zerostring
+
 
 CZIfiles_short = []
 
@@ -57,22 +80,41 @@ ft = result.GetValue('saveformat')
 cziname = result.GetValue('czi')
 SavePath = result.GetValue('savefolder')
 print('Saving CZI : ', cziname, ' as ', ft)
-
 # get the selected image
-img = Zen.Application.Documents.GetByName(cziname)
+img = Zen.Application.Documents.GetByName(Path.GetFileNameWithoutExtension(cziname))
 nameParent = img.Name
 
-# get number of tiles
-nTiles = img.Bounds.SizeM
+# get number of tiles and scenes
+try:
+    nScenes = img.Bounds.SizeS
+except:
+    nScenes = 1
+
+try:
+    nTiles = img.Bounds.SizeM
+except:
+    nTiles = 1
+
+print('Number of Scenes detected: ', nScenes)
 print('Number of Tiles detected: ', nTiles)
 
 # address each tile image in Zen without opening it
-for m in range(1, nTiles + 1):
-    imgTile = img.CreateSubImage('M(' + str(m) + ')')
-    imgTile.Name = nameParent[:-4] + '-T' + str(m) + ft[1:]
-    print(imgTile.Name)
-    # save current tile with the specified format
-    Zen.Application.Save(imgTile, Path.Combine(SavePath, imgTile.Name), False)
-    imgTile.Close()
+for s in range(1, nScenes + 1):
+    for m in range(1, nTiles + 1):
+
+        # get the strings with leading zeros
+        s_str = addzeros(s)
+        m_str = addzeros(m)
+
+        # create the subimage
+        imgTile = img.CreateSubImage('S(' + s_str + ')|M(' + m_str + ')')
+
+        # create a useful name
+        imgTile.Name = nameParent[:-4] + '_S' + s_str + '_T' + m_str + ft[1:]
+        print(imgTile.Name)
+
+        # save current tile with the specified format
+        Zen.Application.Save(imgTile, Path.Combine(SavePath, imgTile.Name), False)
+        imgTile.Close()
 
 print('All Tiles saved.')
