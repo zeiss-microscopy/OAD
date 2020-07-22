@@ -55,9 +55,10 @@ The goal of this tutorial is to create an automated workflow that can be used to
 * full flexibility
 * allows extending and customization for the advanced users
 
+
+
 <p><img src="../Images/Guided_Acquisition_Dialog_74.png" title="Workflow - Actionable Information using Pythonn Scripting (OAD)" width="500"></p>
 
-***
 
 #### UI for Guided Acquisition (ZEN blue module)
 
@@ -77,6 +78,13 @@ The goal of this tutorial is to create an automated workflow that can be used to
 ### Detailed WorkFlow Diagram
 
 ![Workflow - Guided Acquisition diagram](../Images/GuidedAcq_Script_Diagram_v2.png)*General Worklow diagram for Guided Acquisition*
+
+***
+
+### Integration with external Image Analysis
+
+* in combination with **[APEER (on-site)](https://github.com/zeiss-microscopy/OAD/tree/a822058bc124c5181f792abd2b383a8e72d6ae0f/Apeer)** it is possible to integrate your own image analysis packaged into Docker containers
+* an advanced option would be to start or call **[external application directly from within ZEN python scripts](https://github.com/zeiss-microscopy/OAD/tree/a822058bc124c5181f792abd2b383a8e72d6ae0f/Scripts/Start_External_Software)** as explained here
 
 ***
 
