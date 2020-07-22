@@ -68,7 +68,6 @@ The goal of this tutorial is to create an automated workflow that can be used to
 
 <p><img src="../Images/Guided_Acquisition_ZEN32_gui.png" title="Workflow - Actionable Information using Pythonn Scripting (OAD)" width="500"></p>
 
-
 ***
 
 ![Workflow - Actionable Information using OAD](../Images/Guided_Acquisition_PPTX_Slide.png)*Guided Acquisition using scripting*
@@ -81,7 +80,9 @@ The goal of this tutorial is to create an automated workflow that can be used to
 
 ***
 
-### Application Example - Mitosis Detection using camera and LSM
+### Application Examples
+
+#### Mitosis Detection using camera and LSM
 
 An especially interesting option is to combine the power of a camera-based overview scan with the optional sectioning capabilities of an LSM. Such an workflow can be easily configured in ZEN Blue by setting up the respective experiment for the overview scan with camera detection using a low magnification and the LSM-based detail scan, e.g. Z-Stack, using a high NA objective.
 
@@ -99,9 +100,19 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
 
 ![Side-by-Side view of overview in CWS and detailed image](../Images/GA_Mitosis_CWS_Detail_ZEN.png)*Side-by-Side view of overview in CWS and detailed image*
 
+#### More Application Examples
+
+##### Guided Acquisition - Scan Brain Slides
+
+<p><img src="../Images/GA_CD7_BrainsSlide_1.png" title="Guided Acquisition - Scan Brain Slides" width="800"></p>
+
+##### Guided Acquisition - Scan Drosophila Embryos
+
+<p><img src="../Images/GA_CD7_Embryo_Airyscan_1.png" title="Guided Acquisition - Scan Drosophila Embryos" width="800"></p>
+
 ***
 
-### Guided Acquistion Software Module in ZEN Blue
+### Guided Acquisition Software Module in ZEN Blue
 
 Starting with ZEN Blue 3.1 there will the option to purchase dedicated software module for Guided Acquisition, which has a streamlined UI interface and other additional functionality, like save settings.
 
