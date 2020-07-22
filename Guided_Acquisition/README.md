@@ -104,11 +104,11 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
 
 ##### Guided Acquisition - Scan Brain Slides
 
-<p><img src="../Images/GA_CD7_BrainsSlide_1.png" title="Guided Acquisition - Scan Brain Slides" width="800"></p>
+<p><img src="../Images/GA_CD7_BrainsSlide_1.png" title="Guided Acquisition - Scan Brain Slides" width="1200"></p>
 
 ##### Guided Acquisition - Scan Drosophila Embryos
 
-<p><img src="../Images/GA_CD7_Embryo_Airyscan_1.png" title="Guided Acquisition - Scan Drosophila Embryos" width="800"></p>
+<p><img src="../Images/GA_CD7_Embryo_Airyscan_1.png" title="Guided Acquisition - Scan Drosophila Embryos" width="1200"></p>
 
 ***
 
