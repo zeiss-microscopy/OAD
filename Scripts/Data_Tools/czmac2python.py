@@ -5,6 +5,11 @@
 # Date       : 27.07.2020
 # Institution : Carl Zeiss Microscopy GmbH
 #
+# ATTENTION:
+#
+# This script should be run as an external python script !!!
+# Do not run this from with ZEN !!!
+#
 # Copyright(c) 2020 Carl Zeiss AG, Germany. All Rights Reserved.
 #
 # Permission is granted to use, modify and distribute this code,
