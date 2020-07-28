@@ -1,18 +1,25 @@
 # @LogService log
 
 #################################################################
-# File        : fijipytools.py
-# Version     : 1.4
-# Author      : czsrh
-# Date        : 18.02.2020
+# File       : fijipytools.py
+# Version    : 1.6.1
+# Author     : czsrh
+# Date       : 27.07.2020
 # Institution : Carl Zeiss Microscopy GmbH
 #
-# Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+# ATTENTION: Use at your own risk.
+#
+# Copyright(c) 2020 Carl Zeiss AG, Germany. All Rights Reserved.
+#
+# Permission is granted to use, modify and distribute this code,
+# as long as this copyright notice remains part of the code.
 #################################################################
+
 
 import os
 import json
-from java.lang import Double
+from java.lang import Double, Integer
+from java.awt import GraphicsEnvironment
 from ij import IJ, ImagePlus, ImageStack, Prefs
 from ij.process import ImageProcessor, ImageConverter
 from ij.process import StackStatistics
@@ -142,7 +149,7 @@ class ImportTools:
         if metainfo['Extension'] != '.czi':
 
             # read the imagefile using the correct method
-            if metainfo['Extension'] == ('.jpg' or '.JPG' or '.jpeg' or '.JPEG'):
+            if metainfo['Extension'].lower() == ('.jpg' or '.jpeg'):
                 # use dedicated method for jpg
                 imp, metainfo = ImageTools.openjpg(imagefile, method='IJ')
             else:
@@ -218,7 +225,6 @@ class ImportTools:
 
             # read image data using the specified pyramid level
             imp, slices, width, height, pylevel = ImageTools.getImageSeries(imps, series=readpylevel)
-
             metainfo['Output Slices'] = slices
             metainfo['Output SizeX'] = width
             metainfo['Output SizeY'] = height
@@ -354,8 +360,8 @@ class ExportTools:
             if not replace:
                 return None
 
-        ## general safety check
-        #if not extension:
+        # general safety check
+        # if not extension:
         #    extension = 'ome.tiff'
 
         # check extension
@@ -385,7 +391,7 @@ class ExportTools:
 
         else:
             extension = 'ome.tiff'
-            print "save as OME-TIFF: " # savepath
+            print("save as OME-TIFF: ")  # savepath
             pstr = ExportTools.bfexporter(imp, savepath, useLOCI=True)
 
         return savepath
@@ -397,14 +403,14 @@ class ExportTools:
         """
         titleext = imp.getTitle()
         title = os.path.splitext(titleext)[0]
-        
+
         if mode == 'TZC':
-            
+
             for t in range(metainfo['SizeT']):
                 for z in range(metainfo['SizeZ']):
                     for c in range(metainfo['SizeC']):
                         # set position - channel, slice, frame
-                        imp.setPosition(c+1, z+1, t+1)
+                        imp.setPosition(c + 1, z + 1, t + 1)
                         numberedtitle = title + "_t" + IJ.pad(t, 2) + "_z" + IJ.pad(z, 4) + "_c" + IJ.pad(c, 4) + "." + format
                         stackindex = imp.getStackIndex(c + 1, z + 1, t + 1)
                         aframe = ImagePlus(numberedtitle, imp.getStack().getProcessor(stackindex))
@@ -416,9 +422,9 @@ class ExportTools:
             t = 0
             for z in range(metainfo['SizeZ']):
                 # set position - channel, slice, frame
-                imp.setPosition(c+1, z+1, t+1)
+                imp.setPosition(c + 1, z + 1, t + 1)
                 znumber = MiscTools.addzeros(z)
-                numberedtitle = title +  "_z" + znumber + "." + format
+                numberedtitle = title + "_z" + znumber + "." + format
                 stackindex = imp.getStackIndex(c + 1, z + 1, t + 1)
                 aframe = ImagePlus(numberedtitle, imp.getStack().getProcessor(stackindex))
                 outputpath = os.path.join(savepath, numberedtitle)
@@ -480,12 +486,13 @@ class FilterTools:
         stack = imp.getStack()  # get the stack within the ImagePlus
         nslices = stack.getSize()  # get the number of slices
 
-        for index in range(1, nslices + 1):
-            ip = stack.getProcessor(index)
-
-            # apply filter based on filtertype
-            # if filtertype == 'MEDIAN':
-            filter.rank(ip, radius, filterdict[filtertype])
+        # apply filter based on filtertype
+        if filtertype in filterdict:
+            for index in range(1, nslices + 1):
+                ip = stack.getProcessor(index)
+                filter.rank(ip, radius, filterdict[filtertype])
+        else:
+            print("Argument 'filtertype': {filtertype} not found")
 
         return imp
 
@@ -504,7 +511,7 @@ class FilterTools:
         filterdict['MEAN'] = f3d.MEAN
         filterdict['MIN'] = f3d.MIN
         filterdict['MAX'] = f3d.MAX
-        #filterdict['MAXLOCAL'] = f3d.MAXLOCAL # did not work
+        # filterdict['MAXLOCAL'] = f3d.MAXLOCAL # did not work
         filterdict['MEDIAN'] = f3d.MEDIAN
         filterdict['VAR'] = f3d.VAR
 
@@ -514,8 +521,8 @@ class FilterTools:
                               radiusx,
                               radiusy,
                               radiusz)
-        
-        imp = ImagePlus('Filtered 3D', newstack) 
+
+        imp = ImagePlus('Filtered 3D', newstack)
 
         return imp
 
@@ -531,7 +538,7 @@ class BinaryTools:
             nslices = stack.getSize()  # get the number of slices
             for index in range(1, nslices + 1):
                 ip = stack.getProcessor(index)
-                #Reconstruction.fillHoles(imp.getProcessor())
+                # Reconstruction.fillHoles(imp.getProcessor())
                 Reconstruction.fillHoles(ip)
 
         if is3d:
@@ -574,13 +581,13 @@ class WaterShedTools:
 
     @staticmethod
     def edm_watershed(imp):
-        
+
         stack = imp.getStack()  # get the stack within the ImagePlus
         nslices = stack.getSize()  # get the number of slices
         for index in range(1, nslices + 1):
             # get the image processor
             ip = stack.getProcessor(index)
-            
+
             if not ip.isBinary():
                 ip = BinaryImages.binarize(ip)
             print('Apply Watershed to Binary image ...')
@@ -589,7 +596,7 @@ class WaterShedTools:
             edm = EDM()
             edm.setup("watershed", None)
             edm.run(ip)
-            
+
         return imp
 
     @staticmethod
@@ -640,14 +647,14 @@ class ImageTools:
 class ThresholdTools:
 
     @staticmethod
-    def apply_autothreshold(hist, method='Otsu'):
-
+    def apply_autothreshold(hist, method='Otsu'):    
+        """
         if method == 'Otsu':
             lowthresh = Auto_Threshold.Otsu(hist)
         if method == 'Triangle':
             lowthresh = Auto_Threshold.Triangle(hist)
-        if method == 'IJDefault':
-            lowthresh = Auto_Threshold.IJDefault(hist)
+        if method == 'Default':
+            lowthresh = Auto_Threshold.Default(hist)
         if method == 'Huang':
             lowthresh = Auto_Threshold.Huang(hist)
         if method == 'MaxEntropy':
@@ -662,19 +669,38 @@ class ThresholdTools:
             lowthresh = Auto_Threshold.Li(hist)
 
         return lowthresh
+        """
+
+        method_dict = {'Otsu': Auto_Threshold.Otsu,
+                       'Triangle': Auto_Threshold.Triangle,
+                       'Default': Auto_Threshold.Default,
+                       'Huang': Auto_Threshold.Huang,
+                       'MaxEntropy': Auto_Threshold.MaxEntropy,
+                       'Mean': Auto_Threshold.Mean,
+                       'Shanbhag': Auto_Threshold.Shanbhag,
+                       'Yen': Auto_Threshold.Yen,
+                       'Li': Auto_Threshold.Li
+                       }
+
+        if method in method_dict:
+            method_func = method_dict[method]
+            lowthresh = method_func(hist)
+            return lowthresh
+        else:
+            print("Method passed not found: {method}")
+            return None
 
     @staticmethod
     # helper function to apply threshold to whole stack
     # using one corrected value for the stack
-    def apply_threshold_stack_corr(imp, lowth_corr, method='Otsu'):
-        
+    def apply_threshold_stack_corr(imp, lowth_corr):
+
         # get the stacks
         stack = imp.getStack()
         nslices = stack.getSize()
 
         for index in range(1, nslices + 1):
             ip = stack.getProcessor(index)
-            #print('Apply corrected TH: ' + str(lowth_corr))
             ip.threshold(lowth_corr)
 
         # convert to 8bit without rescaling
@@ -692,21 +718,20 @@ class ThresholdTools:
 
         # one threshold value for the whole stack with correction
         if stackopt:
-            
+
             # create argument string for the IJ.setAutoThreshold
             thcmd = method + ' ' + background_threshold + ' stack'
-            
+
             # set threshold and get the lower threshold value
             IJ.setAutoThreshold(imp, thcmd)
             ip = imp.getProcessor()
-            
+
             # get the threshold value and correct it
             lowth = ip.getMinThreshold()
             lowth_corr = int(round(lowth * corrf, 0))
-            
+
             # process stack with corrected threshold value
-            imp = ThresholdTools.apply_threshold_stack_corr(imp, lowth_corr,
-                                                            method=method)
+            imp = ThresholdTools.apply_threshold_stack_corr(imp, lowth_corr)
 
         # threshold slice-by-slice with correction
         if not stackopt:
@@ -721,7 +746,7 @@ class ThresholdTools:
 
                 ip = stack.getProcessor(index)
 
-                # get the histogramm
+                # get the histogram
                 hist = ip.getHistogram()
 
                 # get the threshold value
@@ -748,6 +773,10 @@ class AnalyzeTools:
                          addROIManager=False,
                          headless=False,
                          exclude=True):
+
+        if GraphicsEnvironment.isHeadless():
+            print('Headless Mode detected. Do not use ROI Manager.')
+            addROIManager = False
 
         if addROIManager:
 
@@ -791,6 +820,11 @@ class AnalyzeTools:
             + PA.LABELS \
             + PA.AREA \
             + PA.RECT \
+            + PA.PERIMETER \
+            + PA.SLICE \
+            + PA.SHAPE_DESCRIPTORS \
+            + PA.CENTER_OF_MASS \
+            + PA.CENTROID
 
         results = ResultsTable()
         p = PA(options, measurements, results, minsize, maxsize, mincirc, maxcirc)
@@ -806,7 +840,6 @@ class AnalyzeTools:
             particlestack.addSlice(mmap.getProcessor())
 
         return particlestack, results
-
 
     @staticmethod
     def create_resultfilename(filename, suffix='_Results', extension='txt'):
@@ -909,7 +942,7 @@ class MiscTools:
                + " pixel_width=" + str(scaleX)
                + " pixel_height=" + str(scaleY)
                + " voxel_depth=" + str(scaleZ))
-        
+
         # create new Calibration object
         newCal = Calibration()
 
@@ -924,8 +957,8 @@ class MiscTools:
         newCal.setZUnit(unit)
 
         # apply the new calibration
-        imp.setCalibration(newCal)     
-        
+        imp.setCalibration(newCal)
+
         return imp
 
     @staticmethod
@@ -963,7 +996,7 @@ class MiscTools:
         nch = imp.getNChannels()
         print('Number of Channels: ' + str(nch))
         if chindex > nch:
-        #if nch > 1:
+            # if nch > 1:
             print('Fallback : Using Channel 1')
             chindex = 1
             imps = ChannelSplitter.split(imp)
@@ -992,30 +1025,30 @@ class MiscTools:
             zerostring = '0' + str(number)
 
         return zerostring
-    
+
     @staticmethod
     def createdir(path):
         try:
             os.mkdir(path)
         except OSError:
-            print ("Creation of the directory %s failed" % path)
+            print("Creation of the directory %s failed" % path)
             dir_created = False
         else:
-            print ("Successfully created the directory %s " % path)
+            print("Successfully created the directory %s " % path)
             dir_created = True
 
         return dir_created
-        
+
     @staticmethod
     def getfiles(path, filter='ome.tiff'):
-    
+
         files = []
         # r=root, d=directories, f = files
         for r, d, f in os.walk(path):
             for file in f:
                 if filter in file:
                     files.append(os.path.join(r, file))
-                
+
         return files
 
     @staticmethod
@@ -1046,7 +1079,6 @@ class MiscTools:
         imp = IJ.getImage()
 
         return imp
-
 
 
 class JSONTools:
