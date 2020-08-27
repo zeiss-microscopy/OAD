@@ -1,4 +1,7 @@
-
+- [Open Application Development (OAD)](#open-application-development-oad)
+  - [OAD - General Concept and Key Features](#oad---general-concept-and-key-features)
+  - [Links and References](#links-and-references)
+- [Disclaimer](#disclaimer)
 
 # Open Application Development (OAD)
 
@@ -8,65 +11,64 @@ In order to fulfill the request for automation the ZEN Blue platform offers vari
 
 Its main components are:
 
-*    **CZI image data format and its APIs**
-*    **Python Scripting (OAD Simple API)**
-*    **Interfaces to ZEN (TCP-IP, COM, Extensions)**
-*    **Experiment Feedback - Adaptive Acquistion with Online Image Analysis**
+- **CZI image data format and its APIs**
+- **Python Scripting (OAD Simple API)**
+- **Interfaces to ZEN (TCP-IP, COM, Extensions)**
+- **Experiment Feedback - Adaptive Acquistion with Online Image Analysis**
 
-***
+---
 
-![OAD Tools](./Images/ZEN_OAD_Tools_Slide.png)*ZEN OAD Tools*
+![OAD Tools](./Images/ZEN_OAD_Tools_Slide.png)_ZEN OAD Tools_
 
-***
-
+---
 
 ## OAD - General Concept and Key Features
 
-* **Open Application Development** (OAD) uses powerful **Python Scripts** to **simplify, customize** and **automate** your workflows.
+- **Open Application Development** (OAD) uses powerful **Python Scripts** to **simplify, customize** and **automate** your workflows.
 
-* **Analyze** and **Exchange** data with applications like **Fiji, Python, Knime, CellProfiler, Icy, MATLAB, Excel** and …
+- **Analyze** and **Exchange** data with applications like **Fiji, Python, Knime, CellProfiler, Icy, MATLAB, Excel** and …
 
-* API for reading CZI image data using custom software
-    * **ZeissImgLib (.NET)** to be used on Windows-based systems
-    * **libCZI (C++)** for cross-platform applications
-    * **BioFormats (CZIReader)** allow easy access to CZI files from many external applications using the BioFormats library
+- API for reading CZI image data using custom software
 
-* **BioFormats Import** as a module inside ZEN Blue as well as **OME-TIFF Export**
+  - **ZeissImgLib (.NET)** to be used on Windows-based systems
+  - **libCZI (C++)** for cross-platform applications
+  - **BioFormats (CZIReader)** allow easy access to CZI files from many external applications using the BioFormats library
 
-* Create **“smart”** experiments with **Experiment Feedback** and modify the acquisition **On-the-fly** based on **Online Image Analysis** and **External Inputs** 
+- **BioFormats Import** as a module inside ZEN Blue as well as **OME-TIFF Export**
 
-***
+- Create **“smart”** experiments with **Experiment Feedback** and modify the acquisition **On-the-fly** based on **Online Image Analysis** and **External Inputs**
 
-![OAD Interfaces](./Images/OAD_Overview.png)*OAD Interfaces*
+---
 
-***
+![OAD Interfaces](./Images/OAD_Overview.png)_OAD Interfaces_
 
-![Automated Dynamics](./Videos/Automated_Physiology_IA.gif)*Automated Dynamics*
+---
 
-***
+![Automated Dynamics](./Videos/Automated_Physiology_IA.gif)_Automated Dynamics_
 
-![External Software](./Videos/GuidedAcquisition_ZEN_Fiji.gif)*External Software*
+---
 
+![External Software](./Videos/GuidedAcquisition_ZEN_Fiji.gif)_External Software_
 
-***
+---
 
 ## Links and References
 
-* CZI Image Data Format for microscopes: http://www.zeiss.com/czi
+- CZI Image Data Format for microscopes: http://www.zeiss.com/czi
 
-* ZEISS OAD Forum: http://www.zeiss.com/zen-oad
+- ZEISS OAD Forum: http://www.zeiss.com/zen-oad
 
-* Open Source Cross-Platform API to read CZI: http://github.com/zeiss-microscopy/libCZI
+- Open Source Cross-Platform API to read CZI: http://github.com/zeiss-microscopy/libCZI
 
-* OAD - Open Application Development: https://github.com/zeiss-microscopy/OAD
+- OAD - Open Application Development: https://github.com/zeiss-microscopy/OAD
 
-* The OME-TIFF format: http://www.openmicroscopy.org/site/support/file-formats/ome-tiff
+- The OME-TIFF format: http://www.openmicroscopy.org/site/support/file-formats/ome-tiff
 
-***
+---
 
 # Disclaimer
 
-This is an collection of OAD scripts that is free to use for everybody. 
+This is an collection of OAD scripts that is free to use for everybody.
 Carl Zeiss Microscopy GmbH's ZEN software undertakes no warranty concerning the use of those scripts, image analysis settings and ZEN experiments. Use them on your own risk.
 
 Additionally Carl Zeiss Microscopy GmbH's ZEN software allows connection to the third party software packages.

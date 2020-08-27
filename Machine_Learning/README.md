@@ -1,3 +1,21 @@
+- [Machine Learning](#machine-learning)
+  - [ZEN Intellesis Trainable Segmentation](#zen-intellesis-trainable-segmentation)
+  - [Key Features of Intellesis](#key-features-of-intellesis)
+  - [Application Examples](#application-examples)
+  - [Intellesis - Data Flow](#intellesis---data-flow)
+  - [Technical Specifications](#technical-specifications)
+  - [General Workflows for Intellesis in ZEN](#general-workflows-for-intellesis-in-zen)
+  - [Importing a CZMODEL into ZEN blue or ZEN core](#importing-a-czmodel-into-zen-blue-or-zen-core)
+    - [How to import a model in ZEN](#how-to-import-a-model-in-zen)
+    - [Importing externally trained networks into ZEN](#importing-externally-trained-networks-into-zen)
+    - [Downloading a model (ZEN blue 3.1 only)](#downloading-a-model-zen-blue-31-only)
+  - [Model Downloads](#model-downloads)
+    - [Nucleus Detection using UNet](#nucleus-detection-using-unet)
+      - [UNet Nucleus Detector (GrayScale)](#unet-nucleus-detector-grayscale)
+      - [UNet Nucleus Detector (RGB)](#unet-nucleus-detector-rgb)
+    - [Conditions of Use](#conditions-of-use)
+    - [Scripting Integration](#scripting-integration)
+
 # Machine Learning
 
 ## ZEN Intellesis Trainable Segmentation
@@ -56,7 +74,7 @@ More [detailed information](https://www.zeiss.com/microscopy/int/website/landing
 - Real **Multi-Channel Feature Extraction** – all channels will be used to segment a pixel
 - **Class Segmentation** – hierarchical structures with independent segmentation per class
   - every object can be segmented using it individual model
-- Feature Extraction using **Engineered Feature Sets** and **Deep Feature Extraction**
+- Feature Extraction using **Engineered Feature Sets** and **Deep Feature Extraction** (see also [Feature Extractors](../Feature_Extractors/feature_extractors.md) for more details)
   - Engineered Default Feature Sets (CPU)
     - 25 or 33 Features
   - Neural Network (vgg19) Layers for Feature Extraction (GPU)
@@ -83,7 +101,7 @@ More [detailed information](https://www.zeiss.com/microscopy/int/website/landing
 
 ## Importing a CZMODEL into ZEN blue or ZEN core
 
-It is to import CZMODEL files in ZEN blue and in ZEN core.
+It is possible to export and import import \*.czmodel files, which contain the trained segmentation model, in ZEN blue and in ZEN core.
 
 ### How to import a model in ZEN
 
@@ -140,13 +158,11 @@ ZEN allows to import pre-trained neural networks and also provided some example 
 
 <p><img src="../Images/class_segmentation_cnn.png" title="Class Segmentation using pre-trained DNN" width="500"></p>
 
-
 ### Nucleus Detection using UNet
 
 The trained networks for cell nucleus detection (available for download) are based on the well known UNet network architecture and are using a vgg16 encoder. The general structure is shown below. The numbers below the network layers represent the actual number of feature maps (per layer) and the array size is shown above the layers.
 
 <p><img src="../Images/ZEN_UNet_vgg16_v1.png" title="UNet architecture for nucleus detetction network" ></p>
-
 
 #### UNet Nucleus Detector (GrayScale)
 
@@ -166,7 +182,7 @@ UNet-based Deep Neural Network (TensorFlow 2) for cell nucleus detection (RGB). 
 
 _These pre-trained networks were trained with "best-effort" on the available training data and is (are) provided "as is" without warranty of any kind. The licensor assumes no responsibility for the functionality and fault-free condition of the pre-trained network under conditions which are not in the described scope. Be aware that no pre-trained network will perform equally good on any sample, especially not on samples it was not trained for. Therefore, use such pre-trained networks at your own risks and it is up to the user to evaluate and decide if the obtained segmentation results are valid for the images currently segmented using such a network. For details see the respective chapter in the Online Help / Documentation. By downloading and using the networks I agree to the above terms._
 
-***
+---
 
 ### Scripting Integration
 
