@@ -74,7 +74,7 @@ More [detailed information](https://www.zeiss.com/microscopy/int/website/landing
 - Real **Multi-Channel Feature Extraction** – all channels will be used to segment a pixel
 - **Class Segmentation** – hierarchical structures with independent segmentation per class
   - every object can be segmented using it individual model
-- Feature Extraction using **Engineered Feature Sets** and **Deep Feature Extraction** (see also [Feature Extractors](../Feature_Extractors/feature_extractors.md) for more details)
+- Feature Extraction using **Engineered Feature Sets** and **Deep Feature Extraction** (see also [Feature Extractors](../Machine_Learning/Feature_Extractors/feature_extractors.md) for more details)
   - Engineered Default Feature Sets (CPU)
     - 25 or 33 Features
   - Neural Network (vgg19) Layers for Feature Extraction (GPU)
