@@ -58,13 +58,15 @@ The machine-learning part of Intellesis is entirely built upon Python-based tool
 
 ![ZEN Python Modules](../Images/ZEN_Python_Tools.png)
 
-The actual segmentation service is completely written in [Python](https://www.python.org) and is using proven and established open-source machine-learning libraries to segment the images.
+The actual segmentation service is completely written in [Python](https://www.python.org) and is using proven and established open-source machine-learning libraries to segment the images. More [detailed information](https://www.zeiss.com/microscopy/int/website/landingpages/zen-intellesis.html) and specific information regarding [ZEN core](https://www.zeiss.com/microscopy/int/products/microscope-software/zen-core.html#module) are available on the respective websites.
 
 To be able to handle even large multi-dimensional data sets, the software has a built-in data manager that takes care of splitting and distributing the workload depending on the available computational resources.
 
-![ZEN Python](../Images/intellesis_dataflow.png "Intellesis - Data Flow")
+![Intellesis - ML Data Flow - Training](../Images/intellesis_dataflow_training.png "Intellesis - ML Data Flow - Training")**Intellesis - ML Data Flow - Training**
 
-More [detailed information](https://www.zeiss.com/microscopy/int/website/landingpages/zen-intellesis.html) and specific information regarding [ZEN core](https://www.zeiss.com/microscopy/int/products/microscope-software/zen-core.html#module) are available on the websites.
+***
+
+![Intellesis - ML Data Flow - Prediction](../Images/intellesis_dataflow_prediction.png "Intellesis - ML Data Flow - Prediction")**Intellesis - ML Data Flow - Prediction**
 
 ---
 
