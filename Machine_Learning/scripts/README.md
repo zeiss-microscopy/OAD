@@ -117,6 +117,21 @@ This [script](Intellesis_CompareTwoFeatureExtractors_UI.py) can be used to compa
 - Select the feature extractors and post-processings to be compared
 - Optional: Define a substring in order to do the compare
 
-<p><img src="../../Images/intellesis_compare_features.png" title="Intelleis Model Compare Tool" width="500"></p>
+<p><img src="../../Images/intellesis_compare_features.png" title="Intellesis Model Compare Tool" width="500"></p>
 
 <p><img src="../../Images/intellesis_compare_features_result.png" title="MutiView - Compare two results" width="700"></p>
+
+## Intellesis_ConvertModel2old.py
+
+This [script](Intellesis_ConvertModel2old.py) can be used to compare two feature extractors for a trained model.
+
+- Export the model one wants to convert to an "older" format to a folder of your choice
+- Start the script and select the folder with the exported model
+
+<p><img src="../../Images/intellesis_convert_model1.png" title="Intelleis Model Compare Tool" width="500"></p>
+
+- Select the specific model inside this folder to be converted to the older format
+
+<p><img src="../../Images/intellesis_convert_model2.png" title="MutiView - Compare two results" width="700"></p>
+
+The script with backup the exported model, unpack the model, convert the model spec and package the "converted" model.
