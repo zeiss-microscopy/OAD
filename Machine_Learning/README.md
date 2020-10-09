@@ -149,9 +149,15 @@ Training pixel classifier in Intellesis is very simple and just requires the fol
 
 Watch the short videos below to see those steps in action.
 
+---
+
 ![Intellesis - Train a model to segment a cell using a single channel](../Images/zenblue_simple_nucleus_segmentation_single_channel.gif) **Intellesis - Train a model to segment a cell using a single channel**
 
+---
+
 ![Intellesis - Train a model to segment a cell using all channels (multispectral](../Images/zenblue_simple_nucleus_segmentation_multispectral.gif) **Intellesis - Train a model to segment a cell using all channels (multispectral)**
+
+---
 
 ### How to use a model (trained on a single channel) inside an Image Analysis pipeline
 
@@ -173,6 +179,8 @@ Once the model is trained it can be directly used inside an Image Analysis pipel
 Watch the short video below to see those steps in action.
 
 ![Intellesis - Use a trained model for segmentation inside an Image Analysis Setting](../Images/zenblue_use_simple_nucleus_single_channel_segmentation_in_IA.gif) **Intellesis - Use a trained model for segmentation inside an Image Analysis Setting**
+
+---
 
 ### How to use a model (trained on all channels) inside an Image Analysis pipeline
 
