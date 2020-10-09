@@ -1,4 +1,27 @@
-[[_TOC_]]
+- [ZEN - Open Ecosystem for Integrated Machine Learning Workflows](#zen---open-ecosystem-for-integrated-machine-learning-workflows)
+  - [ZEN Intellesis Trainable Segmentation](#zen-intellesis-trainable-segmentation)
+  - [Key Features of Intellesis](#key-features-of-intellesis)
+  - [ZEN Machine-Learning Landscape](#zen-machine-learning-landscape)
+  - [Application Examples](#application-examples)
+  - [Intellesis - Data Flow](#intellesis---data-flow)
+  - [Intellesis - Technical Features](#intellesis---technical-features)
+  - [General Workflows for Intellesis in ZEN](#general-workflows-for-intellesis-in-zen)
+    - [How to train a simple pixel classifier in Intellesis](#how-to-train-a-simple-pixel-classifier-in-intellesis)
+    - [How to use a model (trained on a single channel) inside an Image Analysis pipeline](#how-to-use-a-model-trained-on-a-single-channel-inside-an-image-analysis-pipeline)
+    - [How to use a model (trained on all channels) inside an Image Analysis pipeline](#how-to-use-a-model-trained-on-all-channels-inside-an-image-analysis-pipeline)
+  - [Importing a CZMODEL into ZEN blue or ZEN core](#importing-a-czmodel-into-zen-blue-or-zen-core)
+    - [How to import a model in ZEN](#how-to-import-a-model-in-zen)
+    - [Importing externally trained networks into ZEN](#importing-externally-trained-networks-into-zen)
+    - [Example Workflow - Train and Import a network to segment a stack](#example-workflow---train-and-import-a-network-to-segment-a-stack)
+  - [9. Model Downloads](#9-model-downloads)
+    - [Application Example - Robust Nucleus Detection using UNet](#application-example---robust-nucleus-detection-using-unet)
+      - [UNet Nucleus Detector (GrayScale)](#unet-nucleus-detector-grayscale)
+      - [UNet Nucleus Detector (RGB)](#unet-nucleus-detector-rgb)
+    - [Example Networks - Conditions of Use](#example-networks---conditions-of-use)
+  - [Integrated Workflows using trained models](#integrated-workflows-using-trained-models)
+    - [Use Nucleus Detector inside a Zone-of-Influence workflow](#use-nucleus-detector-inside-a-zone-of-influence-workflow)
+    - [Use trained model to reliably detect layers](#use-trained-model-to-reliably-detect-layers)
+  - [Scripting Integration in ZEN software](#scripting-integration-in-zen-software)
 
 ---
 
