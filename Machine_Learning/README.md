@@ -293,7 +293,7 @@ This approach also allows to mix machine-learning based segmentation with classi
 3. Define further subclasses as needed and segment them using other ML models or by applying an automated threshold
 4. Run the complete image analysis pipeline incl. the model execution without having to worry about tile sizes, patches etc. and visualize the results easily
 
-![Class Segmentation - Plugin UNet to detect cell nuclei](../Images/class_seg_dnn1.png)
+![Class Segmentation - Plugin UNet to detect cell nuclei](../Images/class_seg_DNN1.png)
 
 ![Class Segmentation - Easily analyze data and visualize the results](../Images/class_seg_dnn2.png)
 
