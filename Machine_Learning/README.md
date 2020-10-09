@@ -295,7 +295,7 @@ This approach also allows to mix machine-learning based segmentation with classi
 
 ![Class Segmentation - Plugin UNet to detect cell nuclei](../Images/class_seg_DNN1.png)
 
-![Class Segmentation - Easily analyze data and visualize the results](../Images/class_seg_dnn2.png)
+![Class Segmentation - Easily analyze data and visualize the results](../Images/class_seg_DNN2.png)
 
 ### Use trained model to reliably detect layers
 
