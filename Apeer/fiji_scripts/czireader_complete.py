@@ -20,9 +20,9 @@
 
 #################################################################
 # File        : czireader_complete.py
-# Version     : 0.1
+# Version     : 0.2
 # Author      : czsrh
-# Date        : 17.01.2020
+# Date        : 23.11.2020
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
@@ -32,13 +32,14 @@
 import os
 from loci.formats import MetadataTools
 from loci.formats import ImageReader
-from loci.plugins.in import ImporterOptions
+from loci.plugins. in import ImporterOptions
 from loci.plugins.util import LociPrefs
 from loci.plugins import BF
-from loci.formats.in import ZeissCZIReader
-from loci.formats.in import DynamicMetadataOptions
+from loci.formats. in import ZeissCZIReader
+from loci.formats. in import DynamicMetadataOptions
 from ij import IJ, ImagePlus, ImageStack, Prefs
 from ij.measure import Calibration
+from org.scijava.log import LogLevel
 
 # clear the console automatically when not in headless mode
 uiService.getDefaultUI().getConsolePane().clear()
@@ -96,6 +97,22 @@ class MiscTools:
                + " pixel_height=" + str(scaleY)
                + " voxel_depth=" + str(scaleZ))
 
+        # create new Calibration object
+        newCal = Calibration()
+
+        # set the new paramters
+        newCal.pixelWidth = scaleX
+        newCal.pixelHeight = scaleY
+        newCal.pixelDepth = scaleZ
+
+        # set the correct unit fro the scaling
+        newCal.setXUnit(unit)
+        newCal.setYUnit(unit)
+        newCal.setZUnit(unit)
+
+        # apply the new calibration
+        imp.setCalibration(newCal)
+
         return imp
 
     @staticmethod
@@ -138,12 +155,12 @@ def readczi(imagefile,
             attach=False,
             autoscale=True):
 
-    log.info('Filename : ' + imagefile)
+    log.log(LogLevel.INFO, 'Filename : ' + imagefile)
 
     metainfo = {}
     # checking for thr file Extension
     metainfo['Extension'] = MiscTools.getextension(MiscTools.splitext_recurse(imagefile))
-    log.info('Detected File Extension : ' + metainfo['Extension'])
+    log.log(LogLevel.INFO, 'Detected File Extension : ' + metainfo['Extension'])
 
     # initialize the reader and get the OME metadata
     reader = ImageReader()
@@ -220,8 +237,8 @@ def readczi(imagefile,
         pylevelout = metainfo['SeriesCount_CZI']
     except:
         # fallback option
-        log.info('PyLevel=' + str(readpylevel) + ' does not exist.')
-        log.info('Using Pyramid Level = 0 as fallback.')
+        log.log(LogLevel.INFO, 'PyLevel=' + str(readpylevel) + ' does not exist.')
+        log.log(LogLevel.INFO, 'Using Pyramid Level = 0 as fallback.')
         imp = imps[0]
         pylevelout = 0
         metainfo['Pyramid Level Output'] = pylevelout
@@ -274,7 +291,7 @@ SETFLATRES = False
 
 # check for meaningful pyramid level
 if READPYLEVEL == 0:
-    log.info('PyLevel = 0 is not valid. Use 1')
+    log.log(LogLevel.INFO, 'PyLevel = 0 is not valid. Use 1')
     READPYLEVEL = 1
 
 # read the CZI image
@@ -293,4 +310,4 @@ imp.show()
 
 # show the metadata
 for k, v in info.items():
-    log.info(str(k) + ' : ' + str(v))
+    log.log(LogLevel.INFO, str(k) + ' : ' + str(v))

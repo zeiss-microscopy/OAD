@@ -2,9 +2,9 @@
 
 #################################################################
 # File       : fijipytools.py
-# Version    : 1.6.1
+# Version    : 1.6.2
 # Author     : czsrh
-# Date       : 27.07.2020
+# Date       : 20.10.2020
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # ATTENTION: Use at your own risk.
@@ -333,7 +333,7 @@ class ExportTools:
 
         if useLOCI:
 
-            paramstring = "outfile=" + savepath + " " + "windowless=true compression=Uncompressed saveROI=false"
+            paramstring = "outfile=[" + savepath + "] windowless=true compression=Uncompressed saveROI=false"
             plugin = LociExporter()
             plugin.arg = paramstring
             exporter = Exporter(plugin, imp)
