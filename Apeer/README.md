@@ -37,4 +37,4 @@ By using any of those examples you agree to this disclaimer.
 
 Version: 2020.07.16
 
-Copyright (c) 2019 Carl Zeiss AG, Germany. All Rights Reserved.
+Copyright (c) 2020 Carl Zeiss AG, Germany. All Rights Reserved.
