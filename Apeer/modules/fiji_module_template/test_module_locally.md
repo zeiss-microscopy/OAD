@@ -1,8 +1,7 @@
-
 **How to test your module locally**
 
 1. First place the test files inside the correct folder.
-2. Make sure the docker client has access to thodse folders.
+2. Make sure the docker client has access to thoose folders.
 3. Navigate to the GIT repository and build the docker container
 
 ```bash
@@ -17,14 +16,22 @@ WFE_INPUT_JSON={"SCRIPT":"/Fiji.app/scripts/my_fijipyscript.py","IMAGEPATH":"/in
 
 4. Now run the just created docker image using:
 
+**On Windows:**
+
 ```bash
 docker run -it --rm -v c:\Temp\input:/input -v c:\Temp\output:/output --env-file wfe.env test/apeer_test_fijimodule:latest
+```
+
+**On Linux:**
+
+```bash
+docker run -it --rm -v /datadisk1/tuxedo/temp/input:/input -v /datadisk1/tuxedo/temp/output:/output --env-file wfe.env test/apeer_test_fijimodule:latest
 ```
 
 5. Usually the result should like this:
 
 ```bash
-C:\Users\m1srh\Documents\Apeer_Modules\fiji_module_template_b88fae21-a305-4afb-b70b-48c18efc9fa8>docker run -it --rm -v c:\Temp\input:/input -v c:\Temp\output:/output --env-file wfe.env test/apeer_test_fijimodule:latest
+C:\Apeer_Modules\fiji_module_template_b88fae21-a305-4afb-b70b-48c18efc9fa8>docker run -it --rm -v c:\Temp\input:/input -v c:\Temp\output:/output --env-file wfe.env test/apeer_test_fijimodule:latest
 Java HotSpot(TM) 64-Bit Server VM warning: ignoring option PermSize=128m; support was removed in 8.0
 Java HotSpot(TM) 64-Bit Server VM warning: Using incremental CMS is deprecated and will likely be removed in a future release
 [INFO] Overriding BIOP Run Macro...; identifier: command:ch.epfl.biop.macrorunner.B_Run_Macro; jar: file:/Fiji.app/plugins/BIOP/B_Run_Macro-1.0.0-SNAPSHOT.jar

@@ -2,9 +2,9 @@
 
 #################################################################
 # File       : fijipytools.py
-# Version    : 1.6.2
+# Version    : 1.6.5
 # Author     : czsrh
-# Date       : 20.10.2020
+# Date       : 26.11.2020
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # ATTENTION: Use at your own risk.
@@ -475,13 +475,6 @@ class FilterTools:
         filterdict['VARIANCE'] = RankFilters.VARIANCE
         filterdict['OPEN'] = RankFilters.OPEN
         filterdict['DESPECKLE'] = RankFilters.DESPECKLE
-        filterdict['Mean'] = RankFilters.MEAN
-        filterdict['Min'] = RankFilters.MIN
-        filterdict['Max'] = RankFilters.MAX
-        filterdict['Median'] = RankFilters.MEDIAN
-        filterdict['Variance'] = RankFilters.VARIANCE
-        filterdict['Open'] = RankFilters.OPEN
-        filterdict['Despeckle'] = RankFilters.DESPECKLE
 
         stack = imp.getStack()  # get the stack within the ImagePlus
         nslices = stack.getSize()  # get the number of slices

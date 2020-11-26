@@ -3,11 +3,11 @@
 """
 File: my_fijipyscript.py
 Author: Sebastian Rhode
-Date: 2019_10_22
-Version: 0.6
+Date: 2020_11_25
+Version: 0.7
 
 The idea of this module is to provide a template showing some of the required
-code parts in order to create modules based on Fiji. The choosen processing step
+code parts in order to create modules based on Fiji. The chosen processing step
 is just an example for your image analysis pipeline
 
 Disclaimer: Use at your own risk!
@@ -26,11 +26,10 @@ from loci.plugins.in import ImporterOptions
 from loci.plugins import LociExporter
 from loci.plugins.out import Exporter
 from ij.io import FileSaver
+from org.scijava.log import LogLevel
 import time
 
 # helper function to apply the filter
-
-
 def apply_filter(imp,
                  radius=5,
                  filtertype='MEDIAN'):
@@ -52,11 +51,13 @@ def apply_filter(imp,
     stack = imp.getStack()  # get the stack within the ImagePlus
     nslices = stack.getSize()  # get the number of slices
 
-    for index in range(1, nslices + 1):
-        # get the image processor
-        ip = stack.getProcessor(index)
-        # apply filter based on filtertype
-        filter.rank(ip, radius, filterdict[filtertype])
+    # apply filter based on filtertype
+    if filtertype in filterdict:
+        for index in range(1, nslices + 1):
+            ip = stack.getProcessor(index)
+            filter.rank(ip, radius, filterdict[filtertype])
+    else:
+        print("Argument 'filtertype': {filtertype} not found")
 
     return imp
 
@@ -66,7 +67,7 @@ def apply_filter(imp,
 
 def run(imagefile, useBF=True, series=0):
 
-    log.info('Image Filename : ' + imagefile)
+    log.log(LogLevel.INFO, 'Image Filename : ' + imagefile)
 
     if not useBF:
         # using IJ static method
@@ -90,16 +91,16 @@ def run(imagefile, useBF=True, series=0):
     if FILTERTYPE != 'NONE':
 
         # apply filter
-        log.info('Apply Filter  : ' + FILTERTYPE)
-        log.info('Filter Radius : ' + str(FILTER_RADIUS))
+        log.log(LogLevel.INFO, 'Apply Filter  : ' + FILTERTYPE)
+        log.log(LogLevel.INFO, 'Filter Radius : ' + str(FILTER_RADIUS))
 
-        # apply the filter based on the choosen type
+        # apply the filter based on the chosen type
         imp = apply_filter(imp,
                            radius=FILTER_RADIUS,
                            filtertype=FILTERTYPE)
 
     if FILTERTYPE == 'NONE':
-        log.info('No filter selected. Do nothing.')
+        log.log(LogLevel.INFO, 'No filter selected. Do nothing.')
 
     return imp
 
@@ -118,10 +119,10 @@ FILTERTYPE = INPUT_JSON['FILTERTYPE']
 FILTER_RADIUS = int(INPUT_JSON['FILTER_RADIUS'])
 SAVEFORMAT = 'ome.tiff'
 
-log.info('Starting ...')
-log.info('Filename               : ' + IMAGEPATH)
-log.info('Save Format used       : ' + SAVEFORMAT)
-log.info('------------  START IMAGE ANALYSIS ------------')
+log.log(LogLevel.INFO, 'Starting ...')
+log.log(LogLevel.INFO, 'Filename               : ' + IMAGEPATH)
+log.log(LogLevel.INFO, 'Save Format used       : ' + SAVEFORMAT)
+log.log(LogLevel.INFO, '------------  START IMAGE ANALYSIS ------------')
 
 ##############################################################
 
@@ -132,7 +133,7 @@ basename = os.path.splitext(outputimagepath)[0]
 # remove the extra .ome before reassembling the filename
 if basename[-4:] == '.ome':
     basename = basename[:-4]
-    log.info('New basename for output :' + basename)
+    log.log(LogLevel.INFO, 'New basename for output :' + basename)
 
 # save processed image
 outputimagepath = basename + SUFFIX_FL + '.' + SAVEFORMAT
@@ -149,7 +150,7 @@ filtered_image = run(IMAGEPATH,
 
 # get time at the end and calc duration of processing
 end = time.clock()
-log.info('Duration of whole Processing : ' + str(end - start))
+log.log(LogLevel.INFO, 'Duration of whole Processing : ' + str(end - start))
 
 ###########################################################
 
@@ -164,15 +165,17 @@ exporter.run()
 
 # get time at the end and calc duration of processing
 end = time.clock()
-log.info('Duration of saving as OME.TIFF : ' + str(end - start))
+log.log(LogLevel.INFO, 'Duration of saving as OME.TIFF : ' + str(end - start))
 
 # write output JSON
-log.info('Writing output JSON file ...')
+log.log(LogLevel.INFO, 'Writing output JSON file ...')
 output_json = {"FILTERED_IMAGE": outputimagepath}
 
 with open("/output/" + INPUT_JSON['WFE_output_params_file'], 'w') as f:
     json.dump(output_json, f)
 
 # finish
-log.info('Done.')
+log.log(LogLevel.INFO, 'Done.')
+
+# exit
 os._exit()

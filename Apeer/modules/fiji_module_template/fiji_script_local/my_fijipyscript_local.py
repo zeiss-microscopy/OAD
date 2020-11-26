@@ -1,6 +1,6 @@
 # @File(label = "Image File", persist=True) FILENAME
 # @String(label = "Select Filter", choices={"NONE", "MEDIAN", "MIN", "MAX", "MEAN", "VARIANCE", "OPEN", "DESPECKLE"}, style="listBox", value="MEDIAN", persist=True) FILTERTYPE
-# @Integer(label = "Filter Radius", value=5, persist=False) FILTER_RADIUS
+# @Integer(label = "Filter Radius", value=5.0, persist=False) FILTER_RADIUS
 # @Boolean(label = "Run in headless mode", value=False, persist=False) HEADLESS
 # @OUTPUT String FILENAME
 # @OUTPUT String FILTERTYPE
@@ -22,20 +22,8 @@ from loci.plugins.in import ImporterOptions
 from loci.plugins import LociExporter
 from loci.plugins.out import Exporter
 from ij.io import FileSaver
+from org.scijava.log import LogLevel
 import time
-
-# helper function to apply the filter
-def getImageStack(imp):
-
-    # get the stacks
-    try:
-        stack = imp.getStack()  # get the stack within the ImagePlus
-        nslices = stack.getSize()  # get the number of slices
-    except:
-        stack = imp.getProcessor()
-        nslices = 1
-
-    return stack, nslices
 
 
 def apply_filter(imp,
@@ -56,13 +44,16 @@ def apply_filter(imp,
     filterdict['DESPECKLE'] = RankFilters.DESPECKLE
 
     # get the stack and number of slices
-    stack, nslices = getImageStack(imp)
+    stack = imp.getStack()  # get the stack within the ImagePlus
+    nslices = stack.getSize()  # get the number of slices
 
-    for index in range(1, nslices + 1):
-        # get the image processor
-        ip = stack.getProcessor(index)
-        # apply filter based on filtertype
-        filter.rank(ip, radius, filterdict[filtertype])
+    # apply filter based on filtertype
+    if filtertype in filterdict:
+        for index in range(1, nslices + 1):
+            ip = stack.getProcessor(index)
+            filter.rank(ip, radius, filterdict[filtertype])
+    else:
+        print("Argument 'filtertype': {filtertype} not found")
 
     return imp
 
@@ -75,7 +66,7 @@ if not HEADLESS:
 
 def run(imagefile, useBF=True, series=0):
 
-    log.info('Image Filename : ' + imagefile)
+    log.log(LogLevel.INFO, 'Image Filename : ' + imagefile)
 
     if not useBF:
         # using IJ static method
@@ -99,8 +90,8 @@ def run(imagefile, useBF=True, series=0):
     if FILTERTYPE != 'NONE':
 
         # apply filter
-        log.info('Apply Filter  : ' + FILTERTYPE)
-        log.info('Filter Radius : ' + str(FILTER_RADIUS))
+        log.log(LogLevel.INFO, 'Apply Filter  : ' + FILTERTYPE)
+        log.log(LogLevel.INFO, 'Filter Radius : ' + str(FILTER_RADIUS))
 
         # apply the filter based on the choosen type
         imp = apply_filter(imp,
@@ -108,7 +99,7 @@ def run(imagefile, useBF=True, series=0):
                            filtertype=FILTERTYPE)
 
     if FILTERTYPE == 'NONE':
-        log.info('No filter selected. Do nothing.')
+        log.log(LogLevel.INFO, 'No filter selected. Do nothing.')
 
     return imp
 
@@ -122,10 +113,10 @@ IMAGEPATH = FILENAME.toString()
 SUFFIX_FL = '_FILTERED'
 SAVEFORMAT = 'ome.tiff'
 
-log.info('Starting ...')
-log.info('Filename               : ' + IMAGEPATH)
-log.info('Save Format used       : ' + SAVEFORMAT)
-log.info('------------  START IMAGE ANALYSIS ------------')
+log.log(LogLevel.INFO, 'Starting ...')
+log.log(LogLevel.INFO, 'Filename               : ' + IMAGEPATH)
+log.log(LogLevel.INFO, 'Save Format used       : ' + SAVEFORMAT)
+log.log(LogLevel.INFO, '------------  START IMAGE ANALYSIS ------------')
 
 ##############################################################
 
@@ -136,7 +127,7 @@ basename = os.path.splitext(outputimagepath)[0]
 # remove the extra .ome before reassembling the filename
 if basename[-4:] == '.ome':
     basename = basename[:-4]
-    log.info('New basename for output :' + basename)
+    log.log(LogLevel.INFO, 'New basename for output :' + basename)
 
 # save processed image
 outputimagepath = basename + SUFFIX_FL + '.' + SAVEFORMAT
@@ -153,7 +144,7 @@ filtered_image = run(IMAGEPATH,
 
 # get time at the end and calc duration of processing
 end = time.clock()
-log.info('Duration of whole Processing : ' + str(end - start))
+log.log(LogLevel.INFO, 'Duration of whole Processing : ' + str(end - start))
 
 ###########################################################
 
@@ -168,10 +159,10 @@ exporter.run()
 
 # get time at the end and calc duration of processing
 end = time.clock()
-log.info('Duration of saving as OME-TIFF : ' + str(end - start))
+log.log(LogLevel.INFO, 'Duration of saving as OME-TIFF : ' + str(end - start))
 
 # show the image
 filtered_image.show()
 
 # finish
-log.info('Done.')
+log.log(LogLevel.INFO, 'Done.')
