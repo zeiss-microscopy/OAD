@@ -218,19 +218,19 @@ def plot_segresults(image, mask, props, add_bbox=True):
 
     fig, ax = plt.subplots(1, 2, figsize=(16, 8))
 
-    ax[0].imshow(image,
+    ax[0].imshow(image_label_overlay,
+                 clim=[image.min(), image.max() * 0.8])
+
+    ax[1].imshow(image,
                  cmap=plt.cm.gray,
                  interpolation='nearest',
-                 clim=[image.min(), image.max() * 0.5])
+                 clim=[image.min(), image.max() * 0.8])
 
-    ax[1].imshow(image_label_overlay,
-                 clim=[image.min(), image.max() * 0.5])
-
-    ax[0].set_title('Original', fontsize=12)
-    ax[1].set_title('Masks', fontsize=12)
+    ax[0].set_title('Masks (not filter)', fontsize=12)
+    ax[1].set_title('Original + Bounding Boxes (filtered)', fontsize=12)
 
     if add_bbox:
-        ax[0] = add_boundingbox(props, ax[0])
+        ax[1] = add_boundingbox(props, ax[1])
 
     plt.show()
 

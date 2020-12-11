@@ -1,0 +1,71 @@
+Parameter;Value
+Directory;testdata
+Filename;WP96_4Pos_B4-10_DAPI.czi
+Extension;czi
+ImageType;czi
+AcqDate;2020-04-23T09:33:58.1132508Z
+TotalSeries;
+SizeX;288764
+SizeY;18764
+SizeZ;1
+SizeC;1
+SizeT;1
+SizeS;28
+SizeB;1
+SizeM;1
+Sizes BF;
+DimOrder BF;
+DimOrder BF Array;
+Axes_czifile;SCYX0
+Shape_czifile;(28, 1, 18764, 288764, 1)
+czi_isRGB;
+czi_isMosaic;False
+ObjNA;0.35
+ObjMag;5.0
+ObjID;Objective:1
+ObjName;['Plan-Apochromat 5x/0.35']
+ObjImmersion;Air
+TubelensMag;1.0
+ObjNominalMag;5.0
+XScale;0.2
+YScale;0.2
+ZScale;0.2
+XScaleUnit;micron
+YScaleUnit;micron
+ZScaleUnit;micron
+DetectorModel;['TestCam']
+DetectorName;['Internal']
+DetectorID;['Detector:Internal']
+DetectorType;[None]
+InstrumentID;[]
+Channels;['DAPI']
+ChannelNames;['DAPI']
+ChannelColors;['#FF00A0FF']
+ImageIDs;[]
+NumPy.dtype;uint8
+Axes_aics;STCZYX
+Shape_aics;(28, 1, 1, 1, 640, 640)
+SizeX_aics;640
+SizeY_aics;640
+SizeC_aics;1
+SizeZ_aics;1
+SizeT_aics;1
+SizeS_aics;28
+dims_aicspylibczi;{'X': (0, 640), 'Y': (0, 640), 'C': (0, 1), 'S': (0, 28)}
+dimorder_aicspylibczi;SCYX
+size_aicspylibczi;(28, 1, 640, 640)
+PixelType;Gray8
+SizeH;1
+SizeI;1
+SizeV;1
+SW-Name;ZEN 3.1 (blue edition)
+SW-Version;3.1.0.00004
+Well_ArrayNames;['B4', 'B4', 'B4', 'B4', 'B5', 'B5', 'B5', 'B5', 'B6', 'B6', 'B6', 'B6', 'B7', 'B7', 'B7', 'B7', 'B8', 'B8', 'B8', 'B8', 'B9', 'B9', 'B9', 'B9', 'B10', 'B10', 'B10', 'B10']
+Well_Indices;[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27]
+Well_PositionNames;['P1', 'P2', 'P3', 'P4', 'P1', 'P2', 'P3', 'P4', 'P1', 'P2', 'P3', 'P4', 'P1', 'P2', 'P3', 'P4', 'P1', 'P2', 'P3', 'P4', 'P1', 'P2', 'P3', 'P4', 'P1', 'P2', 'P3', 'P4']
+Well_ColId;[4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 8, 9, 9, 9, 9, 10, 10, 10, 10]
+Well_RowId;[2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+WellCounter;Counter({'B4': 4, 'B5': 4, 'B6': 4, 'B7': 4, 'B8': 4, 'B9': 4, 'B10': 4})
+SceneStageCenterX;[29687.5, 33312.5, 29687.5, 33312.5, 38687.5, 42312.5, 38687.5, 42312.5, 47687.5, 51312.5, 47687.5, 51312.5, 56687.5, 60312.5, 56687.5, 60312.5, 65687.5, 69312.5, 65687.5, 69312.5, 74687.5, 78312.5, 74687.5, 78312.5, 83687.5, 87312.5, 83687.5, 87312.5]
+SceneStageCenterY;[15687.5, 15687.5, 19312.5, 19312.5, 15687.5, 15687.5, 19312.5, 19312.5, 15687.5, 15687.5, 19312.5, 19312.5, 15687.5, 15687.5, 19312.5, 19312.5, 15687.5, 15687.5, 19312.5, 19312.5, 15687.5, 15687.5, 19312.5, 19312.5, 15687.5, 15687.5, 19312.5, 19312.5]
+NumWells;7
