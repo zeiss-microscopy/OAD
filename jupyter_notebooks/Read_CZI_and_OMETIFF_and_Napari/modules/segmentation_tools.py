@@ -2,9 +2,9 @@
 
 #################################################################
 # File        : segmentation_tools.py
-# Version     : 0.3
+# Version     : 0.4
 # Author      : czsrh
-# Date        : 24.11.2020
+# Date        : 10.12.2020
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # Copyright (c) 2020 Carl Zeiss AG, Germany. All Rights Reserved.
@@ -24,21 +24,23 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 import matplotlib.patches as mpatches
 
-from czitools import imgfileutils as imf
+#from czitools import imgfileutils as imf
+import imgfileutils as imf
 
 from aicsimageio import AICSImage, imread
 
 from skimage import io, measure, segmentation
 from skimage import exposure
 from skimage.exposure import rescale_intensity
-from skimage.morphology import watershed, dilation
 from skimage.morphology import white_tophat, black_tophat, disk, square, ball, closing, square
-from skimage.morphology import remove_small_objects, remove_small_holes
+from skimage.morphology import remove_small_objects, remove_small_holes, dilation
 from skimage.feature import peak_local_max
 from skimage.measure import label, regionprops
 from skimage.filters import threshold_otsu, threshold_triangle, rank, median, gaussian
 from skimage.segmentation import clear_border
 from skimage.segmentation import random_walker
+#from skimage.morphology import watershed
+from skimage.segmentation import watershed
 from skimage.color import label2rgb
 from skimage.util import invert
 
@@ -435,32 +437,32 @@ def segment_nuclei_stardist(image2d, sdmodel,
     return mask2d
 
 
-def set_device():
-    """Check if GPU working, and if so use it
-
-    :return: device - CPU or GPU
-    :rtype: mxnet device
-    """
-    # check if GPU working, and if so use it
-    use_gpu = utils.use_gpu()
-    print('Use GPU: ', use_gpu)
-
-    if use_gpu:
-        device = mxnet.gpu()
-    else:
-        device = mxnet.cpu()
-
-    return device
+# def set_device():
+#     """Check if GPU working, and if so use it
+#
+#     :return: device - CPU or GPU
+#     :rtype: mxnet device
+#     """
+#     # check if GPU working, and if so use it
+#     use_gpu = utils.use_gpu()
+#     print('Use GPU: ', use_gpu)
+#
+#     if use_gpu:
+#         device = mxnet.gpu()
+#     else:
+#         device = mxnet.cpu()
+#
+#     return device
 
 
 def load_cellpose_model(model_type='nuclei',
-                        gpu=False,
-                        net_avg=True,
-                        batch_size=8):
+                        gpu=True,
+                        net_avg=True):
 
     # load cellpose model for cell nuclei using GPU or CPU
     print('Loading Cellpose Model ...')
 
+    """
     # try to get the device
     try:
         device = set_device()
@@ -479,6 +481,11 @@ def load_cellpose_model(model_type='nuclei',
                                 net_avg=net_avg,
                                 device=device
                                 )
+    """
+
+    model = models.Cellpose(gpu=gpu,
+                            model_type=model_type,
+                            net_avg=net_avg)
 
     return model
 

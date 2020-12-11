@@ -2,9 +2,9 @@
 
 #################################################################
 # File        : imgfileutils.py
-# Version     : 1.4.1
+# Version     : 1.4.5
 # Author      : czsrh
-# Date        : 23.11.2020
+# Date        : 10.12.2020
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # Copyright (c) 2020 Carl Zeiss AG, Germany. All Rights Reserved.
@@ -122,15 +122,17 @@ def create_metadata_dict():
                 'Sizes BF': None,
                 'DimOrder BF': None,
                 'DimOrder BF Array': None,
-                # 'Axes_czifile': None,
-                # 'Shape_czifile': None,
+                'Axes_czifile': None,
+                'Shape_czifile': None,
                 'czi_isRGB': None,
                 'czi_isMosaic': None,
-                'ObjNA': None,
-                'ObjMag': None,
-                'ObjID': None,
-                'ObjName': None,
-                'ObjImmersion': None,
+                'ObjNA': [],
+                'ObjMag': [],
+                'ObjID': [],
+                'ObjName': [],
+                'ObjImmersion': [],
+                'TubelensMag': [],
+                'ObjNominalMag': [],
                 'XScale': None,
                 'YScale': None,
                 'ZScale': None,
@@ -348,7 +350,8 @@ def checkmdscale_none(md, tocheck=['ZScale'], replace=[1.0]):
 def get_metadata_czi(filename, dim2none=False,
                      forceDim=False,
                      forceDimname='SizeC',
-                     forceDimvalue=2):
+                     forceDimvalue=2,
+                     convert_scunit=True):
     """
     Returns a dictionary with CZI metadata.
 
@@ -371,6 +374,14 @@ def get_metadata_czi(filename, dim2none=False,
     :type filename: str
     :param dim2none: option to set non-existing dimension to None, defaults to False
     :type dim2none: bool, optional
+    :param forceDim: option to force to not read certain dimensions, defaults to False
+    :type forceDim: bool, optional
+    :param forceDimname: name of the dimension not to read, defaults to SizeC
+    :type forceDimname: str, optional
+    :param forceDimvalue: index of the dimension not to read, defaults to 2
+    :type forceDimvalue: int, optional      
+    :param convert_scunit: convert scale unit string from 'µm' to 'micron', defaults to False
+    :type convert_scunit: bool, optional  
     :return: metadata - dictionary with the relevant CZI metainformation
     :rtype: dict
     """
@@ -648,67 +659,135 @@ def get_metadata_czi(filename, dim2none=False,
     try:
         metadata['SW-Name'] = metadatadict_czi['ImageDocument']['Metadata']['Information']['Application']['Name']
         metadata['SW-Version'] = metadatadict_czi['ImageDocument']['Metadata']['Information']['Application']['Version']
-    except KeyError as e:
-        print('Key not found:', e)
+    except (KeyError, TypeError) as e:
+        print(e)
         metadata['SW-Name'] = None
         metadata['SW-Version'] = None
 
     try:
         metadata['AcqDate'] = metadatadict_czi['ImageDocument']['Metadata']['Information']['Image']['AcquisitionDateAndTime']
-    except KeyError as e:
-        print('Key not found:', e)
+    except (KeyError, TypeError) as e:
+        print(e)
         metadata['AcqDate'] = None
 
     # get objective data
     try:
-        metadata['ObjName'] = metadatadict_czi['ImageDocument']['Metadata']['Information']['Instrument']['Objectives']['Objective']['Name']
-    except KeyError as e:
-        print('Key not found:', e)
-        metadata['ObjName'] = None
+        if isinstance(metadatadict_czi['ImageDocument']['Metadata']['Information']['Instrument']['Objectives']['Objective'], list):
+            num_obj = len(metadatadict_czi['ImageDocument']['Metadata']['Information']['Instrument']['Objectives']['Objective'])
+        else:
+            num_obj = 1
+    except (KeyError, TypeError) as e:
+        print(e)
+        num_obj = 1
 
-    try:
-        metadata['ObjImmersion'] = metadatadict_czi['ImageDocument']['Metadata']['Information']['Instrument']['Objectives']['Objective']['Immersion']
-    except KeyError as e:
-        print('Key not found:', e)
-        metadata['ObjImmersion'] = None
+    # if there is only one objective found
+    if num_obj == 1:
+        try:
+            metadata['ObjName'].append(metadatadict_czi['ImageDocument']['Metadata']['Information']
+                                       ['Instrument']['Objectives']['Objective']['Name'])
+        except (KeyError, TypeError) as e:
+            print(e)
+            metadata['ObjName'].append(None)
 
-    try:
-        metadata['ObjNA'] = np.float(metadatadict_czi['ImageDocument']['Metadata']['Information']
-                                     ['Instrument']['Objectives']['Objective']['LensNA'])
-    except KeyError as e:
-        print('Key not found:', e)
-        metadata['ObjNA'] = None
+        try:
+            metadata['ObjImmersion'] = metadatadict_czi['ImageDocument']['Metadata']['Information']['Instrument']['Objectives']['Objective']['Immersion']
+        except (KeyError, TypeError) as e:
+            print(e)
+            metadata['ObjImmersion'] = None
 
-    try:
-        metadata['ObjID'] = metadatadict_czi['ImageDocument']['Metadata']['Information']['Instrument']['Objectives']['Objective']['Id']
-    except KeyError as e:
-        print('Key not found:', e)
-        metadata['ObjID'] = None
+        try:
+            metadata['ObjNA'] = np.float(metadatadict_czi['ImageDocument']['Metadata']['Information']
+                                         ['Instrument']['Objectives']['Objective']['LensNA'])
+        except (KeyError, TypeError) as e:
+            print(e)
+            metadata['ObjNA'] = None
 
-    try:
-        metadata['TubelensMag'] = np.float(metadatadict_czi['ImageDocument']['Metadata']['Information']
-                                           ['Instrument']['TubeLenses']['TubeLens']['Magnification'])
-    except KeyError as e:
-        print('Key not found:', e, 'Using Default Value = 1.0 for Tublens Magnification.')
-        metadata['TubelensMag'] = 1.0
+        try:
+            metadata['ObjID'] = metadatadict_czi['ImageDocument']['Metadata']['Information']['Instrument']['Objectives']['Objective']['Id']
+        except (KeyError, TypeError) as e:
+            print(e)
+            metadata['ObjID'] = None
 
-    try:
-        metadata['ObjNominalMag'] = np.float(metadatadict_czi['ImageDocument']['Metadata']['Information']
-                                             ['Instrument']['Objectives']['Objective']['NominalMagnification'])
-    except KeyError as e:
-        print('Key not found:', e, 'Using Default Value = 1.0 for Nominal Magnification.')
-        metadata['ObjNominalMag'] = 1.0
+        try:
+            metadata['TubelensMag'] = np.float(metadatadict_czi['ImageDocument']['Metadata']['Information']
+                                               ['Instrument']['TubeLenses']['TubeLens']['Magnification'])
+        except (KeyError, TypeError) as e:
+            print(e, 'Using Default Value = 1.0 for Tublens Magnification.')
+            metadata['TubelensMag'] = 1.0
 
-    try:
-        if metadata['TubelensMag'] is not None:
-            metadata['ObjMag'] = metadata['ObjNominalMag'] * metadata['TubelensMag']
-        if metadata['TubelensMag'] is None:
-            print('No TublensMag found. Use 1 instead')
-            metadata['ObjMag'] = metadata['ObjNominalMag'] * 1.0
+        try:
+            metadata['ObjNominalMag'] = np.float(metadatadict_czi['ImageDocument']['Metadata']['Information']
+                                                 ['Instrument']['Objectives']['Objective']['NominalMagnification'])
+        except (KeyError, TypeError) as e:
+            print(e, 'Using Default Value = 1.0 for Nominal Magnification.')
+            metadata['ObjNominalMag'] = 1.0
 
-    except KeyError as e:
-        print('Key not found:', e)
-        metadata['ObjMag'] = None
+        try:
+            if metadata['TubelensMag'] is not None:
+                metadata['ObjMag'] = metadata['ObjNominalMag'] * metadata['TubelensMag']
+            if metadata['TubelensMag'] is None:
+                print('No TublensMag found. Use 1 instead')
+                metadata['ObjMag'] = metadata['ObjNominalMag'] * 1.0
+
+        except (KeyError, TypeError) as e:
+            print(e)
+            metadata['ObjMag'] = None
+
+    if num_obj > 1:
+        for o in range(num_obj):
+
+            try:
+                metadata['ObjName'].append(metadatadict_czi['ImageDocument']['Metadata']['Information']
+                                           ['Instrument']['Objectives']['Objective'][o]['Name'])
+            except KeyError as e:
+                print('Key not found:', e)
+                metadata['ObjName'].append(None)
+
+            try:
+                metadata['ObjImmersion'].append(metadatadict_czi['ImageDocument']['Metadata']['Information']
+                                                ['Instrument']['Objectives']['Objective'][o]['Immersion'])
+            except KeyError as e:
+                print('Key not found:', e)
+                metadata['ObjImmersion'].append(None)
+
+            try:
+                metadata['ObjNA'].append(np.float(metadatadict_czi['ImageDocument']['Metadata']['Information']
+                                                  ['Instrument']['Objectives']['Objective'][o]['LensNA']))
+            except KeyError as e:
+                print('Key not found:', e)
+                metadata['ObjNA'].append(None)
+
+            try:
+                metadata['ObjID'].append(metadatadict_czi['ImageDocument']['Metadata']['Information']
+                                         ['Instrument']['Objectives']['Objective'][o]['Id'])
+            except KeyError as e:
+                print('Key not found:', e)
+                metadata['ObjID'].append(None)
+
+            try:
+                metadata['TubelensMag'].append(np.float(metadatadict_czi['ImageDocument']['Metadata']['Information']
+                                                        ['Instrument']['TubeLenses']['TubeLens'][o]['Magnification']))
+            except KeyError as e:
+                print('Key not found:', e, 'Using Default Value = 1.0 for Tublens Magnification.')
+                metadata['TubelensMag'].append(1.0)
+
+            try:
+                metadata['ObjNominalMag'].append(np.float(metadatadict_czi['ImageDocument']['Metadata']['Information']
+                                                          ['Instrument']['Objectives']['Objective'][o]['NominalMagnification']))
+            except KeyError as e:
+                print('Key not found:', e, 'Using Default Value = 1.0 for Nominal Magnification.')
+                metadata['ObjNominalMag'].append(1.0)
+
+            try:
+                if metadata['TubelensMag'] is not None:
+                    metadata['ObjMag'].append(metadata['ObjNominalMag'][o] * metadata['TubelensMag'][o])
+                if metadata['TubelensMag'] is None:
+                    print('No TublensMag found. Use 1 instead')
+                    metadata['ObjMag'].append(metadata['ObjNominalMag'][o] * 1.0)
+
+            except KeyError as e:
+                print('Key not found:', e)
+                metadata['ObjMag'].append(None)
 
     # get detector information
 
@@ -919,6 +998,17 @@ def get_metadata_czi(filename, dim2none=False,
 
     # close AICSImage object
     czi_aics.close()
+
+    # convert scale unit tom avoid encoding problems
+    if convert_scunit:
+        if metadata['XScaleUnit'] == 'µm':
+            metadata['XScaleUnit'] = 'micron'
+        if metadata['YScaleUnit'] == 'µm':
+            metadata['YScaleUnit'] = 'micron'
+        if metadata['ZScaleUnit'] == 'µm':
+            metadata['ZScaleUnit'] = 'micron'
+
+    # imwrite(filename, data, description='micron \xB5'.encode('latin-1')))
 
     return metadata
 
@@ -1185,7 +1275,8 @@ def show_napari(array, metadata,
     :param rename_sliders: name slider with correct labels output, defaults to False
     :type verbose: bool, optional
     :param use_BFdims: if True use the 5D dimension string from BioFormats or apeer-ometiff library
-    and if False use 6D dimension string from AICSImageIO, defaults to False
+    and if False use 6D dimension string from AICSImageIO.
+    Only use when the image is read via apeer-ometiff-library etc., defaults to False
     :type verbose: bool, optional
     """
 
@@ -1196,6 +1287,11 @@ def show_napari(array, metadata,
 
         # create scalefcator with all ones
         scalefactors = [1.0] * len(array.shape)
+
+        # extra check for czi to avoid user mistakes
+        if metadata['ImageType'] == 'czi':
+            use_BFdims = False
+
         if use_BFdims:
             # use the dimension string from BioFormats 5D
             dimpos = get_dimpositions(metadata['DimOrder BF Array'])
@@ -1251,7 +1347,7 @@ def show_napari(array, metadata,
                 if isinstance(array, da.Array):
                     print('Extract Channel as Dask.Array')
                     channel = array.compute().take(ch, axis=dimpos['C'])
-                    new_dimstring = metadata['Axes_aics'].replace('C', '')
+                    #new_dimstring = metadata['Axes_aics'].replace('C', '')
 
                 else:
                     # use normal numpy if not
@@ -1299,6 +1395,11 @@ def show_napari(array, metadata,
             print('Adding Channel: ', chname)
             print('Scaling Factors: ', scalefactors)
 
+            # use dask if array is a dask.array
+            if isinstance(array, da.Array):
+                print('Extract Channel using Dask.Array')
+                array = array.compute()
+
             # get min-max values for initial scaling
             clim = calc_scaling(array)
 
@@ -1316,17 +1417,34 @@ def show_napari(array, metadata,
 
             print('Renaming the Sliders based on the Dimension String ....')
 
-            # get the position of dimension entries after removing C dimension
-            dimpos_viewer = get_dimpositions(new_dimstring)
+            if metadata['SizeC'] == 1:
 
-            # get the label of the sliders
-            sliders = viewer.dims.axis_labels
+                # get the position of dimension entries after removing C dimension
+                dimpos_viewer = get_dimpositions(metadata['Axes_aics'])
 
-            # update the labels with the correct dimension strings
-            slidernames = ['B', 'S', 'T', 'Z']
+                # get the label of the sliders
+                sliders = viewer.dims.axis_labels
+
+                # update the labels with the correct dimension strings
+                slidernames = ['B', 'S', 'T', 'Z', 'C']
+
+            if metadata['SizeC'] > 1:
+
+                new_dimstring = metadata['Axes_aics'].replace('C', '')
+
+                # get the position of dimension entries after removing C dimension
+                dimpos_viewer = get_dimpositions(new_dimstring)
+
+                # get the label of the sliders
+                sliders = viewer.dims.axis_labels
+
+                # update the labels with the correct dimension strings
+                slidernames = ['B', 'S', 'T', 'Z']
+
             for s in slidernames:
                 if dimpos_viewer[s] >= 0:
                     sliders[dimpos_viewer[s]] = s
+
             # apply the new labels to the viewer
             viewer.dims.axis_labels = sliders
 
