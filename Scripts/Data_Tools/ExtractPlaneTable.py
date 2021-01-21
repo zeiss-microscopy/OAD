@@ -1,43 +1,30 @@
 #################################################################
 # File       : ExtractPlaneTable.py
-# Version    : 1.0
+# Version    : 1.1
 # Author     : czsrh
-# Date       : 21.06.2016
-# Institution : Carl Zeiss Microscopy GmbH
-# Copyright(c) 2019 Carl Zeiss AG, Germany. All Rights Reserved.
+# Date       : 21.01.2021
+# Insitution : Carl Zeiss Microscopy GmbH
 #
-# Permission is granted to use, modify and distribute this code,
-# as long as this copyright notice remains part of the code.
+#
+# Copyright (c) 2021 Carl Zeiss AG, Germany. All Rights Reserved.
 #################################################################
-
-###########   !!!   ATENTION   !!!   ##############
-#
-# Date: 03.11.2019
-# Currently not working due to an open issue in ZEN!
-#
-###########   !!!   ATENTION   !!!   ##############
 
 
 def SortZenTable(table, columnname, option='asc'):
 
     # get the default view for the internal table object
     dv = table.Core.DefaultView
-
     # sort the table
-    dv.Sort = columnname + ' ' + option
-
+    dv.Sort  = columnname + ' ' + option
     # convert the table to ZenTable object
     dt = dv.ToTable('Test')
-
     # clear the original ZenTable
     table.Rows.Clear()
-
     # fill in the new values
     for dr in dt.Rows:
         table.Rows.Add(dr.ItemArray)
-
+    
     return table
-
 
 # clear console output
 Zen.Application.MacroEditor.ClearMessages()
@@ -47,9 +34,9 @@ img = Zen.Application.Documents.ActiveDocument
 nameParent = img.Name
 
 # define time unit ms, s, min, h, d
-tunit = '[s]'
+tunit = '[ms]'
 
-# create initial plane table
+# create initial plane table 
 table = ZenTable(nameParent[:-4] + '_PlaneTable')
 table.Columns.Add('Scene', int)
 table.Columns.Add('Tile', int)
@@ -73,62 +60,67 @@ print 'Tiles      : ', tiles
 print 'TimePoints : ', SizeT
 print 'Z-Planes   : ', SizeZ
 print 'Channels   : ', SizeC
+ 
 print 'Overall Image Count: ', scenes * tiles * SizeT * SizeZ * SizeC
 
 count = 0
 # open each subimage from the current active image
-for scene in range(1, scenes + 1):
-    for tile in range(1, tiles + 1):
+for scene in range(1, scenes+1):
+    for tile in range(1, tiles+1):
         # very simple progress bar
         print '\b.',
-        for time in range(1, SizeT + 1):
+        for time in range(1, SizeT+1):
             print '\b.',
-            for z in range(1, SizeZ + 1):
+            for z in range (1, SizeZ+1):
                 print '\b.',
-                for ch in range(1, SizeC + 1):
+                for ch in range(1, SizeC+1):
                     count = count + 1
                     # retrieve the actual subimage using the correct path
                     if tiles > 1:
-                        # only try to extract tiles if there are more than one
-                        subimg = img.CreateSubImage('S(' + str(scene) + ')|M(' + str(tile) + ')|T(' +
-                                                    str(time) + ')|Z(' + str(z) + ')|C(' + str(ch) + ')')
+                        subimg = img.CreateSubImage('S('+str(scene)+')|M('+str(tile)+')|T('+str(time)+')|Z('+str(z)+')|C('+str(ch)+')')
                     if tiles == 1:
-                        subimg = img.CreateSubImage('S(' + str(scene) + ')|T(' + str(time) + ')|Z(' + str(z) + ')|C(' + str(ch) + ')')
-
+                        subimg = img.CreateSubImage('S('+str(scene)+')|T('+str(time)+')|Z('+str(z)+')|C('+str(ch)+')')                                        
+                    #subimg = img.CreateSubImage('S('+str(scene)+')|M('+str(tile)+')|T('+str(time)+')|Z('+str(z)+')|C('+str(ch)+')')
+                    
                     # extract relevant imformation from the metadata
                     if tunit == '[ms]':
                         tr = float(subimg.Metadata.GetMetadataWithPath('ImageRelativeTime')[1].TotalMilliseconds)
+                        #tr = float(subimg.Metadata.GetMetadataWithPath('ImageRelativeTime')[0])
                     elif tunit == '[s]':
                         tr = float(subimg.Metadata.GetMetadataWithPath('ImageRelativeTime')[1].TotalSeconds)
+                        #tr = subimg.Metadata.GetMetadataWithPath('ImageRelativeTime')[0]
                     elif tunit == '[min]':
                         tr = float(subimg.Metadata.GetMetadataWithPath('ImageRelativeTime')[1].TotalMinutes)
+                        #tr = float(subimg.Metadata.GetMetadataWithPath('ImageRelativeTime')[0])
                     elif tunit == '[h]':
                         tr = float(subimg.Metadata.GetMetadataWithPath('ImageRelativeTime')[1].TotalHours)
+                        #tr = float(subimg.Metadata.GetMetadataWithPath('ImageRelativeTime')[0])
                     elif tunit == '[d]':
                         tr = float(subimg.Metadata.GetMetadataWithPath('ImageRelativeTime')[1].TotalDays)
+                        #tr = float(subimg.Metadata.GetMetadataWithPath('ImageRelativeTime')[0])
 
                     # fill the ZEN table with the extracted values
                     table.Rows.Add()
                     # add scene index
-                    table.SetValue(count - 1, 0, scene)
+                    table.SetValue(count-1, 0, scene)
                     # add tile index
-                    table.SetValue(count - 1, 1, tile)
+                    table.SetValue(count-1, 1, tile)
                     # add time index
-                    table.SetValue(count - 1, 2, time)
+                    table.SetValue(count-1, 2, time)
                     # add z index
-                    table.SetValue(count - 1, 3, z)
+                    table.SetValue(count-1, 3, z)
                     # add channel index
-                    table.SetValue(count - 1, 4, ch)
+                    table.SetValue(count-1, 4, ch)
                     # add xyz position
-                    table.SetValue(count - 1, 5, subimg.Metadata.StagePositionMicron.X)
-                    table.SetValue(count - 1, 6, subimg.Metadata.StagePositionMicron.Y)
-                    table.SetValue(count - 1, 7, subimg.Metadata.FocusPositionMicron)
+                    table.SetValue(count-1, 5, subimg.Metadata.StagePositionMicron.X)
+                    table.SetValue(count-1, 6, subimg.Metadata.StagePositionMicron.Y)
+                    table.SetValue(count-1, 7, subimg.Metadata.FocusPositionMicron)
                     # add timestamps
-                    table.SetValue(count - 1, 8, tr)
-
+                    table.SetValue(count-1, 8, tr)
+                                    
                     # close the subimage
                     subimg.Close()
-
+                    
 print '\nFinished - PlaneTable created.'
 
 # sort the table
@@ -136,3 +128,4 @@ newtable = SortZenTable(table, 'Time ' + tunit)
 
 # show the table
 Zen.Application.Documents.Add(newtable)
+
