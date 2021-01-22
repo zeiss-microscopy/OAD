@@ -108,3 +108,6 @@ venv.bak/
 
 # personal files
 czcopyright.txt
+.vs/open_application_development/v16/.suo
+.vs/VSWorkspaceState.json
+.vs/slnx.sqlite
