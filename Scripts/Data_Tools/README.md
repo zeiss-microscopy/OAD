@@ -107,7 +107,7 @@ The tool was kindly provided by Sara McArdle from the La Jolla Institute for Imm
 ### ExtractPlaneTable.py
 
 This scripts creates a table with all indices and XYZ coordinates for every tile of the active CZI image.
-In order to run the script one needs to place the [ZenTools.dll](../../DLLs/zenblue_33) inside the ZEN program folder
+In order to run the script one needs to place the [ZenTools.dll](/Scripts/DLLs/zenblue_33/ZenTools.dll) inside the ZEN program folder
 
 ![Screenshot of GUI](../../Images/ExtractPlaneTable.png)
 
