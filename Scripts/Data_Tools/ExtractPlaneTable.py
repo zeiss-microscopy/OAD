@@ -10,7 +10,7 @@
 #
 # Copyright (c) 2020 Carl Zeiss AG, Germany. All Rights Reserved.
 #
-# Disclaimer:The script contains undocuments function and methods,
+# Disclaimer:The script contains undocumented functions and methods,
 #            which are subject to change. Use at your own risk.
 #####################################################################
 
