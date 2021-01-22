@@ -33,47 +33,48 @@ def normalize_columns(table, colname):
     for r in range(table.RowCount):
         # create list with all timestamps
         timestamps.append(table.GetValue(r, table.Columns.IndexOf(colname)))
-    
+
     # determine the minimum time value
     tmin = min(timestamps)
-    
+
     for r in range(table.RowCount):
         # replace the timestamps with the normalized value
         table.SetValue(r, table.Columns.IndexOf(colname), timestamps[r] - tmin)
-        
+
     return table
 
 
 def write_planetable(table, filename, delimiter=','):
 
     # define the headers carefully - they must match with the table column names
-    headers = ['Scene','Tile', 'T', 'Z', 'C', 'X [micron]', 'Y [micron]', 'Z [micron]', 'Time [s]']
+    headers = ['Scene', 'Tile', 'T', 'Z', 'C', 'X [micron]', 'Y [micron]', 'Z [micron]', 'Time [s]']
 
     # open the file for writing
     writer = csv.writer(open(filename, 'wb'), delimiter=delimiter)
-    
+
     # write the headers inside the first row
     writer.writerow(headers)
-    
+
     # write values row-by-row
     for r in range(table.RowCount):
-        
+
         row = []
         for h in headers:
             # special formating
-            if h in ['X [micron]','Y [micron]', 'Z [micron]']:
+            if h in ['X [micron]', 'Y [micron]', 'Z [micron]']:
                 row.append('{0:0.1f}'.format(table.GetValue(r, table.Columns.IndexOf(h))))
             if h in ['Time [s]']:
                 row.append('{0:0.3f}'.format(table.GetValue(r, table.Columns.IndexOf(h))))
             if h in ['Scene', 'Tile', 'T', 'Z', 'C']:
                 row.append(table.GetValue(r, table.Columns.IndexOf(h)))
-        
+
         # write the formated row
         writer.writerow(row)
-        
+
     print('CSV file written.')
 
 ##################################### MAIN SCRIPT #######################################
+
 
 # clear console output
 Zen.Application.MacroEditor.ClearMessages()
@@ -85,7 +86,7 @@ CZIdict = {}
 opendocs = Zen.Application.Documents
 for doc in opendocs:
     image = Zen.Application.Documents.GetByName(doc.Name)
-    
+
     if image.FileName.EndsWith('.czi'):
         # get the filename of the current document only when it ends with '.czi'
         CZIfiles_short.append(Path.GetFileName(image.FileName))
@@ -101,7 +102,7 @@ wd.AddLabel('-----------------------------------------------')
 wd.AddCheckbox('closezentable', 'Close ZEN table at the end', False)
 
 # show the window
-result=wd.Show()
+result = wd.Show()
 
 # check, if Cancel button was clicked
 if result.HasCanceled == True:
@@ -120,7 +121,7 @@ Zen.Application.Documents.ActiveDocument = img
 # define time unit
 tunit = '[s]'
 
-# create initial plane table 
+# create initial plane table
 table = ZenTable(cziname[:-4] + '_PlaneTable')
 table.Columns.Add('Scene', int)
 table.Columns.Add('Tile', int)
@@ -159,7 +160,7 @@ if sbs.Count <= 1000:
     pbar = 20
 if sbs.Count <= 10000:
     pbar = 50
-    
+
 
 print(' Start checking Image Subblocks ...')
 
@@ -168,42 +169,42 @@ for sb in sbs:
 
     # check if the subblock is a pyramid block
     if not sb.IsScaled:
-        
+
         count = count + 1
         if divmod(count, pbar)[1] == 0:
             print '\b.',
-        
+
         # allow data accsess
         sb.BeginImageDataAccess()
-        
+
         # fill the ZEN table with the extracted values
         table.Rows.Add()
-        
+
         # add scene index
         table.SetValue(count, table.Columns.IndexOf('Scene'), sb.Bounds.StartS)
-        
+
         # add tile index
         table.SetValue(count, table.Columns.IndexOf('Tile'), sb.Bounds.StartM)
-        
+
         # add time index
         table.SetValue(count, table.Columns.IndexOf('T'), sb.Bounds.StartT)
-        
+
         # add z index
         table.SetValue(count, table.Columns.IndexOf('Z'), sb.Bounds.StartZ)
-        
+
         # add channel index
         table.SetValue(count, table.Columns.IndexOf('C'), sb.Bounds.StartC)
-        
+
         # add xyz position
         table.SetValue(count, table.Columns.IndexOf('X [micron]'), round(sb.Metadata.StageXPosition, 1))
         table.SetValue(count, table.Columns.IndexOf('Y [micron]'), round(sb.Metadata.StageYPosition, 1))
         table.SetValue(count, table.Columns.IndexOf('Z [micron]'), round(sb.Metadata.FocusPosition, 1))
-        
+
         try:
             # add timestamps
             ft = sb.Metadata.AcquisitionTime.ToFileTime()
             # convert to [sec] because ft is in 100ns intervals
-            ft_sec = Convert.ToDouble(ft)/10000000.0
+            ft_sec = Convert.ToDouble(ft) / 10000000.0
             table.SetValue(count, table.Columns.IndexOf('Time ' + tunit), ft_sec)
         except:
             table.SetValue(count, table.Columns.IndexOf('Time ' + tunit), 0.0)
@@ -227,7 +228,7 @@ if savetable:
     # save the data to file
     tablefilename = img.FileName[:-4] + '_PlaneTable.csv'
     print 'Data will be saved to: ', tablefilename
-    
+
     # check for exiting file
     if File.Exists(tablefilename):
         msg = ZenWindow()
@@ -237,16 +238,16 @@ if savetable:
 
     # check, if Cancel button was clicked
     if result.HasCanceled:
-      print('Canceled. Data will not be saved.')
+        print('Canceled. Data will not be saved.')
     if not result.HasCanceled:
         print('File will be overwritten.')
         write_planetable(newtable, tablefilename, delimiter=',')
-        
+
     if not File.Exists(tablefilename):
         write_planetable(newtable, tablefilename, delimiter=',')
-    
+
 # close ZEN table
 if closetablezen:
     newtable.Close()
-    
+
 print('Done.')
