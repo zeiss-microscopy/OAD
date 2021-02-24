@@ -1,15 +1,15 @@
 # @LogService log
 
 #################################################################
-# File       : fijipytools.py
-# Version    : 1.6.5
-# Author     : czsrh
-# Date       : 26.11.2020
+# File        : fijipytools.py
+# Version     : 1.6.6
+# Author      : czsrh
+# Date        : 20.02.2020
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # ATTENTION: Use at your own risk.
 #
-# Copyright(c) 2020 Carl Zeiss AG, Germany. All Rights Reserved.
+# Copyright(c) 2021 Carl Zeiss AG, Germany. All Rights Reserved.
 #
 # Permission is granted to use, modify and distribute this code,
 # as long as this copyright notice remains part of the code.
@@ -18,6 +18,10 @@
 
 import os
 import json
+import time
+import sys
+from collections import OrderedDict
+from org.scijava.log import LogLevel
 from java.lang import Double, Integer
 from java.awt import GraphicsEnvironment
 from ij import IJ, ImagePlus, ImageStack, Prefs
@@ -69,28 +73,17 @@ from inra.ijpb.morphology import Reconstruction
 from inra.ijpb.morphology import Reconstruction3D
 
 
-class ImportTools:
+
+class MetaData:
 
     @staticmethod
-    def openfile(imagefile,
-                 stitchtiles=True,
-                 setflatres=False,
-                 readpylevel=0,
-                 setconcat=True,
-                 openallseries=True,
-                 showomexml=False,
-                 attach=False,
-                 autoscale=True,
-                 imageID=0):
-
-        # stitchtiles = option of CZIReader to return the raw tiles as
-        # individual series rather than the auto-stitched images
+    def get_metadata(imagefile, imageID=0):
 
         metainfo = {}
         # checking for thr file Extension
         metainfo['Extension'] = MiscTools.getextension(MiscTools.splitext_recurse(imagefile))
 
-        # initialite the reader and get the OME metadata
+        # initialize the reader and get the OME metadata
         reader = ImageReader()
         omeMeta = MetadataTools.createOMEXMLMetadata()
         metainfo['ImageCount_OME'] = omeMeta.getImageCount()
@@ -99,7 +92,7 @@ class ImportTools:
         metainfo['SeriesCount_BF'] = reader.getSeriesCount()
         reader.close()
 
-        # read dimensions TZCXY from OME metadata
+                # read dimensions TZCXY from OME metadata
         metainfo['SizeT'] = omeMeta.getPixelsSizeT(imageID).getValue()
         metainfo['SizeZ'] = omeMeta.getPixelsSizeZ(imageID).getValue()
         metainfo['SizeC'] = omeMeta.getPixelsSizeC(imageID).getValue()
@@ -119,7 +112,7 @@ class ImportTools:
 
         if physSizeX is not None:
             metainfo['ScaleX'] = round(physSizeX.value(), 3)
-            metainfo['ScaleY'] = round(physSizeX.value(), 3)
+            metainfo['ScaleY'] = round(physSizeY.value(), 3)
         if physSizeX is None:
             metainfo['ScaleX'] = None
             metainfo['ScaleY'] = None
@@ -129,6 +122,36 @@ class ImportTools:
         if physSizeZ is None:
             metainfo['ScaleZ'] = None
 
+        return metainfo
+
+    @staticmethod
+    def order_metadict(metainfo_dict):
+
+        # order the metadata dictionary
+        metainfo_ordered = OrderedDict(sorted(metainfo_dict.items()))
+
+        return metainfo_ordered 
+
+
+class ImportTools:
+
+    @staticmethod
+    def openfile(imagefile,
+                 stitchtiles=True,
+                 setflatres=False,
+                 readpylevel=0,
+                 setconcat=True,
+                 openallseries=True,
+                 showomexml=False,
+                 attach=False,
+                 autoscale=True,
+                 imageID=0):
+
+        # stitchtiles = option of CZIReader to return the raw tiles as
+        # individual series rather than the auto-stitched images
+
+        metainfo = MetaData.get_metadata(imagefile, imageID=imageID)
+
         # if image file is Carl Zeiss Image - CZI
         if metainfo['Extension'] == '.czi':
 
@@ -136,14 +159,14 @@ class ImportTools:
             # pylevel = 0 - read the full resolution image
 
             imp, metainfo = ImportTools.readCZI(imagefile, metainfo,
-                                                stitchtiles=stitchtiles,
-                                                setflatres=setflatres,
-                                                readpylevel=readpylevel,
-                                                setconcat=setconcat,
-                                                openallseries=openallseries,
-                                                showomexml=showomexml,
-                                                attach=attach,
-                                                autoscale=autoscale)
+                                                           stitchtiles=stitchtiles,
+                                                           setflatres=setflatres,
+                                                           readpylevel=readpylevel,
+                                                           setconcat=setconcat,
+                                                           openallseries=openallseries,
+                                                           showomexml=showomexml,
+                                                           attach=attach,
+                                                           autoscale=autoscale)
 
         # if image file is not Carl Zeiss Image - CZI
         if metainfo['Extension'] != '.czi':
@@ -244,26 +267,20 @@ class ImportTools:
                 showomexml=False,
                 attach=False,
                 autoscale=True):
-
-        options = DynamicMetadataOptions()
-        options.setBoolean("zeissczi.autostitch", stitchtiles)
-        options.setBoolean("zeissczi.attachments", attach)
-
-        czireader = ZeissCZIReader()
-        czireader.setFlattenedResolutions(setflatres)
-        czireader.setMetadataOptions(options)
-        czireader.setId(imagefile)
-
-        # Set the preferences in the ImageJ plugin
-        # Note although these preferences are applied, they are not refreshed in the UI
-        Prefs.set("bioformats.zeissczi.allow.autostitch", str(stitchtiles).lower())
-        Prefs.set("bioformats.zeissczi.include.attachments", str(attach).lower())
-
-        # metainfo = {}
+        
+        # define the reader options
+        reader_options, czireader = ImportTools.setReaderOptions(imagefile, stitchtiles=stitchtiles,
+                                                                            setflatres=setflatres,
+                                                                            setconcat=setconcat,
+                                                                            openallseries=openallseries,
+                                                                            showomexml=showomexml,
+                                                                            attach=attach,
+                                                                            autoscale=autoscale)
+        
+        # update metainformation
         metainfo['rescount'] = czireader.getResolutionCount()
         metainfo['SeriesCount_CZI'] = czireader.getSeriesCount()
         metainfo['flatres'] = czireader.hasFlattenedResolutions()
-        # metainfo['getreslevel'] = czireader.getResolution()
 
         # Dimensions
         metainfo['SizeT'] = czireader.getSizeT()
@@ -276,17 +293,8 @@ class ImportTools:
         metainfo['AllowAutoStitching'] = czireader.allowAutostitching()
         metainfo['CanReadAttachments'] = czireader.canReadAttachments()
 
-        # read in and display ImagePlus(es) with arguments
-        options = ImporterOptions()
-        options.setOpenAllSeries(openallseries)
-        options.setShowOMEXML(showomexml)
-        options.setConcatenate(setconcat)
-        options.setAutoscale(autoscale)
-        options.setId(imagefile)
-
-        # open the ImgPlus
-        imps = BF.openImagePlus(options)
-
+        # open the ImgPlus using BioFormats
+        imps = BF.openImagePlus(reader_options)
         metainfo['Pyramid Level Output'] = readpylevel
 
         # read image data using the specified pyramid level
@@ -305,25 +313,86 @@ class ImportTools:
         metainfo['ScaleX Output'] = metainfo['ScaleX'] * scale
         metainfo['ScaleY Output'] = metainfo['ScaleY'] * scale
 
-        """
-        imp = MiscTools.setproperties(imp, scaleX=metainfo['ScaleX Output'],
+        imp = MiscTools.setscale(imp, scaleX=metainfo['ScaleX Output'],
                                       scaleY=metainfo['ScaleX Output'],
                                       scaleZ=metainfo['ScaleZ'],
-                                      unit="micron",
-                                      sizeC=metainfo['SizeC'],
-                                      sizeZ=metainfo['SizeZ'],
-                                      sizeT=metainfo['SizeT'])
-        """
-
-        imp = MiscTools.setscale(imp, scaleX=metainfo['ScaleX Output'],
-                                 scaleY=metainfo['ScaleX Output'],
-                                 scaleZ=metainfo['ScaleZ'],
-                                 unit="micron")
+                                      unit="micron")
 
         # close czireader
         czireader.close()
 
         return imp, metainfo
+
+    @staticmethod
+    def setReaderOptions(imagefile, stitchtiles=False,
+                                    setflatres=True,
+                                    setconcat=False,
+                                    openallseries=False,
+                                    showomexml=False,
+                                    attach=False,
+                                    autoscale=True):
+
+        czi_options = DynamicMetadataOptions()
+        czi_options.setBoolean("zeissczi.autostitch", stitchtiles)
+        czi_options.setBoolean("zeissczi.attachments", attach)
+
+        # set the option for the CZIReader
+        czireader = ImportTools.setCZIReaderOptions(imagefile, czi_options, setflatres=setflatres)
+
+        # Set the preferences in the ImageJ plugin
+        # Note although these preferences are applied, they are not refreshed in the UI
+        Prefs.set("bioformats.zeissczi.allow.autostitch", str(stitchtiles).lower())
+        Prefs.set("bioformats.zeissczi.include.attachments", str(attach).lower())
+
+        # set the option for the BioFormats import
+        reader_options = ImporterOptions()
+        reader_options.setOpenAllSeries(openallseries)
+        reader_options.setShowOMEXML(showomexml)
+        reader_options.setConcatenate(setconcat)
+        reader_options.setAutoscale(autoscale)
+        reader_options.setStitchTiles(stitchtiles)
+        reader_options.setId(imagefile)
+
+        return reader_options, czireader
+
+    @staticmethod
+    def setCZIReaderOptions(imagefile, czi_options, setflatres=True):
+
+        czireader = ZeissCZIReader()
+        czireader.setFlattenedResolutions(setflatres)
+        czireader.setMetadataOptions(czi_options)
+        czireader.setId(imagefile)
+
+        return czireader
+
+    @staticmethod
+    def readCZIattachment(imagefile,
+                          stitchtiles=False,
+                          setflatres=False,
+                          readpylevel=0,
+                          setconcat=False,
+                          openallseries=False,
+                          showomexml=False,
+                          attach=False,
+                          autoscale=True):
+        
+        # define the reader options
+        reader_options, czireader = ImportTools.setReaderOptions(imagefile, stitchtiles=stitchtiles,
+                                                                            setflatres=setflatres,
+                                                                            setconcat=setconcat,
+                                                                            openallseries=openallseries,
+                                                                            showomexml=showomexml,
+                                                                            attach=attach,
+                                                                            autoscale=autoscale)
+
+        # open the ImgPlus
+        imps_attach = BF.openImagePlus(reader_options)
+
+        # read image data using the specified pyramid level
+        imp_attach, slices, width, height, pylevel = ImageTools.getImageSeries(imps_attach, series=readpylevel)
+        czireader.close()
+
+        return imp_attach
 
 
 class ExportTools:
@@ -380,6 +449,7 @@ class ExportTools:
             # in case of OME-TIFF
             elif extension == 'ome.tiff' or extension == 'ome.tif':
                 pstr = ExportTools.bfexporter(imp, savepath, useLOCI=True)
+                print('BioFormats Paramstring : ', pstr)
 
             # in case of PNG
             elif extension == ('png' or 'PNG'):
@@ -393,6 +463,7 @@ class ExportTools:
             extension = 'ome.tiff'
             print("save as OME-TIFF: ")  # savepath
             pstr = ExportTools.bfexporter(imp, savepath, useLOCI=True)
+            print('BioFormats Paramstring : ', pstr)
 
         return savepath
 
@@ -475,6 +546,13 @@ class FilterTools:
         filterdict['VARIANCE'] = RankFilters.VARIANCE
         filterdict['OPEN'] = RankFilters.OPEN
         filterdict['DESPECKLE'] = RankFilters.DESPECKLE
+        filterdict['Mean'] = RankFilters.MEAN
+        filterdict['Min'] = RankFilters.MIN
+        filterdict['Max'] = RankFilters.MAX
+        filterdict['Median'] = RankFilters.MEDIAN
+        filterdict['Variance'] = RankFilters.VARIANCE
+        filterdict['Open'] = RankFilters.OPEN
+        filterdict['Despeckle'] = RankFilters.DESPECKLE
 
         stack = imp.getStack()  # get the stack within the ImagePlus
         nslices = stack.getSize()  # get the number of slices
@@ -525,14 +603,27 @@ class BinaryTools:
     @staticmethod
     def fill_holes(imp, is3d=False):
 
+
         if not is3d:
             # 2D fill holes
             stack = imp.getStack()  # get the stack within the ImagePlus
             nslices = stack.getSize()  # get the number of slices
             for index in range(1, nslices + 1):
+                
                 ip = stack.getProcessor(index)
+                ip.invert()
                 # Reconstruction.fillHoles(imp.getProcessor())
                 Reconstruction.fillHoles(ip)
+                ip.invert()
+        #if not is3d:
+        #    # 2D fill holes
+        #    stack = imp.getStack()  # get the stack within the ImagePlus
+        #    nslices = stack.getSize()  # get the number of slices
+        #    for index in range(1, nslices + 1):
+        #        ip = stack.getProcessor(index)
+        #
+        #        # Reconstruction.fillHoles(imp.getProcessor())
+        #        Reconstruction.fillHoles(ip)
 
         if is3d:
             # 3D fill holes
@@ -762,9 +853,9 @@ class AnalyzeTools:
                          maxsize,
                          mincirc,
                          maxcirc,
-                         filename='Test.czi',
+                         #filename='Test.czi',
                          addROIManager=False,
-                         headless=False,
+                         #headless=False,
                          exclude=True):
 
         if GraphicsEnvironment.isHeadless():
@@ -827,9 +918,12 @@ class AnalyzeTools:
         for i in range(imp.getStackSize()):
             imp.setSliceWithoutUpdate(i + 1)
             ip = imp.getProcessor()
-            #IJ.run(imp, "Convert to Mask", "")
+            # convert to a mask for the particle analyzer
+            ip.invert()
+            # do the particle analysis
             p.analyze(imp, ip)
             mmap = p.getOutputImage()
+            # add the slide to the full stack
             particlestack.addSlice(mmap.getProcessor())
 
         return particlestack, results
@@ -888,6 +982,13 @@ class MiscTools:
 
     @staticmethod
     def getextension(splitresult):
+        """Get the file extension even it is  *.ome.tiff
+
+        :param splitresult: results from splitting the path
+        :type splitresult: list
+        :return: file extension
+        :rtype: str
+        """  
 
         if len(splitresult) == 2:
             # only one extension part, eg *.czi detected
@@ -907,6 +1008,14 @@ class MiscTools:
 
     @staticmethod
     def splitext_recurse(filepath):
+        """Get base filename
+
+        :param filepath: filepath
+        :type filepath: str
+        :return: base filename
+        :rtype: str
+        """ 
+
         base, ext = os.path.splitext(filepath)
         if ext == '':
             return (base,)
@@ -922,14 +1031,35 @@ class MiscTools:
                       sizeC=1,
                       sizeZ=1,
                       sizeT=1):
+        """Set properties of image in Fiji
+
+        :param imp: Image
+        :type imp: ImgPlus
+        :param scaleX: scaleX, defaults to 1.0
+        :type scaleX: float, optional
+        :param scaleY: scaleY, defaults to 1.0
+        :type scaleY: float, optional
+        :param scaleZ: scaleZ, defaults to 1.0
+        :type scaleZ: float, optional
+        :param unit: scale unit, defaults to "micron"
+        :type unit: str, optional
+        :param sizeC: sizeC, defaults to 1
+        :type sizeC: int, optional
+        :param sizeZ: sizeZ, defaults to 1
+        :type sizeZ: int, optional
+        :param sizeT: sizeT, defaults to 1
+        :type sizeT: int, optional
+        :return: Image
+        :rtype: ImgPlus
+        """        
 
         # check if scaleZ has a valid value to call modify the properties
         if scaleZ is None:
             scaleZ = 1
 
         # run the image properties tool
-        IJ.run(imp, "Properties...", "channels=" + str(sizeC)
-               + " slices=" + str(sizeZ)
+        IJ.run(imp, "Properties...", "channels=" + str(sizeC) +
+               " slices=" + str(sizeZ)
                + " frames=" + str(sizeT)
                + " unit=" + unit
                + " pixel_width=" + str(scaleX)
@@ -960,6 +1090,22 @@ class MiscTools:
                  scaleY=1.0,
                  scaleZ=1.0,
                  unit="micron"):
+        """Set new scaling for image.
+
+        :param imp: image
+        :type imp: ImgPlus
+        :param scaleX: scaleX, defaults to 1.0
+        :type scaleX: float, optional
+        :param scaleY: scaleY, defaults to 1.0
+        :type scaleY: float, optional
+        :param scaleZ: scaleZ, defaults to 1.0
+        :type scaleZ: float, optional
+        :param unit: scaling unit, defaults to "micron"
+        :type unit: str, optional
+        :return: image
+        :rtype: ImgPlus
+        """  
+
 
         # check if scaleZ has a valid value to call modify the scaling
         if scaleZ is None:
@@ -1072,6 +1218,26 @@ class MiscTools:
         imp = IJ.getImage()
 
         return imp
+
+    @staticmethod
+    def copyorig(src, dst, force_overwrite=True):
+
+        if force_overwrite:
+            if os.path.exists(dst):
+                os.remove(dst)
+                log.log(LogLevel.INFO, 'Removed before copy: ' + dst)
+
+        start = time.clock()
+        try:
+            shutil.copy2(src, dst)
+            copy_ok = 'Copied original file to output.'
+        except IOError:
+            copy_ok = str(IOError)
+        end = time.clock()
+
+        log.log(LogLevel.INFO, 'Duration Copying : ' + str(end - start))
+
+        return copy_ok
 
 
 class JSONTools:
