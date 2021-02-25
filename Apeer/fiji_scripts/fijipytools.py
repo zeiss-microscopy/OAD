@@ -2,9 +2,9 @@
 
 #################################################################
 # File        : fijipytools.py
-# Version     : 1.6.6
+# Version     : 1.6.8
 # Author      : czsrh
-# Date        : 20.02.2020
+# Date        : 20.02.2021
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # ATTENTION: Use at your own risk.
@@ -174,7 +174,7 @@ class ImportTools:
             # read the imagefile using the correct method
             if metainfo['Extension'].lower() == ('.jpg' or '.jpeg'):
                 # use dedicated method for jpg
-                imp, metainfo = ImageTools.openjpg(imagefile, method='IJ')
+                imp, metainfo = ImageTools.openjpg(imagefile, metainfo, method='IJ', series=0)
             else:
                 # if not jpg - use BioFormats
                 imp, metainfo = ImportTools.readbf(imagefile, metainfo,
@@ -228,8 +228,8 @@ class ImportTools:
         return imp, metainfo
 
     @staticmethod
-    def openjpg(imagefile,
-                method='IJ'):
+    def openjpg(imagefile, metainfo, method='IJ',
+                                     series=0):
 
         if method == 'IJ':
 
@@ -247,14 +247,12 @@ class ImportTools:
             imps = BF.openImagePlus(imagefile)
 
             # read image data using the specified pyramid level
-            imp, slices, width, height, pylevel = ImageTools.getImageSeries(imps, series=readpylevel)
+            imp, slices, width, height, pylevel = ImageTools.getImageSeries(imps, series=series)
             metainfo['Output Slices'] = slices
             metainfo['Output SizeX'] = width
             metainfo['Output SizeY'] = height
 
-            imp = imps[0]
-
-        return imp
+        return imp, metainfo
 
     @staticmethod
     def readCZI(imagefile,
