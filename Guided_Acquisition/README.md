@@ -117,7 +117,7 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
 
 ***
 
-#### Guided Acquisition - Scan Brain Slides
+### Guided Acquisition - Scan Brain Slides
 
 <figure>
     <img src="./images/GA_app_labeled_neuron_detection3.png" title="Guided Acquisition - Labeled Neuron Detection" width="1200"></figure>
@@ -145,7 +145,7 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
 
 ***
 
-#### Guided Acquisition - Scan Drosophila Embryos
+### Guided Acquisition - Scan Drosophila Embryos
 
 <figure>
     <img src="./images/GA_CD7_Embryo_Airyscan_1.png" title="Guided Acquisition - Scan Drosophila Embryos" width="1200">
@@ -167,7 +167,7 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
 
 ***
 
-#### Guided Acquisition - Detection of cell-cell contact
+### Guided Acquisition - Detection of cell-cell contact
 
 <figure>
     <img src="./images/GA_app_cell2cell_contacts.png" title="Guided Acquisition - Cell-Cell Contact Detection" width="1200">
@@ -195,7 +195,7 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
     * DAPI and Oblique Contrast in WF 
 
 
-#### Guided Acquisition - Detection of organoids
+### Guided Acquisition - Detection of organoids
 
 <figure>
     <img src="./images/GA_app_3d_organoids1.png" title="Guided Acquisition - Organoid Detection" width="1200">
@@ -226,7 +226,7 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
 
 ***
 
-#### Guided Acquisition - Detection of mitotic cells
+### Guided Acquisition - Detection of mitotic cells
 
 <figure>
     <img src="./images/GA_app_mitotic_cells.png" title="Guided Acquisition - Mitotic Cell Detection" width="1200">
