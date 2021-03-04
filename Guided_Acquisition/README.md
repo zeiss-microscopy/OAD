@@ -131,7 +131,7 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
     <figcaption>Overview image of the sectioned mouse brains and maximum intensity projection of a detected neuron. Sample courtesy of Dr. L. Lim, Katholieke Universiteit Leuven, Belgium</figcaption>
 </figure>
 
-<u>**Description**</u>
+#### Description
 
 * Microscope: ZEISS Celldiscoverer 7
 * 15 sectioned mouse brains prepared on a standard microscope glass slide
@@ -155,7 +155,7 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
     <figcaption>Overview of the sample and maximum intensity projection of one detected embryo. Sample courtesy of Dr. G. Wolfstetter, University of Gothenburg, Germany</figcaption>
 </figure>
 
-<u>**Description**</u>
+#### Description
 
 * Microscope: ZEISS Celldiscoverer 7
 * Sample: Fixed drosophila embryos on a standard microscope glass slide
@@ -177,7 +177,7 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
     <figcaption>Inset shows cell-cell contact between two U20S cells expressing late endosome (green) and actin (purple) markers. Sample obtained from ZEISS Oberkochen demo lab.</figcaption>
 </figure>
 
-<u>**Description**</u>
+#### Description
 
 * Microscope: ZEISS Celldiscoverer 7
 * Sample:
@@ -209,7 +209,7 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
     <figcaption>Overview of a well of a 24-well plate, the overview image and the detail scans. Sample courtesy of Dr. M. Lutolf, EPFL, Switzerland</figcaption>
 </figure>
 
-<u>**Description**</u>
+#### Description
 
 * Microscope: ZEISS Celldiscoverer 7
 * Sample:
@@ -236,7 +236,7 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
     <figcaption>Overview of the sample and one location with a mitotic cell, identified with image analysis and scanned with high resolution. Sample obtained from ZEISS Oberkochen demo lab.</figcaption>
 </figure>
 
-<u>**Description**</u>
+#### Description
 
 * Microscope: ZEISS Celldiscoverer 7
 * Sample: Porcine kidney cell line LLC-PK1
@@ -259,7 +259,7 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
 
 The "scripted" version of Guided Acquisition comes free of charge, but requires more knowledge and can be used at your own risk.
 
-<u>**Key Features**</u> 
+### Key Features 
 
 * full flexibility
 * allows extending and customization for the advanced users
