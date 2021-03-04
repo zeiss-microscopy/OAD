@@ -1,4 +1,7 @@
-# Guided Acquisition
+# Guided Acquisition - Use Image Analysis to guide and automate the microscope
+
+
+<p><img src="./images/GA_Poster_Gallery.png" title="Guided Acquisition - Application Collection" width="1200"></p>
 
 ## Key Facts
 
@@ -91,7 +94,7 @@ Note: You need to define your image analysis setting on a sample image processed
 * LSM 900 MAT​
 * LSM 980 (with Airyscan 2)​
 ​
-> :warning: **This list is subject to change without notice. Please contact your ZEISS for details.**
+> :warning: **This list is subject to change without notice. Please contact your local ZEISS representative for details.**
 
 * **Scanning stage is required for all stands​**
 * **Motorized objective nosepiece is recommended​**
@@ -105,7 +108,7 @@ Note: You need to define your image analysis setting on a sample image processed
 
 An especially interesting option is to combine the power of a camera-based overview scan with the optional sectioning capabilities of an LSM. Such an workflow can be easily configured in ZEN Blue by setting up the respective experiment for the overview scan with camera detection using a low magnification and the LSM-based detail scan, e.g. Z-Stack, using a high NA objective.
 
-Since ZEN Blue 2.5 this software has a module called **ZEN Connect**, which allows combining and correlating images inside one sample-centric workspace. Every acquired image by either the camera or the LSM) will be placed here based on the XY stage coordinates. Therefore the **Correlative Workspace (CWS)** is ideally suited to display the results of an Guided Acquisition workflow.
+ZEN Blue offers a module called **ZEN Connect**, which allows combining and correlating images inside one sample-centric workspace. Every acquired image by either the camera or the LSM) will be placed here based on the XY stage coordinates. Therefore the **Correlative Workspace (CWS)** is ideally suited to display the results of an Guided Acquisition workflow.
 
 More information about ZEN Connect can be found here: [ZEN Connect](https://www.zeiss.com/microscopy/int/products/microscope-software/zen-connect-image-overlay-and-correlative-microscopy.html)
 
