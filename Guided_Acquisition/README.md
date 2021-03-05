@@ -1,5 +1,6 @@
 # Guided Acquisition - Use Image Analysis to guide and automate the microscope
 
+<p><img src="./images/Guided Acquisition Drosophila Embryos in ZEN Connect.gif" title="Guided Acquisition - Guided Acquisition Movie - ZEN Connect" width="1280"></p>
 
 <p><img src="./images/GA_Poster_Gallery.png" title="Guided Acquisition - Application Collection" width="1200"></p>
 
@@ -54,6 +55,7 @@ The goal of this tutorial is to create an automated workflow that can be used to
 ## ZEN Module for Guided Acquisition
 
 Starting with ZEN Blue 3.1 there will the option to purchase dedicated software module for Guided Acquisition, which has a streamlined UI interface and other additional functionality, like save settings.
+
 
 <u>**Key Features**</u> 
 
@@ -290,6 +292,6 @@ The "scripted" version of Guided Acquisition comes free of charge, but requires 
 
 ## Disclaimer
 
-> :warning: **This is an application note that is free to use for everybody. Use it on your own risk. Especially be aware of the fact that automated stage movements might damage hardware if the system is not setup properly. Please check everything in simulation mode first!**
+> :warning: **This tutorial and the related scripts are free to use for everybody. Use it on your own risk. Especially be aware of the fact that automated stage movements might damage hardware if the system is not setup properly. Please check everything in simulation mode first!**
 >
 > Carl Zeiss Microscopy GmbH's ZEN software allows connection to the third party software, Python. Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning Python, makes no representation that Python will work on your hardware, and will not be liable for any damages caused by the use of this extension. By running this example you agree to this disclaimer.
