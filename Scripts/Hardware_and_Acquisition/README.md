@@ -14,7 +14,7 @@ The script does the following things:
 
 ### Smart_Dynamics.py
 
-ZEN Blue offers the possibility to measure the intensity ratio etc. of objects during a running acquisition. Typically the ROIs (where the intensities will be measure) will be created manually.
+ZEN Blue offers the possibility to measure the intensity ratio etc. of objects during a running acquisition. Typically the ROIs (where the intensities will be measured) will be created manually.
 
 For some applications or workflows in can be very beneficial to let an Image Analysis setting create those ROIs automatically be segmenting the objects before the start of the experiment.
 
@@ -26,7 +26,7 @@ The user has to define the following parameters:
 * Option to run a FindSurface using the DF.2 (if available) to find the sample surface
 * Option to run a software autofocus before the actual experiment starts
 * the Image Analysis setting (*.czias) to segment the actual cells or objects
-  * classical threshold as well as machine-learning based segmentation (PixelClassifier or Deep neural networks) can be used
+  * classical threshold as well as machine-learning based segmentation (PixelClassifier or Deep Neural Networks) can be used
 * level of accuracy for the creation of the polygons to outline objects
 * folder to save the results including the data tables from the image analysis
 
