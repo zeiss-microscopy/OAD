@@ -30,7 +30,7 @@ The user has to define the following parameters:
 * level of accuracy for the creation of the polygons to outline objects
 * folder to save the results including the data tables from the image analysis
 
-<p><img src="./images/smart_dynamics2.png" title="Smart Dynamics - User Interface" width="1200"></p>
+<p><img src="./images/smart_dynamics2.png" title="Smart Dynamics - Result in ZEN Blue" width="1200"></p>
 
 ## Disclaimer
 
