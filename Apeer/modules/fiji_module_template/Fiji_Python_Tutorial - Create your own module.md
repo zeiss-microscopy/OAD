@@ -557,7 +557,7 @@ In brief you need to supply a JSON file that specifies your inputs, outputs and 
 On the APEER platform the UI rendered based on this JSON file would look like this:
 
 
-![APEER - Module UI based on JSON file](/images/apeer_module_UI.png)
+![APEER - Module UI based on JSON file](./images/apeer_module_UI.png)
 
 #### Shell script for the Docker Entry Point
 
