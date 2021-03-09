@@ -10,7 +10,7 @@ Create a module that based on ImageJ/Fiji scripting language Python.
 
 ## Introduction
 
-### ImageJ/Fiji - Headless Mode 
+### ImageJ/Fiji - Headless Mode
 
 Before one can start coding it is important to understand a few basic things about scripting in Fiji. In order to be able to create an APEER module using Fiji one needs:
 
@@ -33,7 +33,7 @@ More information and additional examples can be found here:
 * [ImageJ - Script Parameters](https://imagej.net/Script_Parameters)
 
 
-#### Script Parameters
+### Script Parameters
 
 Below you see a typical definition of those scripting parameters inside a Fiji python script. In this case the required inputs are:
 
@@ -57,7 +57,7 @@ When running this script from your Fiji script editor one will see the following
 
 ![Fiji Script Parameters - User Interface](./images/Fiji_Scriptparameter_UI.png)
 
-#### Complete Example Script - Local Fiji version
+### Complete Example Script - Local Fiji version
 
 We will now use this python script example as a template for creating an APEER module out of it. The core functions of this script are quite simple:
 
@@ -330,8 +330,7 @@ filtered_image.show()
 log.log(LogLevel.INFO, 'Done.')
 ```
 
-
-### Structure and files
+## Structure and Files of APEER module repository
 
 Below you see an overview of the files we will generate for this tutorial.
 All these files except the Dockerfile and the json will be utilized within the Docker Container.
@@ -365,8 +364,8 @@ pwd:yourpwd
 The dockerfile for updating and creating Fiji docker container looks like this:
 
 ```docker
-# Prerequites
-# - donwload latest fiji_linux64 from web
+# Prerequisites
+# - download latest fiji_linux64 from web
 # - copy Fiji.app folder it to the folder where your dockerfile is placed
 # place your additional fiji scripts inside the root folder
 # run docker file to built the image and enjoy
@@ -441,7 +440,7 @@ That's it. Now this container can be used later when creating the actual module.
 
 There is no specific order in which the files from above have to be created, so feel free to start with the file you prefer.
 
-#### Module Specifications
+### Module Specifications
 
 The module specification are the same as you have seen in previous tutorials (See [Module Specification Tutorial](https://docs.apeer.com/documentation/module-specification "Module Specification Tutorial"))
 
@@ -559,7 +558,7 @@ On the APEER platform the UI rendered based on this JSON file would look like th
 
 ![APEER - Module UI based on JSON file](./images/apeer_module_UI.png)
 
-#### Shell script for the Docker Entry Point
+### Shell script for the Docker Entry Point
 
 As discussed above when a container is executed it will run the command supplied by the *ENTRYPOINT* parameters.
 On our example we execute a shell script that contains the following command below. In essence we start ImageJ with the argument to run our python script
@@ -573,7 +572,7 @@ SCRIPT=/Fiji.app/scripts/my_fijipyscript.py
 /Fiji.app/ImageJ-linux64 --ij2 --headless --console --run $SCRIPT
 ```
 
-#### Defining the WFE file for local testing (optional)
+### Defining the WFE file for local testing (optional)
 
 With a working local Docker installation you can build and run the container we prepared during the tutorial locally on your machine. Below are some suggestions assuming a Windows operating system.
 
@@ -594,7 +593,7 @@ WFE_INPUT_JSON={"SCRIPT":"/Fiji.app/scripts/my_fijipyscript.py",
                 "WFE_output_params_file":"/output.json"}
 ```
 
-#### Main Python Script - my_fijipyscript.py
+### Main Python Script - my_fijipyscript.py
 
 The desired core function of the APEER module are the same as for the local version of this script:
 
@@ -605,7 +604,7 @@ The desired core function of the APEER module are the same as for the local vers
 
 The main task is to read the JSON parameters for the APEER module UI and use them instead of the script parameters of the original local Fiji version. During the following steps the main function of this script will be explained in more detail. The crucial things are directly commented inside the respective code snippets.
 
-##### Import of modules
+#### Import of modules
 
 One important thing one has to to at the beginning is the define the required inputs. Which one are needed obviously depend from the actul script. Worth mentioning is the first line `# @LogService log`, which is required to enable the logging. This is very useful for debugging purposes later on.
 
@@ -636,7 +635,7 @@ from loci.formats.in import DynamicMetadataOptions
 from ome.units import UNITS
 ```
 
-##### Define useful *helper* functions needed
+#### Define useful *helper* functions needed
 
 Often it is usefule to define some *helper* functions inside the script, that can be used later inside the main part of the script code in order to structure the script and make it readable easily
 
@@ -732,7 +731,7 @@ def apply_filter(imp,
     return imp
 ```
 
-##### Define the main image analysis pipeline
+#### Define the main image analysis pipeline
 
 This part of the code contains the main function that is used to run the actual image analysis pipeline. The reason for creating such an extra function is that one can easily cut out this part of the script an re-use somewhere else. For our example the crucial steps inside this function are:
 
@@ -794,7 +793,7 @@ def run(imagefile, useBF=True,
 ```
 
 
-##### Parsing the inputs from the module
+#### Parsing the inputs from the module
 
 This part of the script is now fundamentally different compared to a local version of the script, where the parameters are directly read by using the script parameters. In case of APEER those parameters now have to be read from the JSON file.
 
@@ -820,7 +819,7 @@ log.log(LogLevel.INFO, '------------  START IMAGE ANALYSIS ------------')
 ```
 
 
-##### Defining the file paths
+#### Defining the file paths
 
 In order to save the processed image with a correct name, it is required to define this `outputimagepath` correctly.
 
@@ -846,7 +845,7 @@ outputimagepath = basename + SUFFIX_FL + '.' + SAVEFORMAT
 ```
 
 
-##### Running the main image analysis pipeline
+#### Running the main image analysis pipeline
 
 Now it is time to call the actual `run()` function to start the processing. For the example there is an optinal extra step built-in, which is measuring the time of execution. This can be quite useful to get *a feeling* for which step actually takes how long. Put this is purely optional.
 
@@ -871,7 +870,7 @@ end = time.clock()
 log.log(LogLevel.INFO, 'Duration of whole Processing : ' + str(end - start))
 ```
 
-##### Save the processed image and write the required output specifications of the module
+#### Save the processed image and write the required output specifications of the module
 
 Once the got the `filtered_image` as a result it mujst be saved as OME-TIFF using the BioFormats library. When running a script in headless mode it is required to use the `LociExporter` method with the respective `paramstring` that define sthe options.
 
@@ -908,8 +907,7 @@ log.log(LogLevel.INFO, 'Done.')
 os._exit()
 ```
 
-
-#### Complete Script - Module version
+### Complete Script - Module version
 
 This is the complete python script example which runs inside the APEER module.
 
@@ -1177,7 +1175,7 @@ os._exit()
 ```
 
 
-#### Creating the Dockerfile for the APEER module
+### Creating the Dockerfile for the APEER module
 
 Each module on the platfrom is packaged into what is called a "Docker Container". Introducing Docker would far exceed this tutorial so if you don't know what Docker is we recommend that you start by reading some ressources online (e.g. [Getting Started](https://docs.Docker.com/get-started/)) to get familiar with the technology.
 
@@ -1212,39 +1210,36 @@ ENTRYPOINT ["sh","./start.sh"]
 
 * Finally we need to define the `ENTRYPOINT` for the Docker container. The entrypoint is the command executed during the start of the container. Here we execute a shell script once the container starts.
 
-
-### Testing your module locally
+### Building and running your module locally
 
 If you are developing modules for the platform it is a good idea to install a local Docker environment. Docker is availabel for all major OS.
 For this tutorial we assume that you already have a local Docker installation and some basic knowledge how to use it.
 **Please refere to online ressources for in depth Docker tutorials.**
-
-#### Building and running your module locally
 
 To build your module container locally navigate to the folder containing all your files and run
 
 ```bash
 docker build --rm -t test/apeer_test_fijimodule:latest .
 ```
+
 This command tells Docker to execute a build:
 
-* --rm: will remove intermediary containers after a successful build
+* --rm = will remove intermediary containers after a successful build
 
-* -t: specifies the name of your container
+* -t = specifies the name of your container
 
-* .: docker will look for a file name *Dockerfile* and use it to build the container accordingly.
+* . = docker will look for a file name *Dockerfile* and use it to build the container accordingly.
 
 If you are running the build for the first time this may take a while because Docker needs to download the base container as well as executing all commands you specified in your dockerfile.
 Once the build completed you can use the following command to display all local availabel docker containers.
 
-```
+```dockerfile
 docker images
 ```
 
 With the build completed you now have the container available and can start it locally to see if everything is working as intended. Run the container using the input specified inside the *wfe.env* file:
 
-
-##### Run the module locally
+#### Run the module locally
 
 You need to define a wfe.env file first, which looks like this:
 
@@ -1324,6 +1319,6 @@ Populating metadata
 **Now commit the complete code and push it to the repository. This will trigger a new build of your module.**
 
 
-### Final Notes
+## Final Notes
 
 This is the first version of this tutorial and it can certainly be improved. If you have suggestions or improvements please leave them in the [APEER Forum](https://forum.apeer.com/) and we will continously improve our tutorials.
