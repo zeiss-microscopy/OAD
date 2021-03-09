@@ -443,7 +443,7 @@ There is no specific order in which the files from above have to be created, so 
 
 #### Module Specifications
 
-The module specification are the same as you have seen in previous tutorials (See [Module Specification Tutorial](https://docs.apeer.com/Producer/module_specification/ "Module Specification Tutorial"))
+The module specification are the same as you have seen in previous tutorials (See [Module Specification Tutorial](https://docs.apeer.com/documentation/module-specification "Module Specification Tutorial"))
 
 In brief you need to supply a JSON file that specifies your inputs, outputs and if neccessary how the UI for the module looks like in case the user can interact with the module. In our case this specification file looks like this:
 
