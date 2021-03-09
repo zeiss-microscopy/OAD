@@ -55,7 +55,7 @@ When running this script from your Fiji script editor one will see the following
 # @OUTPUT Boolean HEADLESS
 ```
 
-![Fiji Script Parameters - User Interface](/images/Fiji_Scriptparameter_UI.png)
+![Fiji Script Parameters - User Interface](./images/Fiji_Scriptparameter_UI.png)
 
 #### Complete Example Script - Local Fiji version
 
