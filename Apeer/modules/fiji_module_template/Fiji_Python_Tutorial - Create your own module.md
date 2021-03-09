@@ -61,8 +61,8 @@ When running this script from your Fiji script editor one will see the following
 
 We will now use this python script example as a template for creating an APEER module out of it. The core functions of this script are quite simple:
 
-* Read the image using the BioFormats pluging
-* Apply a filter to that image using the specifed radius
+* Read the image using the BioFormats plugin
+* Apply a filter to that image using the specified radius
 * Save the resulting image as OME-TIFF using BioFormats
 * Create some logs to provide some information about what is happening 
 
@@ -444,7 +444,7 @@ There is no specific order in which the files from above have to be created, so 
 
 The module specification are the same as you have seen in previous tutorials (See [Module Specification Tutorial](https://docs.apeer.com/documentation/module-specification "Module Specification Tutorial"))
 
-In brief you need to supply a JSON file that specifies your inputs, outputs and if neccessary how the UI for the module looks like in case the user can interact with the module. In our case this specification file looks like this:
+In brief you need to supply a JSON file that specifies your inputs, outputs and if necessary how the UI for the module looks like in case the user can interact with the module. In our case this specification file looks like this:
 
 ```json
 {
@@ -555,7 +555,6 @@ In brief you need to supply a JSON file that specifies your inputs, outputs and 
 
 On the APEER platform the UI rendered based on this JSON file would look like this:
 
-
 ![APEER - Module UI based on JSON file](./images/apeer_module_UI.png)
 
 ### Shell script for the Docker Entry Point
@@ -600,13 +599,13 @@ The desired core function of the APEER module are the same as for the local vers
 * Read the image using BioFormats
 * Apply a filter to that image using the specified radius
 * Save the resulting image as OME-TIFF using BioFormats
-* Create some logs to provide some information about what is happening 
+* Create some logs to provide some information about what is happening
 
 The main task is to read the JSON parameters for the APEER module UI and use them instead of the script parameters of the original local Fiji version. During the following steps the main function of this script will be explained in more detail. The crucial things are directly commented inside the respective code snippets.
 
 #### Import of modules
 
-One important thing one has to to at the beginning is the define the required inputs. Which one are needed obviously depend from the actul script. Worth mentioning is the first line `# @LogService log`, which is required to enable the logging. This is very useful for debugging purposes later on.
+One important thing one has to to at the beginning is the define the required inputs. Which one are needed obviously depend from the actual script. Worth mentioning is the first line `# @LogService log`, which is required to enable the logging. This is very useful for debugging purposes later on.
 
 ```python
 # required imports
@@ -637,7 +636,7 @@ from ome.units import UNITS
 
 #### Define useful *helper* functions needed
 
-Often it is usefule to define some *helper* functions inside the script, that can be used later inside the main part of the script code in order to structure the script and make it readable easily
+Often it is useful to define some *helper* functions inside the script, that can be used later inside the main part of the script code in order to structure the script and make it readable easily
 
 For our example we need two of those function. The 1st one is called `get_metadata` and is used to get the respective metadata from the image.
 
@@ -647,7 +646,7 @@ The 2nd one `apply_filter` is the more interesting function for our example. Thi
 * the type of filter to be applied
 * the kernel size to be used for the filter
 
-Inside the function the correct command to apply the filter *is looked up* inside the dictionary by using the `filtertype` string. Finally the selected filter is apllied to every slice of the image stack using a simple loop.
+Inside the function the correct command to apply the filter *is looked up* inside the dictionary by using the `filtertype` string. Finally the selected filter is applied to every slice of the image stack using a simple loop.
 
 ```python
 def get_metadata(imagefile, imageID=0):
@@ -739,7 +738,7 @@ This part of the code contains the main function that is used to run the actual 
   * when using BioFromats it is required to set the respective options
   * since an image can have many image series, it is also needed to extract the desired ImageSeries. In our example we just use the 1st one for simplicity reasons
 * Apply the filter to the image by calling the helper function `apply_filter()` from above
-  * In case `NONE` was slected, the script will basically just do nothing and retun the unfiltered image
+  * In case `NONE` was selected, the script will basically just do nothing and retun the unfiltered image
   * additional it creates some logging output
 
 ```python
@@ -791,7 +790,6 @@ def run(imagefile, useBF=True,
 
     return imp
 ```
-
 
 #### Parsing the inputs from the module
 
