@@ -60,6 +60,8 @@ For **Deep Feature Extraction** ZEN Intellesis uses the results of an intermedia
 
 The model is trained on a subset of the ImageNet database, which is used in the ImageNet Large-Scale Visual Recognition Challenge (ILSVRC). The entire image is put into the VGG19 network and take the output from an intermediate layer of that network as feature vector.
 
+The weights used for the VGG19 model are the ones provided by TensorFlow. The model was trained on the ImageNet dataset. According to the Keras documentation, the weights were directly converted from the Caffe model published by the authors of the VGG paper. Therefore, all known information about the training process can be obtained directly from the paper: [Very Deep Convolutional Networks for Large-Scale Image Recognition](https://arxiv.org/abs/1409.1556).
+
 ![ZEN Intellesis - Deep Features](intellesis_vgg19_architecture.png "ZEN Intellesis - VGG19")
 
 - **Deep Features 50** -> output from the layer conv2_2 and reduction of feature dimension by applying random transformation -> 50 dimensions
