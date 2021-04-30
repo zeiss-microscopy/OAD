@@ -106,13 +106,13 @@ def classify(image, model,
             outputs = Zen.Processing.Segmentation.TrainableSegmentationWithProbabilityMap(image, model, segf)
             seg_image = outputs[0]
             conf_map = outputs[1]
-            print 'Apply Confidence Threshold to segmented image.'
+            print('Apply Confidence Threshold to segmented image.')
             seg_image = Zen.Processing.Segmentation.MinimumConfidence(seg_image, conf_map, confidence_threshold)
             conf_map.Close()
             del outputs
         except ApplicationException as e:
             seg_image = None
-            print 'Application Exception : ', e.Message
+            print('Application Exception : ', e.Message)
 
     if not use_confidence:
         try:
@@ -120,13 +120,13 @@ def classify(image, model,
             seg_image = Zen.Processing.Segmentation.TrainableSegmentation(image, model, segf)
         except ApplicationException as e:
             seg_image = None
-            print 'Application Exception : ', e.Message
+            print('Application Exception : ', e.Message)
 
     if adapt_pixeltype:
         # adapt the pixeltype to match the type of the original image
         pxtype = image.Metadata.PixelType
         seg_image = Zen.Processing.Utilities.ChangePixelType(seg_image, pxtype)
-        print 'New PixelTyper for Segmented Image : ', seg_image.Metadata.PixelType
+        print('New PixelTyper for Segmented Image : ', seg_image.Metadata.PixelType)
 
     if extractclass:
 
@@ -134,7 +134,7 @@ def classify(image, model,
         substr = 'C(' + str(classid) + ')'
         seg_image = Zen.Processing.Utilities.CreateSubset(seg_image, substr, False)
 
-    if addseg2orig:
+    if addseg:
         # add original and segmentation
         seg_image = Zen.Processing.Utilities.AddChannels(image, seg_image)
 
@@ -247,28 +247,28 @@ adaptpx = result.GetValue('adapt')
 # get class number of select model
 number_of_classes = getmodelclassnumber(modeldict[modelname])
 
-print 'Intellesis Modelname : ', modelname
-print 'Model File : ', modeldict[modelname]
-print 'Number of Classes : ', number_of_classes
-print 'Segmentation Format : ', segmentationformat
-print 'Source Folder : ', sourcefolder
-print 'File Extension Filter : ', fileext
-print 'Use Confidence threshold : ', use_conf
-print 'Confidence Threshold Value : ', conf_th
-print 'Extract Class Option : ', extract
-print 'Add Segmented Image to Original : ', addseg2orig
-print 'Segment Active Image only : ', segactiveimg
-print 'Adapt PixelType of Segmented Image : ', adaptpx
+print('Intellesis Modelname : ', modelname)
+print('Model File : ', modeldict[modelname])
+print('Number of Classes : ', number_of_classes)
+print('Segmentation Format : ', segmentationformat)
+print('Source Folder : ', sourcefolder)
+print('File Extension Filter : ', fileext)
+print('Use Confidence threshold : ', use_conf)
+print('Confidence Threshold Value : ', conf_th)
+print('Extract Class Option : ', extract)
+print('Add Segmented Image to Original : ', addseg2orig)
+print('Segment Active Image only : ', segactiveimg)
+print('Adapt PixelType of Segmented Image : ', adaptpx)
 
 if extract:
     if segmentationformat == 'Labels':
         message = 'Wrong Segmentation Format for Extraction selected. Must be MultiChannel.\nExit.'
-        print message
+        print(message)
         raise SystemExit
-    print 'Use Class ID : ', extract_id
+    print('Use Class ID : ', extract_id)
 
-print 'Add Segmentation Mask : ', addseg2orig
-print 'Segment only Active Image : ', segactiveimg
+print('Add Segmentation Mask : ', addseg2orig)
+print('Segment only Active Image : ', segactiveimg)
 
 # create empty list
 imagefiles = []
@@ -280,7 +280,7 @@ if not segactiveimg:
     if is_empty(imagefiles):
         # in case the folder contains no images with specified extension
         message = 'No images found in specified folder: '
-        print message, sourcefolder
+        print(message, sourcefolder)
         raise SystemExit
 
     # check for existing subfolder inside source folder
@@ -290,45 +290,45 @@ if not segactiveimg:
         if len(Directory.GetFiles(seg_subfolder)) != 0:
             # subfolder exist and is not empty - stop here
             message = 'Subfolder already exits and is not empty. Stopping Execution.'
-            print message, sourcefolder
+            print(message, sourcefolder)
             raise SystemExit
         if len(Directory.GetFiles(seg_subfolder)) == 0:
-            print 'Subfolder already exists but is empty. Proceed with Segmentation.'
+            print('Subfolder already exists but is empty. Proceed with Segmentation.')
 
     if not Directory.Exists(seg_subfolder):
         # subfolder does not exist - create one
         Directory.CreateDirectory(seg_subfolder)
-        print 'Created subfolder for segmentation results : ', seg_subfolder
+        print('Created subfolder for segmentation results : ', seg_subfolder)
 
 if segactiveimg:
 
     if not Zen.Application.Documents.ActiveDocument.IsZenImage:
         message = 'Active Document is not a ZenImage.'
-        print message, sourcefolder
+        print(message, sourcefolder)
         raise SystemExit
 
     if Zen.Application.Documents.ActiveDocument.IsZenImage:
         image = Zen.Application.ActiveDocument
         imagefiles.append(image.FileName)
 
-print '-----------------------------------------------------------------------------'
+print('-----------------------------------------------------------------------------')
 
 # process all images inside the specified folder
 for imagefile in imagefiles:
 
-    print 'Loading Image : ', imagefile
+    print('Loading Image : ', imagefile)
     if not segactiveimg:
         image = Zen.Application.LoadImage(imagefile, False)
     seg_name = Path.GetFileNameWithoutExtension(image.FileName) + '_seg' + Path.GetExtension(image.FileName)
     seg_path = Path.GetDirectoryName(image.FileName)
-    print 'Segmenting ...'
+    print('Segmenting ...')
 
     # check channel number
     if number_of_classes < extract_id:
         message = 'Not enough classes inside model to extract class : ', extract_id
-        print message
-        print 'Number of classes in model : ', modelname, ' = ', number_of_classes
-        print 'Exit.'
+        print(message)
+        print('Number of classes in model : ', modelname, ' = ', number_of_classes)
+        print('Exit.')
         raise SystemExit
 
     # do the pixel classification for the current image
@@ -348,13 +348,13 @@ for imagefile in imagefiles:
         if not segactiveimg:
             # save the resulting image
             savepath = Path.Combine(seg_subfolder, seg_name)
-            print 'Saving segmented image : ', savepath
+            print('Saving segmented image : ', savepath)
             seg.Save(savepath)
             seg.Close()
         if segactiveimg:
             Zen.Application.Documents.Add(seg)
 
     elif seg is None:
-        print 'Could not segment image : ', imagefile
+        print('Could not segment image : ', imagefile)
 
-print 'Done.'
+print('Done.')
