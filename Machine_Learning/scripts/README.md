@@ -65,6 +65,18 @@ Beside this tool is is also possible to run a segmentation using the ZEN built-i
 
 <p><img src="../../Images/intellesis_batch_singleCH_result.png" title="Segmented green channel (bottom left)" width="500"></p>
 
+
+## Intellesis_Analyze_and_Classify.py
+
+The [Intellesis Analyze and Classify](../scripts/Intellesis_Analyze_and_Classify.py) allows you to automate and simplify the following tasks:
+
+- Select an open image document
+- Specify the Image Analysis Setting to run an Image Analysis
+- Specify the Object Classification Model to classify **one** type of segemneted objects from the image analysis (class names must match!)
+- Export the result tables as CSV files
+
+<p><img src="../../Machine_Learning/images/intellesis_analyze_and_classify.png" title="Intellesis - Analyze and Classify" width="500"></p>
+
 ## ZenIntellesis_API.py
 
 The [script](../scripts/ZenIntellesis.py) demonstrates some additional function to manage model files.

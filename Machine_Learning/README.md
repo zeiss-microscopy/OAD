@@ -1,19 +1,29 @@
-- [ZEN - Open Ecosystem for Integrated Machine Learning Workflows](#zen---open-ecosystem-for-integrated-machine-learning-workflows)
+- [ZEN and APEER-ML - Open Ecosystem for Integrated Machine Learning Workflows](#zen-and-apeer-ml---open-ecosystem-for-integrated-machine-learning-workflows)
+  - [Introduction](#introduction)
+  - [Machine Learning versus Deep Learning](#machine-learning-versus-deep-learning)
+  - [Main differences between Deep Learning and Machine Learning](#main-differences-between-deep-learning-and-machine-learning)
+  - [ZEN and APEER - Open Ecosystem for Machine Learning Landscape](#zen-and-apeer---open-ecosystem-for-machine-learning-landscape)
+- [ZEN Intellesis Trainable Segmentation and Object Classification](#zen-intellesis-trainable-segmentation-and-object-classification)
   - [ZEN Intellesis Trainable Segmentation](#zen-intellesis-trainable-segmentation)
-  - [Key Features of Intellesis](#key-features-of-intellesis)
-  - [ZEN Machine-Learning Landscape](#zen-machine-learning-landscape)
+    - [Key Features of Intellesis Segmentation](#key-features-of-intellesis-segmentation)
+    - [Intellesis Segmentation - Tech Notes](#intellesis-segmentation---tech-notes)
+  - [ZEN Intellesis Object Classification](#zen-intellesis-object-classification)
+    - [Key Features of Intellesis Object Classification](#key-features-of-intellesis-object-classification)
+    - [Intellesis Object Classification - Tech Notes](#intellesis-object-classification---tech-notes)
   - [Application Examples](#application-examples)
+    - [Life Science](#life-science)
+    - [Material Science](#material-science)
   - [Intellesis - Data Flow](#intellesis---data-flow)
-  - [Intellesis - Technical Features](#intellesis---technical-features)
-  - [General Workflows for Intellesis in ZEN](#general-workflows-for-intellesis-in-zen)
-    - [How to train a simple pixel classifier in Intellesis](#how-to-train-a-simple-pixel-classifier-in-intellesis)
+  - [General Workflows for Intellesis Segmentation in ZEN](#general-workflows-for-intellesis-segmentation-in-zen)
+    - [How to train a simple Pixel Classifier for Segmentation Intellesis](#how-to-train-a-simple-pixel-classifier-for-segmentation-intellesis)
     - [How to use a model (trained on a single channel) inside an Image Analysis pipeline](#how-to-use-a-model-trained-on-a-single-channel-inside-an-image-analysis-pipeline)
     - [How to use a model (trained on all channels) inside an Image Analysis pipeline](#how-to-use-a-model-trained-on-all-channels-inside-an-image-analysis-pipeline)
   - [Importing a CZMODEL into ZEN blue or ZEN core](#importing-a-czmodel-into-zen-blue-or-zen-core)
     - [How to import a model in ZEN](#how-to-import-a-model-in-zen)
     - [Importing externally trained networks into ZEN](#importing-externally-trained-networks-into-zen)
     - [Example Workflow - Train and Import a network to segment a stack](#example-workflow---train-and-import-a-network-to-segment-a-stack)
-  - [9. Model Downloads](#9-model-downloads)
+    - [Intellesis Segmentation - Scripting Integration](#intellesis-segmentation---scripting-integration)
+  - [Model Downloads](#model-downloads)
     - [Application Example - Robust Nucleus Detection using UNet](#application-example---robust-nucleus-detection-using-unet)
       - [UNet Nucleus Detector (GrayScale)](#unet-nucleus-detector-grayscale)
       - [UNet Nucleus Detector (RGB)](#unet-nucleus-detector-rgb)
@@ -21,25 +31,81 @@
   - [Integrated Workflows using trained models](#integrated-workflows-using-trained-models)
     - [Use Nucleus Detector inside a Zone-of-Influence workflow](#use-nucleus-detector-inside-a-zone-of-influence-workflow)
     - [Use trained model to reliably detect layers](#use-trained-model-to-reliably-detect-layers)
-  - [Scripting Integration in ZEN software](#scripting-integration-in-zen-software)
+  - [General Workflows for Intellesis Object Classification](#general-workflows-for-intellesis-object-classification)
+    - [Train an Object Classification Model](#train-an-object-classification-model)
+    - [Intellesis Object Classification - Scripting Integration](#intellesis-object-classification---scripting-integration)
 
 ---
 
-# ZEN - Open Ecosystem for Integrated Machine Learning Workflows
+# ZEN and APEER-ML - Open Ecosystem for Integrated Machine Learning Workflows
+
+## Introduction
+
+The ZEN software and the APEER platform offer various tools and solution to integrate machine learning methods into image processing and analysis workflows. Depending on the specific workflow one might need only ZEN blue or ZEN core. For other workflows also the APEER-ML as a cloud-based training platform for Deep Neural Networks will play an important role.
+
+## Machine Learning versus Deep Learning
+
+The difference between those can be easily explained in a single sentence: Deep Learning is a special subset of general Machine learning, which is again a subset of Artificial Intelligence.
+Therefore DeepLearning obviously is Machine Learning and Deep Learning algorithms are Machine Learning algorithms.
+
+<p><img src="./images/ML_general-DeepLearning.png" title="Artificial Intelligence - Machine learning - Deep Learning" width="400"></p>
+
+- Machine learning gives computers the ability to learn without being programmed explicitly for a specific task
+- Two main categories exist: Supervised and Unsupervised methods
+
+Deep learning itself consists of methods to analyze data using an approach that mimics the way a person would try to make sense of it. Deep Learning methods use a layered structure of algorithms called an artificial neural networks (ANN).
+
+<p><img src="./images/ML_general-Neural%20Network.png" title="General Strcuture of a very simple neural network" width="400"></p>
+
+ANNs have an input layer and obviously an output layer. The layers between are so-called hidden layers, which means their values cannot be observed (easily) during the training. An ANN gets "deeper" if the number of hidden layers increases.
+
+- Deep Learning is a subset of Machine Learning
+- Deep Learning is using "layered" algorithms called ANN
+
+## Main differences between Deep Learning and Machine Learning
+
+There are three major general differences (simplified:)
+
+- typically Machine learning algorithms are rather" simple" compared to ANNs
+- Deep Learning methods extract features automatically and learn what features work best
+- classical Machine Learning methods are using features typically "engineered" by human intervention
+- Deep Learning typically requires a lot more data due to the complex algorithms used
+
+<p><img src="./images/ML_general-DL-ML-Input-Output.png" title="Difference between Machine Learning and Deep Learning" width="600"></p>
+
+---
+
+## ZEN and APEER - Open Ecosystem for Machine Learning Landscape
+
+The sketch below outlines "the bigger" picture and vision and will be updated frequently. The most important points to consider here are:
+
+- the “exchange” currency inside this ecosystem is the trained model (czmodel)
+- the the open-source python package [**czmodel**](https://pypi.org/project/czmodel/) allows everybody to import their own models in ZEN
+- skilled researcher nad programmers can train their models where the like and still deploy the for "their" users in ZEN or on the APEER platform
+- one can use pre-trained models from ZEISS or get a model trained as a service (includes the label process)
+- on the [APEER platform](www.apeer.com) it is possible to label your own data and train model (coming soon)
+
+![ZEN Machine Learning Landscape](../Images/ZEN_ML_Landscape_simple.png)
+
+---
+# ZEN Intellesis Trainable Segmentation and Object Classification
+
+Among many other powerful tools to process and analyze images the ZEN blue and ZEN core software platform offers two major ML-based modules:
 
 ## ZEN Intellesis Trainable Segmentation
 
-Among many other powerful tools to process and analyze images the ZEN blue and ZEN core software platform offers the module **ZEN Intellesis Trainable Segmentation**, which is using machine-learning algorithms to segment images.
+- Machine- and Deep Learning algorithms to **segment** images
+- Import externally trained Deep Neural networks
 
-![Intellesis - Machine Learning Segmentation](../Images/intellesis_segmentation_tool.png)
+![Intellesis Segmentation](../Images/intellesis_segmentation_tool.png)
 
-## Key Features of Intellesis
+### Key Features of Intellesis Segmentation
 
 - **Simple User Interface for Labelling and Training**
 
   - The tool aims for the non-expert by providing an **“easy-to-use” interface**.
   - The focus is to provide a **clean and simple workflow** to label the images and train a model.
-  - Label your datasets using clean and simple UI in ZEN Intellesis or using [APEER Annotate](https://www.apeer.com/annotate)
+  - Label your datasets using clean and simple UI in ZEN or by using [APEER Annotate](https://www.apeer.com/annotate)
 
 - **Integration into ZEN Measurement and Processing Framework**
 
@@ -58,51 +124,7 @@ Among many other powerful tools to process and analyze images the ZEN blue and Z
 
 ---
 
-## ZEN Machine-Learning Landscape
-
-The sketch below outlines "the bigger" picture and vision and will be updated frequently. The most important points to consider here are:
-
-- the “exchange” currency inside this ecosystem is the trained model (czmodel)
-- the the open-source python package [**czmodel**](https://pypi.org/project/czmodel/) allows everybody to import their own models in ZEN
-- skilled researcher nad programmers can train theri models where the like and still deploy the for "their" users in ZEN or on the APEER platform
-- one can use pre-trained models from ZEISS or get a model trained as a service (includes the label process)
-- on the [APEER platform](www.apeer.com) it is possible to label your own data and train model (coming soon)
-
-![ZEN Machine Learning Landscape](../Images/ZEN_ML_Landscape_simple.png)
-
----
-
-## Application Examples
-
-ZEN can basically read any image data format using the BioFormats Import and Intellesis can therefore be used to segment **any multi-dimensional data set** that can be imported into the software. Shown below are images segmented using ZEN Intellesis Trainable Segmentation.
-
-![ZEN Python](../Images/intellesis_ms_apps.png)
-
----
-
-![ZEN Python](../Images/intellesis_ls_apps.png)
-
----
-
-## Intellesis - Data Flow
-
-The machine-learning part of Intellesis is entirely built upon Python-based tools.
-
-![ZEN Python Modules](../Images/ZEN_Python_Tools.png)
-
-The actual segmentation service is completely written in [Python](https://www.python.org) and is using proven and established open-source machine-learning libraries to segment the images. More [detailed information](https://www.zeiss.com/microscopy/int/website/landingpages/zen-intellesis.html) and specific information regarding [ZEN core](https://www.zeiss.com/microscopy/int/products/microscope-software/zen-core.html#module) are available on the respective websites.
-
-To be able to handle even large multi-dimensional data sets, the software has a built-in data manager that takes care of splitting and distributing the workload depending on the available computational resources.
-
-![Intellesis - Data Flow - Training](../Images/intellesis_dataflow_training.png "Intellesis - ML Data Flow - Training")**Intellesis - Data Flow - Training**
-
----
-
-![Intellesis - Data Flow - Prediction](../Images/intellesis_dataflow_prediction.png "Intellesis - ML Data Flow - Prediction")**Intellesis - Data Flow - Prediction**
-
----
-
-## Intellesis - Technical Features
+### Intellesis Segmentation - Tech Notes
 
 - Machine-Learning Tool for Pixel Classification powered by **[Python](https://www.python.org), [Dask](https://dask.org/), [Scikit-Learn](https://scikit-learn.org/)** and **[Tensorflow 2](https://www.tensorflow.org/)**
 - Real **Multi-Channel Feature Extraction** – all channels will be used to segment a pixel
@@ -127,13 +149,83 @@ To be able to handle even large multi-dimensional data sets, the software has a 
 
 ---
 
-## General Workflows for Intellesis in ZEN
+## ZEN Intellesis Object Classification
+
+- Machine Learning algorithms to **classify** objects inside analyzed images based on measure features
+
+![Intellesis Object Classification - Training](../../Machine_Learning/../open_application_development/Machine_Learning/images/intellesis_toc_1.png)
+
+![Intellesis Object Classification - Classification](../../Machine_Learning/../open_application_development/Machine_Learning/images/intellesis_toc_2.png)
+
+### Key Features of Intellesis Object Classification
+
+- **Simple User Interface for Labelling and Training**
+
+  - The tool aims for the non-expert by providing an **“easy-to-use” interface**.
+  - The focus is to provide a **clean and simple workflow** to label the segmented objects from an analyzed image and train an object classification model.
+
+- **Integration into ZEN Measurement and Processing Framework**
+
+  - Use a trained **Object Classifier** as an additional processing step after the Image Analysis.
+  - Run Batch Classification our automate workflows using python scripting.
+
+- **Support for Multi-dimensional Data Sets**
+
+  - Intellesis Object Classification can be trained on any multidimensional dataset incl. 3rd party file formats from other vendors
+
+---
+
+
+### Intellesis Object Classification - Tech Notes
+
+- **Required an analyzed image** with segmented objects created by any type of segmentation
+- Real **Multi-Channel Feature Extraction** – all channels will be used extract intensity-based measurements for every segmented object
+- **Geometrical and Shape Features** – all available features from the Image Analysis will be used automatically
+- **Random Forrest Classifier** to process the feature table from the image analysis
+- IP-Functions for Classification and Scripting Integration for Automation
+- **Client-Server Architecture** (Zen Client - Python-Server) using a [REST-API](https://en.wikipedia.org/wiki/Representational_state_transfer)
+
+## Application Examples
+
+ZEN can basically read any image data format using the BioFormats Import and Intellesis can therefore be used to segment **any multi-dimensional data set** that can be imported into the software. Shown below are images segmented using ZEN Intellesis Trainable Segmentation.
+
+### Life Science
+
+![ZEN Python](../Images/intellesis_ms_apps.png)
+
+---
+
+### Material Science
+
+![ZEN Python](../Images/intellesis_ls_apps.png)
+
+---
+
+## Intellesis - Data Flow
+
+The machine-learning part of Intellesis is entirely built upon Python-based tools.
+
+![ZEN Python Modules](../Images/ZEN_Python_Tools.png)
+
+The actual segmentation service is completely written in [Python](https://www.python.org) and is using proven and established open-source machine-learning libraries to segment the images. More [detailed information](https://www.zeiss.com/microscopy/int/website/landingpages/zen-intellesis.html) and specific information regarding [ZEN core](https://www.zeiss.com/microscopy/int/products/microscope-software/zen-core.html#module) are available on the respective websites.
+
+To be able to handle even large multi-dimensional data sets, the software has a built-in data manager that takes care of splitting and distributing the workload depending on the available computational resources.
+
+![Intellesis - Data Flow - Training](../Images/intellesis_dataflow_training.png "Intellesis - ML Data Flow - Training")**Intellesis - Data Flow - Training**
+
+---
+
+![Intellesis - Data Flow - Prediction](../Images/intellesis_dataflow_prediction.png "Intellesis - ML Data Flow - Prediction")**Intellesis - Data Flow - Prediction**
+
+---
+
+## General Workflows for Intellesis Segmentation in ZEN
 
 ![Intellesis - Workflows](../Images/intellesis_workflows.png "Intellesis - Workflows")
 
 ---
 
-### How to train a simple pixel classifier in Intellesis
+### How to train a simple Pixel Classifier for Segmentation Intellesis
 
 Training pixel classifier in Intellesis is very simple and just requires the following steps:
 
@@ -174,7 +266,7 @@ Once the model is trained it can be directly used inside an Image Analysis pipel
 9. Press **Finish** to save the setting and now use **Analyze** to run the image analysis.
 10. Inspect the results.
 
-> **IMPORTANT**: It is crucial to understand that a model trained on a single channel have to be assigned to the respective objects that should be segmented with the model. This very flexible approach allows to segment different structures using individual models or classical segmentation approached also inside hierachical objects structures (with sub-objects etc).
+> **IMPORTANT**: It is crucial to understand that a model trained on a single channel have to be assigned to the respective objects that should be segmented with the model. This very flexible approach allows to segment different structures using individual models or classical segmentation approached also inside hierarchical objects structures (with sub-objects etc).
 
 Watch the short video below to see those steps in action.
 
@@ -248,7 +340,44 @@ To illustrate the workflow a public available dataset with labels: [Segmentation
 
 ---
 
-## 9. Model Downloads
+### Intellesis Segmentation - Scripting Integration
+
+Most functions regarding Intellesis Segmentation can be scripted via Python in ZEN in order to automate and customize workflows. Check out the [scripts](../Machine_Learning/scripts/README.md) for some simple examples.
+
+```python
+def classify(image, model,
+             use_confidence=True,
+             confidence_threshold=0,
+             format=ZenSegmentationFormat.MultiChannel):
+
+    # classify pixels using a trained model
+    if use_confidence:
+        try:
+            # run the segmentation and apply confidence threshold to segmented image
+            outputs = Zen.Processing.Segmentation.TrainableSegmentationWithProbabilityMap(image, model, segf)
+            seg_image = outputs[0]
+            prop_map = outputs[1]
+            seg_image = Zen.Processing.Segmentation.MinimumConfidence(seg_image, prop_map, confidence_threshold)
+            prop_map.Close()
+            del outputs
+        except ApplicationException as e:
+            seg_image = None
+            print('Application Exception : '), e.Message
+
+    if not use_confidence:
+        try:
+            # run the segmentation
+            seg_image = Zen.Processing.Segmentation.TrainableSegmentation(image, model, segf)
+        except ApplicationException as e:
+            seg_image = None
+            print('Application Exception : '), e.Message
+
+    return seg_image
+```
+
+---
+
+## Model Downloads
 
 ZEN allows to import pre-trained neural networks and also provided some example that can be downloaded. Those networks can be used inside any segmentation or image analysis workflow in ZEN.
 
@@ -311,37 +440,52 @@ Trained models can be also used inside so-called "Material Modules" like **Layer
 
 ---
 
-## Scripting Integration in ZEN software
+## General Workflows for Intellesis Object Classification
 
-Most functions regarding Intellesis can be scripted via Python in ZEN in order to automate and customize workflows. Check out the [scripts](../Machine_Learning/scripts/README.md) for some simple examples.
+![Intellesis - Workflows](../Machine_Learning/images/Workflows_Object_Classification_v6.png "Intellesis - Workflows")
+
+### Train an Object Classification Model
+
+![Intellesis Object Classification - Train a model to classify objects](../Machine_Learning/images/SneakPreview_ObjectClassification.gif) **Intellesis Object Classification - Trained a model to classify objects**
+
+### Intellesis Object Classification - Scripting Integration
+
+Most functions regarding Intellesis Object Classification can be scripted via Python in ZEN in order to automate and customize workflows. Check out the [scripts](../Machine_Learning/scripts/README.md) for some simple examples.
 
 ```python
-def classify(image, model,
-             use_confidence=True,
-             confidence_threshold=0,
-             format=ZenSegmentationFormat.MultiChannel):
+def find_objclassmodel(name):
+    """ Finds an object classifier model given its Name.
 
-    # classify pixels using a trained model
-    if use_confidence:
-        try:
-            # run the segmentation and apply confidence threshold to segmented image
-            outputs = Zen.Processing.Segmentation.TrainableSegmentationWithProbabilityMap(image, model, segf)
-            seg_image = outputs[0]
-            prop_map = outputs[1]
-            seg_image = Zen.Processing.Segmentation.MinimumConfidence(seg_image, prop_map, confidence_threshold)
-            prop_map.Close()
-            del outputs
-        except ApplicationException as e:
-            seg_image = None
-            print('Application Exception : '), e.Message
+    Arguments:
+        name: string
+              The name of the object classifier model to look for.
 
-    if not use_confidence:
-        try:
-            # run the segmentation
-            seg_image = Zen.Processing.Segmentation.TrainableSegmentation(image, model, segf)
-        except ApplicationException as e:
-            seg_image = None
-            print('Application Exception : '), e.Message
+    Returns: IZenIntellesisObjClassModel
+             The first object classifier model with the specified name
+             or None, if no such model exists.
+    """
+    objclass_models = ZenIntellesis.ObjectClassification.ListAvailableModels()
+    
+    return next((m for m in objclass_models if m.Name == name), None)
 
-    return seg_image
+# get all available object classification models
+ocmodels = ZenIntellesis.ObjectClassification.ListAvailableModels()
+
+for obcmodel in ocmodels:
+    print 'TOC Model Name:', obcmodel.Name, 'Description:', obcmodel.Description, 'Status:', obcmodel.Status
+    training_images = obcmodel.TrainingImages
+    print '\tTraining Images:'
+    print '\t----------------------'
+    for ti in training_images:
+        print '\t' + ti
+
+# select a specific model
+myobjmodel = find_objclassmodel('testmodel')
+
+# classify an analyzed image (inplace)
+myobjmodel.Classify(image, appendFeatures=False)
+
+# import an classification model
+imported_objclass_model = ZenIntellesis.ObjectClassification.ImportModel(model2import, True)
+
 ```
