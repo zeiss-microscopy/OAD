@@ -79,9 +79,9 @@ The sketch below outlines "the bigger" picture and vision and will be updated fr
 
 - the “exchange” currency inside this ecosystem is the trained model (czmodel)
 - the the open-source python package [**czmodel**](https://pypi.org/project/czmodel/) allows everybody to import their own models in ZEN
-- skilled researcher nad programmers can train their models where the like and still deploy the for "their" users in ZEN or on the APEER platform
-- one can use pre-trained models from ZEISS or get a model trained as a service (includes the label process)
-- on the [APEER platform](www.apeer.com) it is possible to label your own data and train model (coming soon)
+- skilled researchers and programmers can train their own models where the like and still deploy them for "their" users in ZEN or on the APEER platform
+- one can get pre-trained models from ZEISS or get a trained model **as a service** (includes the label process)
+- on the [APEER platform](www.apeer.com) it is possible to label your own data, train model and download it as czmodel for ZEN
 
 ![ZEN Machine Learning Landscape](../Images/ZEN_ML_Landscape_simple.png)
 
