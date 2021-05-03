@@ -1,8 +1,7 @@
 - [ZEN and APEER-ML - Open Ecosystem for Integrated Machine Learning Workflows](#zen-and-apeer-ml---open-ecosystem-for-integrated-machine-learning-workflows)
-  - [Introduction](#introduction)
   - [Machine Learning versus Deep Learning](#machine-learning-versus-deep-learning)
   - [Main differences between Deep Learning and Machine Learning](#main-differences-between-deep-learning-and-machine-learning)
-  - [ZEN and APEER - Open Ecosystem for Machine Learning Landscape](#zen-and-apeer---open-ecosystem-for-machine-learning-landscape)
+  - [ZEN and APEER Machine Learning - Overview](#zen-and-apeer-machine-learning---overview)
 - [ZEN Intellesis Trainable Segmentation and Object Classification](#zen-intellesis-trainable-segmentation-and-object-classification)
   - [ZEN Intellesis Trainable Segmentation](#zen-intellesis-trainable-segmentation)
     - [Key Features of Intellesis Segmentation](#key-features-of-intellesis-segmentation)
@@ -39,7 +38,6 @@
 
 # ZEN and APEER-ML - Open Ecosystem for Integrated Machine Learning Workflows
 
-## Introduction
 
 The ZEN software and the APEER platform offer various tools and solution to integrate machine learning methods into image processing and analysis workflows. Depending on the specific workflow one might need only ZEN blue or ZEN core. For other workflows also the APEER-ML as a cloud-based training platform for Deep Neural Networks will play an important role.
 
@@ -75,7 +73,7 @@ There are three major general differences (simplified:)
 
 ---
 
-## ZEN and APEER - Open Ecosystem for Machine Learning Landscape
+## ZEN and APEER Machine Learning - Overview
 
 The sketch below outlines "the bigger" picture and vision and will be updated frequently. The most important points to consider here are:
 
@@ -88,6 +86,7 @@ The sketch below outlines "the bigger" picture and vision and will be updated fr
 ![ZEN Machine Learning Landscape](../Images/ZEN_ML_Landscape_simple.png)
 
 ---
+
 # ZEN Intellesis Trainable Segmentation and Object Classification
 
 Among many other powerful tools to process and analyze images the ZEN blue and ZEN core software platform offers two major ML-based modules:
