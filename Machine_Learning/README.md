@@ -139,10 +139,11 @@ Among many other powerful tools to process and analyze images the ZEN blue and Z
 - Pixel Classification by proven and established **Random Forrest Classifier**
 - **Basic Features use CPU for Feature Extraction** and CPU for Classification
 - **Deep Features use GPU (if exist) for feature extraction** and CPU for Classification
-- Option to **Download** pre-trained DNNs for image segmentation (ZEN blue 3.1)
-- Option to **Import** pre-trained DNNs for image segmentation(> ZEN blue 3.2)
+- Option to **Download** pre-trained DNNs for image segmentation
+- Option to **Import** pre-trained DNNs for image segmentation
   - currently two pre-trained networks are available
   - **[PyPi package czmodel & public ANN Model Specification](https://pypi.org/project/czmodel/)** to convert trained TF2 models into CZMODEL files
+- for inference Intellesis can also use the **[Open Neural Network Exchange (ONNX)](https://onnx.ai)** format
 - Post processing using **Conditional Random Fields** (CRF) to improve the segmentation results
 - Option to apply **confidence thresholds** to the segmentation results
 - Processing functions for creating masks and **scripting integration** for advanced automation of machine learning workflows
