@@ -6,6 +6,9 @@
   - [ZEN Intellesis Trainable Segmentation](#zen-intellesis-trainable-segmentation)
     - [Key Features of Intellesis Segmentation](#key-features-of-intellesis-segmentation)
     - [Intellesis Segmentation - Tech Notes](#intellesis-segmentation---tech-notes)
+    - [Feature Extraction](#feature-extraction)
+      - [What Implementation of the RandomForest is used by Intellesis](#what-implementation-of-the-randomforest-is-used-by-intellesis)
+      - [How does a RandomForest work](#how-does-a-randomforest-work)
   - [ZEN Intellesis Object Classification](#zen-intellesis-object-classification)
     - [Key Features of Intellesis Object Classification](#key-features-of-intellesis-object-classification)
     - [Intellesis Object Classification - Tech Notes](#intellesis-object-classification---tech-notes)
@@ -37,7 +40,6 @@
 ---
 
 # ZEN and APEER-ML - Open Ecosystem for Integrated Machine Learning Workflows
-
 
 The ZEN software and the APEER platform offer various tools and solution to integrate machine learning methods into image processing and analysis workflows. Depending on the specific workflow one might need only ZEN blue or ZEN core. For other workflows also the APEER-ML as a cloud-based training platform for Deep Neural Networks will play an important role.
 
@@ -145,6 +147,37 @@ Among many other powerful tools to process and analyze images the ZEN blue and Z
 - **Client-Server Architecture** (Zen Client - Python-Server) using a [REST-API](https://en.wikipedia.org/wiki/Representational_state_transfer)
 - client-side tiling & fusion functionality to deal with large **Multi-Dimensional Data Sets**
 - support for Nvidia GPUs (recommended is a 8GB GPU or better)
+
+
+### Feature Extraction
+
+Intellesis Segmentation supports two different ways of segmenting an image:
+
+- Feature Extraction with engineered feature sets followed by PixelClassification using a RandomForrest classifier
+- Use Deep Neural networks for segmentation.
+- for detailed information please see: **[Feature Extractors](../Machine_Learning/Feature_Extractors/feature_extractors.md)**
+- the following lines always refer to the RandomForest classifier only.
+
+
+#### What Implementation of the RandomForest is used by Intellesis
+
+- Intellesis is using the following open.source implentation: **[scikit-learn - Random Forest](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier)**
+- except for the number of estimators (=25) Intellesis used the default values
+
+#### How does a RandomForest work
+
+- Each decision tree in the forest considers a subset of features when forming “questions” and only has access to a subset set of the training data
+- this increases diversity in the forest leading to more robust overall predictions and the name ‘Random Forest.’ 
+- **Prediction** = average of all the individual decision tree estimates
+- Regression task = predicting a continuous value of …
+- **Classification task** = predict discrete class labels such as A or B
+- Random Forest will take a **majority vote** for the predicted class
+  
+![RandomForest Classifier - Majority Vote](./images/randomforest1.png)
+
+
+
+
 
 ---
 
