@@ -137,6 +137,8 @@ Among many other powerful tools to process and analyze images the ZEN blue and Z
   - Neural Network (vgg19) Layers for Feature Extraction (GPU)
     - 64, 128 (red. 50) or 256 (red. 70) Features for 1st, 2nd or 3rd layer of network
 - Pixel Classification by proven and established **Random Forrest Classifier**
+- **Basic Features use CPU for Feature Extraction** and CPU for Classification
+- **Deep Features use GPU (if exist) for feature extraction** and CPU for Classification
 - Option to **Download** pre-trained DNNs for image segmentation (ZEN blue 3.1)
 - Option to **Import** pre-trained DNNs for image segmentation(> ZEN blue 3.2)
   - currently two pre-trained networks are available
@@ -157,7 +159,6 @@ Intellesis Segmentation supports two different ways of segmenting an image:
 - Use Deep Neural networks for segmentation.
 - for detailed information please see: **[Feature Extractors](../Machine_Learning/Feature_Extractors/feature_extractors.md)**
 - the following lines always refer to the RandomForest classifier only.
-
 
 #### What Implementation of the RandomForest is used by Intellesis
 
