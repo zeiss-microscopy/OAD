@@ -152,9 +152,9 @@ Among many other powerful tools to process and analyze images the ZEN blue and Z
 
 - Machine Learning algorithms to **classify** objects inside analyzed images based on measure features
 
-![Intellesis Object Classification - Training](../../Machine_Learning/../open_application_development/Machine_Learning/images/intellesis_toc_1.png)
+![Intellesis Object Classification - Training](./images/intellesis_toc_1.png)
 
-![Intellesis Object Classification - Classification](../../Machine_Learning/../open_application_development/Machine_Learning/images/intellesis_toc_2.png)
+![Intellesis Object Classification - Classification](./images/intellesis_toc_2.png)
 
 ### Key Features of Intellesis Object Classification
 
