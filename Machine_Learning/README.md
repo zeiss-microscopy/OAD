@@ -129,9 +129,9 @@ Among many other powerful tools to process and analyze images the ZEN blue and Z
 
 - Machine-Learning Tool for Pixel Classification powered by **[Python](https://www.python.org), [Dask](https://dask.org/), [Scikit-Learn](https://scikit-learn.org/)** and **[Tensorflow 2](https://www.tensorflow.org/)**
 - Real **Multi-Channel Feature Extraction** – all channels will be used to segment a pixel
-- **Class Segmentation** – hierarchical structures with independent segmentation per class
+- **Class Segmentation** – hierarchical structures with independent segmentation models per class
   - every object can be segmented using it individual model
-- Feature Extraction using **Engineered Feature Sets** and **Deep Feature Extraction** (see also [Feature Extractors](../Machine_Learning/Feature_Extractors/feature_extractors.md) for more details)
+- Feature Extraction using **Engineered Feature Sets** and **Deep Feature Extraction** (see also [Feature Extractors - Detailed Information](../Machine_Learning/Feature_Extractors/feature_extractors.md) and [Feature Extraction](FeatureExtraction) for more details)
   - Engineered Default Feature Sets (CPU)
     - 25 or 33 Features
   - Neural Network (vgg19) Layers for Feature Extraction (GPU)
