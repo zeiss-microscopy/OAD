@@ -8,13 +8,13 @@
 # @OUTPUT Boolean HEADLESS
 
 #@UIService uiService
-#@LogService log
+# @LogService sjlog
 
 #################################################################
 # File        : my_fijipyscript_local.py
-# Version     : 0.0.8
+# Version     : 1.0.0
 # Author      : czsrh
-# Date        : 20.02.2021
+# Date        : 08.05.2021
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # The idea of this module is to provide a template showing some of the required
@@ -35,6 +35,7 @@ import json
 import time
 import sys
 from collections import OrderedDict
+import sjlogging
 from java.lang import Double, Integer
 from ij import IJ, ImagePlus, ImageStack, Prefs
 from ij.process import ImageProcessor, LUT
@@ -57,12 +58,11 @@ from ome.units import UNITS
 
 ######### HELPER FUNCTIONS ##############
 
-# helper function to apply the filter
 def apply_filter(imp,
                  radius=5,
                  filtertype='MEDIAN'):
 
-    # initialize filter
+    # initialize Rank filter
     filter = RankFilters()
 
     # create filter dictionary
@@ -85,7 +85,9 @@ def apply_filter(imp,
             ip = stack.getProcessor(index)
             filter.rank(ip, radius, filterdict[filtertype])
     else:
-        print("Argument 'filtertype': {filtertype} not found")
+        #log.log(LogLevel.INFO, "Argument 'filtertype':" + str(filtertype) + " not found")
+        log.info("Argument 'filtertype': " + filtertype + " not found")
+        log.info('Image will not be filtered')
 
     return imp
 
@@ -134,11 +136,22 @@ def get_metadata(imagefile, imageID=0):
         metainfo['ScaleZ'] = None
 
     # sort the dictionary
-    metainfo =  OrderedDict(sorted(metainfo.items()))
+    metainfo = OrderedDict(sorted(metainfo.items()))
 
     return metainfo
 
 ############################################################################
+
+# get new logging object and set loglevel
+sjlogging.set_loglevel("INFO")
+log = sjlogging.setup_logger(sjlog)
+
+# since recently logging in Fiji from Jython was broken and only worked
+# when using
+# beginning of script: # @LogService log
+# for logging: log.log(LogLevel.INFO, 'My Loggging Message ...')
+#
+# See: https://forum.image.sc/t/logservice-issue-with-jython-slim-2-7-2-and-scripting-jython-1-0-0/40020/12?u=sebi06
 
 if not HEADLESS:
     # clear the console automatically when not in headless mode
@@ -146,24 +159,25 @@ if not HEADLESS:
 
 
 def run(imagefile, useBF=True,
-                   series=0,
-                   filtertype='MEDIAN',
-                   filterradius='5'):
+        series=0,
+        filtertype='MEDIAN',
+        filterradius='5'):
 
-    log.log(LogLevel.INFO, 'Image Filename : ' + imagefile)
+    #log.log(LogLevel.INFO, 'Image Filename : ' + imagefile)
+    log.info('Image Filename : ' + imagefile)
 
     # get basic image metainfo
     metainfo = get_metadata(imagefile, imageID=series)
     for k, v in metainfo.items():
-        log.log(LogLevel.INFO, str(k) + ' : ' + str(v))
+        #log.log(LogLevel.INFO, str(k) + ' : ' + str(v))
+        log.info(str(k) + ' : ' + str(v))
 
     if not useBF:
         # using IJ static method
         imp = IJ.openImage(imagefile)
 
     if useBF:
-
-        # initialize the importer options
+        # initialize the importer options for BioFormats
         options = ImporterOptions()
         options.setOpenAllSeries(True)
         options.setShowOMEXML(False)
@@ -180,8 +194,10 @@ def run(imagefile, useBF=True,
     if filtertype != 'NONE':
 
         # apply filter
-        log.log(LogLevel.INFO, 'Apply Filter  : ' + filtertype)
-        log.log(LogLevel.INFO, 'Filter Radius : ' + str(filterradius))
+        #log.log(LogLevel.INFO, 'Apply Filter  : ' + filtertype)
+        #log.log(LogLevel.INFO, 'Filter Radius : ' + str(filterradius))
+        log.info('Apply Filter  : ' + filtertype)
+        log.info('Filter Radius : ' + str(filterradius))
 
         # apply the filter based on the chosen type
         imp = apply_filter(imp,
@@ -189,7 +205,8 @@ def run(imagefile, useBF=True,
                            filtertype=filtertype)
 
     if filtertype == 'NONE':
-        log.log(LogLevel.INFO, 'No filter selected. Do nothing.')
+        #log.log(LogLevel.INFO, 'No filter selected. Do nothing.')
+        log.info('No filter selected. Do nothing.')
 
     return imp
 
@@ -204,10 +221,14 @@ SUFFIX_FL = '_FILTERED'
 SAVEFORMAT = 'ome.tiff'
 
 # log some outputs
-log.log(LogLevel.INFO, 'Starting ...')
-log.log(LogLevel.INFO, 'Filename               : ' + IMAGEPATH)
-log.log(LogLevel.INFO, 'Save Format used       : ' + SAVEFORMAT)
-log.log(LogLevel.INFO, '------------  START IMAGE ANALYSIS ------------')
+#log.log(LogLevel.INFO, 'Starting ...')
+#log.log(LogLevel.INFO, 'Filename               : ' + IMAGEPATH)
+#log.log(LogLevel.INFO, 'Save Format used       : ' + SAVEFORMAT)
+#log.log(LogLevel.INFO, '------------  START IMAGE ANALYSIS ------------')
+log.info('Starting ...')
+log.info('Filename               : ' + IMAGEPATH)
+log.info('Save Format used       : ' + SAVEFORMAT)
+log.info('------------  START IMAGE ANALYSIS ------------')
 
 ##############################################################
 
@@ -218,7 +239,8 @@ basename = os.path.splitext(outputimagepath)[0]
 # remove the extra .ome before reassembling the filename
 if basename[-4:] == '.ome':
     basename = basename[:-4]
-    log.log(LogLevel.INFO, 'New basename for output :' + basename)
+    #log.log(LogLevel.INFO, 'New basename for output :' + basename)
+    log.info('New basename for output :' + basename)
 
 # save processed image
 outputimagepath = basename + SUFFIX_FL + '.' + SAVEFORMAT
@@ -237,14 +259,15 @@ filtered_image = run(IMAGEPATH,
 
 # get time at the end and calc duration of processing
 end = time.clock()
-log.log(LogLevel.INFO, 'Duration of whole Processing : ' + str(end - start))
+#log.log(LogLevel.INFO, 'Duration of Processing : ' + str(end - start))
+log.info('Duration of Processing : ' + str(end - start))
 
 ###########################################################
 
 start = time.clock()
 
 # create the argument string for the BioFormats Exporter and save as OME.TIFF
-paramstring = "outfile=" + outputimagepath + " " + "windowless=true compression=Uncompressed saveROI=false"
+paramstring = "outfile=[" + outputimagepath + "] windowless=true compression=Uncompressed saveROI=false"
 plugin = LociExporter()
 plugin.arg = paramstring
 exporter = Exporter(plugin, filtered_image)
@@ -252,10 +275,12 @@ exporter.run()
 
 # get time at the end and calc duration of processing
 end = time.clock()
-log.log(LogLevel.INFO, 'Duration of saving as OME-TIFF : ' + str(end - start))
+#log.log(LogLevel.INFO, 'Duration of saving as OME-TIFF : ' + str(end - start))
+log.info('Duration of saving as OME-TIFF : ' + str(end - start))
 
 # show the image
 filtered_image.show()
 
 # finish
-log.log(LogLevel.INFO, 'Done.')
+#log.log(LogLevel.INFO, 'Done.')
+log.info('Done.')
