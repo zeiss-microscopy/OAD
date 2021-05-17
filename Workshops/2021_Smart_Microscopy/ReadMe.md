@@ -18,6 +18,7 @@ The official webpage can be found here: **[Smart Microscopy Webpage](https://nmi
   - Make sure that you enable GPU / disable GPU for python depending on your system
 - start the MTB to configure your "virtual" microscope and import the configuration for the CellDiscoverer 7
 - make sure you have your own conda python environment ready
+- install Docker Desktop. See here [Docker Desktop](https://docs.apeer.com/zen/windows-and-docker-requirements)
 
 ### APEER and ZEN - Open Ecosystem for integrated Machine Learning
 
