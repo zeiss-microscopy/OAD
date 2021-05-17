@@ -8,6 +8,11 @@ The official webpage can be found here: **[Smart Microscopy Webpage](https://nmi
 
 ![Preliminary Schedule](./images/smw_schedule.png)
 
+
+## Download Data and code for the workshop
+
+Use this link: **[Smart Microscopy Machine Learning](https://zeiss-my.sharepoint.com/:f:/p/sebastian_rhode/Ei5mAQBclFZPujxUbtf2U6wBEWTGtlZsEV1pfAFaW28CpQ?email=sebastian.rhode%40zeiss.com&e=xb84gt)**
+
 ## Sessions
 
 ### Prerequisites
@@ -25,6 +30,8 @@ The official webpage can be found here: **[Smart Microscopy Webpage](https://nmi
 This session will be the introduction to ZEN and APEER machine learning functionalities
 
 ### Train a model and use it inside ZEN Intellesis
+
+You need to create a conda environment **czmodel**. Go here: **[python_envs](https://github.com/zeiss-microscopy/OAD/tree/master/Workshops/2021_Smart_Microscopy/python_env)**
 
 Use the following notebook **[Train_UNet_Export_as_CZMODEL_final.ipynb](../../Machine_Learning/docs/train_czmodel/Train_UNet_Export_as_CZMODEL_final.ipynb)**
 
