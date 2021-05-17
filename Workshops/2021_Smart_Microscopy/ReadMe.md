@@ -16,7 +16,7 @@ The official webpage can be found here: **[Smart Microscopy Webpage](https://nmi
 - during the installation ZEN will install its won python distribution called ZeissPy
   - Do not worry, it will not interfere with any existing python environments
   - Make sure that you enable GPU / disable GPU for python depending on your system
-- start the MTB to configure your "virtual" microscope and import the **[configuration](./mtb_config/Castor%20Simulation%20WF+LSM900.mtb)** for the CellDiscoverer 7
+- start the MTB to configure your "virtual" microscope and import the configuration for the CellDiscoverer 7
 - make sure you have your own conda python environment ready
 
 ### APEER and ZEN - Open Ecosystem for integrated Machine Learning
