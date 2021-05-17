@@ -25,9 +25,9 @@ This session will be the introduction to ZEN and APEER machine learning function
 
 ### Train a model and use it inside ZEN Intellesis
 
-Use the following notebook [Train_UNet_Export_as_CZMODEL_final.ipynb](../../Machine_Learning/docs/train_czmodel/Train_UNet_Export_as_CZMODEL_final.ipynb)
+Use the following notebook **[Train_UNet_Export_as_CZMODEL_final.ipynb](../../Machine_Learning/docs/train_czmodel/Train_UNet_Export_as_CZMODEL_final.ipynb)**
 
-Go to folder: [train_czmodel](https://github.com/zeiss-microscopy/OAD/tree/master/Machine_Learning/docs/train_czmodel)
+Go to folder: **[train_czmodel](https://github.com/zeiss-microscopy/OAD/tree/master/Machine_Learning/docs/train_czmodel)**
 
 The folder contains also some testdata and related content.
 
@@ -35,4 +35,8 @@ The folder contains also some testdata and related content.
 
 This session will be about creating your own APEER module using python (and maybe Fiji jython) code and to use it ZEN later on.
 
-Go to folder: [APEER modules](https://github.com/zeiss-microscopy/OAD/tree/master/Apeer/modules)
+Go to folder: **[APEER modules](https://github.com/zeiss-microscopy/OAD/tree/master/Apeer/modules)**
+
+Ideally we will use the APEER module to create a customized Guided Acquisition workflow in ZEN
+
+Go to folder **[python_script_zen](https://github.com/zeiss-microscopy/OAD/tree/master/Workshops/2021_Smart_Microscopy/python_scripts_zen)**
