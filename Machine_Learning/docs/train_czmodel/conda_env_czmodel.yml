@@ -1,4 +1,4 @@
-# run: conda env create --file "C:\Users\m1srh\OneDrive - Carl Zeiss AG\Smart_Microscopy_Workshop\python_env\conda_env_czmodel.yml"
+# run: conda env create --file conda_env_czmodel.yml
 name: czmodel
 channels:
   - defaults
@@ -8,15 +8,18 @@ dependencies:
   - pip
   - jupyter
   - matplotlib
+  - cudatoolkit=10
+  - cudnn
+  - sklearn
 
   - pip:
       - czmodel==1.1.0
-      - sklearn
+      - pip install livelossplot
 # Create an environment
-# conda env create --file "C:\Users\m1srh\OneDrive - Carl Zeiss AG\Smart_Microscopy_Workshop\python_env\conda_env_czmodel.yml"
+# conda env create --file conda_env_czmodel.yml
 
 # Update an environment
-# conda env update --name czmodel --file "C:\Users\m1srh\OneDrive - Carl Zeiss AG\Smart_Microscopy_Workshop\python_env\conda_env_czmodel.yml" --prune
+# conda env update --name czmodel --file conda_env_czmodel.yml --prune
 
 # Remove an environment
 # conda remove --name czmodel --all
@@ -24,4 +27,3 @@ dependencies:
 # Show the locations of all versions of Python that are currently in the path
 # Windows: where python
 # Linux which -a python
-
