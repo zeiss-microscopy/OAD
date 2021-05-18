@@ -1,5 +1,5 @@
 # run: conda env create --file conda_env_czmodel.yml
-name: czmodel
+name: czmodel_test
 channels:
   - defaults
 dependencies:
@@ -10,7 +10,7 @@ dependencies:
   - matplotlib
   - cudatoolkit=10
   - cudnn
-  - sklearn
+  - scikit-learn
 
   - pip:
       - czmodel==1.1.0
