@@ -1,5 +1,5 @@
 # run: conda env create --file conda_env_czmodel.yml
-name: czmodel_test
+name: czmodel
 channels:
   - defaults
 dependencies:
