@@ -107,23 +107,6 @@ def conv_block(inputs, filters, kernel_size=3, initializer='he_normal'):
 
     return x
 
-def build_unet(backbone='mobilenet',
-               numclasses=2,
-               activation='softmax',
-               loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-               metrics=['accuracy',sm.metrics.IOUScore(threshold=0.5)],
-               weights=[1],
-               encoder_weights='imagenet',
-               encoder_freeze=True):
-
-    # backbones = ['mobilenet','mobilenetv2','inceptionv3','resnet18','resnet34','resnet50','resnet101','resnet152'])
-
-    #Model
-    model = sm.Unet(backbone, encoder_weights=encoder_weights,classes=numclasses, activation=activation, encoder_freeze=encoder_freeze)
-    model.compile('adam', loss, metrics, loss_weights=weights)
-    
-    return model
-
 
 import numpy as np
 import keras.backend as K
