@@ -33,6 +33,11 @@ This session will be the introduction to ZEN and APEER machine learning function
 
 You need to create a conda environment **czmodel**. Go here: **[python_envs](https://github.com/zeiss-microscopy/OAD/tree/master/Workshops/2021_Smart_Microscopy/python_env)**
 
+- start terminal and make sure  you have conda environment installed
+- navigate the the folder containing **conda_env_czmodel.yml** fil
+- execute ```conda env create --file conda_env_czmodel.yml```
+- execute ```conda activate czmodel```
+
 Use the following notebook **[Train_UNet_Export_as_CZMODEL_final.ipynb](../../Machine_Learning/docs/train_czmodel/Train_UNet_Export_as_CZMODEL_final.ipynb)**
 
 Go to folder: **[train_czmodel](https://github.com/zeiss-microscopy/OAD/tree/master/Machine_Learning/docs/train_czmodel)**
@@ -48,3 +53,16 @@ Go to folder: **[APEER modules](https://github.com/zeiss-microscopy/OAD/tree/mas
 Ideally we will use the APEER module to create a customized Guided Acquisition workflow in ZEN
 
 Go to folder **[python_script_zen](https://github.com/zeiss-microscopy/OAD/tree/master/Workshops/2021_Smart_Microscopy/python_scripts_zen)**
+
+### Reading CZI (and other) image data in Napari
+
+This session will be about reading CZI (and other image data into Napari) and will contain a litte "fun project showing how to start an experiment in ZEN from Napari.
+
+You need to create a conda environment **imageanalysis_czi**. Go here: **[python_envs](https://github.com/zeiss-microscopy/OAD/tree/master/Workshops/2021_Smart_Microscopy/python_env)**
+
+- start terminal and make sure  you have conda environment installed
+- navigate the the folder containing **conda_env_ia_czi.yml** fil
+- execute ```conda env create --file conda_env_is_czi.yml```
+- execute ```conda activate imageanalysis_czi```
+
+The actual code can be found here: Go to folder: **[APEER modules](https://github.com/zeiss-microscopy/OAD/tree/master/napari_python_czi)**
