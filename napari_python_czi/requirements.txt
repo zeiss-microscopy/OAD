@@ -1,5 +1,4 @@
 napari[all]==0.4.7
-napari-aicsimageio
 aicsimageio[all]>=3.3.4,<4
 aicspylibczi>=2.8.0,<4
 magicgui>=0.2.9, <1
