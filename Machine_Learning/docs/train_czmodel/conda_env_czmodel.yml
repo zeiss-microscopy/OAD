@@ -14,7 +14,7 @@ dependencies:
 
   - pip:
       - czmodel==1.1.0
-      - pip install livelossplot
+      - livelossplot
 # Create an environment
 # conda env create --file conda_env_czmodel.yml
 
