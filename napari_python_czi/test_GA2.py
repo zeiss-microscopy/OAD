@@ -85,15 +85,15 @@ minsize = 100000
 maxsize = 1000000000
 
 # define minimum hole size
-minholesize = 1000
+maxholesize = 1000
 
 # define save format for mask
 adapt_dtype_mask = True
 dtype_mask = np.int8
 
 # check if it makes sense
-if minholesize > minsize:
-    minsize = minholesize
+if maxholesize > minsize:
+    minsize = maxholesize
 
 # read the czi mosaic image
 czi = CziFile(filename)
@@ -141,7 +141,7 @@ for s in progressbar.progressbar(range(md['SizeS']), redirect_stdout=True):
 
     # remove small holes
     mask = morphology.remove_small_holes(binary,
-                                         area_threshold=minholesize,
+                                         area_threshold=maxholesize,
                                          connectivity=1,
                                          in_place=True)
 
