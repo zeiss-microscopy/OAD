@@ -11,18 +11,12 @@ from dask import delayed
 from itertools import product
 import napari
 
-# filename = r"testdata\Tumor_H+E_small2.czi"
-#filename = r"C:\Testdata_Zeiss\CD7\Z-Stack_DCV\CellDivision_T=10_Z=15_CH=2_DCV_small.czi"
-#filename = r"C:\Testdata_Zeiss\CD7\Z-Stack_DCV\CellDivision_T=15_Z=20_CH=2_DCV.czi"
-#filename = r"C:\Testdata_Zeiss\CD7\Mouse Kidney_40x0.95_3CD_JK_comp.czi"
-#filename = r"C:\Testdata_Zeiss\DTScan_ID4_small.czi"
-#filename = r"C:\Testdata_Zeiss\DTScan_ID4.czi"
-#filename = r"D:\Temp\input\DTScan_ID4-nokeeptiles.czi"
-#filename = r"C:\Testdata_Zeiss\CD7\testwell96.czi"
-#filename = r"C:\Testdata_Zeiss\CZI_Testfiles\S=2_3x3_Z=4_CH=2.czi"
+
+filename = r"C:\Users\m1srh\OneDrive - Carl Zeiss AG\Smart_Microscopy_Workshop\datasets\celldivision\CellDivision_T=15_Z=20_CH=2_DCV.czi"
 #filename = r"C:\Testdata_Zeiss\LatticeLightSheet\LS_Mitosis_T=150-300.czi"
-#filename = r"C:\Users\m1srh\Downloads\Halo_CZI_small.czi"
-filename = r"C:\Testdata_Zeiss\OverViewScan.czi"
+#filename = "D:\Testdata_Zeiss\AiryScan\FoLu_mCherryEB3_GFPMito_2_Airyscan Processing.czi"
+#filename = r"C:\Testdata_Zeiss\OverViewScan.czi"
+#filename = r"C:\Users\m1srh\OneDrive - Carl Zeiss AG\Smart_Microscopy_Workshop\datasets\cells\w96_A1+A2.czi"
 
 ######################################################################
 
