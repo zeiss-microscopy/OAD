@@ -3,7 +3,7 @@
 # Version    : 7.4
 # Author     : czsrh, czmla, czkel
 # Date       : 21.10.2019
-# Institution : Carl Zeiss Microscopy GmbH
+# Insitution : Carl Zeiss Microscopy GmbH
 #
 # !!! Requires with ZEN >=2.6 HF3 - Use at your own Risk !!!
 #
@@ -311,7 +311,7 @@ ovdoc = Zen.Application.Documents.GetByName(output_OVScan.Name)
 # save the overview scan image inside the select folder
 output_OVScan.Save(Path.Combine(OutputFolder, ovscan_name))
 
-# get the actula focus value for the overscan idependent from the z-value
+# get the actual focus value for the overscan independent from the z-value
 # before the start of the overview scan using the image metadata
 zvalue_ovscan = output_OVScan.Metadata.FocusPositionMicron
 
