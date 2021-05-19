@@ -47,7 +47,7 @@ def bbox2stageXY(image_stageX=0,
     :rtype: float
     """
 
-    # calculate the origin of the image in stage coordinates
+    # calculate the width and height of the image in [micron]
     width = sizeX * scale
     height = sizeY * scale
 
@@ -68,9 +68,29 @@ def execute(filepath,
             filter_size=3,
             threshold_method='triangle',
             min_objectsize=1000,
-            min_holesize=100,
-            saveformat='ome.tiff'
-            ):
+            max_holesize=100,
+            saveformat='ome.tiff'):
+    """Main function that executed the workflow.
+
+    :param filepath: file path of the CZI image
+    :type filepath: tsr
+    :param separator: sepeartor for the CSV table, defaults to ';'
+    :type separator: str, optional
+    :param filter_method: smoothing filer, defaults to 'none'
+    :type filter_method: str, optional
+    :param filter_size: kernel size or radius of filter element, defaults to 3
+    :type filter_size: int, optional
+    :param threshold_method: threshold method, defaults to 'triangle'
+    :type threshold_method: str, optional
+    :param min_objectsize: minimum object size, defaults to 1000
+    :type min_objectsize: int, optional
+    :param max_holesize: maximum object size, defaults to 100
+    :type max_holesize: int, optional
+    :param saveformat: format to save the segmented image, defaults to 'ome.tiff'
+    :type saveformat: str, optional
+    :return: outputs
+    :rtype: dict
+    """
 
     print('--------------------------------------------------')
     print('FilePath : ', filepath)
@@ -84,12 +104,9 @@ def execute(filepath,
     # get the metadata from the czi file
     md, additional_mdczi = imf.get_metadata(filepath)
 
-    # to make it more readable
+    # to make it more readable extravt values from metadata dictionary
     stageX = md['SceneStageCenterX']
     stageY = md['SceneStageCenterY']
-
-    # toggle additional printed output
-    verbose = True
 
     # define columns names for dataframe
     cols = ['S', 'T', 'Z', 'C', 'Number']
@@ -101,7 +118,7 @@ def execute(filepath,
     # scalefactor to read CZI
     sf = 1.0
 
-    # index for channel
+    # index for channel - currently only single channel images are supported !
     chindex = 0
 
     # define maximum object sizes
@@ -112,8 +129,8 @@ def execute(filepath,
     dtype_mask = np.int8
 
     # check if it makes sense
-    if min_holesize > min_objectsize:
-        min_objectsize = min_holesize
+    if max_holesize > min_objectsize:
+        min_objectsize = max_holesize
 
     # read the czi mosaic image
     czi = CziFile(filepath)
@@ -125,18 +142,13 @@ def execute(filepath,
     print('IsMosaic     : ', czi.is_mosaic())
 
     # read the mosaic pixel data
-    mosaic = czi.read_mosaic(C=0, scale_factor=1.0)
+    mosaic = czi.read_mosaic(C=0, scale_factor=sf)
     print('Mosaic Shape :', mosaic.shape)
 
-    # get the mosiac as NumPy.Array - must it im memory !!!
+    # get the mosaic as NumPy.Array - must fit im memory !!!
     image2d = np.squeeze(mosaic, axis=0)
     md['SizeX_readmosaic'] = image2d.shape[1]
     md['SizeY_readmosaic'] = image2d.shape[0]
-
-    image_counter = 0
-
-    # initialize empty dataframe
-    results = pd.DataFrame()
 
     # create the savename for the OME-TIFF
     if saveformat == 'ome.tiff':
@@ -144,6 +156,10 @@ def execute(filepath,
     if saveformat == 'tiff':
         savename_seg = filename.split('.')[0] + '.tiff'
 
+    # initialize empty dataframe
+    results = pd.DataFrame()
+
+    # main loop over all T - Z - C slices
     for s in progressbar.progressbar(range(md['SizeS']), redirect_stdout=True):
         for t in range(md['SizeT']):
             for z in range(md['SizeZ']):
@@ -154,7 +170,7 @@ def execute(filepath,
                           'C': chindex,
                           'Number': 0}
 
-        # filter image
+        # preprocessing - filter the image
         if filter_method == 'none' or filter_method == 'None':
             image2d_filtered = image2d
         if filter_method == 'median':
@@ -162,12 +178,12 @@ def execute(filepath,
         if filter_method == 'gauss':
             image2d_filtered = gaussian(image2d, sigma=filter_size, mode='reflect')
 
-        # threshold image and run marker-based watershed
+        # threshold image
         binary = sgt.autoThresholding(image2d_filtered, method=threshold_method)
 
         # Remove contiguous holes smaller than the specified size
         mask = morphology.remove_small_holes(binary,
-                                             area_threshold=min_holesize,
+                                             area_threshold=max_holesize,
                                              connectivity=1,
                                              in_place=True)
 
@@ -232,14 +248,6 @@ def execute(filepath,
         objects = objects.append(pd.DataFrame(values, index=[0]), ignore_index=True)
         results = results.append(props, ignore_index=True)
 
-        image_counter += 1
-        # optional display of results
-        if image_counter - 1 in show_image:
-            print('Well:', props['WellId'].iloc[0], 'Index S-C:', s, chindex, 'Objects:', values['Number'])
-
-            # ax = vst.plot_segresults(image2d, mask, props,
-            #                         add_bbox=True)
-
     # make sure the array as 5D of order (T, Z, C, X, Y) to write an correct OME-TIFF
     mask = imf.expand_dims5d(mask, md)
 
@@ -298,6 +306,6 @@ if __name__ == "__main__":
             filter_size=3,
             threshold_method='triangle',
             min_objectsize=100000,
-            min_holesize=1000,
+            max_holesize=1000,
             saveformat='ome.tiff'
             )

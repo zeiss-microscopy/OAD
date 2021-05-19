@@ -37,7 +37,7 @@
                 },
                 "default": 50000
             },
-            "min_holesize": {
+            "max_holesize": {
                 "type:number": {
                     "lower_inclusive": 1,
                     "upper_inclusive": 5000
@@ -124,10 +124,10 @@
                     "step": 1000
                 }
             },
-            "min_holesize": {
+            "max_holesize": {
                 "index": 6,
-                "label": "Minimum Hole Size",
-                "description": "Define minimum size for removing contiguous holes smaller than the specified size",
+                "label": "Remove small holes",
+                "description": "Define size for removing contiguous holes smaller than the specified size",
                 "widget:slider": {
                     "step": 100
                 }

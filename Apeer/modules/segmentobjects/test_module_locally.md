@@ -11,7 +11,7 @@ docker build --rm -t test/apeer_test_segmentobj:latest .
 3. Run the container using the input specified inside the wfe.env file:
 
 ```JSON
-WFE_INPUT_JSON={"overview_image":"/input/OverViewScan.czi","filter_method":"none","filter_size":3,"threshold_method":"triangle","min_objectsize":100000,"min_holesize":1000,"WFE_output_params_file":"/output.json"}
+WFE_INPUT_JSON={"overview_image":"/input/OverViewScan.czi","filter_method":"none","filter_size":3,"threshold_method":"triangle","min_objectsize":100000,"max_holesize":1000,"WFE_output_params_file":"/output.json"}
 ```
 
 4. Now run the just created docker image using:

@@ -14,9 +14,8 @@ if __name__ == "__main__":
                                       filter_size=int(inputs['filter_size']),
                                       threshold_method=inputs['threshold_method'],
                                       min_objectsize=int(inputs['min_objectsize']),
-                                      min_holesize=int(inputs['min_holesize']),
-                                      saveformat='ome.tiff'
-                                      )
+                                      max_holesize=int(inputs['max_holesize']),
+                                      saveformat='ome.tiff')
 
     # write the results to the outputs
     adk.set_file_output('segmented_image', outputs['segmented_image'])
