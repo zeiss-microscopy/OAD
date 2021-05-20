@@ -10,8 +10,8 @@ dependencies:
   - pip
   - numpy
   - pandas
-  #  - seaborn
-  #  - matplotlib
+  - seaborn
+  - matplotlib
   - xmltodict
   - lxml
   - openpyxl
@@ -19,6 +19,7 @@ dependencies:
   - scikit-image
   - tifffile
   - scipy
+  - zarr
   - progressbar2
   - imagecodecs
   - pip:
@@ -27,7 +28,7 @@ dependencies:
 # conda env create --file conda_env_ia_czi.yml
 
 # Update an environment
-# conda env update --name imageanalysis_czi --file conda_env_ia_czi.yml" --prune
+# conda env update --name imageanalysis_czi --file conda_env_ia_czi.yml --prune
 
 # Remove an environment
 # conda remove --name imageanalysis_czi --all

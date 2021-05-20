@@ -103,3 +103,7 @@ venv.bak/
 # mypy
 .mypy_cache/
 .vscode/settings.json
+
+# imagefile and datafile
+.ome.tiff
+.csv
