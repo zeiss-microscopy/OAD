@@ -61,7 +61,7 @@ do_postprocess = False
 
 # define a module name and version
 module_name = 'SegmentObjects-GA'
-module_version = 2
+module_version = 3
 
 # define the processing parameters (or use the defaults: params.Parameters)
 my_parameters = {'filter_method': 'none',

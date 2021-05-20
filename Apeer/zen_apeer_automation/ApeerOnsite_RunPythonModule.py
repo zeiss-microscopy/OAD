@@ -108,7 +108,7 @@ czifile = r'c:\Users\m1srh\OneDrive - Carl Zeiss AG\Smart_Microscopy_Workshop\da
 
 # define a module name and version
 module_name = 'SegmentObjects-GA'
-module_version = 2 # 0 = draft
+module_version = 3 # 0 = draft
 
 # get module and check
 mymodule, version_found = get_module(module_name, module_version=module_version)
