@@ -1,8 +1,8 @@
 ﻿#################################################################
 # File       : Guided_Acquisition_shortUI_apeer.py
-# Version    : 0.1
+# Version    : 0.2
 # Author     : czsrh, czmla, czkel
-# Date       : 14.05.2021
+# Date       : 20.05.2021
 # Insitution : Carl Zeiss Microscopy GmbH
 #
 # Optimized for the use with Celldiscoverer 7 and DF2, but
@@ -37,7 +37,7 @@ from System.IO import File, Directory, Path
 import sys
 
 # version number for dialog window
-version = 0.1
+version = 0.2
 # file name for overview scan
 ovscan_name = 'OverviewScan.czi'
 
@@ -555,7 +555,7 @@ if use_apeer:
     colID = get_columns(SingleObj)
 
     # define the required column names here
-    col2check = ('bbox_center_stageX', 'bbox_center_stageX', 'bbox_width_scaled', 'bbox_height_scaled')
+    col2check = ('bbox_center_stageX', 'bbox_center_stageY', 'bbox_width_scaled', 'bbox_height_scaled')
 
     # check if all columns exist
     if all(key in colID for key in col2check):

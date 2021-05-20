@@ -1,8 +1,8 @@
 ﻿#################################################################
 # File        : ApeerOnsite_RunPythonModule.py
-# Version     : 0.1
+# Version     : 0.2
 # Author      : czsrh
-# Date        : 10.05.2021
+# Date        : 20.05.2021
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # Disclaimer: This tool is purely experimental. Feel free to
@@ -191,7 +191,7 @@ Zen.Application.Documents.Add(object_table)
 
 # get all columns as dict with columnIDs
 colID = get_columns(object_table)
-col2check = ('bbox_center_stageX', 'bbox_center_stageX', 'bbox_width_scaled', 'bbox_height_scaled')
+col2check = ('bbox_center_stageX', 'bbox_center_stageY', 'bbox_width_scaled', 'bbox_height_scaled')
 if all(key in colID for key in col2check):
     print('All required columns found.')
 else:
