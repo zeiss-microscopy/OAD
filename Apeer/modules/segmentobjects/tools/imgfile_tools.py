@@ -31,7 +31,6 @@ import dask.array as da
 import pandas as pd
 import tifffile
 import pydash
-import zarr
 
 
 def get_imgtype(imagefile):

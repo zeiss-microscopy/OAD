@@ -104,7 +104,7 @@ print('Shape        : ', czi.dims_shape())
 print('IsMosaic     : ', czi.is_mosaic())
 
 # read the mosaic pixel data
-mosaic = czi.read_mosaic(C=0, scale_factor=1.0)
+mosaic = czi.read_mosaic(C=0, scale_factor=sf)
 print('Mosaic Shape :', mosaic.shape)
 
 image2d = np.squeeze(mosaic, axis=0)
