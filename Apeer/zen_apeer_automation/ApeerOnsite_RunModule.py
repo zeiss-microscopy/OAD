@@ -1,8 +1,8 @@
 ﻿#################################################################
-# File        : ApeerOnsite_RunPythonModule.py
-# Version     : 0.2
+# File        : ApeerOnsite_RunModule.py
+# Version     : 0.3
 # Author      : czsrh
-# Date        : 20.05.2021
+# Date        : 21.05.2021
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # Disclaimer: This tool is purely experimental. Feel free to
@@ -18,6 +18,7 @@
 #################################################################
 
 from System.IO import File, Directory, Path
+from System import ApplicationException
 
 # clear the output console
 Zen.Application.MacroEditor.ClearMessages()
@@ -106,9 +107,42 @@ def get_module(module_name, module_version=0):
 # define the input image
 czifile = r'c:\Users\m1srh\OneDrive - Carl Zeiss AG\Smart_Microscopy_Workshop\datasets\brain_slide\OverViewScan.czi'
 
-# define a module name and version
-module_name = 'SegmentObjects-GA'
-module_version = 3 # 0 = draft
+# run from seeting or define parameters manually
+run_from_setting = True
+
+# create empyt dictionary for the parameters
+parameters = {}
+
+if run_from_setting:
+
+    # name of the APEER module seeting
+    apeer_modulesetting = 'SegmentObjects_Brainslide'
+
+    # read it from settings file
+    ams = ZenApeer.Onsite.ModuleSetting()
+    ams.Load(apeer_modulesetting)
+
+    print '-----   Show APEER Module Setting   -----'
+    print 'Module Name    : ', ams.ModuleName
+    print 'Module Version : ', ams.ModuleVersion
+    print 'Module Parameters    : ', ams.Parameters
+
+    module_name = ams.ModuleName
+    module_version = ams.ModuleVersion
+    parameters = ams.Parameters
+
+if not run_from_setting:
+
+    # define a module name and version
+    module_name = 'SegmentObjects-GA'  # use without file extension *.czams
+    module_version = 3  # 0 = draft
+
+    # define the processing parameters (or use the defaults: params.Parameters
+    parameters = {'filter_method': 'none',
+                  'filter_size': 5,
+                  'threshold_method': 'triangle',
+                  'min_objectsize': 50000,
+                  'max_holesize': 1000}
 
 # get module and check
 mymodule, version_found = get_module(module_name, module_version=module_version)
@@ -119,26 +153,27 @@ if mymodule is None or not version_found:
     raise SystemExit
 
 # get the module parameters for the specified module
-params = ZenApeer.Onsite.GetSampleModuleParameters(mymodule.ModuleName, module_version)
+module_params = ZenApeer.Onsite.GetSampleModuleParameters(module_name, module_version)
 
 # show the required module inputs
 print '------ Module Inputs ------'
-for ip in params.Inputs:
+for ip in module_params.Inputs:
     print ip.Key
 
 # sho the required parameters and their defaults
 print '------ Module Parameters ------'
-for p in params.Parameters:
+for p in module_params.Parameters:
     print p.Key
-    
+
 print '------ Outputs ------'
-for op in params.Outputs.GetEnumerator():
+for op in module_params.Outputs.GetEnumerator():
     print op.Key
 
-# get the module input programmatically
-module_inputs = get_module_inputs(params)
 
-#create the required dictionary with the correct key and value
+# get the module input programmatically
+module_inputs = get_module_inputs(module_params)
+
+# create the required dictionary with the correct key and value for the input
 input_image = {module_inputs[0]: czifile}
 
 # create the path to save the results
@@ -148,33 +183,41 @@ savepath = Path.Combine(Path.GetDirectoryName(czifile), 'saved_results')
 if not Directory.Exists(savepath):
     Directory.CreateDirectory(savepath)
 
-# define the processing parameters (or use the defaults: params.Parameters
-my_parameters = {'filter_method': 'none',
-                 'filter_size': 5,
-                 'threshold_method': 'triangle',
-                 'min_objectsize': 50000,
-                 'max_holesize': 1000}
 
-# or use default parameters from the module
-#my_parameters = params.Parameters
+if not run_from_setting:
+
+    # define the processing parameters (or use the defaults: params.Parameters
+    parameters = {'filter_method': 'none',
+                  'filter_size': 5,
+                  'threshold_method': 'triangle',
+                  'min_objectsize': 50000,
+                  'max_holesize': 1000}
+
+    # or use default parameters from the module
+    #my_parameters = params.Parameters
+
 
 # run the local APEER module with using keywords
-runoutputs, status, log = ZenApeer.Onsite.RunModule(moduleName=mymodule.ModuleName,
+runoutputs, status, log = ZenApeer.Onsite.RunModule(module_name,
                                                     moduleVersion=module_version,
                                                     inputs=input_image,
-                                                    parameters=my_parameters,
+                                                    parameters=parameters,
                                                     storagePath=savepath)
 
-# get results storage locations
-path_segmented_image = runoutputs['segmented_image']
-path_object_table = runoutputs['objects_table']
-
 print '--------------   Module Results   ---------------'
-print 'Segmented Image : ', path_segmented_image
-print 'Objects Table : ', path_object_table
+for op in runoutputs.GetEnumerator():
+    print op.Key, ' : ', op.Value
+
+if not runoutputs.ContainsKey('segmented_image'):
+    print 'No output : segmented_image'
+    raise SystemExit
+
+if not runoutputs.ContainsKey('objects_table'):
+    print 'No output : objects_table'
+    raise SystemExit
 
 # load the segmented image and make sure the pyramid is calculated
-segmented_image = Zen.Application.LoadImage(path_segmented_image, False)
+segmented_image = Zen.Application.LoadImage(runoutputs['segmented_image'], False)
 Zen.Processing.Utilities.GenerateImagePyramid(segmented_image, ZenBackgroundMode.Black)
 Zen.Application.Save(segmented_image, segmented_image.FileName[:-8] + 'czi', False)
 Zen.Application.Documents.Add(segmented_image)
@@ -186,7 +229,7 @@ for id in ids:
 
 # initialize ZenTable object and load CSV file
 object_table = ZenTable()
-object_table.Load(path_object_table)
+object_table.Load(runoutputs['objects_table'])
 Zen.Application.Documents.Add(object_table)
 
 # get all columns as dict with columnIDs
@@ -197,19 +240,19 @@ if all(key in colID for key in col2check):
 else:
     print('Not All required columns found. Exiting.')
     raise SystemExit
-    
+
 
 # execute detailed experiment at the position of every detected object
 for obj in range(object_table.RowCount):
 
     # get the object information from the position table - make sure to use the correct names !
-    xpos = object_table.GetValue(obj, colID['bbox_center_stageX']) # get X-position from table
-    ypos = object_table.GetValue(obj, colID['bbox_center_stageY']) # get Y-position from table
-    bwidth = object_table.GetValue(obj, colID['bbox_width_scaled']) # get the width of the bounding box
-    bheight = object_table.GetValue(obj, colID['bbox_height_scaled']) # get the height of the bounding box
-    
-    print 'Moving Stage to Object:', obj+1, ' at :', '{:.2f}'.format(xpos), '{:.2f}'.format(ypos)
-    
+    xpos = object_table.GetValue(obj, colID['bbox_center_stageX'])  # get X-position from table
+    ypos = object_table.GetValue(obj, colID['bbox_center_stageY'])  # get Y-position from table
+    bwidth = object_table.GetValue(obj, colID['bbox_width_scaled'])  # get the width of the bounding box
+    bheight = object_table.GetValue(obj, colID['bbox_height_scaled'])  # get the height of the bounding box
+
+    print 'Moving Stage to Object:', obj + 1, ' at :', '{:.2f}'.format(xpos), '{:.2f}'.format(ypos)
+
 
 if 'WellId' in colID:
     print('WellId column found.')
@@ -219,8 +262,5 @@ else:
     print('WellId column not found.')
     well_exist = False
     column_wellid = None
-    
+
 print well_exist, column_wellid
-
-
-

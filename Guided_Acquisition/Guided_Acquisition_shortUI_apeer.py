@@ -1,8 +1,8 @@
 ﻿#################################################################
 # File       : Guided_Acquisition_shortUI_apeer.py
-# Version    : 0.2
+# Version    : 8.0
 # Author     : czsrh, czmla, czkel
-# Date       : 20.05.2021
+# Date       : 21.05.2021
 # Insitution : Carl Zeiss Microscopy GmbH
 #
 # Optimized for the use with Celldiscoverer 7 and DF2, but
@@ -37,7 +37,7 @@ from System.IO import File, Directory, Path
 import sys
 
 # version number for dialog window
-version = 0.2
+version = 8.0
 # file name for overview scan
 ovscan_name = 'OverviewScan.czi'
 
@@ -60,15 +60,15 @@ do_postprocess = False
 #################   Define APEER module here   ###############
 
 # define a module name and version
-module_name = 'SegmentObjects-GA'
-module_version = 3
+#module_name = 'SegmentObjects-GA'
+#module_version = 3
 
 # define the processing parameters (or use the defaults: params.Parameters)
-my_parameters = {'filter_method': 'none',
-                 'filter_size': 5,
-                 'threshold_method': 'triangle',
-                 'min_objectsize': 50000,
-                 'max_holesize': 1000}
+#my_parameters = {'filter_method': 'none',
+#                 'filter_size': 5,
+#                 'threshold_method': 'triangle',
+#                 'min_objectsize': 50000,
+#                 'max_holesize': 1000}
 
 ##############################################################
 
@@ -346,28 +346,31 @@ format = '%Y-%m-%d_%H-%M-%S'
 # get list with all existing experiments and image analysis setup and a short version of that list
 expfiles = Directory.GetFiles(Path.Combine(docfolder, 'Experiment Setups'), '*.czexp')
 ipfiles = Directory.GetFiles(Path.Combine(docfolder, 'Image Analysis Settings'), '*.czias')
+apfiles = Directory.GetFiles(Path.Combine(docfolder, 'APEER Module Settings'), '*.czams')
 expfiles_short = getshortfiles(expfiles)
 ipfiles_short = getshortfiles(ipfiles)
+apfiles_short = getshortfiles(apfiles)
 
 # Initialize Dialog
 GuidedAcqDialog = ZenWindow()
 GuidedAcqDialog.Initialize('Guided Acquisition - Version : ' + str(version))
 # add components to dialog
-GuidedAcqDialog.AddLabel('1) Select Overview Experiment  ------------------------------')
+GuidedAcqDialog.AddLabel('------   Select Overview Experiment   ------')
 GuidedAcqDialog.AddDropDown('overview_exp', 'Overview Scan Experiment', expfiles_short, 0)
 GuidedAcqDialog.AddCheckbox('fs_before_overview', 'OPTION - FindSurface (DF only) before Overview', False)
 GuidedAcqDialog.AddCheckbox('SWAF_before_overview', 'OPTION - SWAF before Overview', False)
 GuidedAcqDialog.AddIntegerRange('SWAF_ov_initial_range', 'Initial SWAF Range before Overview [micron]', 200, 50, 3000)
-GuidedAcqDialog.AddLabel('2) Select Image Analysis to detect objects  ----------------------')
+GuidedAcqDialog.AddLabel('------   Select Image Analysis to detect objects   ------')
 GuidedAcqDialog.AddDropDown('ip_pipe', 'Image Analysis Pieline', ipfiles_short, 0)
 GuidedAcqDialog.AddCheckbox('use_apeer_for_IA', 'Use APEER module run run IA instead', True)
-GuidedAcqDialog.AddLabel('3) Select DetailScan Experiment  ---------------------------')
+GuidedAcqDialog.AddDropDown('ap_pipe', 'APEER Module Settings', apfiles_short, 0)
+GuidedAcqDialog.AddLabel('------   Select DetailScan Experiment   ------')
 GuidedAcqDialog.AddDropDown('detailed_exp', 'Detailed Scan Experiment', expfiles_short, 1)
 GuidedAcqDialog.AddCheckbox('fs_before_detail', 'OPTION - FindSurface (DF only) before Detail', False)
 GuidedAcqDialog.AddCheckbox('SWAF_before_detail', 'OPTION - SWAF before Detail', False)
 GuidedAcqDialog.AddIntegerRange('SWAF_detail_initial_range', 'Initial SWAF Range before Detail [micron]', 100, 10, 1000)
 GuidedAcqDialog.AddCheckbox('recallfocus_beforeDT', 'OPTION - Use RecallFocus (DF only) before Detail', False)
-GuidedAcqDialog.AddLabel('4) Specify basefolder to save the images ----------------------')
+GuidedAcqDialog.AddLabel('------   Specify basefolder to save the images   ------')
 GuidedAcqDialog.AddFolderBrowser('outfolder', 'Basefolder for Images and Data Tables', imgfolder)
 
 # show the window
@@ -380,6 +383,7 @@ if result.HasCanceled:
 # get the values and store them
 OverViewExpName = str(result.GetValue('overview_exp'))
 ImageAS = str(result.GetValue('ip_pipe'))
+ApeerMS = str(result.GetValue('ap_pipe'))
 DetailExpName = str(result.GetValue('detailed_exp'))
 OutputFolder = str(result.GetValue('outfolder'))
 fs_beforeOV = result.GetValue('fs_before_overview')
@@ -397,7 +401,7 @@ print('Overview Scan Experiment : ' + OverViewExpName)
 if not use_apeer:
     print('Image Analysis Pipeline : ' + ImageAS)
 if use_apeer:
-    print('Use Apeer Module for IA : ')
+    print('Use Apeer Module Setting : ' + ApeerMS)
 print('Detailed Scan Experiment : ' + DetailExpName)
 print('Output Folder for Data : ' + OutputFolder)
 print('\n')
@@ -442,7 +446,7 @@ if OVScanIsTileExp:
 print('\nRunning OverviewScan Experiment.\n')
 #output_OVScan = Zen.Acquisition.Execute(OVScan_reloaded)
 # For testing purposes - Load overview scan image automatically instead of executing the "real" experiment
-ovtestimage = r"C:\Users\m1srh\OneDrive - Carl Zeiss AG\Smart_Microscopy_Workshop\datasets\brain_slide\OverViewScan.czi"
+ovtestimage = r'C:\Users\m1srh\OneDrive - Carl Zeiss AG\Smart_Microscopy_Workshop\datasets\brain_slide\OverViewScan.czi'
 output_OVScan = Zen.Application.LoadImage(ovtestimage, False)
 
 # show the overview scan inside the document area
@@ -496,8 +500,19 @@ if not use_apeer:
 # use APEER module to detect the objects
 if use_apeer:
 
+    # read it from settings file
+    ams = ZenApeer.Onsite.ModuleSetting()
+    
+    # loaf the APEER module seeting b - remove *.czams file extension first
+    ams.Load(Path.GetFileNameWithoutExtension(ApeerMS))
+    
+    print '-----   Apeer Module Seeting   -----'
+    print 'Module Name    : ', ams.ModuleName
+    print 'Module Version : ', ams.ModuleVersion
+    print 'Module Parameters    : ', ams.Parameters
+
     # get module and check
-    mymodule, version_found = get_module(module_name, module_version=module_version)
+    mymodule, version_found = get_module(ams.ModuleName, module_version=ams.ModuleVersion)
 
     # exit if the check failed
     if mymodule is None or not version_found:
@@ -505,10 +520,10 @@ if use_apeer:
         raise SystemExit
 
     # get the module parameters for the specified module
-    params = ZenApeer.Onsite.GetSampleModuleParameters(mymodule.ModuleName, module_version)
+    module_params = ZenApeer.Onsite.GetSampleModuleParameters(ams.ModuleName, ams.ModuleVersion)
 
     # get the module input programmatically
-    module_inputs = get_module_inputs(params)
+    module_inputs = get_module_inputs(module_params)
 
     # create the required dictionary with the correct key and value
     input_image = {module_inputs[0]: savepath_ovscan}
@@ -522,22 +537,36 @@ if use_apeer:
         Directory.CreateDirectory(savepath_apeer)
 
     # run the local APEER module with using keywords
-    runoutputs, status, log = ZenApeer.Onsite.RunModule(moduleName=mymodule.ModuleName,
-                                                        moduleVersion=module_version,
-                                                        inputs=input_image,
-                                                        parameters=my_parameters,
-                                                        storagePath=savepath_apeer)
+    try:
+        runoutputs, status, log = ZenApeer.Onsite.RunModule(moduleName=ams.ModuleName,
+                                                            moduleVersion=ams.ModuleVersion,
+                                                            inputs=input_image,
+                                                            parameters=ams.Parameters,
+                                                            storagePath=savepath_apeer)
+                                                            
+        for op in runoutputs.GetEnumerator():
+            print '-----    Outputs   -----'
+            print op.Key, ' : ', op.Value
+        
+    except ApplicationException as e:
+        print 'Module Run failded.', e.Message
+        raise SystemExit
 
     # get results storage locations
-    path_segmented_image = runoutputs['segmented_image']
-    path_object_table = runoutputs['objects_table']
+    # IMPORTANT: To be used inside Guided Acquisition
+    # the APEER Module is expected to have
+    # at least those to outputs with exactly those names
 
-    print '--------------   Module Results   ---------------'
-    print 'Segmented Image : ', path_segmented_image
-    print 'Objects Table : ', path_object_table
+    if not runoutputs.ContainsKey('segmented_image'):
+        print 'No output : segmented_image'
+        raise SystemExit
+    
+    if not runoutputs.ContainsKey('objects_table'):
+        print 'No output : objects_table'
+        raise SystemExit
 
     # load the segmented image and make sure the pyramid is calculated
-    segmented_image = Zen.Application.LoadImage(path_segmented_image, False)
+    segmented_image = Zen.Application.LoadImage(runoutputs['segmented_image'], False)
     Zen.Processing.Utilities.GenerateImagePyramid(segmented_image, ZenBackgroundMode.Black)
     Zen.Application.Documents.Add(segmented_image)
 
@@ -548,7 +577,7 @@ if use_apeer:
 
     # initialize ZenTable object and load CSV file
     SingleObj = ZenTable()
-    SingleObj.Load(path_object_table)
+    SingleObj.Load(runoutputs['objects_table'])
     Zen.Application.Documents.Add(SingleObj)
 
     # get all columns as dict with columnIDs
