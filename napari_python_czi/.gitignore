@@ -127,7 +127,6 @@ dmypy.json
 .idea/misc.xml
 .idea/napari_zeiss.iml
 .idea/vcs.xml
-napari_browser_cz.py
 .idea/modules.xml
 .idea/inspectionProfiles/profiles_settings.xml
 .vscode/settings.json
