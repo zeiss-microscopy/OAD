@@ -8,6 +8,7 @@ dependencies:
   - pip
   - jupyter
   - matplotlib
+  - nb-conda-kernels
   - cudatoolkit=10
   - cudnn
   - scikit-learn
@@ -15,6 +16,7 @@ dependencies:
   - pip:
       - czmodel==1.1.0
       - livelossplot
+
 # Create an environment
 # conda env create --file conda_env_czmodel.yml
 
