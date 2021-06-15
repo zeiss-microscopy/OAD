@@ -272,7 +272,7 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
   - Nuclei labeled with Histone 2B mCherry
   - Microtubles labeled with tubulin mEmerald
 - Overview scan:
-  - Plan-Apochromat 5x/0.35 objective, 1x magnification changer,Axiocam 506 mono
+  - Plan-Apochromat 5x/0.35 objective, 1x magnification changer, Axiocam 506 mono
 - Image Analysis:
   - segmentation on nuclear channel
   - Region Filter: intensity and area were set to detect the mitotic cells.
@@ -296,15 +296,15 @@ The "scripted" version of Guided Acquisition comes free of charge, but requires 
 
 ### Integration with external Image Analysis
 
-- in combination with **[APEER (on-site)](https://github.com/zeiss-microscopy/OAD/tree/a822058bc124c5181f792abd2b383a8e72d6ae0f/Apeer)*-it is possible to integrate your own image analysis packaged into Docker containers
-- an advanced option would be to start or call **[external application directly from within ZEN python scripts](https://github.com/zeiss-microscopy/OAD/tree/a822058bc124c5181f792abd2b383a8e72d6ae0f/Scripts/Start_External_Software)*-as explained here.
+- in combination with **[APEER (on-site)](https://github.com/zeiss-microscopy/OAD/tree/a822058bc124c5181f792abd2b383a8e72d6ae0f/Apeer)* - it is possible to integrate your own image analysis packaged into Docker containers
+- an advanced option would be to start or call **[external application directly from within ZEN python scripts](https://github.com/zeiss-microscopy/OAD/tree/a822058bc124c5181f792abd2b383a8e72d6ae0f/Scripts/Start_External_Software)* - as explained here.
 
 <p><img src="./images/Guided_Acquistion_external1.png" title="Workflow - Guided Acquistion using external tools" width="500"></p>
 
 
 ***
 
-<p><img src="./images/Guided_Acquisition_Dialog_apeer.png" title="Workflow - Actionable Information using Python Scripting (OAD)" width="400"></p>
+<p><img src="./images/Guided_Acquisition_8.2.png" title="Workflow - Actionable Information using Python Scripting (OAD)" width="400"></p>
 
 ***
 
@@ -314,7 +314,7 @@ The "scripted" version of Guided Acquisition comes free of charge, but requires 
 
 ### Detailed WorkFlow Diagram for Guided Acquisition
 
-![Workflow - Guided Acquisition diagram](./images/GuidedAcq_Script_Diagram_v2.png)*General Worklow diagram for Guided Acquisition*
+![Workflow - Guided Acquisition diagram](./images/GuidedAcq_Script_Diagram_v3.png)*General Worklow diagram for Guided Acquisition*
 
 ***
 
