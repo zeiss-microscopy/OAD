@@ -447,9 +447,9 @@ _These pre-trained networks were trained with "best-effort" on the available tra
 
 ### Use Nucleus Detector inside a Zone-of-Influence workflow
 
-Once an externally trained model is imported (or was trained in ZEN) it can be plugged into any ZEN image analyis pipeline using a feature called **Class Segmentation**. The general idea is to set up a measurement hierachy for the objects and the plugin trained models were needed, for example to robustly detect stained cell nuclei.
+Once an externally trained model is imported (or was trained in ZEN) it can be plugged into any ZEN image analysis pipeline using a feature called **Class Segmentation**. The general idea is to set up a measurement hierarchy for the objects and the plugin trained models were needed, for example to robustly detect stained cell nuclei.
 
-This approach also allows to mix machine-learning based segmentation with classical methods like "simple" thresholding approaches. As an example, the rocust nucleus detection using a pre-trained network is an ideal segmentation method to be used to segment the \*\*Primary Objects" inside a so-called "Zone-of-Influence" segmentation as shown below
+This approach also allows to mix machine-learning based segmentation with classical methods like "simple" threshold approaches. As an example, the robust nucleus detection using a pre-trained network is an ideal segmentation method to be used to segment the \*\*Primary Objects" inside a so-called "Zone-of-Influence" segmentation as shown below
 
 1. Plugin the imported model into the class **Primary Objects** to robustly detect the stained cell nuclei inside a specific channel
 2. Use this primary object to define a **Ring** around every detect cell nucleus
@@ -480,7 +480,7 @@ Trained models can be also used inside so-called "Material Modules" like **Layer
 
 ### Train an Object Classification Model
 
-![Intellesis Object Classification - Train a model to classify objects](../Machine_Learning/images/SneakPreview_ObjectClassification.gif) **Intellesis Object Classification - Trained a model to classify objects**
+![Intellesis Object Classification - Train a model to classify objects](../Machine_Learning/images/ZEN_blue_Object_Classification3.gif "Train ad Classify") Intellesis Object Classification - Trained and Classify workflow. Images taken from: [Broad Bioimage Benchmark Collection](https://bbbc.broadinstitute.org/BBBC010)
 
 ### Intellesis Object Classification - Scripting Integration
 
