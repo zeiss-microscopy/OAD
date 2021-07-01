@@ -9,9 +9,6 @@
     - [Feature Extraction](#feature-extraction)
       - [What Implementation of the RandomForest is used by Intellesis](#what-implementation-of-the-randomforest-is-used-by-intellesis)
       - [How does a RandomForest work](#how-does-a-randomforest-work)
-  - [ZEN Intellesis Object Classification](#zen-intellesis-object-classification)
-    - [Key Features of Intellesis Object Classification](#key-features-of-intellesis-object-classification)
-    - [Intellesis Object Classification - Tech Notes](#intellesis-object-classification---tech-notes)
   - [Application Examples](#application-examples)
     - [Life Science](#life-science)
     - [Material Science](#material-science)
@@ -34,6 +31,9 @@
     - [Use Nucleus Detector inside a Zone-of-Influence workflow](#use-nucleus-detector-inside-a-zone-of-influence-workflow)
     - [Use trained model to reliably detect layers](#use-trained-model-to-reliably-detect-layers)
   - [General Workflows for Intellesis Object Classification](#general-workflows-for-intellesis-object-classification)
+  - [ZEN Intellesis Object Classification](#zen-intellesis-object-classification)
+    - [Key Features of Intellesis Object Classification](#key-features-of-intellesis-object-classification)
+    - [Intellesis Object Classification - Tech Notes](#intellesis-object-classification---tech-notes)
     - [Train an Object Classification Model](#train-an-object-classification-model)
     - [Intellesis Object Classification - Scripting Integration](#intellesis-object-classification---scripting-integration)
 
@@ -177,47 +177,9 @@ Intellesis Segmentation supports two different ways of segmenting an image:
   
 ![RandomForest Classifier - Majority Vote](./images/randomforest1.png)
 
-
-
-
-
----
-
-## ZEN Intellesis Object Classification
-
-- Machine Learning algorithms to **classify** objects inside analyzed images based on measure features
-
-![Intellesis Object Classification - Training](./images/intellesis_toc_1.png)
-
-![Intellesis Object Classification - Classification](./images/intellesis_toc_2.png)
-
-### Key Features of Intellesis Object Classification
-
-- **Simple User Interface for Labelling and Training**
-
-  - The tool aims for the non-expert by providing an **“easy-to-use” interface**.
-  - The focus is to provide a **clean and simple workflow** to label the segmented objects from an analyzed image and train an object classification model.
-
-- **Integration into ZEN Measurement and Processing Framework**
-
-  - Use a trained **Object Classifier** as an additional processing step after the Image Analysis.
-  - Run Batch Classification our automate workflows using python scripting.
-
-- **Support for Multi-dimensional Data Sets**
-
-  - Intellesis Object Classification can be trained on any multidimensional dataset incl. 3rd party file formats from other vendors
-
 ---
 
 
-### Intellesis Object Classification - Tech Notes
-
-- **Required an analyzed image** with segmented objects created by any type of segmentation
-- Real **Multi-Channel Feature Extraction** – all channels will be used extract intensity-based measurements for every segmented object
-- **Geometrical and Shape Features** – all available features from the Image Analysis will be used automatically
-- **Random Forrest Classifier** to process the feature table from the image analysis
-- IP-Functions for Classification and Scripting Integration for Automation
-- **Client-Server Architecture** (Zen Client - Python-Server) using a [REST-API](https://en.wikipedia.org/wiki/Representational_state_transfer)
 
 ## Application Examples
 
@@ -477,6 +439,42 @@ Trained models can be also used inside so-called "Material Modules" like **Layer
 ## General Workflows for Intellesis Object Classification
 
 ![Intellesis - Workflows](../Machine_Learning/images/Workflows_Object_Classification_v6.png "Intellesis - Workflows")
+
+
+## ZEN Intellesis Object Classification
+
+- Machine Learning algorithms to **classify** objects inside analyzed images based on measure features
+
+![Intellesis Object Classification - Training](./images/intellesis_toc_1.png)
+
+![Intellesis Object Classification - Classification](./images/intellesis_toc_2.png)
+
+### Key Features of Intellesis Object Classification
+
+- **Simple User Interface for Labelling and Training**
+
+  - The tool aims for the non-expert by providing an **“easy-to-use” interface**.
+  - The focus is to provide a **clean and simple workflow** to label the segmented objects from an analyzed image and train an object classification model.
+
+- **Integration into ZEN Measurement and Processing Framework**
+
+  - Use a trained **Object Classifier** as an additional processing step after the Image Analysis.
+  - Run Batch Classification our automate workflows using python scripting.
+
+- **Support for Multi-dimensional Data Sets**
+
+  - Intellesis Object Classification can be trained on any multidimensional dataset incl. 3rd party file formats from other vendors
+
+---
+
+### Intellesis Object Classification - Tech Notes
+
+- **Required an analyzed image** with segmented objects created by any type of segmentation
+- Real **Multi-Channel Feature Extraction** – all channels will be used extract intensity-based measurements for every segmented object
+- **Geometrical and Shape Features** – all available features from the Image Analysis will be used automatically
+- **Random Forrest Classifier** to process the feature table from the image analysis
+- IP-Functions for Classification and Scripting Integration for Automation
+- **Client-Server Architecture** (Zen Client - Python-Server) using a [REST-API](https://en.wikipedia.org/wiki/Representational_state_transfer)
 
 ### Train an Object Classification Model
 
