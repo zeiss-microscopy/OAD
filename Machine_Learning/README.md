@@ -2,13 +2,12 @@
   - [Machine Learning versus Deep Learning](#machine-learning-versus-deep-learning)
   - [Main differences between Deep Learning and Machine Learning](#main-differences-between-deep-learning-and-machine-learning)
   - [ZEN and APEER Machine Learning - Overview](#zen-and-apeer-machine-learning---overview)
-- [ZEN Intellesis Trainable Segmentation and Object Classification](#zen-intellesis-trainable-segmentation-and-object-classification)
-  - [ZEN Intellesis Trainable Segmentation](#zen-intellesis-trainable-segmentation)
-    - [Key Features of Intellesis Segmentation](#key-features-of-intellesis-segmentation)
-    - [Intellesis Segmentation - Tech Notes](#intellesis-segmentation---tech-notes)
-    - [Feature Extraction](#feature-extraction)
-      - [What Implementation of the RandomForest is used by Intellesis](#what-implementation-of-the-randomforest-is-used-by-intellesis)
-      - [How does a RandomForest work](#how-does-a-randomforest-work)
+- [ZEN Intellesis Trainable Segmentation](#zen-intellesis-trainable-segmentation)
+  - [Key Features of Intellesis Segmentation](#key-features-of-intellesis-segmentation)
+  - [Intellesis Segmentation - Tech Notes](#intellesis-segmentation---tech-notes)
+  - [Feature Extraction](#feature-extraction)
+    - [What Implementation of the RandomForest is used by Intellesis](#what-implementation-of-the-randomforest-is-used-by-intellesis)
+    - [How does a RandomForest work](#how-does-a-randomforest-work)
   - [Application Examples](#application-examples)
     - [Life Science](#life-science)
     - [Material Science](#material-science)
@@ -30,11 +29,11 @@
   - [Integrated Workflows using trained models](#integrated-workflows-using-trained-models)
     - [Use Nucleus Detector inside a Zone-of-Influence workflow](#use-nucleus-detector-inside-a-zone-of-influence-workflow)
     - [Use trained model to reliably detect layers](#use-trained-model-to-reliably-detect-layers)
+- [ZEN Intellesis Object Classification](#zen-intellesis-object-classification)
+  - [Key Features of Intellesis Object Classification](#key-features-of-intellesis-object-classification)
+  - [Intellesis Object Classification - Tech Notes](#intellesis-object-classification---tech-notes)
   - [General Workflows for Intellesis Object Classification](#general-workflows-for-intellesis-object-classification)
-  - [ZEN Intellesis Object Classification](#zen-intellesis-object-classification)
-    - [Key Features of Intellesis Object Classification](#key-features-of-intellesis-object-classification)
-    - [Intellesis Object Classification - Tech Notes](#intellesis-object-classification---tech-notes)
-    - [Train an Object Classification Model](#train-an-object-classification-model)
+    - [Train and Classify](#train-and-classify)
     - [Intellesis Object Classification - Scripting Integration](#intellesis-object-classification---scripting-integration)
 
 ---
@@ -89,18 +88,14 @@ The sketch below outlines "the bigger" picture and vision and will be updated fr
 
 ---
 
-# ZEN Intellesis Trainable Segmentation and Object Classification
-
-Among many other powerful tools to process and analyze images the ZEN blue and ZEN core software platform offers two major ML-based modules:
-
-## ZEN Intellesis Trainable Segmentation
+# ZEN Intellesis Trainable Segmentation
 
 - Machine- and Deep Learning algorithms to **segment** images
 - Import externally trained Deep Neural networks
 
 ![Intellesis Segmentation](../Images/intellesis_segmentation_tool.png)
 
-### Key Features of Intellesis Segmentation
+## Key Features of Intellesis Segmentation
 
 - **Simple User Interface for Labelling and Training**
 
@@ -125,7 +120,7 @@ Among many other powerful tools to process and analyze images the ZEN blue and Z
 
 ---
 
-### Intellesis Segmentation - Tech Notes
+## Intellesis Segmentation - Tech Notes
 
 - Machine-Learning Tool for Pixel Classification powered by **[Python](https://www.python.org), [Dask](https://dask.org/), [Scikit-Learn](https://scikit-learn.org/)** and **[Tensorflow 2](https://www.tensorflow.org/)**
 - Real **Multi-Channel Feature Extraction** – all channels will be used to segment a pixel
@@ -152,7 +147,7 @@ Among many other powerful tools to process and analyze images the ZEN blue and Z
 - support for Nvidia GPUs (recommended is a 8GB GPU or better)
 
 
-### Feature Extraction
+## Feature Extraction
 
 Intellesis Segmentation supports two different ways of segmenting an image:
 
@@ -161,12 +156,12 @@ Intellesis Segmentation supports two different ways of segmenting an image:
 - for detailed information please see: **[Feature Extractors](../Machine_Learning/Feature_Extractors/feature_extractors.md)**
 - the following lines always refer to the RandomForest classifier only.
 
-#### What Implementation of the RandomForest is used by Intellesis
+### What Implementation of the RandomForest is used by Intellesis
 
 - Intellesis is using the following open.source implentation: **[scikit-learn - Random Forest](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier)**
 - except for the number of estimators (=25) Intellesis used the default values
 
-#### How does a RandomForest work
+### How does a RandomForest work
 
 - Each decision tree in the forest considers a subset of features when forming “questions” and only has access to a subset set of the training data
 - this increases diversity in the forest leading to more robust overall predictions and the name ‘Random Forest.’ 
@@ -436,12 +431,7 @@ Trained models can be also used inside so-called "Material Modules" like **Layer
 
 ---
 
-## General Workflows for Intellesis Object Classification
-
-![Intellesis - Workflows](../Machine_Learning/images/Workflows_Object_Classification_v6.png "Intellesis - Workflows")
-
-
-## ZEN Intellesis Object Classification
+# ZEN Intellesis Object Classification
 
 - Machine Learning algorithms to **classify** objects inside analyzed images based on measure features
 
@@ -449,7 +439,7 @@ Trained models can be also used inside so-called "Material Modules" like **Layer
 
 ![Intellesis Object Classification - Classification](./images/intellesis_toc_2.png)
 
-### Key Features of Intellesis Object Classification
+## Key Features of Intellesis Object Classification
 
 - **Simple User Interface for Labelling and Training**
 
@@ -467,7 +457,7 @@ Trained models can be also used inside so-called "Material Modules" like **Layer
 
 ---
 
-### Intellesis Object Classification - Tech Notes
+## Intellesis Object Classification - Tech Notes
 
 - **Required an analyzed image** with segmented objects created by any type of segmentation
 - Real **Multi-Channel Feature Extraction** – all channels will be used extract intensity-based measurements for every segmented object
@@ -476,7 +466,12 @@ Trained models can be also used inside so-called "Material Modules" like **Layer
 - IP-Functions for Classification and Scripting Integration for Automation
 - **Client-Server Architecture** (Zen Client - Python-Server) using a [REST-API](https://en.wikipedia.org/wiki/Representational_state_transfer)
 
-### Train an Object Classification Model
+## General Workflows for Intellesis Object Classification
+
+![Intellesis - Workflows](../Machine_Learning/images/Workflows_Object_Classification_v6.png "Intellesis - Workflows")
+
+
+### Train and Classify
 
 ![Intellesis Object Classification - Train a model to classify objects](../Machine_Learning/images/ZEN_blue_Object_Classification3.gif "Train ad Classify") Intellesis Object Classification - Trained and Classify workflow. Images taken from: [Broad Bioimage Benchmark Collection](https://bbbc.broadinstitute.org/BBBC010)
 
