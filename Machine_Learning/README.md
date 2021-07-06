@@ -182,13 +182,13 @@ ZEN can basically read any image data format using the BioFormats Import and Int
 
 ### Life Science
 
-![ZEN Python](../Images/intellesis_ms_apps.png)
+![ZEN Python](../Images/intellesis_ls_apps.png)
 
 ---
 
 ### Material Science
 
-![ZEN Python](../Images/intellesis_ls_apps.png)
+![ZEN Python](../Images/intellesis_ms_apps.png)
 
 ---
 
