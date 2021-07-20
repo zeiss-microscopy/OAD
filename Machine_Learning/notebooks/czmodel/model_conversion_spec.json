@@ -1,0 +1,12 @@
+{
+    "ModelMetadata": {
+        "Type": "SingleClassSemanticSegmentation",
+        "Classes": ["Background", "Nucleus"],
+        "InputShape": [1024, 1024, 1],
+        "OutputShape": [1024, 1024, 2],
+        "ModelName": "Nuclei Segmentation Model From JSON",
+        "MinOverlap": [8, 8]
+    },
+    "ModelPath": "./saved_tf2_model_output/",
+    "LicenseFile": null
+}
