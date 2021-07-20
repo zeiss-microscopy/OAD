@@ -524,7 +524,7 @@ Zen.Application.MacroEditor.ClearMessages()
 # check the location of experiment setups and image analysis settings are stored
 docfolder = Zen.Application.Environment.GetFolderPath(ZenSpecialFolder.UserDocuments)
 imgfolder = Zen.Application.Environment.GetFolderPath(ZenSpecialFolder.ImageAutoSave)
-imgfolder = r'c:\Output\Guided_Acquisition'
+imgfolder = r'c:\temp'
 format = '%Y-%m-%d_%H-%M-%S'
 
 # get list with all existing experiments and image analysis setup and a short version of that list
@@ -632,10 +632,10 @@ if OVScanIsTileExp:
 
 # execute the experiment
 print('\nRunning OverviewScan Experiment.\n')
-#output_OVScan = Zen.Acquisition.Execute(OVScan_reloaded)
+output_OVScan = Zen.Acquisition.Execute(OVScan_reloaded)
 # For testing purposes - Load overview scan image automatically instead of executing the "real" experiment
-ovtestimage = r'C:\Users\m1srh\OneDrive - Carl Zeiss AG\Smart_Microscopy_Workshop\datasets\brainslide\OverViewScan.czi'
-output_OVScan = Zen.Application.LoadImage(ovtestimage, False)
+#ovtestimage = r'C:\temp\OverViewScan.czi'
+#output_OVScan = Zen.Application.LoadImage(ovtestimage, False)
 
 # the the stage top-left and the scaling of the overview image
 stageTL = output_OVScan.GetPositionLeftTop()
