@@ -1,8 +1,8 @@
 ﻿#################################################################
 # File        : Guided_Acquisition_shortUI.py
-# Version     : 8.2
+# Version     : 8.3
 # Author      : czsrh, czmla, czkel
-# Date        : 14.06.2021
+# Date        : 21.07.2021
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # Optimized for the use with Celldiscoverer 7 and DF2, but
@@ -42,7 +42,7 @@ from System.Collections.Generic import List
 import sys
 
 # version number for dialog window
-version = 8.2
+version = 8.3
 # file name for overview scan
 ovscan_name = 'OverviewScan.czi'
 
@@ -504,14 +504,16 @@ def getclassnames(ias):
     iaclasses = {}
     classnames = ias.GetRegionClassNames()
 
-    for id in range(0, len(classnames) + 1):
+    for id in range(0, len(classnames)):
         try:
+            # class for single objects
             cl = ias.GetRegionClass(id)
         except:
+            # class for all objects
             cl = ias.GetRegionsClass(id)
 
-        iaclasses[str(cl.ID)] = cl.Name
-        print('ID - ClassName: ', cl.ID, cl.Name)
+        iaclasses[cl.ID] = cl.Name
+        print('ID - RegionClassName: ', cl.ID, cl.Name)
 
     return iaclasses
 
@@ -524,7 +526,7 @@ Zen.Application.MacroEditor.ClearMessages()
 # check the location of experiment setups and image analysis settings are stored
 docfolder = Zen.Application.Environment.GetFolderPath(ZenSpecialFolder.UserDocuments)
 imgfolder = Zen.Application.Environment.GetFolderPath(ZenSpecialFolder.ImageAutoSave)
-imgfolder = r'c:\temp'
+imgfolder = r'd:\Output\Guided_Acquisition'
 format = '%Y-%m-%d_%H-%M-%S'
 
 # get list with all existing experiments and image analysis setup and a short version of that list
@@ -634,7 +636,7 @@ if OVScanIsTileExp:
 print('\nRunning OverviewScan Experiment.\n')
 output_OVScan = Zen.Acquisition.Execute(OVScan_reloaded)
 # For testing purposes - Load overview scan image automatically instead of executing the "real" experiment
-#ovtestimage = r'C:\temp\OverViewScan.czi'
+#ovtestimage = r"D:\GA_test_SRH\ov_ia.czi"
 #output_OVScan = Zen.Application.LoadImage(ovtestimage, False)
 
 # the the stage top-left and the scaling of the overview image
@@ -666,16 +668,15 @@ if not use_apeer:
 
     # Analyse the image
     Zen.Analyzing.Analyze(output_OVScan, ias)
-    
-    # get classes and derive regions names from that
-    iasclasses = getclassnames(ias)
 
     if use_polygon:
 
+        # get classes and derive regions names from that
+        iasclasses = getclassnames(ias)
+        
         # get the individual image analysis regions from 1st IA class (!!!)
-
         # ATTENTION: the first single objects class will be used. It has ID = 2
-        regions = Zen.Analyzing.GetRegions(output_OVScan, iasclasses['2'])
+        regions = Zen.Analyzing.GetRegions(output_OVScan, iasclasses[2])
         print('RegionClassNames: ', iasclasses)
         print('Analysis found ' + str(regions.Count) + 'regions!')
     
