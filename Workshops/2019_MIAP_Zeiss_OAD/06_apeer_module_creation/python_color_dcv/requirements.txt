@@ -1,6 +1,6 @@
 apeer-dev-kit>=1,<2
 cloudpickle==0.6.1
-dask==0.20.2
+dask==2021.10.0
 decorator==4.3.0
 networkx==2.2
 numpy==1.15.4
