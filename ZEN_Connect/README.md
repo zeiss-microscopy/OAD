@@ -28,7 +28,7 @@ More information can be found here: [ZEN Connect](https://www.zeiss.com/microsco
 
 The import of images into a ZEN Connect project can be easily automated via python scripting.
 
-### ZENConnect_SaveAllImagesAsCWS.py
+### [ZENConnect_SaveAllImagesAsCWS.py](../ZEN_Connect/scripts/ZENConnect_SaveAllImagesAsCWS.py)
 
 * Save all open image documents to a new CWS project
 * Check if image contains preview or label images and add them as well
@@ -36,7 +36,7 @@ The import of images into a ZEN Connect project can be easily automated via pyth
 
 ![ZEN Connect Automation - ZENConnect_SaveAllImagesAsCWS.py](../Images/cws_script1.png)
 
-### Add_Images_from_folder_to_ZEN_Connect.py
+### [Add_Images_from_folder_to_ZEN_Connect.py](../ZEN_Connect/scripts/Add_Images_from_folder_to_ZEN_Connect.py)
 
 * Add all images found in a folder to a ZEN Connect project
 * Do this recursively as option
