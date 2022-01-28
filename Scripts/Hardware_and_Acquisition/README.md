@@ -1,6 +1,6 @@
-## Hardware and Acquisition
+# Hardware and Acquisition
 
-### FindSurface_SWAF_ActiveExp.py
+## FindSurface_SWAF_ActiveExp.py
 
 This script is intended to be placed as a action button inside the ZEN menu bar especially when using a Celldiscoverer 7 system. The idea here is to combine the hard-based focus with the software focus to store the final z-value (where something should be in focus) inside the hardware focus in order to be able to relocate to that value (relative to the sample carrier surface) easily without bleaching.
 
@@ -12,7 +12,7 @@ The script does the following things:
 
 * The result of the **SWAF** will be stored as an offset inside the DF.2 and be recalled anytime via **RecallFocus**
 
-### Smart_Dynamics.py
+## Smart_Dynamics.py
 
 ZEN Blue offers the possibility to measure the intensity ratio etc. of objects during a running acquisition. Typically the ROIs (where the intensities will be measured) will be created manually.
 
@@ -31,6 +31,22 @@ The user has to define the following parameters:
 * folder to save the results including the data tables from the image analysis
 
 <p><img src="./images/smart_dynamics2.png" title="Smart Dynamics - Result in ZEN Blue" width="1200"></p>
+
+
+## LLS7_ZStacksOfYstacks.py
+
+The [ZStacksOfYStack](./LLS7_ZStacksOfYStacks_v1.2.py) macro is specifically designed for Lattice Lightsheet 7 and enables the user to record multiple volumes stacked on top of each other. This allows for recording larger volumes and imaging deeper into the sample as the focus position of the lightsheet can be adjusted with imaging depth. The macro asks the user to move close to the coverslip and focus the lightsheet, then to move to the deepest position of the sample that they want to image and focus the lightsheet there. The macro will then record the defined volume by stacking multiple volume scans and adjusting the lightsheet with depth using linear interpolation of the values set by the user.
+
+### Versions and Changes
+
+* v1.1 adds capabilities to do more than 9 volume stacks without loosing the correct order of stacks (max 20 stacks)
+* v1.1 adds capabilities to change 'Focus Sheet' with imaging depths, the user can set 'Focus Sheet' close to the cover slip and at the deepest position in the sample, that they want to image and the macro will do a linear interpolation and modify 'Focus Sheet' automatically wih imaging depth
+* v1.2 asks the user to move to and focus @ coverslip and @ depth and automatically reads z positions and Focus Sheet values from those positions
+* v1.2 reads Scanner Offset y value from calibration files, user just has to select the active MTB, which should be selected correctly automatically based on it being the last modified MTB
+* v1.2 automatically calculates the number of stacks required from camera ROI, overlap and distance between coverslip and depth positions specified by the user
+* v1.2 takes the active experiment setup (and potential unsaved changes) rather than letting the user choose from existing experiment setups in a dropdown menu
+
+<p><img src="./images/lls7_ytile.png" title="LLS7 - YStackTiling" width="600"></p>
 
 ## Disclaimer
 
