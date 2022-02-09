@@ -68,15 +68,14 @@ Its main components are:
 
 # Disclaimer
 
-This is an collection of OAD scripts that is free to use for everybody.
+This is an collection of tools and scripts that is free to use for everybody.
 Carl Zeiss Microscopy GmbH's ZEN software undertakes no warranty concerning the use of those scripts, image analysis settings and ZEN experiments. Use them on your own risk.
 
-Additionally Carl Zeiss Microscopy GmbH's ZEN software allows connection to the third party software packages.
-
+Additionally Carl Zeiss Microscopy GmbH's ZEN software allows connection and usage to the third party software packages.
 Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those software packages, makes no representation that they will work on your system and/or hardware and will not be liable for any damages caused by the use of this extension.
 
-By using any of thos examples you agree to this disclaimer.
+By using any of those examples you agree to this disclaimer.
 
-Version: 2018.11.01
+Version: 2012.02.09
 
-Copyright (c) 2018 Carl Zeiss AG, Germany. All Rights Reserved.
+Copyright (c) 2022 Carl Zeiss AG, Germany. All Rights Reserved.
