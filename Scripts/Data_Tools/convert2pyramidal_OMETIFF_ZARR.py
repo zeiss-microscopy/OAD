@@ -1,6 +1,6 @@
 ﻿#####################################################################
-# File        : convert2pyramidal_OMETIFF.py
-# Version     : 0.3
+# File        : convert2pyramidal_OMETIFF_ZARR.py
+# Version     : 0.1
 # Author      : czsrh
 # Date        : 07.03.2022
 # Institution : Carl Zeiss Microscopy GmbH

@@ -1,8 +1,8 @@
 ﻿#####################################################################
 # File        : convert2pyramidal_OMETIFF.py
-# Version     : 0.1
+# Version     : 0.3
 # Author      : czsrh
-# Date        : 14.12.2020
+# Date        : 07.03.2022
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # This script can be used to convert a CZI image into a pyramidal OME-TIFF.
@@ -27,7 +27,7 @@ from System.IO import File, Directory, Path
 import sys
 from System.Diagnostics import Process
 
-version = 0.1
+version = 0.3
 
 
 def run_tool(toolname, params):
@@ -48,8 +48,8 @@ def run_tool(toolname, params):
 Zen.Application.MacroEditor.ClearMessages()
 
 # defaults - adapt to your needs
-bf2raw_dird = r'c:\Temp\whole_slide_conversion\bioformats2raw-0.2.5\bin'
-raw2ome_dird = r'c:\Temp\whole_slide_conversion\raw2ometiff-0.2.8\bin'
+bf2raw_dir = 'c:\\Temp\\bioformats2raw-0.4.0'
+raw2ome_dir = 'c:\\Temp\\raw2ometiff-0.3.0'
 ome_comps = ['LZW', 'Uncompressed']
 py_default = 4
 py_min = 1
@@ -72,8 +72,8 @@ for doc in opendocs:
 # create dialog window
 wd = ZenWindow()
 wd.Initialize('Convert CZI to pyramidal OME-TIFF - Version : ' + str(version))
-wd.AddFolderBrowser('bf2raw_loc', 'Location of bioformats2raw', bf2raw_dird)
-wd.AddFolderBrowser('raw2ome_loc', 'Location of raw2ometiff', raw2ome_dird)
+wd.AddFolderBrowser('bf2raw_loc', 'Location of bioformats2raw', bf2raw_dir)
+wd.AddFolderBrowser('raw2ome_loc', 'Location of raw2ometiff', raw2ome_dir)
 wd.AddDropDown('czi', 'Select CZI Image Document', CZIfiles_short, 0)
 wd.AddDropDown('comp', 'Select compression for OME-TIFF', ome_comps, 0)
 wd.AddIntegerRange('reslevels', 'Number of pyramid levels OME-TIFF', py_default, py_min, py_max)
@@ -81,7 +81,7 @@ wd.AddLabel('-----------------------------------------------')
 wd.AddCheckbox('clean', 'Clean Up TMP Files and Folder afterwards', True)
 result = wd.Show()
 
-if result.HasCanceled == True:
+if result.HasCanceled:
     sys.exit('Macro aborted with Cancel!')
 
 # get the input values and store them
@@ -95,13 +95,13 @@ compression = result.GetValue('comp')
 cleanup = result.GetValue('clean')
 
 # define absolute paths for tools
-bf2raw = Path.Combine(bf2raw_dir, 'bioformats2raw')
-raw2ome = Path.Combine(raw2ome_dir, 'raw2ometiff')
-print 'Path bioformats2raw : ', bf2raw
-print 'Path raw2ometiff : ', raw2ome
-print 'CZI File : ', czifile
-print 'Compression for OME-TIFF : ', compression
-print 'Cleaning up afterwards : ', cleanup
+bf2raw = Path.Combine(bf2raw_dir, Path.Combine('bin', 'bioformats2raw'))
+raw2ome = Path.Combine(raw2ome_dir, Path.Combine('bin', 'raw2ometiff'))
+print("Path bioformats2raw : ", bf2raw)
+print("Path raw2ometiff : ", raw2ome)
+print("CZI File : ", czifile)
+print("Compression for OME-TIFF : ", compression)
+print("Cleaning up afterwards : ", cleanup)
 
 # check if the tools exists on the speified location
 if not File.Exists(bf2raw):
@@ -112,28 +112,28 @@ if not File.Exists(raw2ome):
 # create the name for the required TMP folder and the output OME-TIFF
 tmpfolder = Path.Combine(Path.GetDirectoryName(czifile), Path.GetFileNameWithoutExtension(czifile))
 omefile = tmpfolder + '_PY.ome.tiff'
-print 'TMP Folder : ', tmpfolder
-print 'OME-TIFF to be created : ', omefile
+print('TMP Folder : ', tmpfolder)
+print('OME-TIFF to be created : ', omefile)
 
 # define parameters and run bioformats2raw
 bf2raw_params = '"' + czifile + '" ' + '"' + tmpfolder + '"' + ' --resolutions ' + str(resolutions) + ' --compression=raw'
-print 'Command String : ', bf2raw_params
+print('Command String : ', bf2raw_params)
 done1 = run_tool(bf2raw, bf2raw_params)
-print 'Done with conversion to RAW.', done1
+print('Done with conversion to RAW.', done1)
 
 # # define parameters and run raw2ometiff
 raw2ome_params = '"' + tmpfolder + '" ' + '"' + omefile + '"' + ' --compression=' + compression
-print 'Command String : ', raw2ome_params
+print('Command String : ', raw2ome_params)
 done2 = run_tool(raw2ome, raw2ome_params)
-print 'Done with conversion to pyramidal OME-TIFF', done2
+print('Done with conversion to pyramidal OME-TIFF', done2)
 
 # delete bfmemo file and TMP folder
 if cleanup:
-    print 'Cleaning up ...'
+    print('Cleaning up ...')
     delname = Path.Combine(czidir, '.' + cziname + '.bfmemo')
-    print 'Deleting : ', delname
+    print('Deleting : ', delname)
     File.Delete(delname)
-    print 'Deleting Folder : ', tmpfolder
+    print('Deleting Folder : ', tmpfolder)
     Directory.Delete(tmpfolder, True)
 
-print 'Done.'
+print('Done.')
