@@ -1,14 +1,16 @@
 ﻿#####################################################################
 # File       : Extract_PlaneTable.py
-# Version    : 1.2
+# Version    : 1.3
 # Author     : czsrh
-# Date       : 22.01.2021
+# Date       : 07.03.2022
 # Insitution : Carl Zeiss Microscopy GmbH
 #
-# This script required ZEN blue version 3.3. Please contact us if older
+# This script required ZEN blue version 3.5. Please contact us if older
 # versions are required
 #
-# Copyright (c) 2020 Carl Zeiss AG, Germany. All Rights Reserved.
+# Will only give meaningful results for CZIs acquifred with ZEN blue!
+#
+# Copyright (c) 2022 Carl Zeiss AG, Germany. All Rights Reserved.
 #
 # Disclaimer:The script contains undocuments function and methods,
 #            which are subject to change. Use at your own risk.
@@ -18,11 +20,11 @@ from System import Convert
 from System.IO import Directory, Path, File, FileInfo, DirectoryInfo
 import csv
 import clr
-# this DLL has to be present in the ZEN 3.3 program folder
-clr.AddReference('ZenTools.dll')
+# this DLL has to be present in the ZEN 3.5 program folder
+clr.AddReference('ZenToolsBlue35.dll')
 import ZenTools
 
-version = 1.2
+version = 1.3
 
 
 def normalize_columns(table, colname):
@@ -104,7 +106,7 @@ wd.AddCheckbox('closezentable', 'Close ZEN table at the end', False)
 result=wd.Show()
 
 # check, if Cancel button was clicked
-if result.HasCanceled == True:
+if result.HasCanceled:
     sys.exit('Macro aborted with Cancel!')
 
 # get the input values and store them
@@ -145,7 +147,7 @@ print 'TimePoints : ', SizeT
 print 'Z-Planes   : ', SizeZ
 print 'Channels   : ', SizeC
 print 'Overall Image Count  : ', scenes * tiles * SizeT * SizeZ * SizeC
-print 'Total SubBlock Count : ', img.Core.SubBlocks.Count
+print 'Total SubBlock Count : ', ZenTools.ImageTools.GetNumberOfSubblocks(image=img)
 
 count = -1
 
