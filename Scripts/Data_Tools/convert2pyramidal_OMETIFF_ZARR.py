@@ -1,8 +1,8 @@
 ﻿#####################################################################
 # File        : convert2pyramidal_OMETIFF_ZARR.py
-# Version     : 0.1
+# Version     : 0.2
 # Author      : czsrh
-# Date        : 07.03.2022
+# Date        : 08.03.2022
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # This script can be used to convert a CZI image into a pyramidal OME-TIFF.
@@ -26,7 +26,7 @@ from System.IO import File, Directory, Path
 import sys
 from System.Diagnostics import Process
 
-version = 0.1
+version = 0.2
 
 
 def run_tool(toolname, params):
@@ -131,6 +131,7 @@ if output_fmt == 'ZARR':
 
 else:
 
+    print('Starting Conversion to pyramidal OME-TIFF ...')
     # set the correct compression string for the OME-TIFF output
     if output_fmt == 'OME-TIFF (LZW)':
         compression = 'LZW'
@@ -150,7 +151,7 @@ else:
     print('Done with conversion to RAW.', done1)
 
     # # define parameters and run raw2ometiff
-    raw2ome_params = '"' + tmpfolder + '" ' + '"' + omefile + '"' + ' --compression=' + output_fmt
+    raw2ome_params = '"' + tmpfolder + '" ' + '"' + omefile + '"' + ' --compression=' + compression
     print('Command String : ', raw2ome_params)
     done2 = run_tool(raw2ome, raw2ome_params)
     print('Done with conversion to pyramidal OME-TIFF', done2)
