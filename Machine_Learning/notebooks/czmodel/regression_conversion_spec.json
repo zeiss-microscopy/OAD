@@ -1,0 +1,11 @@
+{
+    "ModelMetadata": {
+        "Type": "Regression",
+        "InputShape": [1024, 1024, 1],
+        "OutputShape": [1024, 1024, 1],
+        "ModelName": "Regression Model From JSON",
+        "MinOverlap": [8, 8]
+    },
+    "ModelPath": "./saved_tf2_model_output/",
+    "LicenseFile": null
+}
