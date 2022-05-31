@@ -1,7 +1,7 @@
 - [Guided Acquisition - Use Image Analysis to guide and automate the microscope](#guided-acquisition---use-image-analysis-to-guide-and-automate-the-microscope)
   - [Key Facts](#key-facts)
   - [General Workflow Description](#general-workflow-description)
-    - [Idea or Task:](#idea-or-task)
+    - [Idea or Task](#idea-or-task)
     - [Main Workflow Description](#main-workflow-description)
   - [ZEN Module for Guided Acquisition](#zen-module-for-guided-acquisition)
   - [Supported Hardware](#supported-hardware)
@@ -42,7 +42,7 @@ For a growing number of applications, it will be crucial to acquire data in a sm
 
 **Starting with ZEN blue 3.2 it will also be possible to train you own neural network for segmentation, [import it in ZEN](https://github.com/zeiss-microscopy/OAD/tree/39dbefaaaf4ede1492a4f9c8c12ea56f9b90cb0e/Machine_Learning#importing-externally-trained-networks-into-zen) and use it integrated into the Guided Acquisition workflow.**
 
-### Idea or Task:
+### Idea or Task
 
 - Scan or inspect a large area.
 - Detect an "interesting" object or region using automated Image Analysis incl. Machine-Learning Segmentation.
