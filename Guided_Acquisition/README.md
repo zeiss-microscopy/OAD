@@ -13,7 +13,7 @@
       - [Description](#description-1)
     - [Guided Acquisition - Detection of cell-cell contact](#guided-acquisition---detection-of-cell-cell-contact)
       - [Description](#description-2)
-    - [Guided Acquisition - Detection of organoids](#guided-acquisition---detection-of-organoids)
+    - [Guided Acquisition - Detection of Organoids](#guided-acquisition---detection-of-organoids)
       - [Description](#description-3)
     - [Guided Acquisition - Detection of mitotic cells](#guided-acquisition---detection-of-mitotic-cells)
       - [Description](#description-4)
@@ -225,7 +225,9 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
     - DAPI and Oblique Contrast in WF 
 
 
-### Guided Acquisition - Detection of organoids
+***
+
+### Guided Acquisition - Detection of Organoids
 
 <figure>
     <img src="./images/GA_app_3d_organoids1.png" title="Guided Acquisition - Organoid Detection" width="1200">
@@ -238,21 +240,21 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
 
 #### Description
 
--Microscope: ZEISS Celldiscoverer 7
--Sample:
-  -mouse Lgr5+ gut organoids in a 24 well thick PS-bottom plate
-  -organoids mounted in 3D matrix (matrigel)
--Overview scan:
-  -2.5x 0.12 dry (5x 0.35, 0.5x Magnification Changer)
-  -DAPI channel only
--Image Analysis:
-  -segmentation of organoids from DAPI overview scan
-  -region filter on organoid size, intensity and circularity of objects
--Detailed acquisition:
-  -10x 0.35 (20x 0.7, 0.5x Magnification Changer)
-  -auto-adapted for thick-PS bottom imaging
-  -3 Channel, single track LSM for speed
-  -z-stacks
+- Microscope: ZEISS Celldiscoverer 7
+- Sample:
+  - mouse Lgr5+ gut organoids in a 24 well thick PS-bottom plate
+  - organoids mounted in 3D matrix (matrigel)
+- Overview scan:
+  - 2.5x 0.12 dry (5x 0.35, 0.5x Magnification Changer)
+  - DAPI channel only
+- Image Analysis:
+  - segmentation of organoids from DAPI overview scan
+  - region filter on organoid size, intensity and circularity of objects
+- Detailed acquisition:
+  - 10x 0.35 (20x 0.7, 0.5x Magnification Changer)
+  - auto-adapted for thick-PS bottom imaging
+  - 3 Channel, single track LSM for speed
+  - z-stacks
 
 ***
 
