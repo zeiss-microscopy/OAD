@@ -90,7 +90,7 @@ Starting with ZEN Blue 3.1 there will the option to purchase dedicated software 
 - easy handling of wellplate datasets
 
 <p align="center">
-  <img src="./images/GA_module_ZEN_1.png" title="Workflow - Actionable Information using Pythonn Scripting (OAD)" width="600">
+  <img src="./images/GA_module_ZEN_1.png" title="Workflow - Actionable Information using Python Scripting (OAD)" width="600">
 </p>
 
 Add one or more additional image processing steps after the overview scan. This processed image will be the input for the image analysis step. Currently available processing steps:
@@ -301,7 +301,7 @@ The "scripted" version of Guided Acquisition comes free of charge, but requires 
 - in combination with **[APEER (on-site)](https://github.com/zeiss-microscopy/OAD/tree/a822058bc124c5181f792abd2b383a8e72d6ae0f/Apeer)** - it is possible to integrate your own image analysis packaged into Docker containers
 - an advanced option would be to start or call **[external application directly from within ZEN python scripts](https://github.com/zeiss-microscopy/OAD/tree/a822058bc124c5181f792abd2b383a8e72d6ae0f/Scripts/Start_External_Software)** - as explained here.
 
-<p><img src="./images/Guided_Acquistion_external1.png" title="Workflow - Guided Acquistion using external tools" width="500"></p>
+<p><img src="./images/Guided_Acquisition_external1.png" title="Workflow - Guided Acquisition using external tools" width="500"></p>
 
 
 ***
