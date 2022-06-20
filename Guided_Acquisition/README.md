@@ -1,7 +1,7 @@
 - [Guided Acquisition - Use Image Analysis to guide and automate the microscope](#guided-acquisition---use-image-analysis-to-guide-and-automate-the-microscope)
   - [Key Facts](#key-facts)
   - [General Workflow Description](#general-workflow-description)
-    - [Idea or Task:](#idea-or-task)
+    - [Idea or Task](#idea-or-task)
     - [Main Workflow Description](#main-workflow-description)
   - [ZEN Module for Guided Acquisition](#zen-module-for-guided-acquisition)
   - [Supported Hardware](#supported-hardware)
@@ -13,7 +13,7 @@
       - [Description](#description-1)
     - [Guided Acquisition - Detection of cell-cell contact](#guided-acquisition---detection-of-cell-cell-contact)
       - [Description](#description-2)
-    - [Guided Acquisition - Detection of organoids](#guided-acquisition---detection-of-organoids)
+    - [Guided Acquisition - Detection of Organoids](#guided-acquisition---detection-of-organoids)
       - [Description](#description-3)
     - [Guided Acquisition - Detection of mitotic cells](#guided-acquisition---detection-of-mitotic-cells)
       - [Description](#description-4)
@@ -42,7 +42,7 @@ For a growing number of applications, it will be crucial to acquire data in a sm
 
 **Starting with ZEN blue 3.2 it will also be possible to train you own neural network for segmentation, [import it in ZEN](https://github.com/zeiss-microscopy/OAD/tree/39dbefaaaf4ede1492a4f9c8c12ea56f9b90cb0e/Machine_Learning#importing-externally-trained-networks-into-zen) and use it integrated into the Guided Acquisition workflow.**
 
-### Idea or Task:
+### Idea or Task
 
 - Scan or inspect a large area.
 - Detect an "interesting" object or region using automated Image Analysis incl. Machine-Learning Segmentation.
@@ -90,7 +90,7 @@ Starting with ZEN Blue 3.1 there will the option to purchase dedicated software 
 - easy handling of wellplate datasets
 
 <p align="center">
-  <img src="./images/GA_module_ZEN_1.png" title="Workflow - Actionable Information using Pythonn Scripting (OAD)" width="600">
+  <img src="./images/GA_module_ZEN_1.png" title="Workflow - Actionable Information using Python Scripting (OAD)" width="600">
 </p>
 
 Add one or more additional image processing steps after the overview scan. This processed image will be the input for the image analysis step. Currently available processing steps:
@@ -225,7 +225,9 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
     - DAPI and Oblique Contrast in WF 
 
 
-### Guided Acquisition - Detection of organoids
+***
+
+### Guided Acquisition - Detection of Organoids
 
 <figure>
     <img src="./images/GA_app_3d_organoids1.png" title="Guided Acquisition - Organoid Detection" width="1200">
@@ -238,21 +240,21 @@ More information about ZEN Connect can be found here: [ZEN Connect](https://www.
 
 #### Description
 
--Microscope: ZEISS Celldiscoverer 7
--Sample:
-  -mouse Lgr5+ gut organoids in a 24 well thick PS-bottom plate
-  -organoids mounted in 3D matrix (matrigel)
--Overview scan:
-  -2.5x 0.12 dry (5x 0.35, 0.5x Magnification Changer)
-  -DAPI channel only
--Image Analysis:
-  -segmentation of organoids from DAPI overview scan
-  -region filter on organoid size, intensity and circularity of objects
--Detailed acquisition:
-  -10x 0.35 (20x 0.7, 0.5x Magnification Changer)
-  -auto-adapted for thick-PS bottom imaging
-  -3 Channel, single track LSM for speed
-  -z-stacks
+- Microscope: ZEISS Celldiscoverer 7
+- Sample:
+  - mouse Lgr5+ gut organoids in a 24 well thick PS-bottom plate
+  - organoids mounted in 3D matrix (matrigel)
+- Overview scan:
+  - 2.5x 0.12 dry (5x 0.35, 0.5x Magnification Changer)
+  - DAPI channel only
+- Image Analysis:
+  - segmentation of organoids from DAPI overview scan
+  - region filter on organoid size, intensity and circularity of objects
+- Detailed acquisition:
+  - 10x 0.35 (20x 0.7, 0.5x Magnification Changer)
+  - auto-adapted for thick-PS bottom imaging
+  - 3 Channel, single track LSM for speed
+  - z-stacks
 
 ***
 
@@ -299,7 +301,7 @@ The "scripted" version of Guided Acquisition comes free of charge, but requires 
 - in combination with **[APEER (on-site)](https://github.com/zeiss-microscopy/OAD/tree/a822058bc124c5181f792abd2b383a8e72d6ae0f/Apeer)** - it is possible to integrate your own image analysis packaged into Docker containers
 - an advanced option would be to start or call **[external application directly from within ZEN python scripts](https://github.com/zeiss-microscopy/OAD/tree/a822058bc124c5181f792abd2b383a8e72d6ae0f/Scripts/Start_External_Software)** - as explained here.
 
-<p><img src="./images/Guided_Acquistion_external1.png" title="Workflow - Guided Acquistion using external tools" width="500"></p>
+<p><img src="./images/Guided_Acquisition_external1.png" title="Workflow - Guided Acquisition using external tools" width="500"></p>
 
 
 ***
