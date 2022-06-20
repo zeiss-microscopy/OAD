@@ -5,7 +5,7 @@
 In order to mak this work one needs to install the following python package [czitools](https://github.com/sebi06/czitools) inside the desired python environment:
 
 * Clone repository or download zip.
-* Avtivate the desired python environment.
+* Activate the desired python environment.
 * Install package via pip
 
 ```bash
@@ -25,9 +25,9 @@ Playing around with the Napari Viewer is fun. This example illustrates how to ad
 
 Disclaimer: This a prototype and just meant to be an example. Use at your own risk!
 
-![Viewer with FileOpen Dialog](images/napari_filedialog.png)
+![Viewer with FileOpen Dialog](../Images/napari_filedialog.png)
 
-![Viewer with TreeView](images/napari_treeview_lls7.png)
+![Viewer with TreeView](../Images/napari_treeview_lls7.png)
 
 ## Start a ZEN experiment from the Napari viewer
 
@@ -41,11 +41,11 @@ In order to start an experiment from Napari there are a few new widgets:
 * Button **Run Experiment** to actually start a pre-configured in ZEN Blue
 * Option to open an newly acquired CZI directly after the experiment is finished
 
-![Napari Viewer with ZEN Control](images/napari_zen_tcpip1.png)
+![Napari Viewer with ZEN Control](../Images/napari_zen_tcpip1.png)
 
 ***
 
-![Napari Viewer with ZEN Control in Action](images/Napari_simulated_CD7_TCPIP_Run_Experiment2.gif)
+![Napari Viewer with ZEN Control in Action](../Images/Napari_simulated_CD7_TCPIP_Run_Experiment2.gif)
 
 ***
 
