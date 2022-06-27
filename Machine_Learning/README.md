@@ -38,8 +38,8 @@
     - [Intellesis Object Classification - Scripting Integration](#intellesis-object-classification---scripting-integration)
 - [ZEN Intellesis Denoising](#zen-intellesis-denoising)
   - [Key Features Intellesis Denoising](#key-features-intellesis-denoising)
-  - [What is Noise (insisde images in microscopy)](#what-is-noise-insisde-images-in-microscopy)
-    - [Reasons for “imperfection"](#reasons-for-imperfection)
+  - [What is Noise (inside images in microscopy)](#what-is-noise-inside-images-in-microscopy)
+    - [Reasons for “Imperfection"](#reasons-for-imperfection)
     - [Main sources of Noise in microscopy](#main-sources-of-noise-in-microscopy)
     - [What is Noise2Void (simplified):](#what-is-noise2void-simplified)
     - [What pure Noise2Void cannot do:](#what-pure-noise2void-cannot-do)
@@ -568,7 +568,7 @@ Starting with ZEN blue 3.6 and ZEN core 3.4 it is possible to train and use AI-p
   - Import any multi-dimensional dataset incl. 3rd party file formats from other vendors
 
 
-## What is Noise (insisde images in microscopy)
+## What is Noise (inside images in microscopy)
 
 Sidenote: Parts of the text and images are taken from this publication: [Imaging in focus: An introduction to denoising bioimages in the era of deep learning](https://www.sciencedirect.com/science/article/pii/S1357272521001588)
 
@@ -577,7 +577,7 @@ Whenever one is imaging an object it is crucial to recognize that:
 
 **_"Every image is an imperfect representation of the underlying structure that is being imaged!"_**
 
-### Reasons for “imperfection"
+### Reasons for “Imperfection"
 
 - Limited resolution because of the optics
 - Uneven illumination or background
@@ -623,7 +623,7 @@ All of the things above are "unwanted" but it is important to understand that me
 
 - the effect of denoising on the quantifiability of the pixel intensities is a matter of ongoing research
 
-- be careful when using N2V or any other method that modifies pixel values when the final application is something like FRET or Ratiometric Imaging, where the conclusion may directly depend on the pixle counts
+- be careful when using N2V or any other method that modifies pixel values when the final application is something like FRET or Ratiometric Imaging, where the conclusion may directly depend on the pixel counts
 
 
 ## TechNotes Intellesis Denoising
