@@ -1,28 +1,29 @@
 - [ZEN and APEER-ML - Open Ecosystem for Integrated Machine Learning Workflows](#zen-and-apeer-ml---open-ecosystem-for-integrated-machine-learning-workflows)
+  - [Building Blocks of the Ecosystem](#building-blocks-of-the-ecosystem)
   - [Machine Learning versus Deep Learning](#machine-learning-versus-deep-learning)
   - [Main differences between Deep Learning and Machine Learning](#main-differences-between-deep-learning-and-machine-learning)
   - [ZEN and APEER Machine Learning - Overview](#zen-and-apeer-machine-learning---overview)
-- [ZEN Intellesis Trainable Segmentation](#zen-intellesis-trainable-segmentation)
+- [ZEN Intellesis Segmentation](#zen-intellesis-segmentation)
   - [Key Features of Intellesis Segmentation](#key-features-of-intellesis-segmentation)
   - [Intellesis Segmentation - Tech Notes](#intellesis-segmentation---tech-notes)
   - [Feature Extraction](#feature-extraction)
     - [What Implementation of the RandomForest is used by Intellesis](#what-implementation-of-the-randomforest-is-used-by-intellesis)
-    - [How does a RandomForest work](#how-does-a-randomforest-work)
+    - [How does a RandomForest Classifier work](#how-does-a-randomforest-classifier-work)
   - [Application Examples](#application-examples)
     - [Life Science](#life-science)
     - [Material Science](#material-science)
-  - [Intellesis - Data Flow](#intellesis---data-flow)
   - [General Workflows for Intellesis Segmentation in ZEN](#general-workflows-for-intellesis-segmentation-in-zen)
     - [How to train a simple Pixel Classifier for Segmentation Intellesis](#how-to-train-a-simple-pixel-classifier-for-segmentation-intellesis)
     - [How to use a model (trained on a single channel) inside an Image Analysis pipeline](#how-to-use-a-model-trained-on-a-single-channel-inside-an-image-analysis-pipeline)
     - [How to use a model (trained on all channels) inside an Image Analysis pipeline](#how-to-use-a-model-trained-on-all-channels-inside-an-image-analysis-pipeline)
   - [Importing a CZMODEL into ZEN blue or ZEN core](#importing-a-czmodel-into-zen-blue-or-zen-core)
     - [How to import a model in ZEN](#how-to-import-a-model-in-zen)
+  - [Bringing CZANNs and ZEISS software ecosystem togehter](#bringing-czanns-and-zeiss-software-ecosystem-togehter)
+    - [The challenges of deployment](#the-challenges-of-deployment)
+    - [The czmodel PyPi package](#the-czmodel-pypi-package)
     - [Importing externally trained networks into ZEN](#importing-externally-trained-networks-into-zen)
-    - [Example Workflow - Train and Import a network to segment a stack](#example-workflow---train-and-import-a-network-to-segment-a-stack)
     - [Intellesis Segmentation - Scripting Integration](#intellesis-segmentation---scripting-integration)
-  - [Model Downloads](#model-downloads)
-    - [Application Example - Robust Nucleus Detection using UNet](#application-example---robust-nucleus-detection-using-unet)
+  - [Application Example - Download Model for Robust Nucleus Detection using UNet](#application-example---download-model-for-robust-nucleus-detection-using-unet)
       - [UNet Nucleus Detector (GrayScale)](#unet-nucleus-detector-grayscale)
       - [UNet Nucleus Detector (RGB)](#unet-nucleus-detector-rgb)
     - [Example Networks - Conditions of Use](#example-networks---conditions-of-use)
@@ -35,12 +36,43 @@
   - [General Workflows for Intellesis Object Classification](#general-workflows-for-intellesis-object-classification)
     - [Train and Classify](#train-and-classify)
     - [Intellesis Object Classification - Scripting Integration](#intellesis-object-classification---scripting-integration)
+- [ZEN Intellesis Denoising](#zen-intellesis-denoising)
+  - [Key Features Intellesis Denoising](#key-features-intellesis-denoising)
+  - [TechNotes Intellesis Denoising](#technotes-intellesis-denoising)
 
 ---
 
 # ZEN and APEER-ML - Open Ecosystem for Integrated Machine Learning Workflows
 
-The ZEN software and the APEER platform offer various tools and solution to integrate machine learning methods into image processing and analysis workflows. Depending on the specific workflow one might need only ZEN blue or ZEN core. For other workflows also the APEER-ML as a cloud-based training platform for Deep Neural Networks will play an important role.
+The [ZEN blue](https://www.zeiss.com/microscopy/int/products/microscope-software/zen.html), [ZEN core](https://www.zeiss.com/microscopy/int/products/microscope-software/zen-core.html) and [vision4D](https://www.arivis.com/solutions/vision4d) software together with and the [APEER] platform offer various tools and solutions to integrate machine learning methods and Deep learning into image processing and analysis workflows. 
+
+The mission statement for the ecosystem can be described as:
+
+<font size="5">"Put the scientist into the driver seat for Deep learning"</font>
+
+and
+
+<font size="5">"Better data beat better models."</font>
+
+## Building Blocks of the Ecosystem
+
+- **APEER-ML**
+  - Cloud-based platform for data-driven training of Deep Learning models incl. annotation tools
+  - Models can be used inside ZEN and Vision4D for various applications (2D and 3D Analysis etc.)
+- **ZEN Intellesis Segmentation**
+  - Local training of simple models
+  - Full Integration of models incl. Deep Learning into Image Analysis applications
+- **ZEN Intellesis Object Classification**
+  - Feature-based Object Classification
+- **ZEN Intellesis Denoising**
+  - Local training and usage of Noise2Void
+- **vision4D & visionHub**
+  - Use DL models for segmentation, Classify Objects and use regression models
+- **ZEISS ML-Stack** (Python)
+  - czmodel, pylibCZIrw, cztile, ZeissPy, prismalearn, ...
+
+
+***
 
 ## Machine Learning versus Deep Learning
 
@@ -54,7 +86,7 @@ Therefore DeepLearning obviously is Machine Learning and Deep Learning algorithm
 
 Deep learning itself consists of methods to analyze data using an approach that mimics the way a person would try to make sense of it. Deep Learning methods use a layered structure of algorithms called an artificial neural networks (ANN).
 
-<p><img src="./images/ML_general-Neural%20Network.png" title="General Strcuture of a very simple neural network" width="400"></p>
+<p><img src="./images/ML_general-Neural%20Network.png" title="General Structure of a very simple neural network" width="400"></p>
 
 ANNs have an input layer and obviously an output layer. The layers between are so-called hidden layers, which means their values cannot be observed (easily) during the training. An ANN gets "deeper" if the number of hidden layers increases.
 
@@ -78,20 +110,26 @@ There are three major general differences (simplified:)
 
 The sketch below outlines "the bigger" picture and vision and will be updated frequently. The most important points to consider here are:
 
-- the “exchange” currency inside this ecosystem is the trained model (czmodel)
-- the the open-source python package [**czmodel**](https://pypi.org/project/czmodel/) allows everybody to import their own models in ZEN
-- skilled researchers and programmers can train their own models where the like and still deploy them for "their" users in ZEN or on the APEER platform
+- the “exchange” currency inside this ecosystem is the trained model
+- the the open-source python package [czmodel] allows everybody to import their own models in ZEN or vision4D
+- skilled researchers and programmers can train their own models where the like and still deploy them for "their" users in ZEN or vision4D or on the [APEER-ML] platform
 - one can get pre-trained models from ZEISS or get a trained model **as a service** (includes the label process)
-- on the [APEER platform](www.apeer.com) it is possible to label your own data, train model and download it as czmodel for ZEN
+- on the [APEER-ML] platform it is possible to label your own data, train model and download it as *.czann file to be used in ZEN or vision4D
 
-![ZEN Machine Learning Landscape](../Images/ZEN_ML_Landscape_simple.png)
+![Concept Train Anywhere](../Machine_Learning/images/train_anywhere.png)**Train a model anywhere**
+
+***
+
+A more detailed overview about the ecosystem is shown below:
+
+![Machine Learning Landscape](../Machine_Learning/images/github_ML_Landscape.png)**Detailed Overview about the ecosystem**
 
 ---
 
-# ZEN Intellesis Trainable Segmentation
-
+# ZEN Intellesis Segmentation
 - Machine- and Deep Learning algorithms to **segment** images
-- Import externally trained Deep Neural networks
+- Full Integration into Image Analysis Workflows, Material Modules, BioApps and Guided Acquisition
+- Import of externally trained Deep Neural networks
 
 ![Intellesis Segmentation](../Images/intellesis_segmentation_tool.png)
 
@@ -101,17 +139,20 @@ The sketch below outlines "the bigger" picture and vision and will be updated fr
 
   - The tool aims for the non-expert by providing an **“easy-to-use” interface**.
   - The focus is to provide a **clean and simple workflow** to label the images and train a model.
-  - Label your datasets using clean and simple UI in ZEN or by using [APEER Annotate](https://www.apeer.com/annotate)
+  - Label your datasets using clean and simple UI in ZEN or by using [APEER-Annotate]
 
-- **Integration into ZEN Measurement and Processing Framework**
+<p><img src="../Machine_Learning/images/APEER_annotation_auto_background.gif" title="Partial Annotation on APEER" width="800"></p>
+
+- **Integration into Measurement and Processing Framework**
 
   - As segmentation is only the required first step for subsequent measurements the **integration into the actual measurement tools** is key.
-  - Any Intellesis model can be **directly used inside Image Analysis workflows** as a segmentation tool.
+  - Deep Learning models for semantic segmentation trainedAny Intellesis model can be **directly used inside Image Analysis workflows** as a segmentation method Deep Learning or RandomForrest)
+  - Vision4D allows to import Deep Learning models
 
 - **Open Platform - Import your own trained models**
 
   - Import your own model and use it seamlessly integrated in ZEN workflows and benefit from Image Tiling & Fusion client
-  - Use the open-source python package [**czmodel**](https://pypi.org/project/czmodel/) to "package your model to be used in the ZEN ecosystem.
+  - Use the open-source python package [czmodel] to "package your model to be used in the ZEN ecosystem.
 
 - **Support for Multi-dimensional Data Sets**
 
@@ -122,7 +163,7 @@ The sketch below outlines "the bigger" picture and vision and will be updated fr
 
 ## Intellesis Segmentation - Tech Notes
 
-- Machine-Learning Tool for Pixel Classification powered by **[Python](https://www.python.org), [Dask](https://dask.org/), [Scikit-Learn](https://scikit-learn.org/)** and **[Tensorflow 2](https://www.tensorflow.org/)**
+- Machine-Learning Tool for Pixel Classification powered by [Python]
 - Real **Multi-Channel Feature Extraction** – all channels will be used to segment a pixel
 - **Class Segmentation** – hierarchical structures with independent segmentation models per class
   - every object can be segmented using it individual model
@@ -137,8 +178,8 @@ The sketch below outlines "the bigger" picture and vision and will be updated fr
 - Option to **Download** pre-trained DNNs for image segmentation
 - Option to **Import** pre-trained DNNs for image segmentation
   - currently two pre-trained networks are available
-  - **[PyPi package czmodel & public ANN Model Specification](https://pypi.org/project/czmodel/)** to convert trained TF2 models into CZMODEL files
-- for inference Intellesis can also use the **[Open Neural Network Exchange (ONNX)](https://onnx.ai)** format
+  - [PyPi package czmodel & public ANN Model Specification](https://pypi.org/project/czmodel/) to package trained models into ONNX files incl. metadata
+- for inference Intellesis can also use the [Open Neural Network Exchange (ONNX)](https://onnx.ai) format
 - Post processing using **Conditional Random Fields** (CRF) to improve the segmentation results
 - Option to apply **confidence thresholds** to the segmentation results
 - Processing functions for creating masks and **scripting integration** for advanced automation of machine learning workflows
@@ -153,15 +194,15 @@ Intellesis Segmentation supports two different ways of segmenting an image:
 
 - Feature Extraction with engineered feature sets followed by PixelClassification using a RandomForrest classifier
 - Use Deep Neural networks for segmentation.
-- for detailed information please see: **[Feature Extractors](../Machine_Learning/Feature_Extractors/feature_extractors.md)**
+- for detailed information please see: [Feature Extractors](../Machine_Learning/Feature_Extractors/feature_extractors.md)
 - the following lines always refer to the RandomForest classifier only.
 
 ### What Implementation of the RandomForest is used by Intellesis
 
-- Intellesis is using the following open.source implentation: **[scikit-learn - Random Forest](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier)**
-- except for the number of estimators (=25) Intellesis used the default values
+- Intellesis is using the following open.source implentation: [scikit-learn - Random Forest](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier)
+- except for the number of estimators (= 25) Intellesis used the default values
 
-### How does a RandomForest work
+### How does a RandomForest Classifier work
 
 - Each decision tree in the forest considers a subset of features when forming “questions” and only has access to a subset set of the training data
 - this increases diversity in the forest leading to more robust overall predictions and the name ‘Random Forest.’ 
@@ -189,24 +230,6 @@ ZEN can basically read any image data format using the BioFormats Import and Int
 ### Material Science
 
 ![ZEN Python](../Images/intellesis_ms_apps.png)
-
----
-
-## Intellesis - Data Flow
-
-The machine-learning part of Intellesis is entirely built upon Python-based tools.
-
-![ZEN Python Modules](../Images/ZEN_Python_Tools.png)
-
-The actual segmentation service is completely written in [Python](https://www.python.org) and is using proven and established open-source machine-learning libraries to segment the images. More [detailed information](https://www.zeiss.com/microscopy/int/website/landingpages/zen-intellesis.html) and specific information regarding [ZEN core](https://www.zeiss.com/microscopy/int/products/microscope-software/zen-core.html#module) are available on the respective websites.
-
-To be able to handle even large multi-dimensional data sets, the software has a built-in data manager that takes care of splitting and distributing the workload depending on the available computational resources.
-
-![Intellesis - Data Flow - Training](../Images/intellesis_dataflow_training.png "Intellesis - ML Data Flow - Training")**Intellesis - Data Flow - Training**
-
----
-
-![Intellesis - Data Flow - Prediction](../Images/intellesis_dataflow_prediction.png "Intellesis - ML Data Flow - Prediction")**Intellesis - Data Flow - Prediction**
 
 ---
 
@@ -301,33 +324,36 @@ To Import a model in ZEN use the **Import** model function inside ZEN blue or ZE
 
 ---
 
+
+## Bringing CZANNs and ZEISS software ecosystem togehter
+
+Training artificial neural networks (ANN) to tackle semantic segmentation problems has become a very popular task and an increasing number of solutions has become available that require little technical understanding to train ANNs. Of course, this statement does not hold for models highly optimized for specific use cases where solving the problem at hand requires a high amount of experience, creativity and some “magic”. However, in many cases it is possible to achieve decent results with widely used ANN model architectures, a sufficient amount of data and enough compute power.
+
+While about a decade ago solving computer vision tasks required an expert to design algorithms and understand the math behind them, ANNs and simple-to-use frameworks like [TensorFlow](https://www.tensorflow.org/) and [PyTorch](https://pytorch.org/) allow learning those algorithms from data and therefore can be treated as a black-box even achieving super-human performance in some cases. This simplicity and the high expressiveness of neural network models are presumably the reason that ANNs have become extremely popular and there is literally no way around this technology in research as well as industry. It should, however, be mentioned here that it is still extremely helpful to understand what happens behind the scenes.
+
+### The challenges of deployment
+
+While in research the focus mostly lies on training and evaluating models, deployment is a different issue that poses different challenges. Especially in microscopy there usually are not only captured small images but stacks of images, time series of images or tiled scenes that are stitched to one large image of multiple or even hundreds of gigabytes. The training process, in contrast, is typically performed on small image crops (e.g. 256 x 256) such that the data for the calculations fits into the GPU or main memory of the employed machine. Applying a trained model on considerably larger images as mentioned above brings about several pitfalls that need to be handled.
+
+The [ZEN Intellesis](https://www.zeiss.com/microscopy/int/products/microscope-software/zen-intellesis-image-segmentation-by-deep-learning.html) infrastructure provides a solution for that problem. It applies a sophisticated tiling strategy that transforms multi-dimensional image captures – as they are generated by ZEISS microscopes – to image tiles of shape (height x width x color channels) where height and width are defined by the applied ANN model. Finally, it performs inference with the model and reassembles the resulting segmentation masks to fit the initially captured image. It therefore offers a solution to apply a trained ANN on large images without worrying too much about the required memory and the size of the image.
+
+### The czmodel PyPi package
+
+Starting with ZEN Blue 3.2 it will be possible to run prediction with custom segmentation models trained "outside of ZEN". To be compatible with the Intellesis infrastructure, a model has to comply with our specification and some meta data must be provided that is described in detail in the official CZANN model specification in the project description of our [czmodel package](https://pypi.org/project/czmodel/).
+
+For a simple example of such a pipeline see the attached Jupyter notebook (ready to be executed) in our [Colab Notebook](https://colab.research.google.com/github/zeiss-microscopy/OAD/blob/master/Machine_Learning/notebooks/czmodel/SingleClassSemanticSegmentation_4_0_0.ipynb). Note that the notebook is not to be understood as a best practice guide for training ANN models but rather illustrates the use of the [czmodel](https://pypi.org/project/czmodel/) library with a very simple model generation process that will usually be more sophisticated.
+
+![Importing External Networks](../Machine_Learning/images/czmodel_pypi.png)
+
+
 ### Importing externally trained networks into ZEN
 
 Starting with ZEN blue 3.2 and ZEN core 3.1 it will be possible to import externally trained models into ZEN. To import such a file just use the normal import function mentioned above. The general idea here is:
 
-![Importing External Networks](../Images/intellesis_dataflow_czmodel.png)
-
 - the ZEISS Custom-Solution Team, a researcher or any 3rd party trains its specific neural network
-- The **[PyPi package czmodel](https://pypi.org/project/czmodel/)** is used to concert and package the network into a CZMODEL file
-- the file is imported into ZEN using the normal **Import** mechanism
-- from here on the network can be used inside the ZEN Image Analysis and Processing Function and also inside **[Guided Acquisition Workflows](https://github.com/zeiss-microscopy/OAD/tree/39dbefaaaf4ede1492a4f9c8c12ea56f9b90cb0e/Guided_Acquisition)**
-
-For more details please se the **[Importing External Networks](../Machine_Learning/docs/README.md)**
-
-### Example Workflow - Train and Import a network to segment a stack
-
-To illustrate the general idea of using externally trained networks the followings steps have to be considered.
-
-- A model was trained inside a jupyter notebook
-- By using the **CZMODEL** the saved model was packed to be then imported in ZEN
-- **If needed the process of labeling the data and training a network can be also provide by ZEISS as a commercial service.**
-- The result of your own training or the training service will be a trained model ready to be in your own environment, on the APEER platform or inside the ZEN software platform.
-
-![Intellesis - Use imported DNN to segment your data](../Images/workflow_model_em1.png)
-
-To illustrate the workflow a public available dataset with labels: [Segmentation of neuronal structures in EM stacks challenge](https://imagej.net/Segmentation_of_neuronal_structures_in_EM_stacks_challenge_-_ISBI_2012.html#Test_data) was used to trains a simple network.
-
-![Intellesis - Use imported DNN to segment your data](../Images/dnn_em-membranes_segmented_1.gif)
+- The PyPi package [czmodel](https://pypi.org/project/czmodel/) is used to convert and package the model as a *.czann file
+- the file is imported into ZEN using the normal **Import** mechanisms
+- from here on the network can be used inside the ZEN Image Analysis, Processing functions, BioApps, Material Modules and also inside [Guided Acquisition Workflows](https://github.com/zeiss-microscopy/OAD/tree/master/Guided_Acquisition)
 
 ---
 
@@ -368,13 +394,12 @@ def classify(image, model,
 
 ---
 
-## Model Downloads
+
+## Application Example - Download Model for Robust Nucleus Detection using UNet
 
 ZEN allows to import pre-trained neural networks and also provided some example that can be downloaded. Those networks can be used inside any segmentation or image analysis workflow in ZEN.
 
 <p><img src="../Images/class_segmentation_cnn.png" title="Class Segmentation using pre-trained DNN" width="500"></p>
-
-### Application Example - Robust Nucleus Detection using UNet
 
 The trained networks for cell nucleus detection (available for download) are based on the well known UNet network architecture and are using a vgg16 encoder. The general structure is shown below. The numbers below the network layers represent the actual number of feature maps (per layer) and the array size is shown above the layers.
 
@@ -516,3 +541,21 @@ myobjmodel.Classify(image, appendFeatures=False)
 imported_objclass_model = ZenIntellesis.ObjectClassification.ImportModel(model2import, True)
 
 ```
+
+# ZEN Intellesis Denoising
+
+## Key Features Intellesis Denoising
+
+## TechNotes Intellesis Denoising
+
+
+[PyPI]: https://pypi.org/
+[czmodel]: https://pypi.org/project/czmodel/
+[cztile]: https://pypi.org/project/cztile/
+[APEER]: https://www.apeer.com
+[APEER-ML]: https://www.apeer.com
+[APEER-Annotate]: https://www.apeer.com/annotate
+[Python]: https://www.python.org
+[Dask]: https://dask.org/)
+[Scikit-Learn]: https://scikit-learn.org/
+[Tensorflow]: https://www.tensorflow.org/
