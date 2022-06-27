@@ -1,8 +1,0 @@
-{
-"Name": "SimpleNucleiModel From JSON",
-"BorderSize": 64,
-"ColorHandling": "ConvertToMonochrome",
-"PixelType": "Gray16",
-"Classes": ["Background", "Nuclei"],
-"ModelPath": "saved_tf2_model_output_dims_unset"
-}
