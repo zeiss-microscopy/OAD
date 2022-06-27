@@ -16,12 +16,12 @@
     - [How to train a simple Pixel Classifier for Segmentation Intellesis](#how-to-train-a-simple-pixel-classifier-for-segmentation-intellesis)
     - [How to use a model (trained on a single channel) inside an Image Analysis pipeline](#how-to-use-a-model-trained-on-a-single-channel-inside-an-image-analysis-pipeline)
     - [How to use a model (trained on all channels) inside an Image Analysis pipeline](#how-to-use-a-model-trained-on-all-channels-inside-an-image-analysis-pipeline)
-  - [Importing a CZMODEL into ZEN blue or ZEN core](#importing-a-czmodel-into-zen-blue-or-zen-core)
-    - [How to import a model in ZEN](#how-to-import-a-model-in-zen)
-  - [Bringing CZANNs and ZEISS software ecosystem togehter](#bringing-czanns-and-zeiss-software-ecosystem-togehter)
+  - [Bringing CZANNs and ZEISS software ecosystem together](#bringing-czanns-and-zeiss-software-ecosystem-together)
     - [The challenges of deployment](#the-challenges-of-deployment)
     - [The czmodel PyPi package](#the-czmodel-pypi-package)
-    - [Importing externally trained networks into ZEN](#importing-externally-trained-networks-into-zen)
+  - [Importing a CZMODEL into ZEN blue or ZEN core](#importing-a-czmodel-into-zen-blue-or-zen-core)
+    - [How to import a model in ZEN](#how-to-import-a-model-in-zen)
+    - [How to create external models](#how-to-create-external-models)
     - [Intellesis Segmentation - Scripting Integration](#intellesis-segmentation---scripting-integration)
   - [Application Example - Download Model for Robust Nucleus Detection using UNet](#application-example---download-model-for-robust-nucleus-detection-using-unet)
       - [UNet Nucleus Detector (GrayScale)](#unet-nucleus-detector-grayscale)
@@ -261,13 +261,9 @@ Training pixel classifier in Intellesis is very simple and just requires the fol
 
 > **IMPORTANT**: If a model was trained one a single channel only it can be used to segment single channel images only. If all channels where used during the training the model can be only use to segment images with a "matching" channel number.
 
-Watch the short videos below to see those steps in action.
-
----
+Watch the short videos below to see those steps in action:
 
 ![Intellesis - Train a model to segment a cell using a single channel](../Images/zenblue_simple_nucleus_segmentation_single_channel.gif) **Intellesis - Train a model to segment a cell using a single channel**
-
----
 
 ![Intellesis - Train a model to segment a cell using all channels (multispectral](../Images/zenblue_simple_nucleus_segmentation_multispectral.gif) **Intellesis - Train a model to segment a cell using all channels (multispectral)**
 
@@ -316,24 +312,7 @@ Watch the short video below to see those steps in action.
 
 ---
 
-## Importing a CZMODEL into ZEN blue or ZEN core
-
-It is possible to export and import import \*.czmodel files, which contain the trained segmentation model, in ZEN blue and in ZEN core.
-
-### How to import a model in ZEN
-
-To Import a model in ZEN use the **Import** model function inside ZEN blue or ZEN core.
-
-<p><img src="../Images/zen32_model_import_dialog.png" title="ZEN blue - Import Model" width="600"></p>
-
-<p><img src="../Images/zen32_model_import_file.png" title="ZEN blue - Select CZMODEL or JSON file" width="600"></p>
-
-<p><img src="../Images/zen_core30_model_import.png" title="ZEN core - Select CZMODEL or JSON file" width="600"></p>
-
----
-
-
-## Bringing CZANNs and ZEISS software ecosystem togehter
+## Bringing CZANNs and ZEISS software ecosystem together
 
 Training artificial neural networks (ANN) to tackle semantic segmentation problems has become a very popular task and an increasing number of solutions has become available that require little technical understanding to train ANNs. Of course, this statement does not hold for models highly optimized for specific use cases where solving the problem at hand requires a high amount of experience, creativity and some “magic”. However, in many cases it is possible to achieve decent results with widely used ANN model architectures, a sufficient amount of data and enough compute power.
 
@@ -354,14 +333,32 @@ For a simple example of such a pipeline see the attached Jupyter notebook (ready
 ![Importing External Networks](../Machine_Learning/images/czmodel_pypi.png)
 
 
-### Importing externally trained networks into ZEN
+## Importing a CZMODEL into ZEN blue or ZEN core
+
+It is possible to export and import import \*.czmodel files, which contain the trained segmentation model, in ZEN blue and in ZEN core.
+
+### How to import a model in ZEN
+
+To Import a model in ZEN use the **Import** model function inside ZEN blue or ZEN core.
+
+<p><img src="../Images/zen32_model_import_dialog.png" title="ZEN blue - Import Model" width="600"></p>
+
+<p><img src="../Images/zen32_model_import_file.png" title="ZEN blue - Select CZMODEL or JSON file" width="600"></p>
+
+<p><img src="../Images/zen_core30_model_import.png" title="ZEN core - Select CZMODEL or JSON file" width="600"></p>
+
+---
+
+
+### How to create external models
 
 Starting with ZEN blue 3.2 and ZEN core 3.1 it will be possible to import externally trained models into ZEN. To import such a file just use the normal import function mentioned above. The general idea here is:
 
-- the ZEISS Custom-Solution Team, a researcher or any 3rd party trains its specific neural network
-- The PyPi package [czmodel](https://pypi.org/project/czmodel/) is used to convert and package the model as a *.czann file
-- the file is imported into ZEN using the normal **Import** mechanisms
-- from here on the network can be used inside the ZEN Image Analysis, Processing functions, BioApps, Material Modules and also inside [Guided Acquisition Workflows](https://github.com/zeiss-microscopy/OAD/tree/master/Guided_Acquisition)
+- **the ZEISS Custom Solution Team, a researcher or any 3rd party trains its specific neural network**
+- the PyPi package [czmodel](https://pypi.org/project/czmodel/) is used to convert and package the model as a *.czann file
+- the *.czann file is imported into ZEN using the normal **Import** mechanisms
+
+From here on the network can be used inside the ZEN Image Analysis, Processing functions, BioApps, Material Modules and also inside [Guided Acquisition Workflows](https://github.com/zeiss-microscopy/OAD/tree/master/Guided_Acquisition)
 
 ---
 
