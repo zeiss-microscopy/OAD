@@ -38,7 +38,15 @@
     - [Intellesis Object Classification - Scripting Integration](#intellesis-object-classification---scripting-integration)
 - [ZEN Intellesis Denoising](#zen-intellesis-denoising)
   - [Key Features Intellesis Denoising](#key-features-intellesis-denoising)
+  - [What is Noise (insisde images in microscopy)](#what-is-noise-insisde-images-in-microscopy)
+    - [Reasons for “imperfection"](#reasons-for-imperfection)
+    - [Main sources of Noise in microscopy](#main-sources-of-noise-in-microscopy)
+    - [What is Noise2Void (simplified):](#what-is-noise2void-simplified)
+    - [What pure Noise2Void cannot do:](#what-pure-noise2void-cannot-do)
+  - [How to train and use a Noise2Void model in ZEN](#how-to-train-and-use-a-noise2void-model-in-zen)
+  - [Remarks and pitfalls](#remarks-and-pitfalls)
   - [TechNotes Intellesis Denoising](#technotes-intellesis-denoising)
+  - [Remarks](#remarks)
 
 ---
 
@@ -544,18 +552,105 @@ imported_objclass_model = ZenIntellesis.ObjectClassification.ImportModel(model2i
 
 # ZEN Intellesis Denoising
 
+Starting with ZEN blue 3.6 and ZEN core 3.4 it is possible to train and use AI-powered denoising methods inside the ZEN software. The algorithm used is called Noise2Void (N2V) and is described in the paper [Noise2Void - Learning Denoising from Single Noisy Images](https://arxiv.org/abs/1811.10980).
+
+![ZEN Denoising](../Machine_Learning/images/denoise1.png)
+
 ## Key Features Intellesis Denoising
+
+- **Simple User Interface for Labelling and Training**
+  - Clean and simple training UI with just a few parameters to be adjusted 
+- **Integration into ZEN Processing Framework**
+  - Use trained denoise and general regression models as a normal processing function
+  - Scripting
+- **Open Platform – Import your own trained networks for denoising and regression tasks**
+  - **Import your own Noise2Void or Regression model and use it seamlessly integrated in ZEN workflows via *.czann format
+  - Denosing or regression models in ZEN or V4D are packages as *.czann files and therefore it is easily possible to import your own model into ZEN.
+  - For instructions on how to do this please check out the [Colab Notebook](https://colab.research.google.com/github/zeiss-microscopy/OAD/blob/master/Machine_Learning/notebooks/czmodel/Regresssion_4_0_0.ipynb)
+- Support for Multi-dimensional Datasets
+  - Import any multi-dimensional dataset incl. 3rd party file formats from other vendors
+
+
+## What is Noise (insisde images in microscopy)
+
+Sidenote: Parts of the text and images are taken from this publication: [Imaging in focus: An introduction to denoising bioimages in the era of deep learning](https://www.sciencedirect.com/science/article/pii/S1357272521001588)
+
+
+Whenever one is imaging an object it is crucial to recognize that:
+
+**_"Every image is an imperfect representation of the underlying structure that is being imaged!"_**
+
+### Reasons for “imperfection"
+
+- Limited resolution because of the optics
+- Uneven illumination or background
+- Unwanted stray light or out-of-focus light
+- Image artifacts
+- **Noise**
+
+![ZEN Denoising](../Machine_Learning/images/denoise2.png)**Image Imperfections**
+
+All of the things above are "unwanted" but it is important to understand that methods like N2V can only help with the noise itself not with all the other undesired things in your image. 
+
+### Main sources of Noise in microscopy
+
+- Shot Noise (due to the nature of light itself, Poisson Distribution)
+- Detector Noise (due to the electronics etc., models as additive Gaussian noise)
+
+### What is Noise2Void (simplified):
+
+- it is a deep-learning based method to learn “the noise” from the image itself (no labels or ground truth need) in order to remove the noise
+- by “masking” a pixel (hiding it from the receptive field of the Deep Neural Network
+- Assumption when using N2V: pixel-independent noise or so called "iid" (identically distributed samples)noise, which depends on detection method and the used detectors itself
+
+
+### What pure Noise2Void cannot do:
+
+- remove out-of-focus or stray light or background signal
+- increase the resolution
+- correct uneven illumination
+- correct image artifact
+
+
+## How to train and use a Noise2Void model in ZEN
+
+![ZEN Denoising](../Machine_Learning/images/ZENblue_N2V_Train_Denoise_1.gif)
+
+## Remarks and pitfalls
+
+- if training images show only one type of structure, but later the model is applied to images with totally different structures, the model might “hallucinate”
+
+- the performance of any denoising approach should be assessed based on the final goal of the analysis pipeline
+
+- denoised images can be used to obtain certain features of the image, such as a more robust segmentation or localization of objects that is usually the basis for subsequent intensity measurements
+
+- the effect of denoising on the quantifiability of the pixel intensities is a matter of ongoing research
+
+- be careful when using N2V or any other method that modifies pixel values when the final application is something like FRET or Ratiometric Imaging, where the conclusion may directly depend on the pixle counts
+
 
 ## TechNotes Intellesis Denoising
 
+- Training of Noise2Void models is done locally – the training pipeline is part of the ZeissPy distribution (automatically installed with ZEN)
+  - 8GB GPU (or better) is recommended for the training
+  - model inference also works reasonable well on CPU only
+- training Pipeline is using TensorFlow2 and is integrated into prismalearn package
+- models are stored using the ONNX format
+- Import of external N2V and general regression models is possible
+- check [Colab notebooks](https://colab.research.google.com/github/zeiss-microscopy/OAD/blob/master/Machine_Learning/notebooks/czmodel/Regresssion_3_0_0.ipynb)
+- Support of Denoising and Regression model inside [czmodel] package
+
+
+
+## Remarks
 
 [PyPI]: https://pypi.org/
 [czmodel]: https://pypi.org/project/czmodel/
 [cztile]: https://pypi.org/project/cztile/
-[APEER]: https://www.apeer.com
-[APEER-ML]: https://www.apeer.com
-[APEER-Annotate]: https://www.apeer.com/annotate
-[Python]: https://www.python.org
-[Dask]: https://dask.org/)
+[APEER]: https://www.apeer.com/
+[APEER-ML]: https://www.apeer.com/
+[APEER-Annotate]: https://www.apeer.com/annotate/
+[Python]: https://www.python.org/
+[Dask]: https://dask.org/
 [Scikit-Learn]: https://scikit-learn.org/
 [Tensorflow]: https://www.tensorflow.org/
