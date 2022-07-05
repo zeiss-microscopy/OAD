@@ -3,6 +3,7 @@
   - [Machine Learning versus Deep Learning](#machine-learning-versus-deep-learning)
   - [Main differences between Deep Learning and Machine Learning](#main-differences-between-deep-learning-and-machine-learning)
   - [ZEN and APEER Machine Learning - Overview](#zen-and-apeer-machine-learning---overview)
+    - [Open formats allow to use models anywhere](#open-formats-allow-to-use-models-anywhere)
 - [ZEN Intellesis Segmentation](#zen-intellesis-segmentation)
   - [Key Features of Intellesis Segmentation](#key-features-of-intellesis-segmentation)
   - [Intellesis Segmentation - Tech Notes](#intellesis-segmentation---tech-notes)
@@ -131,6 +132,16 @@ The sketch below outlines "the bigger" picture and vision and will be updated fr
 A more detailed overview about the ecosystem is shown below:
 
 ![Machine Learning Landscape](../Machine_Learning/images/github_ML_Landscape.png)**Detailed Overview about the ecosystem**
+
+### Open formats allow to use models anywhere
+
+Below a "showcase" to demonstrate that the concept of being "open" and having a respective model formats works.
+
+* train a *.czann model on APEER
+* open the image in [Napari]
+* import the model (requires a plugin) and run it
+
+![Grain Size Analyssis using DNN](../Machine_Learning/images/grainsize_czann_napari.png)
 
 ---
 
@@ -651,3 +662,4 @@ All of the things above are "unwanted" but it is important to understand that me
 [Dask]: https://dask.org/
 [Scikit-Learn]: https://scikit-learn.org/
 [Tensorflow]: https://www.tensorflow.org/
+[Napari]: https://napari.org/
