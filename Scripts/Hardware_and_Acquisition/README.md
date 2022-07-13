@@ -33,18 +33,31 @@ The user has to define the following parameters:
 <p><img src="./images/smart_dynamics2.png" title="Smart Dynamics - Result in ZEN Blue" width="1200"></p>
 
 
-## LLS7_ZStacksOfYstacks.py
+## LLS7_VolumeStacking.py
 
-The [ZStacksOfYStack](./LLS7_ZStacksOfYStacks_v1.2.py) macro is specifically designed for Lattice Lightsheet 7 and enables the user to record multiple volumes stacked on top of each other. This allows for recording larger volumes and imaging deeper into the sample as the focus position of the lightsheet can be adjusted with imaging depth. The macro asks the user to move close to the coverslip and focus the lightsheet, then to move to the deepest position of the sample that they want to image and focus the lightsheet there. The macro will then record the defined volume by stacking multiple volume scans and adjusting the lightsheet with depth using linear interpolation of the values set by the user.
+The [LLS7_VolumeStacking](./LLS7_VolumeStacking_v2.3.py) macro is specifically designed for Lattice Lightsheet 7 and enables the user to record multiple volumes stacked on top of each other. This allows for recording larger volumes and imaging deeper into the sample as the focus position of the lightsheet can be adjusted with imaging depth. The macro asks the user to move close to the coverslip and focus the lightsheet, then to move to the deepest position of the sample that they want to image and focus the lightsheet there. The macro will then record the defined volume by stacking multiple volume scans and adjusting the lightsheet with depth using linear interpolation of the values set by the user.
 
 ### Versions and Changes
 
 * v1.1 adds capabilities to do more than 9 volume stacks without loosing the correct order of stacks (max 20 stacks)
+
 * v1.1 adds capabilities to change 'Focus Sheet' with imaging depths, the user can set 'Focus Sheet' close to the cover slip and at the deepest position in the sample, that they want to image and the macro will do a linear interpolation and modify 'Focus Sheet' automatically wih imaging depth
+
 * v1.2 asks the user to move to and focus @ coverslip and @ depth and automatically reads z positions and Focus Sheet values from those positions
+
 * v1.2 reads Scanner Offset y value from calibration files, user just has to select the active MTB, which should be selected correctly automatically based on it being the last modified MTB
+
 * v1.2 automatically calculates the number of stacks required from camera ROI, overlap and distance between coverslip and depth positions specified by the user
+
 * v1.2 takes the active experiment setup (and potential unsaved changes) rather than letting the user choose from existing experiment setups in a dropdown menu
+
+* v1.3 adds time series; user has to set number of time points and delay between stacks; will be saved as individual files, up to 900 time points
+
+* v2.1 adds automated processing incl concatenation of recorded volume stacks
+
+* v2.2 adds Focus Waist interpolation and time stamps log (time stamp is acquisition start of first volume scan per time point)
+
+* v2.3 adds compatibility with Tiles experiments (single position/scene)
 
 <p><img src="./images/lls7_ytile.png" title="LLS7 - YStackTiling" width="600"></p>
 
