@@ -4,7 +4,8 @@
         "InputShape": [1024, 1024, 1],
         "OutputShape": [1024, 1024, 1],
         "ModelName": "Regression Model From JSON",
-        "MinOverlap": [8, 8]
+        "MinOverlap": [8, 8],
+        "Scaling": [1.0, 1.0]
     },
     "ModelPath": "./saved_tf2_model_output/",
     "LicenseFile": null
