@@ -5,8 +5,7 @@
         "InputShape": [1024, 1024, 1],
         "OutputShape": [1024, 1024, 2],
         "ModelName": "Nuclei Segmentation Model From JSON",
-        "MinOverlap": [8, 8],
-        "Scaling": [1.0, 1.0]
+        "MinOverlap": [8, 8]
     },
     "ModelPath": "./saved_tf2_model_output/",
     "LicenseFile": null
