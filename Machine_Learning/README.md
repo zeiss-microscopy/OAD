@@ -624,6 +624,10 @@ All of the things above are "unwanted" but it is important to understand that me
 
 ![ZEN Denoising](../Machine_Learning/images/ZENblue_N2V_Train_Denoise_1.gif)
 
+The same video with sound and a transscript can be found here: [ZEN Denoising - Video with Sound and Transscript](https://www.youtube.com/watch?v=L0ccHmUKmBg)
+
+***
+
 ## Remarks and pitfalls
 
 - if training images show only one type of structure, but later the model is applied to images with totally different structures, the model might “hallucinate”
