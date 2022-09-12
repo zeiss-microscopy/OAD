@@ -2,9 +2,9 @@
 
 #################################################################
 # File        : fijipytools.py
-# Version     : 1.6.8
+# Version     : 1.8.2
 # Author      : czsrh
-# Date        : 20.02.2021
+# Date        : 07.09.2022
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # ATTENTION: Use at your own risk.
@@ -183,7 +183,8 @@ class ImportTools:
                                                    setconcat=setconcat,
                                                    openallseries=openallseries,
                                                    showomexml=showomexml,
-                                                   autoscale=autoscale)
+                                                   autoscale=autoscale,
+                                                   stitchtiles=stitchtiles)
 
         return imp, metainfo
 
@@ -194,7 +195,8 @@ class ImportTools:
                setconcat=False,
                openallseries=True,
                showomexml=False,
-               autoscale=True):
+               autoscale=True,
+               stitchtiles=True):
 
         # initialize the importer options
         options = ImporterOptions()
@@ -203,6 +205,7 @@ class ImportTools:
         options.setConcatenate(setconcat)
         options.setAutoscale(autoscale)
         options.setId(imagefile)
+        options.setStitchTiles(stitchtiles)
 
         # in case of concat=True all series set number of series = 1
         # and set pyramidlevel = 0 (1st level) since there will be only one
@@ -446,6 +449,7 @@ class ExportTools:
 
             # in case of OME-TIFF
             elif extension == 'ome.tiff' or extension == 'ome.tif':
+                print("Saving: ", savepath)
                 pstr = ExportTools.bfexporter(imp, savepath, useLOCI=True)
                 print('BioFormats Paramstring : ', pstr)
 
@@ -459,7 +463,7 @@ class ExportTools:
 
         else:
             extension = 'ome.tiff'
-            print("save as OME-TIFF: ")  # savepath
+            print("Saving: ", savepath)
             pstr = ExportTools.bfexporter(imp, savepath, useLOCI=True)
             print('BioFormats Paramstring : ', pstr)
 
@@ -601,33 +605,28 @@ class BinaryTools:
     @staticmethod
     def fill_holes(imp, is3d=False):
 
-
         if not is3d:
+            
             # 2D fill holes
-            stack = imp.getStack()  # get the stack within the ImagePlus
-            nslices = stack.getSize()  # get the number of slices
+            im_stack = imp.getStack()  # get the stack within the ImagePlus
+            nslices = im_stack.getSize()  # get the number of slices
             for index in range(1, nslices + 1):
                 
-                ip = stack.getProcessor(index)
+                ip = im_stack.getProcessor(index)
                 ip.invert()
                 # Reconstruction.fillHoles(imp.getProcessor())
                 Reconstruction.fillHoles(ip)
                 ip.invert()
-        #if not is3d:
-        #    # 2D fill holes
-        #    stack = imp.getStack()  # get the stack within the ImagePlus
-        #    nslices = stack.getSize()  # get the number of slices
-        #    for index in range(1, nslices + 1):
-        #        ip = stack.getProcessor(index)
-        #
-        #        # Reconstruction.fillHoles(imp.getProcessor())
-        #        Reconstruction.fillHoles(ip)
 
         if is3d:
+            
             # 3D fill holes
-            imp = Reconstruction3D.fillHoles(imp.getImageStack())
+            im_stack = Reconstruction3D.fillHoles(imp.getImageStack())
 
-        return imp
+        # convert back to ImgPlus
+        out = ImagePlus("Fill Holes", im_stack)
+
+        return out
 
 
 class WaterShedTools:
@@ -637,14 +636,13 @@ class WaterShedTools:
                       mj_normalize=True,
                       mj_dynamic=1,
                       mj_connectivity=6,
-                      force_mj=False,
                       is3d=False):
 
         if not is3d:
             print('Detected 2D image.')
             # run watershed on 2D image
             print('Watershed : 2D image')
-            imp = WaterShedTools.edm_watershed(imp)
+            imp_ws = WaterShedTools.edm_watershed(imp)
 
         if is3d:
 
@@ -654,12 +652,14 @@ class WaterShedTools:
                 print('Only 6 or 26 connectivity for 3D stacks is allowed. Using 6.')
 
             print('Watershed MJ: 3D image')
-            imp = WaterShedTools.mj_watershed3d(imp,
-                                                normalize=mj_normalize,
-                                                dynamic=mj_dynamic,
-                                                connectivity=mj_connectivity)
+            imp_ws = WaterShedTools.mj_watershed3d(imp,
+                                                   normalize=mj_normalize,
+                                                   dynamic=mj_dynamic,
+                                                   connectivity=mj_connectivity)
 
-        return imp
+        
+        
+        return imp_ws
 
     @staticmethod
     def edm_watershed(imp):
@@ -672,9 +672,11 @@ class WaterShedTools:
 
             if not ip.isBinary():
                 ip = BinaryImages.binarize(ip)
-            print('Apply Watershed to Binary image ...')
-            print(type(ip))
-            print('isBinary : ', ip.isBinary())
+            
+            #print('Apply Watershed to Binary image ...')
+            #print(type(ip))
+            #print('isBinary : ', ip.isBinary())
+            
             edm = EDM()
             edm.setup("watershed", None)
             edm.run(ip)
@@ -682,24 +684,26 @@ class WaterShedTools:
         return imp
 
     @staticmethod
-    def mj_watershed3d(stack,
+    def mj_watershed3d(imp,
                        normalize=True,
                        dynamic=1,
                        connectivity=6):
 
         # run watershed on stack
         weights = ChamferWeights3D.BORGEFORS.getFloatWeights()
-        # calc distance map and invert - works on ImageProcessor or ImageStack
-        dist = BinaryImages.distanceMap(stack, weights, normalize)
-        # dist = BinaryImages.distanceMap(imp.getStack(), weights, normalize)
+        
+        # calc distance map and invert
+        dist = BinaryImages.distanceMap(imp.getStack(), weights, normalize)
         Images3D.invert(dist)
-        # basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, imp.getStack(), dynamic, connectivity, False)
-        basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, stack, dynamic, connectivity, False)
-        imp = ImagePlus("basins", basins)
-        ip = imp.getProcessor()
+        
+        basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, imp.getStack(), dynamic, connectivity, False)
+        #basins = ExtendedMinimaWatershed.extendedMinimaWatershed(dist, imp, dynamic, connectivity, False)
+        
+        imp_basins = ImagePlus("basins", basins)
+        ip = imp_basins.getProcessor()
         ip.setThreshold(1, 255, ImageProcessor.NO_LUT_UPDATE)
 
-        return imp
+        return imp_basins
 
 
 class ImageTools:
@@ -736,7 +740,7 @@ class ThresholdTools:
         if method == 'Triangle':
             lowthresh = Auto_Threshold.Triangle(hist)
         if method == 'Default':
-            lowthresh = Auto_Threshold.Default(hist)
+            lowthresh = Auto_Threshold.IJDefault(hist)
         if method == 'Huang':
             lowthresh = Auto_Threshold.Huang(hist)
         if method == 'MaxEntropy':
@@ -755,7 +759,7 @@ class ThresholdTools:
 
         method_dict = {'Otsu': Auto_Threshold.Otsu,
                        'Triangle': Auto_Threshold.Triangle,
-                       'Default': Auto_Threshold.Default,
+                       'Default': Auto_Threshold.IJDefault,
                        'Huang': Auto_Threshold.Huang,
                        'MaxEntropy': Auto_Threshold.MaxEntropy,
                        'Mean': Auto_Threshold.Mean,
