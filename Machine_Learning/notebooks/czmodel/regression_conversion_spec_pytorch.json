@@ -1,0 +1,12 @@
+{
+    "ModelMetadata": {
+        "Type": "Regression",
+        "InputShape": [512, 512, 1],
+        "OutputShape": [512, 512, 1],
+        "ModelName": "Regression Model From JSON",
+        "MinOverlap": [8, 8],
+        "Scaling": [1.0, 1.0]
+    },
+    "ModelPath": "./saved_torch_regression_model.pt",
+    "LicenseFile": null
+}
