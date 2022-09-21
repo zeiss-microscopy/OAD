@@ -1,15 +1,13 @@
-# @LogService log
-
 #################################################################
 # File        : fijipytools.py
-# Version     : 1.8.2
+# Version     : 1.8.3
 # Author      : czsrh
-# Date        : 07.09.2022
+# Date        : 16.09.2022
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # ATTENTION: Use at your own risk.
 #
-# Copyright(c) 2021 Carl Zeiss AG, Germany. All Rights Reserved.
+# Copyright(c) 2022 Carl Zeiss AG, Germany. All Rights Reserved.
 #
 # Permission is granted to use, modify and distribute this code,
 # as long as this copyright notice remains part of the code.
@@ -20,8 +18,8 @@ import os
 import json
 import time
 import sys
+import shutil
 from collections import OrderedDict
-from org.scijava.log import LogLevel
 from java.lang import Double, Integer
 from java.awt import GraphicsEnvironment
 from ij import IJ, ImagePlus, ImageStack, Prefs
@@ -71,7 +69,6 @@ from inra.ijpb.data.image import Images3D
 from inra.ijpb.watershed import ExtendedMinimaWatershed
 from inra.ijpb.morphology import Reconstruction
 from inra.ijpb.morphology import Reconstruction3D
-
 
 
 class MetaData:
@@ -1227,8 +1224,7 @@ class MiscTools:
         if force_overwrite:
             if os.path.exists(dst):
                 os.remove(dst)
-                log.log(LogLevel.INFO, 'Removed before copy: ' + dst)
-
+                print('Removed before copy: ', dst)
         start = time.clock()
         try:
             shutil.copy2(src, dst)
@@ -1237,7 +1233,7 @@ class MiscTools:
             copy_ok = str(IOError)
         end = time.clock()
 
-        log.log(LogLevel.INFO, 'Duration Copying : ' + str(end - start))
+        print('Duration Copying : ', str(end - start))
 
         return copy_ok
 

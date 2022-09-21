@@ -1,11 +1,11 @@
 ﻿#################################################################
 # File        : Intellesis_Segmentation_Tool_adv.py
-# Version     : 0.4
+# Version     : 1.0
 # Author      : czsrh, czmri
-# Date        : 16.03.2020
+# Date        : 22.09.2021
 # Institution : Carl Zeiss Microscopy GmbH
 #
-# Copyright(c) 2021 Carl Zeiss AG, Germany. All Rights Reserved.
+# Copyright(c) 2022 Carl Zeiss AG, Germany. All Rights Reserved.
 #
 # Disclaimer: Use this script at your own risk.
 #
@@ -16,14 +16,38 @@
 from System.IO import File, Directory, Path, SearchOption
 import sys
 import clr
-clr.AddReference('System.Xml')
+clr.AddReference("System.Xml")
 import System.Xml
 from System import ApplicationException
 import time
 
-version = 0.4
+version = 1.0
 
 #################################################################
+
+
+def Scrap(input, minarea=50, maxarea=100000, inrange=True, id=0, showresult=True):
+    # scarp objects
+    print "* Scrap Objects ..."
+    print "MinArea =", minarea, " MaxArea =", maxarea, " Select in Range = ", inrange
+    scr = Zen.Processing.Binary.Scrap(input, minarea, maxarea, inrange, False)
+    scr.Name = "ScrapObjects_" + str(id) + ".czi"
+    if showresult:
+        Zen.Application.Documents.Add(scr)
+
+    return scr
+
+
+def FillHoles(input, id=0, showresult=True):
+
+    # fill holes inside binary image
+    print "* Filling Holes ..."
+    fh = Zen.Processing.Binary.FillHoles(input)
+    fh.Name = "FillHoles_" + str(id) + ".czi"
+    if showresult:
+        Zen.Application.Documents.Add(fh)
+
+    return fh
 
 
 def is_empty(any_structure):
@@ -67,7 +91,7 @@ def getmodelname(xmldoc):
     """
     # get Intellesis modelname from XML file
     modelname = None
-    nodes = xmldoc.SelectNodes('Model/ModelName')
+    nodes = xmldoc.SelectNodes("Model/ModelName")
     for node in nodes:
         modelname = node.InnerText
 
@@ -84,7 +108,7 @@ def getmodelid(xmldoc):
     """
     # get modelid from XML file
     modelid = None
-    nodes = xmldoc.SelectNodes('Model/Id')
+    nodes = xmldoc.SelectNodes("Model/Id")
     for node in nodes:
         modelid = node.InnerText
 
@@ -103,10 +127,10 @@ def getmodelclassnames(modelfile):
     classnames = []
     xmldoc = System.Xml.XmlDocument()
     xmldoc.Load(modelfile)
-    nodes = xmldoc.SelectNodes('Model/TrainingClasses')
+    nodes = xmldoc.SelectNodes("Model/TrainingClasses")
     for node in nodes:
         for c in node.ChildNodes:
-            classnames.append(c.GetAttributeNode('Name').Value)
+            classnames.append(c.GetAttributeNode("Name").Value)
 
     return classnames
 
@@ -123,10 +147,10 @@ def getmodel_validchannels(modelfile):
     valid_channels = []
     xmldoc = System.Xml.XmlDocument()
     xmldoc.Load(modelfile)
-    nodes = xmldoc.SelectNodes('Model/Channels')
+    nodes = xmldoc.SelectNodes("Model/Channels")
     for node in nodes:
         for c in node.ChildNodes:
-            valid_channels.append(c.GetAttributeNode('PixelType').Value)
+            valid_channels.append(c.GetAttributeNode("PixelType").Value)
 
     return valid_channels, len(valid_channels)
 
@@ -142,7 +166,7 @@ def getmodelclassnumber(modelfile):
     # get number of classes del from XML model file
     xmldoc = System.Xml.XmlDocument()
     xmldoc.Load(modelfile)
-    nodes = xmldoc.SelectNodes('Model/TrainingClasses')
+    nodes = xmldoc.SelectNodes("Model/TrainingClasses")
     for node in nodes:
         numclasses = node.ChildNodes.Count
 
@@ -173,11 +197,15 @@ def cleanup_dict(dc, clean_key=None, clean_value=None):
 def runmodel(image, model,
              use_confidence=False,
              confidence_threshold=0,
-             format='MultiChannel',
+             format="MultiChannel",
              extractclass=False,
              class2extract_id=0,
              addseg=False,
-             adapt_pixeltype=True):
+             adapt_pixeltype=True,
+             remove=False,
+             minobj=1,
+             maxobj=1000000000,
+             fillholes=False):
     """This function classifies the pixels inside an ZenImage using an Intellesis segmentation model
 
     :param image: Image to be segmented
@@ -187,7 +215,7 @@ def runmodel(image, model,
     :param use_confidence: Use confidence threshold to filter segmented pixels, defaults to False
     :type use_confidence: bool, optional
     :param confidence_threshold: threshold value for the confidence, defaults to 0
-    :type confidence_threshold: inFormat of segmentation output, defaults to 'MultiChannel'
+    :type confidence_threshold: inFormat of segmentation output, defaults to "MultiChannel"
     :type format: str, optional
     :param extractclass: Option to extract a class from segmentation result, defaults to False
     :type extractclass: bool, optional
@@ -203,25 +231,25 @@ def runmodel(image, model,
     :rtype: ZenImage
     """
 
-    if format == 'MultiChannel':
+    if format == "MultiChannel":
         segf = ZenSegmentationFormat.MultiChannel
-    if format == 'Labels':
+    if format == "Labels":
         segf = ZenSegmentationFormat.Labels
 
     # classify pixels using a trained model
     if use_confidence:
         try:
             # run the segmentation and apply confidence threshold to segmented image
-            outputs = Zen.Processing.Segmentation.TrainableSegmentationWithProbabilityMap(image, model, segf)
+            outputs = Zen.Processing.Segmentation.TrainableSegmentationWithConfidneceMap(image, model, segf)
             seg_image = outputs[0]
             conf_map = outputs[1]
-            print('Apply Confidence Threshold to segmented image.')
+            print("Apply Confidence Threshold to segmented image.")
             seg_image = Zen.Processing.Segmentation.MinimumConfidence(seg_image, conf_map, confidence_threshold)
             conf_map.Close()
             del outputs
         except ApplicationException as e:
             seg_image = None
-            print('Application Exception : ', e.Message)
+            print("Application Exception : ", e.Message)
 
     if not use_confidence:
         try:
@@ -229,23 +257,36 @@ def runmodel(image, model,
             seg_image = Zen.Processing.Segmentation.TrainableSegmentation(image, model, segf)
         except ApplicationException as e:
             seg_image = None
-            print('Application Exception : ', e.Message)
+            print("Application Exception : ", e.Message)
 
     if adapt_pixeltype:
         # adapt the pixeltype to match the type of the original image
         pxtype = image.Metadata.PixelType
-        seg_image = Zen.Processing.Utilities.ChangePixelType(seg_image, pxtype)
-        print('New PixelTyper for Segmented Image : ', seg_image.Metadata.PixelType)
+        
+        checkpx = (ZenPixelType.Gray8, ZenPixelType.Gray16)
+        
+        #only adapt pixeltype if the 
+        if pxtype in checkpx:
+            seg_image = Zen.Processing.Utilities.ChangePixelType(seg_image, pxtype)
+            print("New PixelType for Segmented Image : ", seg_image.Metadata.PixelType)
+        if not pxtype in checkpx:
+            print("No PixeType conversion for Segmented Image done.")
 
     if extractclass:
         # create subset string and extract the respective channel
-        substr = 'C(' + str(class2extract_id + 1) + ')'
-        print('Use SubsetString : ', substr)
+        substr = "C(" + str(class2extract_id + 1) + ")"
+        print("Use SubsetString : ", substr)
         seg_image = Zen.Processing.Utilities.CreateSubset(seg_image, substr, False)
+        
+        # post-process extract image
+        if remove:
+            seg_image = Scrap(seg_image, minarea=minobj, maxarea=maxobj, inrange=True, id=0, showresult=False)
+        if fillholes:
+            seg_image = FillHoles(seg_image, id=0, showresult=False)
 
     if addseg:
         # add segmentation output to the original image as an additional channel
-        print('Add Segmentation output as new channel to image.')
+        print("Add Segmentation output as new channel to image.")
         seg_image = Zen.Processing.Utilities.AddChannels(image, seg_image)
 
     return seg_image
@@ -311,20 +352,20 @@ docfolder = Zen.Application.Environment.GetFolderPath(ZenSpecialFolder.UserDocum
 imgfolder = Zen.Application.Environment.GetFolderPath(ZenSpecialFolder.ImageAutoSave)
 
 # or you your own default folder
-imgfolder = r'c:\Output\Intellesis_Batch_Test'
+imgfolder = r"f:\Zen_Output\batch"
 
 # maximum number of classes
 maxclass = 16
 classlist = createidstr(maxclass)
 
 # get list with all existing models and a short version of that list
-modelfolder = Path.Combine(docfolder, 'Model-Repository')
-modelfiles = Directory.GetFiles(modelfolder, '*.xml')
+modelfolder = Path.Combine(docfolder, "Model-Repository")
+modelfiles = Directory.GetFiles(modelfolder, "*.xml")
 
 if is_empty(modelfiles):
     # catch exception in case the folder contains no models at all
-    message = 'No modelfiles found in specified folder: '
-    print(message, Path.Combine(docfolder, 'Model-Repository'))
+    message = "No modelfiles found in specified folder: "
+    print(message, Path.Combine(docfolder, "Model-Repository"))
     raise SystemExit
 
 # get the list of filename use only the basefilename
@@ -356,33 +397,33 @@ modelnames_short.sort(key=str.lower)
 
 # initialize Dialog
 IntellesisSegTool = ZenWindow()
-IntellesisSegTool.Initialize('Intellesis Segmentation Tool - Version: ' + str(version))
+IntellesisSegTool.Initialize("Intellesis Segmentation Tool - Version: " + str(version))
 # add components to dialog
-IntellesisSegTool.AddDropDown('czi', 'Select CZI Image Document', CZIfiles_short, 0)
-IntellesisSegTool.AddDropDown('modelnames', 'Intellesis Model', modelnames_short, 0)
-IntellesisSegTool.AddDropDown('segformat', 'SegmentationFormat Output', ['MultiChannel', 'Labels'], 0)
-IntellesisSegTool.AddCheckbox('use_confidence', 'Use Confidence Threshold', False)
-IntellesisSegTool.AddIntegerRange('prob_threshold', 'Specify Confidence Threshold for Classification', 51, 0, 99)
-IntellesisSegTool.AddCheckbox('extract_class', 'Extract (requires MultiChannel as Output Format)', True)
-IntellesisSegTool.AddCheckbox('addsegm', 'Add Segmentation Mask to Original Image', False)
+IntellesisSegTool.AddDropDown("czi", "Select CZI Image Document", CZIfiles_short, 0)
+IntellesisSegTool.AddDropDown("modelnames", "Intellesis Model", modelnames_short, 0)
+IntellesisSegTool.AddDropDown("segformat", "SegmentationFormat Output", ["MultiChannel", "Labels"], 0)
+IntellesisSegTool.AddCheckbox("use_confidence", "Use Confidence Threshold", False)
+IntellesisSegTool.AddIntegerRange("prob_threshold", "Specify Confidence Threshold for Classification", 51, 0, 99)
+IntellesisSegTool.AddCheckbox("extract_class", "Extract (requires MultiChannel as Output Format)", True)
+IntellesisSegTool.AddCheckbox("addsegm", "Add Segmentation Mask to Original Image", False)
 
 # show the window
 result = IntellesisSegTool.Show()
 if result.HasCanceled:
-    message = 'Macro was canceled by user.'
+    message = "Macro was canceled by user."
     print(message)
     raise SystemExit
 
 # get the values and store them
-cziname = result.GetValue('czi')
+cziname = result.GetValue("czi")
 czidocument = CZIdict[cziname]
-modelname = str(result.GetValue('modelnames'))
-segmentationformat = str(result.GetValue('segformat'))
-use_conf = result.GetValue('use_confidence')
-conf_th = result.GetValue('prob_threshold')
-fileext = str(result.GetValue('extension'))
-extract = result.GetValue('extract_class')
-addseg2orig = result.GetValue('addsegm')
+modelname = str(result.GetValue("modelnames"))
+segmentationformat = str(result.GetValue("segformat"))
+use_conf = result.GetValue("use_confidence")
+conf_th = result.GetValue("prob_threshold")
+fileext = str(result.GetValue("extension"))
+extract = result.GetValue("extract_class")
+addseg2orig = result.GetValue("addsegm")
 
 # get class number of select model
 number_of_classes = getmodelclassnumber(modeldict[modelname])
@@ -390,7 +431,7 @@ valid_channels, num_valid_channels = getmodel_validchannels(modeldict[modelname]
 
 # get name of classes
 classnames = getmodelclassnames(modeldict[modelname])
-print('Detected Class Names : ', classnames)
+print("Detected Class Names : ", classnames)
 
 # get the active image document
 image = Zen.Application.Documents.GetByName(cziname)
@@ -398,81 +439,94 @@ Zen.Application.Documents.ActiveDocument = image
 
 # get channel information from image
 chnames, numch = get_channelnames(image)
-chnames.append('All Channels')
+chnames.append("All Channels")
 
-if extract and segmentationformat == 'MultiChannel':
+if extract and segmentationformat == "MultiChannel":
 
     # initialize Dialog
     IntellesisClassSelector = ZenWindow()
-    IntellesisClassSelector.Initialize('Intellesis Class and Channel Selection - Version: ' + str(version))
-    IntellesisClassSelector.AddLabel('1) --- Define Class to extract ---')
-    IntellesisClassSelector.AddLabel('Model : ' + modelname)
-    IntellesisClassSelector.AddLabel('Required Channel Number : ' + str(num_valid_channels))
-    IntellesisClassSelector.AddDropDown('extract_classname', 'Select Class Name', classnames, 0)
+    IntellesisClassSelector.Initialize("Intellesis Class and Channel Selection - Version: " + str(version))
+    IntellesisClassSelector.AddLabel("1) --- Define Class to extract ---")
+    IntellesisClassSelector.AddLabel("Model : " + modelname)
+    IntellesisClassSelector.AddLabel("Required Channel Number : " + str(num_valid_channels))
+    IntellesisClassSelector.AddDropDown("extract_classname", "Select Class Name", classnames, 0)
+    IntellesisClassSelector.AddCheckbox("remove_small", "Only keep Objects in Size Range", True)
+    IntellesisClassSelector.AddIntegerRange("min_objsize", "Specify Minimum Object Size", 1, 1, 100000)
+    IntellesisClassSelector.AddIntegerRange("max_objsize", "Specify Maximum Object Size", 1000000000, 1, 1000000000)
+    IntellesisClassSelector.AddCheckbox("fill_holes", "Fill Holes inside segmented image", True)
+    
 
     if numch > 1:
-        IntellesisClassSelector.AddLabel('2) --- Define Channel to be Segmented ---')
-        IntellesisClassSelector.AddCheckbox('apply2single', 'Apply to single channel', True)
-        IntellesisClassSelector.AddDropDown('ch2segment', 'Select Channel to be segmented', chnames, 0)
+        IntellesisClassSelector.AddLabel("2) --- Define Channel to be Segmented ---")
+        IntellesisClassSelector.AddCheckbox("apply2single", "Apply to single channel", True)
+        IntellesisClassSelector.AddDropDown("ch2segment", "Select Channel to be segmented", chnames, 0)
 
     # show the window
     cs_result = IntellesisClassSelector.Show()
     if cs_result.HasCanceled:
-        message = 'Macro was canceled by user.'
+        message = "Macro was canceled by user."
         print(message)
         raise SystemExit
 
-    class2extract = cs_result.GetValue('extract_classname')
+    class2extract = cs_result.GetValue("extract_classname")
     # get the Channel ID from Class (to be extracted)
     class2extract_id = classnames.IndexOf(class2extract)
-    apply2ch = cs_result.GetValue('apply2single')
-    ch2seg = cs_result.GetValue('ch2segment')
+    apply2ch = cs_result.GetValue("apply2single")
+    ch2seg = cs_result.GetValue("ch2segment")
+    remove = cs_result.GetValue("remove_small")
+    minobj = cs_result.GetValue("min_objsize")
+    maxobj = cs_result.GetValue("max_objsize")
+    fillholes = cs_result.GetValue("fill_holes")
 
 if not extract:
     class2extract_id = None
 
-print('CZI Image Document : ', cziname)
-print('Intellesis Modelname : ', modelname)
-print('Model File : ', modeldict[modelname])
-print('Number of Classes : ', number_of_classes)
-print('Segmentation Format : ', segmentationformat)
-print('Use Confidence threshold : ', use_conf)
-print('Confidence Threshold Value : ', conf_th)
-print('Add Segmented Image to Original : ', addseg2orig)
-print('Extract Class Option : ', extract)
+print("CZI Image Document : ", cziname)
+print("Intellesis Modelname : ", modelname)
+print("Model File : ", modeldict[modelname])
+print("Number of Classes : ", number_of_classes)
+print("Segmentation Format : ", segmentationformat)
+print("Use Confidence threshold : ", use_conf)
+print("Confidence Threshold Value : ", conf_th)
+print("Add Segmented Image to Original : ", addseg2orig)
+print("Extract Class Option : ", extract)
 
 if extract:
-    print('Detected Class Names : ', classnames)
-    print('Extract Class    : ', class2extract)
-    print('Channel ID of Class : ', class2extract_id)
+    print("Detected Class Names : ", classnames)
+    print("Extract Class    : ", class2extract)
+    print("Channel ID of Class : ", class2extract_id)
+    print("Remove Small Objects: ", remove)
+    print("Min Object Size     : ", minobj)
+    print("Max Object Size     : ", maxobj)
+    print("Fill Holes          : ", fillholes)
 
 if apply2ch:
-    print('Apply to single Channel : ', apply2ch)
-    print('Selected Image Channel  : ', ch2seg)
+    print("Apply to single Channel : ", apply2ch)
+    print("Selected Image Channel  : ", ch2seg)
 
 if extract:
-    if segmentationformat == 'Labels':
-        message = r'Wrong Segmentation Format for Extraction selected. Must be MultiChannel.\nExit.'
+    if segmentationformat == "Labels":
+        message = r"Wrong Segmentation Format for Extraction selected. Must be MultiChannel.\nExit."
         print(message)
         raise SystemExit
-    # print 'Use Class Name : ', extract
+    # print "Use Class Name : ", extract
 
-print('-----------------------------------------------------------------------------')
+print("-----------------------------------------------------------------------------")
 
 # process the image
-seg_name = Path.GetFileNameWithoutExtension(image.FileName) + '_seg' + Path.GetExtension(image.FileName)
+seg_name = Path.GetFileNameWithoutExtension(image.FileName) + "_seg" + Path.GetExtension(image.FileName)
 seg_path = Path.GetDirectoryName(image.FileName)
 
 # if a single needs to be extracted
 if apply2ch:
     # create substring
-    print('Extract Channel before Segmentation: ', ch2seg)
+    print("Extract Channel before Segmentation: ", ch2seg)
     ch_id = chnames.IndexOf(ch2seg)
-    substr = 'C(' + str(ch_id + 1) + ')'
+    substr = "C(" + str(ch_id + 1) + ")"
     image = seg_image = Zen.Processing.Utilities.CreateSubset(image, substr, False)
 
 # do the pixel classification for the current image
-print('Starting - Loading / Init model might take a while ...')
+print("Starting - Loading / Init model might take a while ...")
 start = time.clock()
 
 # run the actual model
@@ -483,15 +537,20 @@ seg = runmodel(image, modelname,
                extractclass=extract,
                class2extract_id=class2extract_id,
                addseg=addseg2orig,
-               adapt_pixeltype=True)
+               adapt_pixeltype=True,
+               remove=remove,
+               minobj=minobj,
+               maxobj=maxobj,
+               fillholes=fillholes
+               )
 
 end = time.clock()
-print(r'Total Time (Start Service + Load / Init model + Processing ) : ', str(round(end - start, 0)))
+print(r"Total Time (Start Service + Load / Init model + Processing ) : ", str(round(end - start, 0)))
 
 if seg is not None:
     Zen.Application.Documents.Add(seg)
 
 elif seg is None:
-    print('Could not segment image : ', czidocument)
+    print("Could not segment image : ", czidocument)
 
-print('Done.')
+print("Done.")

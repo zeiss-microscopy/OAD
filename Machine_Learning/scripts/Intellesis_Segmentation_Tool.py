@@ -1,11 +1,11 @@
 ﻿#################################################################
 # File       : Intellesis_Segmentation_Tool.py
-# Version    : 0.9
+# Version    : 1.1
 # Author     : czsrh
-# Date       : 25.03.2019
+# Date       : 22.09.2022
 # Institution : Carl Zeiss Microscopy GmbH
 #
-# Copyright(c) 2019 Carl Zeiss AG, Germany. All Rights Reserved.
+# Copyright(c) 2022 Carl Zeiss AG, Germany. All Rights Reserved.
 #
 # Permission is granted to use, modify and distribute this code,
 # as long as this copyright notice remains part of the code.
@@ -14,11 +14,11 @@
 from System.IO import File, Directory, Path, SearchOption
 import sys
 import clr
-clr.AddReference('System.Xml')
+clr.AddReference("System.Xml")
 import System.Xml
 from System import ApplicationException
 
-version = 0.9
+version = 1.1
 
 
 def is_empty(any_structure):
@@ -40,7 +40,7 @@ def getshortfiles(filelist):
 def getmodelname(xmldoc):
     # get modelname from XML file
     modelname = None
-    nodes = xmldoc.SelectNodes('Model/ModelName')
+    nodes = xmldoc.SelectNodes("Model/ModelName")
     for node in nodes:
         modelname = node.InnerText
 
@@ -50,7 +50,7 @@ def getmodelname(xmldoc):
 def getmodelid(xmldoc):
     # get modelid from XML file
     modelid = None
-    nodes = xmldoc.SelectNodes('Model/Id')
+    nodes = xmldoc.SelectNodes("Model/Id")
     for node in nodes:
         modelid = node.InnerText
 
@@ -61,7 +61,7 @@ def getmodelclassnumber(modelfile):
     # get number of classes of model from XML model file
     xmldoc = System.Xml.XmlDocument()
     xmldoc.Load(modelfile)
-    nodes = xmldoc.SelectNodes('Model/TrainingClasses')
+    nodes = xmldoc.SelectNodes("Model/TrainingClasses")
     for node in nodes:
         numclasses = node.ChildNodes.Count
 
@@ -87,32 +87,32 @@ def cleanup_dict(dc):
 
 def classify(image, model,
              use_confidence=True,
-             confidence_threshold=0,
-             format='MultiChannel',
+             confidence_threshold=0.0,
+             format="MultiChannel",
              extractclass=False,
              addseg=False,
              classid=1,
              adapt_pixeltype=True):
 
-    if format == 'MultiChannel':
+    if format == "MultiChannel":
         segf = ZenSegmentationFormat.MultiChannel
-    if format == 'Labels':
+    if format == "Labels":
         segf = ZenSegmentationFormat.Labels
 
     # classify pixels using a trained model
     if use_confidence:
         try:
             # run the segmentation and apply confidence threshold to segmented image
-            outputs = Zen.Processing.Segmentation.TrainableSegmentationWithProbabilityMap(image, model, segf)
+            outputs = Zen.Processing.Segmentation.TrainableSegmentationWithConfidenceMap(image, model, segf)
             seg_image = outputs[0]
             conf_map = outputs[1]
-            print('Apply Confidence Threshold to segmented image.')
+            print("Apply Confidence Threshold to segmented image:", confidence_threshold)
             seg_image = Zen.Processing.Segmentation.MinimumConfidence(seg_image, conf_map, confidence_threshold)
             conf_map.Close()
             del outputs
         except ApplicationException as e:
             seg_image = None
-            print('Application Exception : ', e.Message)
+            print("Application Exception : ", e.Message)
 
     if not use_confidence:
         try:
@@ -120,18 +120,18 @@ def classify(image, model,
             seg_image = Zen.Processing.Segmentation.TrainableSegmentation(image, model, segf)
         except ApplicationException as e:
             seg_image = None
-            print('Application Exception : ', e.Message)
+            print("Application Exception : ", e.Message)
 
     if adapt_pixeltype:
         # adapt the pixeltype to match the type of the original image
         pxtype = image.Metadata.PixelType
         seg_image = Zen.Processing.Utilities.ChangePixelType(seg_image, pxtype)
-        print('New PixelTyper for Segmented Image : ', seg_image.Metadata.PixelType)
+        print("New PixelTyper for Segmented Image : ", seg_image.Metadata.PixelType)
 
     if extractclass:
 
         # create subset string
-        substr = 'C(' + str(classid) + ')'
+        substr = "C(" + str(classid) + ")"
         seg_image = Zen.Processing.Utilities.CreateSubset(seg_image, substr, False)
 
     if addseg:
@@ -158,21 +158,22 @@ Zen.Application.MacroEditor.ClearMessages()
 # check the location of folder where experiment setups and image analysis settings are stored
 docfolder = Zen.Application.Environment.GetFolderPath(ZenSpecialFolder.UserDocuments)
 imgfolder = Zen.Application.Environment.GetFolderPath(ZenSpecialFolder.ImageAutoSave)
+
 # or you your own default folder
-imgfolder = r'c:\Output\Intellesis_Batch_Test'
+imgfolder = r"f:\Zen_Output\batch"
 
 # maximum number of classes
 maxclass = 16
 classlist = createidstr(maxclass)
 
 # get list with all existing models and a short version of that list
-modelfolder = Path.Combine(docfolder, 'Model-Repository')
-modelfiles = Directory.GetFiles(modelfolder, '*.xml')
+modelfolder = Path.Combine(docfolder, "Model-Repository")
+modelfiles = Directory.GetFiles(modelfolder, "*.xml")
 
 if is_empty(modelfiles):
     # catch exception in case the folder contains no models at all
-    message = 'No modelfiles found in specified folder: '
-    print(message, Path.Combine(docfolder, 'Model-Repository'))
+    message = "No modelfiles found in specified folder: "
+    print(message, Path.Combine(docfolder, "Model-Repository"))
     raise SystemExit
 
 # get the list of filename use only the basefilename
@@ -204,71 +205,71 @@ modelnames_short.sort(key=str.lower)
 
 # initialize Dialog
 IntellesisBatchDialog = ZenWindow()
-IntellesisBatchDialog.Initialize('Intellesis Segmentation Tool - Version: ' + str(version))
+IntellesisBatchDialog.Initialize("Intellesis Segmentation Tool - Version: " + str(version))
 # add components to dialog
-IntellesisBatchDialog.AddLabel('1) Select Intellesis Model for Segmentation')
-IntellesisBatchDialog.AddDropDown('modelnames', 'Intellesis Model', modelnames_short, 0)
-IntellesisBatchDialog.AddLabel('2) Select SegmentationFormat type')
-IntellesisBatchDialog.AddDropDown('segformat', 'SegmentationFormat Output', ['MultiChannel', 'Labels'], 0)
-IntellesisBatchDialog.AddCheckbox('use_confidence', 'Use Confidence Threshold', False)
-IntellesisBatchDialog.AddIntegerRange('prob_threshold', 'Specify Confidence Threshold for Classification', 90, 0, 99)
-IntellesisBatchDialog.AddLabel('3) Class Extraction Option')
-IntellesisBatchDialog.AddCheckbox('extract_class', 'Extract (requires MultiChannel as Output Format)', False)
-IntellesisBatchDialog.AddDropDown('extract_class_list', 'Select Class ID', classlist, 0)
-IntellesisBatchDialog.AddLabel('4) Additional Tools')
-IntellesisBatchDialog.AddCheckbox('addsegm', 'Add Segmentation Mask to Original Image', False)
-IntellesisBatchDialog.AddCheckbox('adapt', 'Adapt PixelType of Segmented Mask to match Original Image', False)
-IntellesisBatchDialog.AddCheckbox('segactive', 'Segment Active Image only (Do not use Folder !)', True)
-IntellesisBatchDialog.AddLabel('5) Select Folder containing Images')
-IntellesisBatchDialog.AddFolderBrowser('sourcedir', 'Source Folder with Images: ', imgfolder)
-IntellesisBatchDialog.AddDropDown('extension', 'Image File Extension Filter', [
-                                  '*.czi', '*.jpg', '*.tif', '*.tiff', '*.png', '*.ome.tiff', '*.ome.tif'], 0)
+IntellesisBatchDialog.AddLabel("1) Select Intellesis Model for Segmentation")
+IntellesisBatchDialog.AddDropDown("modelnames", "Intellesis Model", modelnames_short, 0)
+IntellesisBatchDialog.AddLabel("2) Select SegmentationFormat type")
+IntellesisBatchDialog.AddDropDown("segformat", "SegmentationFormat Output", ["MultiChannel", "Labels"], 0)
+IntellesisBatchDialog.AddCheckbox("use_confidence", "Use Confidence Threshold", False)
+IntellesisBatchDialog.AddIntegerRange("prob_threshold", "Specify Confidence Threshold for Classification", 90, 0, 99)
+IntellesisBatchDialog.AddLabel("3) Class Extraction Option")
+IntellesisBatchDialog.AddCheckbox("extract_class", "Extract (requires MultiChannel as Output Format)", False)
+IntellesisBatchDialog.AddDropDown("extract_class_list", "Select Class ID", classlist, 0)
+IntellesisBatchDialog.AddLabel("4) Additional Tools")
+IntellesisBatchDialog.AddCheckbox("addsegm", "Add Segmentation Mask to Original Image", False)
+IntellesisBatchDialog.AddCheckbox("adapt", "Adapt PixelType of Segmented Mask to match Original Image", False)
+IntellesisBatchDialog.AddCheckbox("segactive", "Segment Active Image only (Do not use Folder !)", True)
+IntellesisBatchDialog.AddLabel("5) Select Folder containing Images")
+IntellesisBatchDialog.AddFolderBrowser("sourcedir", "Source Folder with Images: ", imgfolder)
+IntellesisBatchDialog.AddDropDown("extension", "Image File Extension Filter", [
+                                  "*.czi", "*.jpg", "*.tif", "*.tiff", "*.png", "*.ome.tiff", "*.ome.tif"], 0)
 
 # show the window
 result = IntellesisBatchDialog.Show()
 if result.HasCanceled:
-    message = 'Macro was canceled by user.'
+    message = "Macro was canceled by user."
     print(message)
     raise SystemExit
 
 # get the values and store them
-modelname = str(result.GetValue('modelnames'))
-sourcefolder = str(result.GetValue('sourcedir'))
-segmentationformat = str(result.GetValue('segformat'))
-use_conf = result.GetValue('use_confidence')
-conf_th = result.GetValue('prob_threshold')
-fileext = str(result.GetValue('extension'))
-extract = result.GetValue('extract_class')
-extract_id = int(result.GetValue('extract_class_list'))
-addseg2orig = result.GetValue('addsegm')
-segactiveimg = result.GetValue('segactive')
-adaptpx = result.GetValue('adapt')
+modelname = str(result.GetValue("modelnames"))
+sourcefolder = str(result.GetValue("sourcedir"))
+segmentationformat = str(result.GetValue("segformat"))
+use_conf = result.GetValue("use_confidence")
+conf_th = result.GetValue("prob_threshold")
+fileext = str(result.GetValue("extension"))
+extract = result.GetValue("extract_class")
+extract_id = int(result.GetValue("extract_class_list"))
+addseg2orig = result.GetValue("addsegm")
+segactiveimg = result.GetValue("segactive")
+adaptpx = result.GetValue("adapt")
 
 # get class number of select model
 number_of_classes = getmodelclassnumber(modeldict[modelname])
 
-print('Intellesis Modelname : ', modelname)
-print('Model File : ', modeldict[modelname])
-print('Number of Classes : ', number_of_classes)
-print('Segmentation Format : ', segmentationformat)
-print('Source Folder : ', sourcefolder)
-print('File Extension Filter : ', fileext)
-print('Use Confidence threshold : ', use_conf)
-print('Confidence Threshold Value : ', conf_th)
-print('Extract Class Option : ', extract)
-print('Add Segmented Image to Original : ', addseg2orig)
-print('Segment Active Image only : ', segactiveimg)
-print('Adapt PixelType of Segmented Image : ', adaptpx)
+print("Intellesis Modelname : ", modelname)
+print("Model File : ", modeldict[modelname])
+print("Number of Classes : ", number_of_classes)
+print("Segmentation Format : ", segmentationformat)
+print("Source Folder : ", sourcefolder)
+print("File Extension Filter : ", fileext)
+print("Use Confidence threshold : ", use_conf)
+print("Confidence Threshold Value : ", conf_th)
+print("Extract Class Option : ", extract)
+print("Add Segmented Image to Original : ", addseg2orig)
+print("Segment Active Image only : ", segactiveimg)
+print("Adapt PixelType of Segmented Image : ", adaptpx)
 
 if extract:
-    if segmentationformat == 'Labels':
-        message = 'Wrong Segmentation Format for Extraction selected. Must be MultiChannel.\nExit.'
+    if segmentationformat == "Labels":
+        message = "Wrong Segmentation Format for Extraction selected. Must be MultiChannel.\nExit."
         print(message)
         raise SystemExit
-    print('Use Class ID : ', extract_id)
+    print("Use Class ID : ", extract_id)
 
-print('Add Segmentation Mask : ', addseg2orig)
-print('Segment only Active Image : ', segactiveimg)
+print("Add Segmentation Mask : ", addseg2orig)
+print("Segment only Active Image : ", segactiveimg)
 
 # create empty list
 imagefiles = []
@@ -279,31 +280,31 @@ if not segactiveimg:
 
     if is_empty(imagefiles):
         # in case the folder contains no images with specified extension
-        message = 'No images found in specified folder: '
+        message = "No images found in specified folder: "
         print(message, sourcefolder)
         raise SystemExit
 
     # check for existing subfolder inside source folder
-    seg_subfolder = Path.Combine(sourcefolder, 'Seg')
+    seg_subfolder = Path.Combine(sourcefolder, "Seg")
 
     if Directory.Exists(seg_subfolder):
         if len(Directory.GetFiles(seg_subfolder)) != 0:
             # subfolder exist and is not empty - stop here
-            message = 'Subfolder already exits and is not empty. Stopping Execution.'
+            message = "Subfolder already exits and is not empty. Stopping Execution."
             print(message, sourcefolder)
             raise SystemExit
         if len(Directory.GetFiles(seg_subfolder)) == 0:
-            print('Subfolder already exists but is empty. Proceed with Segmentation.')
+            print("Subfolder already exists but is empty. Proceed with Segmentation.")
 
     if not Directory.Exists(seg_subfolder):
         # subfolder does not exist - create one
         Directory.CreateDirectory(seg_subfolder)
-        print('Created subfolder for segmentation results : ', seg_subfolder)
+        print("Created subfolder for segmentation results : ", seg_subfolder)
 
 if segactiveimg:
 
     if not Zen.Application.Documents.ActiveDocument.IsZenImage:
-        message = 'Active Document is not a ZenImage.'
+        message = "Active Document is not a ZenImage."
         print(message, sourcefolder)
         raise SystemExit
 
@@ -311,24 +312,24 @@ if segactiveimg:
         image = Zen.Application.ActiveDocument
         imagefiles.append(image.FileName)
 
-print('-----------------------------------------------------------------------------')
+print("-----------------------------------------------------------------------------")
 
 # process all images inside the specified folder
 for imagefile in imagefiles:
 
-    print('Loading Image : ', imagefile)
+    print("Loading Image : ", imagefile)
     if not segactiveimg:
         image = Zen.Application.LoadImage(imagefile, False)
-    seg_name = Path.GetFileNameWithoutExtension(image.FileName) + '_seg' + Path.GetExtension(image.FileName)
+    seg_name = Path.GetFileNameWithoutExtension(image.FileName) + "_seg" + Path.GetExtension(image.FileName)
     seg_path = Path.GetDirectoryName(image.FileName)
-    print('Segmenting ...')
+    print("Segmenting ...")
 
     # check channel number
     if number_of_classes < extract_id:
-        message = 'Not enough classes inside model to extract class : ', extract_id
+        message = "Not enough classes inside model to extract class : ", extract_id
         print(message)
-        print('Number of classes in model : ', modelname, ' = ', number_of_classes)
-        print('Exit.')
+        print("Number of classes in model : ", modelname, " = ", number_of_classes)
+        print("Exit.")
         raise SystemExit
 
     # do the pixel classification for the current image
@@ -348,13 +349,13 @@ for imagefile in imagefiles:
         if not segactiveimg:
             # save the resulting image
             savepath = Path.Combine(seg_subfolder, seg_name)
-            print('Saving segmented image : ', savepath)
+            print("Saving segmented image : ", savepath)
             seg.Save(savepath)
             seg.Close()
         if segactiveimg:
             Zen.Application.Documents.Add(seg)
 
     elif seg is None:
-        print('Could not segment image : ', imagefile)
+        print("Could not segment image : ", imagefile)
 
-print('Done.')
+print("Done.")
