@@ -1,26 +1,26 @@
-﻿#################################################################
+#################################################################
 # File       : SaveSingleTiles_to_Folder.py
-# Version    : 1.1
+# Version    : 1.3
 # Author     : czsrh
-# Date       : 16.07.2020
+# Date       : 12.11.2022
 # Insitution : Carl Zeiss Microscopy GmbH
 #
-# Copyright(c) 2019 Carl Zeiss AG, Germany. All Rights Reserved.
+# Save the selected image as single tiles into the specified folder
+# using the selected format.
+# When using OME-TIFF export make sure one used a valid setting
+#
+# Copyright(c) 2022 Carl Zeiss AG, Germany. All Rights Reserved.
 #
 # Permission is granted to use, modify and distribute this code,
 # as long as this copyright notice remains part of the code.
 #################################################################
 
-"""  
-Save the selected image as single tiles into the specified folder
-using the selected format.
-
-"""
-
 from System.IO import Path, File, Directory, FileInfo
 
-version = 1.1
+version = 1.3
 
+# clear output
+Zen.Application.MacroEditor.ClearMessages()
 
 def addzeros(number):
     """Convert a number into a string and add leading zeros.
@@ -98,23 +98,41 @@ except:
 print('Number of Scenes detected: ', nScenes)
 print('Number of Tiles detected: ', nTiles)
 
-# address each tile image in Zen without opening it
-for s in range(1, nScenes + 1):
-    for m in range(1, nTiles + 1):
+# initilaize OME-TIFF setting
+settingsfile = 'OME-TIFF_Default.czips'
+ometiff_setting = Zen.Processing.Utilities.Settings.OmeTiffExportSetting()
+# the seeting must be located in:
+# c:\Users\XXX\Documents\Carl Zeiss\ZEN\Documents\Processing Settings\OmeTiffExport\
+ometiff_setting.Load(settingsfile, ZenSettingDirectory.User)
 
-        # get the strings with leading zeros
-        s_str = addzeros(s)
-        m_str = addzeros(m)
+
+# address each tile image in Zen without opening it
+for s in range(0, nScenes):
+    for m in range(0, nTiles):
+
+        # get the strings with leading zeros for splitting
+        s_str = addzeros(s + 1)
+        m_str = addzeros(m + 1)
 
         # create the subimage
         imgTile = img.CreateSubImage('S(' + s_str + ')|M(' + m_str + ')')
 
         # create a useful name
-        imgTile.Name = nameParent[:-4] + '_S' + s_str + '_T' + m_str + ft[1:]
-        print(imgTile.Name)
-
-        # save current tile with the specified format
-        Zen.Application.Save(imgTile, Path.Combine(SavePath, imgTile.Name), False)
+        s_str = addzeros(s)
+        m_str = addzeros(m)
+        
+        if ft == "*.ome.tiff":
+            imgTile.Name = nameParent[:-4] + '_S' + s_str + '_T' + m_str
+            print(imgTile.Name)
+            # save current tile with the specified format
+            Zen.Processing.Utilities.ExportOmeTiff(imgTile, ometiff_setting, imgTile.Name, SavePath)
+        
+        else:
+            imgTile.Name = nameParent[:-4] + '_S' + s_str + '_T' + m_str + ft[1:]
+            print(imgTile.Name)
+            # save current tile with the specified format
+            Zen.Application.Save(imgTile, Path.Combine(SavePath, imgTile.Name), False)
+        
         imgTile.Close()
 
 print('All Tiles saved.')
