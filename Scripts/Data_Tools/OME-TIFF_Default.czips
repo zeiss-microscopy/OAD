@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProcessingParameters Function="OmeTiffExport">
+  <FunctionParameters Function="OmeTiffExport">
+    <DestFolder>D:\Testdata_Zeiss\Labeled_Datasets\Grains\GeGra-Aluminum4zeiss-colored-patches\labels_new</DestFolder>
+    <SubsetSelectionMode>All</SubsetSelectionMode>
+    <SubSetString></SubSetString>
+    <MultichannelMode>DistinctChannels</MultichannelMode>
+    <SaveMultiChannelImageAsGrayScale>false</SaveMultiChannelImageAsGrayScale>
+    <ProcessingModeFlags>Raw</ProcessingModeFlags>
+    <MCSelectionMode>SubsetDefinition</MCSelectionMode>
+    <UseReducedFormat>true</UseReducedFormat>
+    <UseChannelNames>false</UseChannelNames>
+    <BurnInDataZone>false</BurnInDataZone>
+    <GraphicElementsZoom>1</GraphicElementsZoom>
+    <PanOption>All</PanOption>
+    <Zoom>1</Zoom>
+    <UseBIGTiffFormat>true</UseBIGTiffFormat>
+    <UseCompression>false</UseCompression>
+    <UseTiling>false</UseTiling>
+    <MergeScenes>false</MergeScenes>
+    <Prefix>OverViewScan</Prefix>
+    <ShiftPixel>false</ShiftPixel>
+    <GeneratePyramid>false</GeneratePyramid>
+    <GenerateThumbnail>false</GenerateThumbnail>
+    <ConvertTo8Bit>false</ConvertTo8Bit>
+    <OmeXmlSchemaVersion>Schema201606</OmeXmlSchemaVersion>
+  </FunctionParameters>
+</ProcessingParameters>
