@@ -38,6 +38,7 @@
     - [Train and Classify](#train-and-classify)
     - [Intellesis Object Classification - Scripting Integration](#intellesis-object-classification---scripting-integration)
 - [ZEN Intellesis Denoising](#zen-intellesis-denoising)
+  - [The algorithm](#the-algorithm)
   - [Key Features Intellesis Denoising](#key-features-intellesis-denoising)
   - [What is Noise (inside images in microscopy)](#what-is-noise-inside-images-in-microscopy)
     - [Reasons for “Imperfection"](#reasons-for-imperfection)
@@ -45,6 +46,11 @@
     - [What is Noise2Void (simplified):](#what-is-noise2void-simplified)
     - [What pure Noise2Void cannot do:](#what-pure-noise2void-cannot-do)
   - [How to train and use a Noise2Void model in ZEN](#how-to-train-and-use-a-noise2void-model-in-zen)
+  - [Understanding the training parameters](#understanding-the-training-parameters)
+    - [Number of epochs:](#number-of-epochs)
+    - [Batch size:](#batch-size)
+    - [Window size:](#window-size)
+    - [Masking Ratio:](#masking-ratio)
   - [Remarks and pitfalls](#remarks-and-pitfalls)
   - [TechNotes Intellesis Denoising](#technotes-intellesis-denoising)
   - [Remarks](#remarks)
@@ -562,6 +568,10 @@ imported_objclass_model = ZenIntellesis.ObjectClassification.ImportModel(model2i
 
 Starting with ZEN blue 3.6 and ZEN core 3.4 it is possible to train and use AI-powered denoising methods inside the ZEN software. The algorithm used is called Noise2Void (N2V) and is described in the paper [Noise2Void - Learning Denoising from Single Noisy Images](https://arxiv.org/abs/1811.10980).
 
+## The algorithm
+
+The denoising module in ZEN uses the Noise2Void (N2V) approach and has been shown to achieve state-of-the-art performance at denoising scientific images. Because N2V is a general-purpose algorithm that does not require prior knowledge of the specific noise distribution, it is ideal to denoise wide range of microscopy image modalities, including fluorescence microscopy, bright-field microscopy, and electron microscopy.
+
 ![ZEN Denoising](../Machine_Learning/images/denoise1.png)
 
 ## Key Features Intellesis Denoising
@@ -624,7 +634,31 @@ All of the things above are "unwanted" but it is important to understand that me
 
 ![ZEN Denoising](../Machine_Learning/images/ZENblue_N2V_Train_Denoise_1.gif)
 
-The same video with sound and a transscript can be found here: [ZEN Denoising - Video with Sound and Transscript](https://www.youtube.com/watch?v=L0ccHmUKmBg)
+The same video with sound and a transcript can be found here: [ZEN Denoising - Video with Sound and Transscript](https://www.youtube.com/watch?v=L0ccHmUKmBg)
+
+
+## Understanding the training parameters
+
+The Intellesis Denoising training interface shares a resemblance with the Intellesis machine learning training interface, making it user-friendly for both new and existing users to develop personalized denoising models. This training interface features four adjustable parameters, namely the number of epochs, batch size, window size, and masking ratio. While the default values may suffice, users may need to lower the batch size when using a resource-limited system (e.g., your work laptop). Further details on each of these parameters are available below.
+
+### Number of epochs:
+
+The "number of epochs" refers to the number of times the training dataset is passed through the neural network during the training process. Each pass through the dataset is called an epoch. In N2V, the number of epochs is a user-defined parameter that determines how many times the neural network will be trained on the full dataset. If the number of epochs is too short, the model may not be able to learn the underlying patterns in the data, resulting in underfitting. On the other hand, if the number of epochs is too long, the model may start to memorize the training data, resulting in overfitting making it less effective at denoising new images. 
+
+
+### Batch size:
+
+The "batch size" refers to the number of samples (image patches) that are processed by the neural network at once. During each epoch, the training dataset is typically divided into several smaller batches, and the neural network is updated based on the average loss across the batch. The batch size is another user-defined parameter that controls how many samples are processed in each batch. If the batch size is too small, the model may converge slowly and can result in poor generalization. If the batch size is too large, it may result in the model being unable to fit into memory, slowing down the training process, and potentially leading to poor generalization. The default batch size in ZEN is 64, but it is advisable to experiment with smaller sizes, such as 32 or 16, if memory errors occur.
+
+### Window size:
+
+The "window size" parameter determines the size of the image patch that N2V uses to make predictions. Specifically, N2V divides the input image into overlapping patches of a fixed size (determined by the window size parameter) and trains a neural network to predict the central pixel of each patch based on the other pixels in the patch. During inference (denoising), N2V processes the input image in a sliding-window fashion, applying the trained neural network to each patch in turn to produce a denoised output image. If the window size is too small, it may not capture enough information to properly denoise the image. If the window size is too large, it may include too much information, leading to overfitting, increased computation time, and reduced performance. The default window size of 5 is optimal for most images. 
+
+### Masking Ratio:
+
+The "masking ratio" parameter determines the proportion of pixels within each patch that are randomly masked during N2V training. By randomly setting some pixels within each patch to zero, N2V forces the neural network to learn a more robust representation of the underlying image structure, rather than simply memorizing the specific noise patterns in the input image. The masking ratio controls the level of noise injection during training, with higher values leading to more aggressive masking and generally better performance on noisy datasets. If the masking ratio is too small, the model may not be able to learn the noise distribution effectively, which can lead to poor denoising performance.
+In general, the optimal values for these parameters will depend on the specific characteristics of the input image and the amount and type of noise present in the data. It is often necessary to experiment with different values to determine the best combination for a given task.
+
 
 ***
 
