@@ -14,7 +14,7 @@ Its main components are:
 - **CZI image data format and its APIs**
 - **Python Scripting (OAD Simple API)**
 - **Interfaces to ZEN (TCP-IP, COM, Extensions)**
-- **Experiment Feedback - Adaptive Acquistion with Online Image Analysis**
+- **Experiment Feedback - Adaptive Acquisition with Online Image Analysis**
 
 ---
 
@@ -28,10 +28,10 @@ Its main components are:
 
 - **Analyze** and **Exchange** data with applications like **Fiji, Python, Knime, CellProfiler, Icy, MATLAB, Excel** and …
 
-- API for reading CZI image data using custom software
+- API for reading and writing CZI image data using custom software
 
   - **ZeissImgLib (.NET)** to be used on Windows-based systems
-  - **libCZI (C++)** for cross-platform applications
+  - **libCZI (C++)** and **pylibCZIrw (python)** for cross-platform applications
   - **BioFormats (CZIReader)** allow easy access to CZI files from many external applications using the BioFormats library
 
 - **BioFormats Import** as a module inside ZEN Blue as well as **OME-TIFF Export**
@@ -58,7 +58,9 @@ Its main components are:
 
 - ZEISS OAD Forum: http://www.zeiss.com/zen-oad
 
-- Open Source Cross-Platform API to read CZI: http://github.com/zeiss-microscopy/libCZI
+- Open Source Cross-Platform API to read and write CZI: https://github.com/ZEISS/libczi
+
+- Open Source Cross-Platform API to read and write CZI from Python (based on libCZI C++) https://pypi.org/project/pylibCZIrw/
 
 - OAD - Open Application Development: https://github.com/zeiss-microscopy/OAD
 
@@ -76,6 +78,6 @@ Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those sof
 
 By using any of those examples you agree to this disclaimer.
 
-Version: 2012.02.09
+Version: 2023.02.27
 
-Copyright (c) 2022 Carl Zeiss AG, Germany. All Rights Reserved.
+Copyright (c) 2023 Carl Zeiss AG, Germany. All Rights Reserved.

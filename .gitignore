@@ -112,3 +112,11 @@ czcopyright.txt
 .vs/open_application_development/v16/.suo
 .vs/VSWorkspaceState.json
 .vs/slnx.sqlite
+/jupyter_notebooks/pylibCZIrw/data/inputs
+/jupyter_notebooks/pylibCZIrw/newCZI_compressed.czi
+/jupyter_notebooks/pylibCZIrw/newczi_mdata.czi
+/jupyter_notebooks/pylibCZIrw/newCZI_scenes.czi
+/jupyter_notebooks/pylibCZIrw/newczi_tilewise.czi
+/jupyter_notebooks/pylibCZIrw/newCZI_uncompressed.czi
+/jupyter_notebooks/pylibCZIrw/newCZI_z=16_ch=3.czi
+/jupyter_notebooks/pylibCZIrw/newCZI_zloc.czi
