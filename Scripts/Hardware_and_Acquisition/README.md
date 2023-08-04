@@ -1,6 +1,6 @@
 - [Hardware and Acquisition](#hardware-and-acquisition)
-  - [FindSurface\_SWAF\_ActiveExp.py](#findsurface_swaf_activeexppy)
-  - [Smart\_Dynamics.py](#smart_dynamicspy)
+  - [FindSurface\_SWAF\_ActiveExp](#findsurface_swaf_activeexp)
+  - [Smart\_Dynamics](#smart_dynamics)
   - [Lattice Light Sheet 7 Scripts](#lattice-light-sheet-7-scripts)
     - [LLS7\_VolumeStacking](#lls7_volumestacking)
     - [Fuse Volumes](#fuse-volumes)
@@ -18,7 +18,7 @@
 
 # Hardware and Acquisition
 
-## FindSurface_SWAF_ActiveExp.py
+## FindSurface_SWAF_ActiveExp
 
 This script is intended to be placed as a action button inside the ZEN menu bar especially when using a Celldiscoverer 7 system. The idea here is to combine the hard-based focus with the software focus to store the final z-value (where something should be in focus) inside the hardware focus in order to be able to relocate to that value (relative to the sample carrier surface) easily without bleaching.
 
@@ -30,7 +30,7 @@ The script does the following things:
 
 * The result of the **SWAF** will be stored as an offset inside the DF.2 and be recalled anytime via **RecallFocus**
 
-## Smart_Dynamics.py
+## Smart_Dynamics
 
 ZEN Blue offers the possibility to measure the intensity ratio etc. of objects during a running acquisition. Typically the ROIs (where the intensities will be measured) will be created manually.
 
@@ -102,13 +102,13 @@ The [LLS7_PositionTimeSeries_2](./lls7/LLS7_PositionTimeSeries_2.py) requires mo
 
 The [LLS7_PositionTimeSeries_3](./lls7/LLS7_PositionTimeSeries_3.py) requires modification of the code: Position Time Series 3 does the same as MultiPosition but allows in addition to set looping and a delay between loops. Can be used for time series within time series (e.g. go to pos 1, record as fast as possible for 5min, then go to pos 2, record as fast as possible for 5min, wait for 1hr, then repeat fast imaging at pos 1&2.
  
-<p><img src="./images/lls7_pos3.png" title="LLS7 - Position Time Series 3" width="300"></p>
+<p><img src="./images/lls7_pos3.png" title="LLS7 - Position Time Series 3" width="400"></p>
 
 ### Photoactivation
 
 The [LLS7_Photoactivation](./lls7/LLS7_Photoactivation.py) script allows to run three pre-defined experiment setups (.czexp files), one after the other. Application: record baseline time series of large volume, then activate smaller volume with 100% laser power, then observe behaviour across large volume incorporating both activated and non-activated areas.
  
-<p><img src="./images/lls7_photoactivation.png" title="LLS7 - Photoactivation" width="300"></p>
+<p><img src="./images/lls7_photoactivation.png" title="LLS7 - Photoactivation" width="400"></p>
 
 ### Extract Incubation Information
 
