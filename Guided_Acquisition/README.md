@@ -303,7 +303,6 @@ The "scripted" version of Guided Acquisition comes free of charge, but requires 
 
 <p><img src="./images/Guided_Acquisition_external1.png" title="Workflow - Guided Acquisition using external tools" width="500"></p>
 
-
 ***
 
 <p><img src="./images/Guided_Acquisition_8.2.png" title="Workflow - Actionable Information using Python Scripting (OAD)" width="400"></p>
