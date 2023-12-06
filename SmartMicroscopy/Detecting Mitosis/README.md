@@ -1,6 +1,6 @@
 ## What it is
 
-This use case describes a simple approach of doing Event-driven smart microscopy in OAD.
+This use case describes a simple approach of doing event-driven smart microscopy in OAD. It showcases the detection of mitotic (rounded) cells in a time-lapse phase contrast data set and the concurrent detailed acquisition of said mitotic events. It contains all scripts, images and Deep Learning models to run the use case in simulated mode. 
 
 ## How to use it
 
