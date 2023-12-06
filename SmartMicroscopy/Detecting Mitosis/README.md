@@ -1,2 +1,4 @@
+# What it is
 
-<p><img src="demo video 4X.mp4" title="Guided Acquisition - Guided Acquisition Movie - ZEN Connect" width="1280"></p>
+This use case describes a simple approach of doing Event-driven smart microscopy in OAD.
+
