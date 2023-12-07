@@ -1,4 +1,6 @@
-<p><img src="./Misc/workflow_overview.png" title="Event-driven smart microscopy in OAD - Overview" width="1280"></p>
+# Event-driven Smart Microscopy in OAD
+
+<p><img src="./Misc/workflow_overview.png" title="Event-driven Smart Microscopy in OAD - Overview" width="1280"></p>
 
 ## What it is
 
