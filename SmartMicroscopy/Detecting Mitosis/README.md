@@ -18,3 +18,9 @@ This use case describes a simple approach of doing event-driven smart microscopy
    - Line 28: OVERVIEW_RESERVOIR = absolute file path to the folder with all overview images
    - Line 40: absolute file path to an output image folder
 7) You should be all set to run the macro. Make sure that the correct experimental setups and image analysis settings are chosen in the initial GUI.
+
+## Disclaimer
+
+> :warning: **This tutorial and the related scripts are free to use for everybody. Use it on your own risk. Especially be aware of the fact that automated stage movements might damage hardware if the system is not setup properly. Please check everything in simulation mode first!**
+>
+> Carl Zeiss Microscopy GmbH's ZEN software allows connection to the third party software, Python. Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning Python, makes no representation that Python will work on your hardware, and will not be liable for any damages caused by the use of this extension. By running this example you agree to this disclaimer.
