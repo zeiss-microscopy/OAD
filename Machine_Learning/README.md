@@ -417,7 +417,7 @@ The [ZEN Intellesis] infrastructure provides a solution for that problem. It app
 
 all our software tools allow to run predictions with custom segmentation DL models (Semantic Segmentation) trained "outside of ZEN". To be compatible "usable", a model has to comply with our specification and some meta data must be provided that is described in detail in the official CZANN model specification in the project description of our [czmodel package](https://pypi.org/project/czmodel/).
 
-<p><img src="../Machine_learning/images/czmodel_pypi.png" title="The CZMODEL package" width="800"></p>
+<p><img src="./images/czmodel_pypi.png" title="The CZMODEL package" width="800"></p>
 
 - Open and standardized “container” to store ML models and metadata
 - no new model format
@@ -427,7 +427,7 @@ all our software tools allow to run predictions with custom segmentation DL mode
 
 For a simple example of such a pipeline see the attached Jupyter notebook (ready to be executed) in our [Colab Notebook](https://colab.research.google.com/github/zeiss-microscopy/OAD/blob/master/Machine_Learning/notebooks/czmodel/SingleClassSemanticSegmentation_PyTorch_5_0_0.ipynb). Note that the notebook is not to be understood as a best practice guide for training ANN models but rather illustrates the use of the [czmodel](https://pypi.org/project/czmodel/) library with a very simple model generation process that will usually be more sophisticated.
 
-<p><img src="../Machine_learning/images/package_czann.png" title="Package a model as CZANN" width="800"></p>
+<p><img src="./images/package_czann.png" title="Package a model as CZANN" width="800"></p>
 
 ### How to create external models
 
