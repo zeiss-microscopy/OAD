@@ -13,7 +13,8 @@
   - [ZEN Intellesis Segmentation](#zen-intellesis-segmentation)
   - [Key Features of Intellesis Segmentation](#key-features-of-intellesis-segmentation)
   - [Intellesis Segmentation - Tech Notes](#intellesis-segmentation---tech-notes)
-  - [Feature Extraction](#feature-extraction)
+  - [What is Feature Extraction](#what-is-feature-extraction)
+  - [Feature Extraction  in ZEN Intellesis](#feature-extraction--in-zen-intellesis)
     - [What Implementation of the RandomForest is used by Intellesis](#what-implementation-of-the-randomforest-is-used-by-intellesis)
     - [How does a RandomForest Classifier work](#how-does-a-randomforest-classifier-work)
   - [Application Examples](#application-examples)
@@ -23,6 +24,7 @@
     - [How to train a simple Pixel Classifier for Segmentation Intellesis](#how-to-train-a-simple-pixel-classifier-for-segmentation-intellesis)
     - [How to use a model (trained on a single channel) inside an Image Analysis pipeline](#how-to-use-a-model-trained-on-a-single-channel-inside-an-image-analysis-pipeline)
     - [How to use a model (trained on all channels) inside an Image Analysis pipeline](#how-to-use-a-model-trained-on-all-channels-inside-an-image-analysis-pipeline)
+  - [How train a model for Instance Segmentation](#how-train-a-model-for-instance-segmentation)
   - [How to use an Instance Segmentation model in ZEN](#how-to-use-an-instance-segmentation-model-in-zen)
   - [Bringing CZANNs and ZEISS software ecosystem together](#bringing-czanns-and-zeiss-software-ecosystem-together)
     - [The challenges of deployment](#the-challenges-of-deployment)
@@ -267,7 +269,15 @@ The three main software packages all offer a range of segmentation methods that 
 - client-side tiling & fusion functionality to deal with large **Multi-Dimensional Data Sets**
 - support for Nvidia GPUs (recommended is a 8GB GPU or better)
 
-## Feature Extraction
+## What is Feature Extraction
+
+In order to classify pixel using Machine-Learning Classifiers it is need to extract "features" from an image. This is usually done by applying different kind of filter. During tha training process it is not required to label the whole image - labeling can also be done on a subset of the image.
+
+<p><img src="../Machine_Learning/images/feature_extraction.png" title="Feature Extraction for Machine Learning" width="1000"></p>
+
+Sample courtesy of Prof. Jochen Herms, LMU München, Germany.
+
+## Feature Extraction  in ZEN Intellesis
 
 Intellesis Segmentation supports two different ways of segmenting an image:
 
@@ -278,7 +288,7 @@ Intellesis Segmentation supports two different ways of segmenting an image:
 
 ### What Implementation of the RandomForest is used by Intellesis
 
-- Intellesis is using the following open.source implentation: [scikit-learn - Random Forest](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier)
+- Intellesis is using the following open.source implementation: [scikit-learn - Random Forest](https://scikit-learn.org/stable/modules/generated/sklearn.ensemble.RandomForestClassifier.html#sklearn.ensemble.RandomForestClassifier)
 - except for the number of estimators (= 25) Intellesis used the default values
 
 ### How does a RandomForest Classifier work
@@ -381,10 +391,13 @@ Watch the short video below to see those steps in action.
 
 ---
 
+## How train a model for Instance Segmentation
+
+On our [arivis Cloud] platform it is easily possible to label your data to train an AiModel for Instance Segmentation
 
 ## How to use an Instance Segmentation model in ZEN
 
-In order to use Instance Segmentation models it is required to annotate data and trained a model on our cloud platform. Once the training is finished the model and all the required code are packaged as a docker container and can be downloaded to your local platform.
+In order to use Instance Segmentation models it is required to annotate data and trained a model on our [arivis cloud] platform. Once the training is finished the model and all the required code are packaged as a docker container and can be downloaded to your local platform.
 
 ![Instance Segmentation Workflow](../Machine_Learning/images/instance1.png)
 
