@@ -414,14 +414,13 @@ In order to use Instance Segmentation models it is required to annotate data and
 
 ![Using the Instance model inside ZEN Image Analysis](../Machine_Learning/images/instance4.png)
 
-Using the same workflow it is also possible to train apply AiModel for Instance Segmentation in ZEN core material workflow, like Grain-Size Analysis (MaterialApps)
+Using the same workflow it is also possible to train apply AiModel for Instance Segmentation in ZEN core material workflow, like Grain-Size Analysis ([MaterialApps](https://www.zeiss.com/microscopy/en/products/software/zeiss-zen-core.html#accordionItem-150111185))
 
 ![Using the Instance model inside ZEN Image Analysis](../Machine_Learning/images/grains_all.png)
 
 - (TL) Aluminum (baker-stained) grains inside the arivis Cloud viewer label and segmented in arivis Cloud using Instance Segmentation.
 - (TR) Results of a prediction using instance segmentation in arivis Cloud
 - (B) The AiModel for Instance Segmentation integrated in ZEN core inside the Grains workflow.
-
 
 ## Bringing CZANNs and ZEISS software ecosystem together
 
