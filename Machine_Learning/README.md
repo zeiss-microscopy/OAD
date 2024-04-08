@@ -414,6 +414,15 @@ In order to use Instance Segmentation models it is required to annotate data and
 
 ![Using the Instance model inside ZEN Image Analysis](../Machine_Learning/images/instance4.png)
 
+Using the same workflow it is also possible to train apply AiModel for Instance Segmentation in ZEN core material workflow, like Grain-Size Analysis (MaterialApps)
+
+![Using the Instance model inside ZEN Image Analysis](../Machine_Learning/images/grains_all.png)
+
+- (TL) Aluminum (baker-stained) grains inside the arivis Cloud viewer label and segmented in arivis Cloud using Instance Segmentation.
+- (TR) Results of a prediction using instance segmentation in arivis Cloud
+- (B) The AiModel for Instance Segmentation integrated in ZEN core inside the Grains workflow.
+
+
 ## Bringing CZANNs and ZEISS software ecosystem together
 
 Training artificial neural networks (ANN) to tackle semantic segmentation problems has become a very popular task and an increasing number of solutions has become available that require little technical understanding to train ANNs. Of course, this statement does not hold for models highly optimized for specific use cases where solving the problem at hand requires a high amount of experience, creativity and some “magic”. However, in many cases it is possible to achieve decent results with widely used ANN model architectures, a sufficient amount of data and enough compute power.
