@@ -1,4 +1,4 @@
-- [ZEN and arivis Cloud - Open Ecosystem for Integrated Machine Learning Workflows](#zen-and-arivis-cloud---open-ecosystem-for-integrated-machine-learning-workflows)
+- [ZEISS - Open Ecosystem for Integrated Machine Learning Workflows](#zeiss---open-ecosystem-for-integrated-machine-learning-workflows)
   - [Building Blocks of the Ecosystem](#building-blocks-of-the-ecosystem)
   - [Machine Learning versus Deep Learning](#machine-learning-versus-deep-learning)
     - [Main differences between Deep Learning and Machine Learning](#main-differences-between-deep-learning-and-machine-learning)
@@ -26,6 +26,8 @@
     - [How to use a model (trained on all channels) inside an Image Analysis pipeline](#how-to-use-a-model-trained-on-all-channels-inside-an-image-analysis-pipeline)
   - [How train a model for Instance Segmentation](#how-train-a-model-for-instance-segmentation)
   - [How to use an Instance Segmentation model in ZEN](#how-to-use-an-instance-segmentation-model-in-zen)
+    - [Integration into BioApps](#integration-into-bioapps)
+    - [Integration into Material Workflows](#integration-into-material-workflows)
   - [Bringing CZANNs and ZEISS software ecosystem together](#bringing-czanns-and-zeiss-software-ecosystem-together)
     - [The challenges of deployment](#the-challenges-of-deployment)
     - [The czmodel PyPi package](#the-czmodel-pypi-package)
@@ -65,7 +67,7 @@
 
 ---
 
-# ZEN and arivis Cloud - Open Ecosystem for Integrated Machine Learning Workflows
+# ZEISS - Open Ecosystem for Integrated Machine Learning Workflows
 
 The [ZEN blue], [ZEN core] and [arivis Pro] software together with and the [arivis Cloud] platform offer various tools and solutions to integrate machine learning methods and Deep learning into image processing and analysis workflows.
 
@@ -76,6 +78,17 @@ The mission statement for the ecosystem can be described as:
 and
 
 <font size="5">"Better data beat better models."</font>
+
+ZEN and ZEN Core are robust microscopy software packages, offering a broad spectrum of image analysis and processing tools tailored to support [standard microscopy workflows](#zeiss_ai1). From image acquisition to preprocessing, analysis, and final result presentation, these tools guide users through every step
+
+<p><img src="./images/zeiss_ai.png" id="zeiss_ai1" title="Microscope Imaging Workflow" width="800"></p>
+
+A [schematic representation](#zeiss_ai1) of a typical microscopy imaging workflow, illustrating the sequential steps from image acquisition to preprocessing, image analysis, classification, and result/report generation.
+
+The ZEN software packages offer dedicated analysis tools alongside a versatile image analysis toolkit, incorporating powerful Machine Learning algorithms for different phases of the [workflow](#zeiss_ai2). For example, Noise2Void algorithm facilitates image denoising, while semantic and instance segmentation methods are available for image segmentation tasks. Additionally, the software supports Machine Learning driven object classification.
+These solutions build upon established and widely recognized tools and frameworks like PyTorch, TensorFlow, and ONNX, and are fine-tuned for simplicity and seamless integration. They can be readily used within pre-configured workflows in ZEN and ZEN Core, such as Material Apps (for tasks like grain size analysis and layer thickness measurement) or Bio Apps (for tasks such as cell counting and gene expression analysis). The integration of AI within the ZEN software has revolutionized microscopy, enhancing speed, efficiency, and accuracy to unprecedented levels.
+
+<p><img src="./images/zeiss_ai2.png" id="zeiss_ai2" title="Microscope Imaging Workflow with AI techniques" width="800"></p>
 
 ## Building Blocks of the Ecosystem
 
@@ -414,6 +427,20 @@ In order to use Instance Segmentation models it is required to annotate data and
 
 ![Using the Instance model inside ZEN Image Analysis](../Machine_Learning/images/instance4.png)
 
+### Integration into [BioApps]
+
+Bio Apps comprise a streamlined suite of image analysis tools meticulously tailored for common tasks in cell biology and cancer research. These tools provide specialized solutions for tasks such as cell counting, cellular gene expression analysis, and nuclear translocation studies.
+
+The cells displayed in the figure were imaged using a ZEISS Celldiscoverer 7 microscope, employing oblique contrast imaging to enhance cellular morphology and facilitate better segmentation. The channel corresponding to mCherry fluorescence is colored in pink and displayed alongside the cell channel, as shown in the top right in the [figure](#bioapp1) below. A Deep Learning model for instance segmentation, trained on the ZEISS arivis Cloud platform, was imported into the Gene Expression BioApp in ZEN to perform automated cellular segmentation.
+
+<p><img src="./images/bioapps1.png" id="bioapp1" title="Gene Expression BioApp" width="800"></p>
+
+An instance segmentation model trained on [arivis Cloud] is used for the segmentation of cells in the oblique channel. Following cell segmentation, mCherry-positive cells are identified to evaluate the expression rate. The result of analyzing a multi-well plate using the Gene-Expression Bio App as heatmap.
+
+<p><img src="./images/bioapps2.png" id="bioapp1" title="Gene Expression BioApp  Heatmap" width="800"></p>
+
+### Integration into Material Workflows
+
 Using the same workflow it is also possible to train apply AiModel for Instance Segmentation in ZEN core material workflow, like Grain-Size Analysis ([MaterialApps](https://www.zeiss.com/microscopy/en/products/software/zeiss-zen-core.html#accordionItem-150111185))
 
 ![Using the Instance model inside ZEN Image Analysis](../Machine_Learning/images/grains_all.png)
@@ -421,6 +448,8 @@ Using the same workflow it is also possible to train apply AiModel for Instance 
 - (TL) Aluminum (baker-stained) grains inside the arivis Cloud viewer label and segmented in arivis Cloud using Instance Segmentation.
 - (TR) Results of a prediction using instance segmentation in arivis Cloud
 - (B) The AiModel for Instance Segmentation integrated in ZEN core inside the Grains workflow.
+
+The figures showcases the ZEN Core interface for grain size analysis. An instance segmentation model trained on ZEISS arivis Cloud is imported into ZEN Core to segment individual grains within an aluminum Barker etched sample. This segmentation process enables the extraction of the size distribution of individual grains, facilitating comprehensive analysis.
 
 ## Bringing CZANNs and ZEISS software ecosystem together
 
@@ -684,8 +713,6 @@ The denoising module in ZEN uses the Noise2Void (N2V) approach and has been show
 
 ## What is Noise (inside images in microscopy)
 
-Sidenote: Parts of the text and images are taken from this publication: [Imaging in focus: An introduction to denoising bioimages in the era of deep learning](https://www.sciencedirect.com/science/article/pii/S1357272521001588)
-
 Whenever one is imaging an object it is crucial to recognize that:
 
 **_"Every image is an imperfect representation of the underlying structure that is being imaged!"_**
@@ -698,7 +725,7 @@ Whenever one is imaging an object it is crucial to recognize that:
 - Image artifacts
 - **Noise**
 
-![ZEN Denoising](../Machine_Learning/images/denoise2.png)**Image Imperfections**
+![ZEN Denoising](../Machine_Learning/images/denoise3.png)**Image Imperfections**
 
 All of the things above are "unwanted" but it is important to understand that methods like N2V can only help with the noise itself not with all the other undesired things in your image.
 
@@ -710,15 +737,15 @@ All of the things above are "unwanted" but it is important to understand that me
 ### What is Noise2Void (simplified):
 
 - it is a deep-learning based method to learn “the noise” from the image itself (no labels or ground truth need) in order to remove the noise
-- by “masking” a pixel and therfore hiding it from the receptive field of the Deep Neural Network
+- by “masking” a pixel and therefore hiding it from the receptive field of the Deep Neural Network
 - Assumption when using N2V: pixel-independent noise or so called "iid" (identically distributed samples)noise, which depends on detection method and the used detectors itself
 
 ### What pure Noise2Void cannot do:
 
-- remove out-of-focus or stray light or background signal
+- remove out-of-focus, stray light or background signal
 - increase the resolution
 - correct uneven illumination
-- correct image artifact
+- correct image artifacts
 
 ## How to train and use a Noise2Void model in ZEN
 
@@ -732,7 +759,7 @@ The Intellesis Denoising training interface shares a resemblance with the Intell
 
 ### Number of epochs
 
-The "number of epochs" refers to the number of times the training dataset is passed through the neural network during the training process. Each pass through the dataset is called an epoch. (an epoch consists of a fixed number of samples drawn from the dataset) In N2V, the number of epochs is a user-defined parameter that determines how many times the neural network will be trained on the full dataset. If the number of epochs is too short, the model may not be able to learn the underlying patterns in the data, resulting in underfitting. On the other hand, if the number of epochs is too long, the model may start to memorize the training data, resulting in overfitting making it less effective at denoising new images.
+The "number of epochs" refers to the number of times the training dataset is passed through the neural network during the training process. Each pass through the dataset is called an epoch. (an epoch consists of a fixed number of samples drawn from the dataset) In N2V, the number of epochs is a user-defined parameter that determines how many times the neural network will be trained on the full dataset. If the number of epochs is too short, the model may not be able to learn the underlying patterns in the data, resulting in under-fitting. On the other hand, if the number of epochs is too long, the model may start to memorize the training data, resulting in over-fitting making it less effective at denoising new images.
 
 ### Batch size
 
@@ -740,7 +767,7 @@ The "batch size" refers to the number of samples (image patches) that are proces
 
 ### Window size
 
-Given a pixel to be masked", the "window size" parameter determines the size of the surrounding area to sample replacement pixel. Specifically, N2V divides the input image into overlapping patches of a fixed size (determined by the window size parameter) and trains a neural network to predict the central pixel of each patch based on the other pixels in the patch. During inference (denoising), N2V processes the input image in a sliding-window fashion, applying the trained neural network to each patch in turn to produce a denoised output image. If the window size is too small, it may not capture enough information to properly denoise the image. If the window size is too large, it may include too much information, leading to overfitting, increased computation time, and reduced performance. The default window size of 5 is optimal for most images.
+Given a pixel to be masked", the "window size" parameter determines the size of the surrounding area to sample replacement pixel. Specifically, N2V divides the input image into overlapping patches of a fixed size (determined by the window size parameter) and trains a neural network to predict the central pixel of each patch based on the other pixels in the patch. During inference (denoising), N2V processes the input image in a sliding-window fashion, applying the trained neural network to each patch in turn to produce a denoised output image. If the window size is too small, it may not capture enough information to properly denoise the image. If the window size is too large, it may include too much information, leading to over-fitting, increased computation time, and reduced performance. The default window size of 5 is optimal for most images.
 
 ### Masking Ratio
 
@@ -760,6 +787,8 @@ In general, the optimal values for these parameters will depend on the specific 
 - the effect of denoising on the quantifiability of the pixel intensities is a matter of ongoing research
 
 - be careful when using N2V or any other method that modifies pixel values when the final application is something like FRET or Ratiometric Imaging, where the conclusion may directly depend on the pixel counts
+
+- a nice summary of the benefits and possible limitation of AI-based denoising can be found here: [Imaging in focus: An introduction to denoising bioimages in the era of deep learning](https://www.sciencedirect.com/science/article/pii/S1357272521001588)
 
 ## TechNotes Intellesis Denoising
 
