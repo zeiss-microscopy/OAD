@@ -182,6 +182,8 @@ The sketch below outlines "the bigger" picture and vision and will be updated fr
 
 ## Model Deployment across platforms
 
+![AI Model Development Overview](../Machine_Learning/images/AI_Model_Development_Overview.png)
+
 ### Semantic Segmentation
 
 Deep-Learning Models for semantic segmentation can be trained on the [cloud platform](https://www.apeer.com/app/ai-toolkit/overview) or "externally" and then packaged as a CZANN file using the [czmodel](#the-czmodel-pypi-package). The artifact that is "shipped" is only the model and the actual platform, where the model will be used later, has to make sure all required dependencies are available
