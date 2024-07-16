@@ -182,7 +182,7 @@ The sketch below outlines "the bigger" picture and vision and will be updated fr
 
 ## Model Deployment across platforms
 
-![Concept Train Anywhere](../Machine_Learning/images/AI_Model_Development_Overview.png)
+![AI Model Development Overview](../Machine_Learning/images/AI_Model_Development_Overview.png)
 
 ### Semantic Segmentation
 
