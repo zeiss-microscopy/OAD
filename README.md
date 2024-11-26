@@ -13,12 +13,9 @@ Its main components are:
 
 - **CZI image data format and its APIs**
 - **Python Scripting (OAD Simple API)**
+- **ZEN API Contraol ZEN from the outside**
 - **Interfaces to ZEN (TCP-IP, COM, Extensions)**
 - **Experiment Feedback - Adaptive Acquisition with Online Image Analysis**
-
----
-
-![OAD Tools](./Images/ZEN_OAD_Tools_Slide.png)_ZEN OAD Tools_
 
 ---
 
@@ -37,10 +34,11 @@ Its main components are:
 - **BioFormats Import** as a module inside ZEN Blue as well as **OME-TIFF Export**
 
 - Create **“smart”** experiments with **Experiment Feedback** and modify the acquisition **On-the-fly** based on **Online Image Analysis** and **External Inputs**
+- Use "Guided Acquisition" and "Automated Photomanipulation" modules in ZEN
 
 ---
 
-![OAD Interfaces](./Images/OAD_Overview.png)_OAD Interfaces_
+![OAD Interfaces](./Images/ZEN_Interfaces.png)_ZEN Interfaces_
 
 ---
 
@@ -54,17 +52,15 @@ Its main components are:
 
 ## Links and References
 
-- CZI Image Data Format for microscopes: http://www.zeiss.com/czi
+- [CZI Image Data Format](http://www.zeiss.com/czi) for microscopes
 
-- ZEISS OAD Forum: http://www.zeiss.com/zen-oad
+- [libczi](https://github.com/ZEISS/libczi): Open Source Cross-Platform API to read and write CZI
 
-- Open Source Cross-Platform API to read and write CZI: https://github.com/ZEISS/libczi
+- [pylibCZIrw](https://pypi.org/project/pylibCZIrw/): Open Source Cross-Platform API to read and write CZI from Python (based on libCZI C++) ([Source Code](https://github.com/ZEISS/pylibczirw))
 
-- Open Source Cross-Platform API to read and write CZI from Python (based on libCZI C++) https://pypi.org/project/pylibCZIrw/
+- [Open Application Development](https://github.com/zeiss-microscopy/OAD)
 
-- OAD - Open Application Development: https://github.com/zeiss-microscopy/OAD
-
-- The OME-TIFF format: http://www.openmicroscopy.org/site/support/file-formats/ome-tiff
+- [OME-TIFF format](http://www.openmicroscopy.org/site/support/file-formats/ome-tiff)
 
 ---
 
@@ -78,6 +74,6 @@ Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those sof
 
 By using any of those examples you agree to this disclaimer.
 
-Version: 2023.02.27
+Version: 2024.11.26
 
-Copyright (c) 2023 Carl Zeiss AG, Germany. All Rights Reserved.
+Copyright (c) 2024 Carl Zeiss AG, Germany. All Rights Reserved.
