@@ -81,7 +81,7 @@ ft = result.GetValue('saveformat')
 cziname = result.GetValue('czi')
 SavePath = result.GetValue('savefolder')
 split_ch = result.GetValue('split_channels')
-print('Saving CZI : ', cziname, ' as ', ft)
+print(('Saving CZI : ', cziname, ' as ', ft))
 # get the selected image
 img = Zen.Application.Documents.GetByName(Path.GetFileNameWithoutExtension(cziname))
 nameParent = img.Name
@@ -102,8 +102,8 @@ try:
 except:
     nChannels = 1
 
-print('Number of Scenes detected: ', nScenes)
-print('Number of Tiles detected: ', nTiles)
+print(('Number of Scenes detected: ', nScenes))
+print(('Number of Tiles detected: ', nTiles))
 
 # initilaize OME-TIFF setting
 settingsfile = 'OME-TIFF_Default.czips'
@@ -135,13 +135,13 @@ if split_ch:
                 
                 if ft == "*.ome.tiff":
                     imgTile.Name = nameParent[:-4] + '_S' + s_str + '_T' + m_str + '_C' + c_str
-                    print(imgTile.Name)
+                    print((imgTile.Name))
                     # save current tile with the specified format
                     Zen.Processing.Utilities.ExportOmeTiff(imgTile, ometiff_setting, imgTile.Name, SavePath)
                 
                 else:
                     imgTile.Name = nameParent[:-4] + '_S' + s_str + '_T' + m_str +'_C' + c_str + ft[1:]
-                    print(imgTile.Name)
+                    print((imgTile.Name))
                     # save current tile with the specified format
                     Zen.Application.Save(imgTile, Path.Combine(SavePath, imgTile.Name), False)
                 
@@ -166,13 +166,13 @@ if not split_ch:
                 
                 if ft == "*.ome.tiff":
                     imgTile.Name = nameParent[:-4] + '_S' + s_str + '_T' + m_str
-                    print(imgTile.Name)
+                    print((imgTile.Name))
                     # save current tile with the specified format
                     Zen.Processing.Utilities.ExportOmeTiff(imgTile, ometiff_setting, imgTile.Name, SavePath)
                 
                 else:
                     imgTile.Name = nameParent[:-4] + '_S' + s_str + '_T' + m_str + ft[1:]
-                    print(imgTile.Name)
+                    print((imgTile.Name))
                     # save current tile with the specified format
                     Zen.Application.Save(imgTile, Path.Combine(SavePath, imgTile.Name), False)
                 

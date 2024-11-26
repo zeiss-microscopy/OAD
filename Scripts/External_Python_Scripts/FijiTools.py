@@ -28,8 +28,8 @@ def Conv2Array(filename, rowoffset, delim):
     numvar = len(headers)
     numrows = len(data)
     entries = numrows - 1
-    print('Number of Vars    :', numvar)
-    print('Number of Entries :', entries)
+    print(('Number of Vars    :', numvar))
+    print(('Number of Entries :', entries))
 
     # initialize 2D array to store all parameter values
     values = Array.CreateInstance(float, numrows - rowoffset, numvar)
@@ -99,7 +99,7 @@ def CreateTable(data, col, rows, legends, startcol, tablename, typelist, table):
 
     for i in range(startcol, col, 1):
 
-        print('Column Type : ', typelist[i])
+        print(('Column Type : ', typelist[i]))
         if (typelist[i] == 'float'):
             table.Columns.Add(legends[i], float)
         if (typelist[i] == 'str'):
@@ -151,12 +151,12 @@ def Fiji2ZenStageXY(PosX_Fiji, PosY_Fiji, ImageCenterStageX, ImageCenterStageY, 
     PosY_Fiji_ZenStageY = OriginImage_as_StageY + PosY_Fiji
 
     if output:
-        print('OriginImage_as_StageX = ', OriginImage_as_StageX)
-        print('OriginImage_as_StageY = ', OriginImage_as_StageY)
-        print('End_ImageX_as_StageX  = ', End_ImageX_as_StageX)
-        print('End_ImageY_as_StageY  = ', End_ImageY_as_StageY)
-        print('PosX_Fiji_ZenStageX   = ', PosX_Fiji_ZenStageX)
-        print('PosY_Fiji_ZenStageY   = ', PosY_Fiji_ZenStageY)
+        print(('OriginImage_as_StageX = ', OriginImage_as_StageX))
+        print(('OriginImage_as_StageY = ', OriginImage_as_StageY))
+        print(('End_ImageX_as_StageX  = ', End_ImageX_as_StageX))
+        print(('End_ImageY_as_StageY  = ', End_ImageY_as_StageY))
+        print(('PosX_Fiji_ZenStageX   = ', PosX_Fiji_ZenStageX))
+        print(('PosY_Fiji_ZenStageY   = ', PosY_Fiji_ZenStageY))
 
     return PosX_Fiji_ZenStageX, PosY_Fiji_ZenStageY
 

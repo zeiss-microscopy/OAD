@@ -22,17 +22,17 @@ def removeczi(removedir):
 
     # check directory for files to export
     czi2remove = Directory.GetFiles(removedir, '*.czi')
-    print 'Number of files to be removed: ', len(czi2remove)
+    print('Number of files to be removed: ', len(czi2remove))
 
     for czi in czi2remove:
         # delete the splitted CZI files when option was checked
         try:
             File.Delete(czi)
-            print 'Removed: ', czi
+            print('Removed: ', czi)
         except:
-            print 'Could not remove: ', czi
+            print('Could not remove: ', czi)
 
-    print 'Removal complete.'
+    print('Removal complete.')
 
 
 # clear output console
@@ -75,7 +75,7 @@ window.AddFolderBrowser('bftoolsdir', 'bftools directory:', exelocfolder_default
 result = window.Show()
 if result.HasCanceled:
     message = 'Macro was canceled by user.'
-    print message
+    print(message)
     raise SystemExit(message)
 
 # read results from dialog
@@ -100,7 +100,7 @@ splitdirs = []
 
 if split == True:
 
-    print 'Split CZI using Split Scenes (Write Files): yes'
+    print('Split CZI using Split Scenes (Write Files): yes')
     # Batch Loop - Load all CZI images and do Split Scenes (Write Files)
     for i in range(0, numczi):
         # get current CZI file
@@ -111,74 +111,74 @@ if split == True:
         Directory.CreateDirectory(splitdir)
         # store directory name inside list
         splitdirs.append(splitdir)
-        print 'File to split: ', czifile
+        print('File to split: ', czifile)
         image = Zen.Application.LoadImage(czifile, False)
 
         # split single CZI file containing all wells into single CZI files
         Zen.Processing.Utilities.SplitScenes(image, splitdir, ZenCompressionMethod.None, True, True, False)
         # close file
         image.Close()
-        print 'Finished Split Scences (Write Files): ', czifile
+        print('Finished Split Scences (Write Files): ', czifile)
 
 elif split == False:
     # set the splitdir to the original folder when no splitting takes place
-    print 'Split CZI using Split Scenes (Write Files): no'
+    print('Split CZI using Split Scenes (Write Files): no')
     splitdirs.append(sourcedir)
 
-print '----------------------------------------------------'
+print('----------------------------------------------------')
 
 for dir in splitdirs:
 
     option = ' "' + dir + '"'
 
     if omeexport == True:
-        print 'Export as OME-TIFF: yes'
+        print('Export as OME-TIFF: yes')
         option = option + ' -export'
     elif omeexport == False:
-        print 'Export as OME-TIFF: no'
+        print('Export as OME-TIFF: no')
         option = option + ' -noexport'
 
     if createomexml == True:
-        print 'Create OME_XML from CZI: yes'
+        print('Create OME_XML from CZI: yes')
         option = option + ' -xml'
     elif createomexml == False:
-        print 'Create OME_XML from CZI: no'
+        print('Create OME_XML from CZI: no')
         option = option + ' -noxml'
 
     if waitforkey == True:
         # wait for key press inside the command line window after every CZI file
-        print 'Wait at the end for key press: yes'
+        print('Wait at the end for key press: yes')
         option = option + ' -wait'
     if waitforkey == False:
-        print 'Wait at the end for key press: no'
+        print('Wait at the end for key press: no')
         option = option + ' -nowait'
 
     if czidelete == True:
-        print 'Remove CZIs after Split Scenes (Write Files): yes.'
+        print('Remove CZIs after Split Scenes (Write Files): yes.')
     elif czidelete == False:
-        print 'Remove CZIs after Split Scenes (Write Files): no'
+        print('Remove CZIs after Split Scenes (Write Files): no')
 
     # add directory containing the bftools to the options
     option = option + ' "' + exedir + '"'
 
     if bfsplit == True:
-        print 'Split single CZIs using bfconvert: ', splitopt
+        print('Split single CZIs using bfconvert: ', splitopt)
         option = option + ' -' + splitopt
     elif bfsplit == False:
-        print 'No splitting using bfconvert: -NOSPLIT'
+        print('No splitting using bfconvert: -NOSPLIT')
         option = option + ' -NOSPLIT'
 
     # run commad line argument
-    print 'Batch script to run the OME-TIFF export using bfconvert.'
-    print 'Argument: ' + exeloc
-    print 'Working directory: ', dir
-    print '...'
+    print('Batch script to run the OME-TIFF export using bfconvert.')
+    print('Argument: ' + exeloc)
+    print('Working directory: ', dir)
+    print('...')
     time.sleep(2)
 
     # start batch script (*.bat) to use the bftools
     app = Process()
-    print 'Batch File to run: ', exeloc
-    print 'Batch Options    : ', option
+    print('Batch File to run: ', exeloc)
+    print('Batch Options    : ', option)
     app.StartInfo.FileName = exeloc
     app.StartInfo.Arguments = option
     app.Start()
@@ -188,7 +188,7 @@ for dir in splitdirs:
 # remove czis from all created subdirs and only when the option was set
 if czidelete == True and split == True:
     for dir2clean in splitdirs:
-        print 'Removing CZIs in created subdirectories ...'
+        print('Removing CZIs in created subdirectories ...')
         removeczi(dir2clean)
 
-print 'Export finished.'
+print('Export finished.')

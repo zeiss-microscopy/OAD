@@ -25,7 +25,7 @@ def get_script(filename):
         # get the actual text
         script = tree.find("Text").text
     except OSError as e:
-        print("Could not read file: ", filename, e)
+        print(("Could not read file: ", filename, e))
         script = None
 
     return script
@@ -43,7 +43,7 @@ paths = Path(parent_directory).glob("**/*.czmac")
 for path in paths:
 
     # because path is object not string - convert it
-    print("Converting: ", str(path))
+    print(("Converting: ", str(path)))
 
     # get the python script as text
     script = get_script(str(path))
@@ -62,12 +62,12 @@ for path in paths:
         # remove the *czmac files
         if path.is_file():
             path.unlink()
-            print("Removed File: ", str(path))
+            print(("Removed File: ", str(path)))
         elif path.is_dir():
             rmtree(path)
-            print("Removed Directory: ", str(path))
+            print(("Removed Directory: ", str(path)))
 
     if script is None:
-        print("Problem with File: ", path)
+        print(("Problem with File: ", path))
 
 print("Done.")

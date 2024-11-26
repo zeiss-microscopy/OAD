@@ -30,7 +30,7 @@ def ReadBarCodefromImage(image):
     # use the correct path to read the barcode from the image
     barcode_complete = image.Metadata.GetMetadataWithPath('Metadata/AttachmentInfos[]/Label/Barcodes[]/Content')
     if len(barcode_complete) == 0:
-        print 'No barcode was found.'
+        print('No barcode was found.')
         barcode = None
         barcodeinfo = None
         barcode_found = False
@@ -50,15 +50,15 @@ activeimage = Zen.Application.Documents.ActiveDocument
 
 # read the barcode from the image
 barcode, barcodeinfo, found = ReadBarCodefromImage(activeimage)
-print 'Found Barcode : ', found
-print 'Barcode       : ', barcode
-print 'Barcode Info  : ', barcodeinfo
+print('Found Barcode : ', found)
+print('Barcode       : ', barcode)
+print('Barcode Info  : ', barcodeinfo)
 
 if found:
     # save with new name
     filename = activeimage.FileName
     newname = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + '_' + barcode + '.czi')
-    print 'Save with new name : ', newname
+    print('Save with new name : ', newname)
     activeimage.Save(newname)
     activeimage.Close()
     
@@ -66,4 +66,4 @@ if found:
         reload_image = Zen.Application.LoadImage(newname, False)
         Zen.Application.Documents.Add(reload_image)
     
-print 'Done.'
+print('Done.')

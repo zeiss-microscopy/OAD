@@ -47,7 +47,7 @@ for zz in range(1,StageNumberOfSteps,1):
 
     # Calculate next stage position
     StagePosition = StageStartPosition + zz * StageStepSize
-    print StagePosition
+    print(StagePosition)
     
     # Move stage
     Zen.Devices.Stage.TargetPositionY = StagePosition

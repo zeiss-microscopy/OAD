@@ -72,11 +72,11 @@ params['ScaleZ'] = round(img.Metadata.ScalingMicron.Z, 3)
 params['Width_micron'] = round(params['Width_Pixel'] * img.Metadata.ScalingMicron.X, 3)
 params['Height_micron'] = round(params['Height_Pixel'] * img.Metadata.ScalingMicron.Y, 3)
 
-print params
+print(params)
 
 # write JSON file for Fiji
 jsonfilepath = jt.write_json(params, jsonfile=params['FILEWOEXT'] + '.json', savepath=params['IMAGEDIR'])
-print('Save Data to JSON: ', jsonfilepath)
+print(('Save Data to JSON: ', jsonfilepath))
 
 # configre the options
 option1 = "--ij2 --headless --console --run " + SCRIPT + " "
@@ -89,7 +89,7 @@ print(option)
 
 fijistr = ft.createFijistring(IMAGEJDIR, SCRIPT, jsonfilepath)
 fijistr = fijistr.replace('\\', '\\\\')
-print fijistr
+print(fijistr)
 
 
 # start Fiji script in headless mode

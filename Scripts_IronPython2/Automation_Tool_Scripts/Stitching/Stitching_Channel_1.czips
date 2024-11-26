@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ProcessingParameters Function="Stitching">
+  <FunctionParameters Function="Stitching">
+    <ChannelProcessingMode>ProcessChannel</ChannelProcessingMode>
+    <SobelMode>DirectionIndependent</SobelMode>
+    <BorderMode>CosineZero</BorderMode>
+    <PrincipalStitchingPlane StartC="0" StartS="0" StartB="0" />
+    <ShadingCorrectionIsAutomatic>true</ShadingCorrectionIsAutomatic>
+    <SingleThreaded>false</SingleThreaded>
+    <StitchingMode>ShadeAndStitchAndFuse</StitchingMode>
+    <SearchDepthTile2>5</SearchDepthTile2>
+    <SearchDepthTile1>15</SearchDepthTile1>
+    <ConfidenceThreshold>80</ConfidenceThreshold>
+    <StitchingOptimizationMode>MinimumSpanningTree</StitchingOptimizationMode>
+    <StitchingOverlaps>NoCorners</StitchingOverlaps>
+    <DoDebugging>false</DoDebugging>
+    <DoSobel>false</DoSobel>
+    <SetSearchDepthsAutomatically>false</SetSearchDepthsAutomatically>
+    <PaddingPercentage>10</PaddingPercentage>
+    <MinimalMovingOverlap>5</MinimalMovingOverlap>
+    <StitchingComparer>NormalizedCorrelationIpp</StitchingComparer>
+    <MaximalShift>10</MaximalShift>
+    <MaximalShiftX>10</MaximalShiftX>
+    <MaximalShiftY>10</MaximalShiftY>
+    <OffPrincipalPlaneStitchModes>
+      <Dimension Name="C" StitchMultipleDimensions="ByReference" />
+    </OffPrincipalPlaneStitchModes>
+  </FunctionParameters>
+</ProcessingParameters>

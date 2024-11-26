@@ -45,8 +45,8 @@ elif args.separator == 'comma':
 elif args.separator == 'semicolon':
     separator = ';'
 
-print('Write CSV Option : ', args.writecsv)
-print('Separator        : ', args.separator)
+print(('Write CSV Option : ', args.writecsv))
+print(('Separator        : ', args.separator))
 
 # get CSV write option
 if args.writecsv == 'True':
@@ -79,7 +79,7 @@ planetable, filenamecsv, MetaInfo = bf.get_planetable(filenameczi,
                                                       showinfo=True)
 
 # show the dataframe
-print(planetable[:10])
+print((planetable[:10]))
 
 # define name for figure to be saved
 figuresavename = os.path.splitext(filenamecsv)[0] + '_XYZ-Pos' + '.' + saveformat

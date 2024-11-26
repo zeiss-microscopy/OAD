@@ -113,7 +113,7 @@ def rename_columns(dfs, paramlist, verbose=False):
     for i in range(0, len(paramlist)):
         # rename the columns with measured parameters and correct types
         if verbose:
-            print('Renamed : ', dfs.columns[i], ' to ', paramlist[i])
+            print(('Renamed : ', dfs.columns[i], ' to ', paramlist[i]))
         try:
             dfs.rename(columns={dfs.columns[i]: paramlist[i]}, inplace=True)
         except:
@@ -178,13 +178,13 @@ def fill_heatmaps(dfs, numparams, num_nonmp, nr, nc,
     # get all wells containing some data
     #wellID_key = WELLID_KEY  # 'ImageSceneContainerName::Image Scene Container Name '
     print('---------------------------------------------------')
-    print('wellID_key : ', wellID_key)
+    print(('wellID_key : ', wellID_key))
     print('Found keys:')
-    print(dfs.keys())
+    print((list(dfs.keys())))
     print('---------------------------------------------------')
     wells_real = dfs[wellID_key].value_counts()
 
-    df_stats = pd.DataFrame(index=range(len(wells_real)), columns=dfs.columns)
+    df_stats = pd.DataFrame(index=list(range(len(wells_real))), columns=dfs.columns)
     #df_stats.drop(df_stats.columns[[3, 4]], axis=1, inplace=True)
 
     try:
@@ -201,12 +201,12 @@ def fill_heatmaps(dfs, numparams, num_nonmp, nr, nc,
     cols_orig = dfs.columns
 
     # create an additional columns of the object numbers
-    df_obj = pd.DataFrame(index=range(len(wells_real)), columns=['ObjectNumbers'])
+    df_obj = pd.DataFrame(index=list(range(len(wells_real))), columns=['ObjectNumbers'])
 
     if showbar == True:
         # initialize the progress bar
         # pb1 = ProgressBar(len(wells_real), title='Processing Wells')
-        pb1 = iter(range(len(wells_real)))
+        pb1 = iter(list(range(len(wells_real))))
 
         try:
             fp = FloatProgress(min=1,
@@ -219,7 +219,7 @@ def fill_heatmaps(dfs, numparams, num_nonmp, nr, nc,
             # bar = progressbar.ProgressBar(redirect_stdout=True, max_value=len(wells_real))
             bar = progressbar.ProgressBar(max_value=len(wells_real))
     elif showbar is False:
-        pb1 = iter(range(len(wells_real)))
+        pb1 = iter(list(range(len(wells_real))))
 
     # iterate over all wells that were detected and do the statistics
     for well in pb1:
@@ -230,10 +230,10 @@ def fill_heatmaps(dfs, numparams, num_nonmp, nr, nc,
             bar.update(well)
 
         # extract current dataframe for all existing wells
-        current_wellid = wells_real.keys()[well]
+        current_wellid = list(wells_real.keys())[well]
 
         if verbose:
-            print("Found data for wells : ",  current_wellid)
+            print(("Found data for wells : ",  current_wellid))
 
         # get all data for the current well from the over dataframe
         df_tmp = get_well_all_parameters(dfs, current_wellid,
@@ -290,7 +290,7 @@ def fill_heatmaps(dfs, numparams, num_nonmp, nr, nc,
         # create heatmap based on the platetype
         heatmap_array = np.full([nr, nc], np.nan)
         heatmap_name = df_stats.columns[int(hm)]
-        print('HeatMap: ', heatmap_name)
+        print(('HeatMap: ', heatmap_name))
 
         # cycle to df_stats based on the columns nam and transfer data to heatmap
         for v in range(0, df_stats.shape[0]):
@@ -363,7 +363,7 @@ def showheatmap(heatmap, parameter2display,
                     orientation='portrait',
                     transparent=False,
                     frameon=False)
-        print('Heatmap image saved as: ', savename)
+        print(('Heatmap image saved as: ', savename))
     else:
         savename = False
 
@@ -388,7 +388,7 @@ def showheatmap_all(heatmap_dict, subplots,
     plotid = -1
 
     # cycle heatmaps heatmaps
-    for key in heatmap_dict.keys():  # python 3
+    for key in list(heatmap_dict.keys()):  # python 3
 
         plotid = plotid + 1
         # get the desired heatmap from the dictionary containing all heatmaps
@@ -420,7 +420,7 @@ def showheatmap_all(heatmap_dict, subplots,
     if save:
         savename = filename[:-4] + '_HM_all.png'
         fig.savefig(savename, dpi=dpi, orientation='portrait', transparent=False, frameon=False)
-        print('Heatmap image saved as: ', savename)
+        print(('Heatmap image saved as: ', savename))
     else:
         savename = False
 
@@ -534,7 +534,7 @@ def convert_dec_sep(df, np):
         try:
             df.iloc[:, id] = df.iloc[:, id].str.replace(',', '.').astype('float')
         except:
-            print('No correction of types possible for column: ', df.columns[id])
+            print(('No correction of types possible for column: ', df.columns[id]))
 
     return df
 

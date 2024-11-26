@@ -53,7 +53,7 @@ def writexml_czi(filename):
     xmlfile = filename.replace('.czi', '_CZI_MetaData.xml')
     tree = czi.metadata.getroottree()
     tree.write(xmlfile, encoding='utf-8', method='xml')
-    print('Write special CZI XML metainformation for: ', xmlfile)
+    print(('Write special CZI XML metainformation for: ', xmlfile))
 
     czi.close()
 
@@ -257,7 +257,7 @@ def getXMLnodes(filename_czi, searchpath, showoutput=False):
     text = []
 
     if showoutput:
-        print('Path      : ', searchpath)
+        print(('Path      : ', searchpath))
 
     for elem in tree.iterfind(searchpath):
 
@@ -266,9 +266,9 @@ def getXMLnodes(filename_czi, searchpath, showoutput=False):
         text.append(elem.text)
 
         if showoutput:
-            print('Tag       : ', elem.tag)
-            print('Attribute : ', elem.attrib)
-            print('Text      : ', elem.text)
+            print(('Tag       : ', elem.tag))
+            print(('Attribute : ', elem.attrib))
+            print(('Text      : ', elem.text))
 
     if showoutput:
         print('-----------------------------------------------------------------------------------------------')
