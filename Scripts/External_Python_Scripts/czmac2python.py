@@ -16,6 +16,15 @@ from shutil import rmtree
 
 
 def get_script(filename):
+    """
+    Extracts and returns the text content of the "Text" element from an XML file.
+    Args:
+        filename (str): The path to the XML file.
+    Returns:
+        str: The text content of the "Text" element if found, otherwise None.
+    Raises:
+        OSError: If there is an issue reading the file.
+    """
 
     try:
         # get the tree and find the script
@@ -25,7 +34,7 @@ def get_script(filename):
         # get the actual text
         script = tree.find("Text").text
     except OSError as e:
-        print(("Could not read file: ", filename, e))
+        print(f"Could not read file: {filename}, {e}")
         script = None
 
     return script
@@ -43,9 +52,9 @@ paths = Path(parent_directory).glob("**/*.czmac")
 for path in paths:
 
     # because path is object not string - convert it
-    print(("Converting: ", str(path)))
+    print(f"Converting: {str(path)}")
 
-    # get the python script as text
+    print(f"Converting: {str(path)}")
     script = get_script(str(path))
 
     if script is not None:
@@ -56,18 +65,11 @@ for path in paths:
         with open(filename_py, "w") as file:
             file.write(script)
 
-        # close the file
-        file.close()
-
         # remove the *czmac files
         if path.is_file():
             path.unlink()
-            print(("Removed File: ", str(path)))
+            print(f"Removed File: {str(path)}")
         elif path.is_dir():
-            rmtree(path)
-            print(("Removed Directory: ", str(path)))
+            print(f"Removed Directory: {str(path)}")
 
-    if script is None:
-        print(("Problem with File: ", path))
-
-print("Done.")
+        print(f"Problem with File: {path}")
