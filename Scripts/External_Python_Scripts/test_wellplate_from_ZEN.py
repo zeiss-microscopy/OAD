@@ -30,10 +30,10 @@ parser.add_argument('-dpi', action="store", dest='dpi')
 
 # get the arguments
 args = parser.parse_args()
-print('CSV Filename: ', args.filename)
-print('PlateType: ', args.platetype)
-print('Parameter to display: ', args.parameter)
-print('DPI: ', args.dpi)
+print(('CSV Filename: ', args.filename))
+print(('PlateType: ', args.platetype))
+print(('Parameter to display: ', args.parameter))
+print(('DPI: ', args.dpi))
 
 ############################ TEST #########################################
 
@@ -53,7 +53,7 @@ headers = df_single.head(0)
 # define wellplate type (this has to be done by user)
 platetype = args.platetype
 
-print('Columns : ', df_single.columns)
+print(('Columns : ', df_single.columns))
 
 # default number of non-measurement parameters
 num_nonmp = 6
@@ -102,7 +102,7 @@ df_single['Ratio'] = df_single['NucMeanGFP']/df_single['RingMeanGFP']
 df_single = df_single.replace([np.inf, -np.inf], np.nan)
 
 num_param = len(df_single.columns) - num_nonmp
-print('Number of Object Parameters: ', num_param)
+print(('Number of Object Parameters: ', num_param))
 
 # show part of dataframe
 df_single[:6]
@@ -124,7 +124,7 @@ heatmap_dict, well_dict = wpt.fill_heatmaps(df_single, num_param, num_nonmp, Nr,
                                             colID_key='ColumnID')
 
 # show all keys
-heatmap_dict.keys()
+list(heatmap_dict.keys())
 
 # define parameters to display the heatmap
 parameter2display = args.parameter
@@ -165,7 +165,7 @@ savename_all = wpt.showheatmap_all(heatmap_dict, plotgrid,
                                    dpi=np.int(args.dpi))
 
 # show all key = measure parameters for that dictionary
-print(heatmap_dict.keys())
+print((list(heatmap_dict.keys())))
 
 # modify the layout so the the axis labels and titles do not overlap
 if args.showplot == 'True':

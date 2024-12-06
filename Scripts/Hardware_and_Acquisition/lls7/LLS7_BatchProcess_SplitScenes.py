@@ -39,7 +39,7 @@ Zen.Application.MacroEditor.ClearMessages()
 OutputFolder = str(imgfolder + "\processed")
 Directory.CreateDirectory(OutputFolder)
 print('---------------')
-print('Created new directory: ', OutputFolder)
+print(('Created new directory: ', OutputFolder))
 print('---------------')
 
 # get list of files to fuse

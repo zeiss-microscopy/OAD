@@ -19,7 +19,7 @@
 def calc_series_range(total_series, scenes, sceneID):
 
     sps = total_series / scenes  # series_per_scence = sps
-    series_seq = range(sceneID * sps - sps, sps * sceneID)
+    series_seq = list(range(sceneID * sps - sps, sps * sceneID))
 
     return series_seq
 
@@ -29,7 +29,7 @@ def calc_series_range_well(wellnumber, imgperwell):
     this function can be used when the number of positions or scenes per well is equal for every well.
     The well numbers start with Zero and have nothing to do with the actual wellID, e.g. C2
     """
-    seriesseq = range(wellnumber * imgperwell,  wellnumber * imgperwell + imgperwell, 1)
+    seriesseq = list(range(wellnumber * imgperwell,  wellnumber * imgperwell + imgperwell, 1))
 
     return seriesseq
 

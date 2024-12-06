@@ -74,12 +74,12 @@ def dircheck(basefolder):
     base_exists = Directory.Exists(basefolder)
 
     if base_exists:
-        print('Selected Directory Exists: ', base_exists)
+        print(('Selected Directory Exists: ', base_exists))
         # specify the desired output format for the folder, e.g. 2017-08-08_17-47-41
         format = '%Y-%m-%d_%H-%M-%S'
         # create the new directory
         newdir = createfolder(basefolder, formatstring=format)
-        print('Created new directory: ', newdir)
+        print(('Created new directory: ', newdir))
     if not base_exists:
         Directory.CreateDirectory(basefolder)
         newdir = basefolder
@@ -123,7 +123,7 @@ def cloneexp(expname, prefix='ZSYS_', save=True, reloadexp=True):
     # save experiment
     if save:
         exp.SaveAs(exp_newname, False)
-        print('Saved Temporay Experiment as : ', exp_newname)
+        print(('Saved Temporay Experiment as : ', exp_newname))
         # close the original experiment object
         exp.Close()
         time.sleep(1)
@@ -145,7 +145,7 @@ dir = 'C:/ProgramData/Carl Zeiss/MTB2011'
 MTBs = Directory.GetDirectories(dir)
 #print(MTBs)
 MTBs_short = getshortfiles(MTBs)
-print("MTBs detected: " + str(MTBs_short))
+print(("MTBs detected: " + str(MTBs_short)))
 
 # Get active MTB
 activeMTB =  max(MTBs, key=os.path.getmtime)
@@ -194,7 +194,7 @@ if result.HasCanceled:
 OutputFolder = str(result.GetValue('outfolder'))
 Overlap = result.GetValue('overlap')
 activeMTB = result.GetValue('activeMTB')
-print("Active MTB: " + str(activeMTB))
+print(("Active MTB: " + str(activeMTB)))
 TP = result.GetValue('TimePoints')
 Delay = result.GetValue('Delay')
 Autosave = result.GetValue('Autosave')
@@ -215,13 +215,13 @@ print(xmlfile)
 xmldoc = minidom.parse(xmlfile)
 itemlist = xmldoc.getElementsByTagName('CalibrationUniqueDataValue')
 ScannerOffsetYCal = float(itemlist[int(ls)*3-1].attributes['Value'].value)
-print("Scanner Offset y: " + str(ScannerOffsetYCal))
+print(("Scanner Offset y: " + str(ScannerOffsetYCal)))
 
 # Check if Tiles experiment
 Exp1 = Zen.Acquisition.Experiments.ActiveExperiment
 Zen.Acquisition.Experiments.ActiveExperiment.Save()
 YN = Exp1.IsTilesExperiment(0)
-print("Is Tiles Experiment: " + str(YN))
+print(("Is Tiles Experiment: " + str(YN)))
 
 # Get positions from user
 if P > 1:
@@ -326,10 +326,10 @@ else:
 
 # print values
 #print('Y Stack Experiment : ' + ExpName)
-print('Overlap : ' + str(Overlap) + '%')
+print(('Overlap : ' + str(Overlap) + '%'))
 #print('Number of Stacks : ' + str(NStacks))
 if Autosave == True:
-    print('Output Folder for Data : ' + OutputFolder)
+    print(('Output Folder for Data : ' + OutputFolder))
 print('\n')
 
 # check directory
@@ -366,7 +366,7 @@ while ttt < TP+100:
         Zen.Devices.Focus.MoveTo(pz[s])
         
         print('---------------')
-        print('Time Point #' + str(ttt-99) + ', Position #' + str(s+1) + ', Volume Stack #1')
+        print(('Time Point #' + str(ttt-99) + ', Position #' + str(s+1) + ', Volume Stack #1'))
         Zen.Devices.Focus.MoveTo(pz[s])
         #print(Z1)
         #print(pz[s])
@@ -401,16 +401,16 @@ while ttt < TP+100:
         Det.SetParameter('MTBMuSPIMImagingDevice','ScannerOffsetY', str(curf))
         output = Zen.Acquisition.Execute(tempExp)
         FocusYActual = float(Det.GetParameter('MTBMuSPIMImagingDevice', 'ScannerOffsetY'))
-        print('Recorded at xy position [' + str(px[s]) + ', ' + str(py[s]) + ']')
-        print('Recorded at z position: ' + str(curz))
-        print('with Focus Sheet position: ' + str(round((FocusYActual - ScannerOffsetYCal) * 10,3)))
+        print(('Recorded at xy position [' + str(px[s]) + ', ' + str(py[s]) + ']'))
+        print(('Recorded at z position: ' + str(curz)))
+        print(('with Focus Sheet position: ' + str(round((FocusYActual - ScannerOffsetYCal) * 10,3))))
         hw = Zen.Devices.ReadHardwareSetting()
         test = float(hw.GetParameter('MTBMuSPIMLightSheetRefocus', 'Position'))
         #print('with Focus Waist position: ' + str(round(curw)))
-        print('with Focus Waist position: ' + str(round(test)))
+        print(('with Focus Waist position: ' + str(round(test))))
         testac1 = float(hw.GetParameter('MTBMuSPIMAlvarezPlate1', 'Position'))
         testac2 = float(hw.GetParameter('MTBMuSPIMAlvarezPlate2', 'Position'))
-        print('with Aberration Control at: ' + str(round(testac1)))
+        print(('with Aberration Control at: ' + str(round(testac1))))
         #print('with Aberration Control at: ' + str(round(testac2)))
         SizeY = output.Bounds.SizeY
         PixelSizeXY = output.Scaling.X
@@ -437,7 +437,7 @@ while ttt < TP+100:
         # record z stacks
         for i in range (11, NStacks+10):
             print('---------------')
-            print('Time Point #' + str(ttt-99) + ', Position #' + str(s+1) + ', Volume Stack #' + str(i-9))
+            print(('Time Point #' + str(ttt-99) + ', Position #' + str(s+1) + ', Volume Stack #' + str(i-9)))
             if s < 9:
                 stack_name = 'volumestack_position0' + str(s+1) + '_TP' + str(ttt) + str(i) + '_' + str(round((i-10)*dz,3)) + 'um.czi'
             else:
@@ -470,16 +470,16 @@ while ttt < TP+100:
             Det.SetParameter('MTBMuSPIMImagingDevice','ScannerOffsetY', str(curf))
             output = Zen.Acquisition.Execute(tempExp)
             FocusYActual = float(Det.GetParameter('MTBMuSPIMImagingDevice', 'ScannerOffsetY'))
-            print('Recorded at xy position [' + str(px[s]) + ', ' + str(py[s]) + ']')
-            print('Recorded at z position: ' + str(curz))
-            print('with Focus Sheet position: ' + str(round((FocusYActual - ScannerOffsetYCal) * 10,3)))
+            print(('Recorded at xy position [' + str(px[s]) + ', ' + str(py[s]) + ']'))
+            print(('Recorded at z position: ' + str(curz)))
+            print(('with Focus Sheet position: ' + str(round((FocusYActual - ScannerOffsetYCal) * 10,3))))
             hw = Zen.Devices.ReadHardwareSetting()
             test = float(hw.GetParameter('MTBMuSPIMLightSheetRefocus', 'Position'))
             #print('with Focus Waist position: ' + str(round(curw)))
-            print('with Focus Waist position: ' + str(round(test)))
+            print(('with Focus Waist position: ' + str(round(test))))
             testac1 = float(hw.GetParameter('MTBMuSPIMAlvarezPlate1', 'Position'))
             testac2 = float(hw.GetParameter('MTBMuSPIMAlvarezPlate2', 'Position'))
-            print('with Aberration Control at: ' + str(round(testac1)))
+            print(('with Aberration Control at: ' + str(round(testac1))))
             #print('with Aberration Control at: ' + str(round(testac2)))
             if Autosave == True:
                 output.Save(Path.Combine(OutputFolder, stack_name))
@@ -512,7 +512,7 @@ if Autosave == True and Autoprocess == True:
 
     Directory.CreateDirectory(OutputFolder)
     print('---------------')
-    print('Created new directory: ', OutputFolder)
+    print(('Created new directory: ', OutputFolder))
 
     # Set parameters (deskew with cover glass transformation)
     myShear = ZenZAxisShear.None
@@ -545,7 +545,7 @@ if Autosave == True and Autoprocess == True:
 
     Directory.CreateDirectory(OutputFolder)
     print('---------------')
-    print('Created new directory: ', OutputFolder)
+    print(('Created new directory: ', OutputFolder))
 
     # get list of files to fuse
     filelist = os.listdir(InputFolder)
@@ -601,12 +601,12 @@ if Autosave == True and Autoprocess == True:
             Zen.Application.Documents.Add(FinalImage)
             if l < 9:
                 FinalImage.Save(Path.Combine(OutputFolder, 'concatenated_stacks_position0' + str(l+1) + '.czi'))
-                print('Saved as concatenated_stacks_position0' + str(l+1) + '.czi')
+                print(('Saved as concatenated_stacks_position0' + str(l+1) + '.czi'))
                 print('---------------')
                 Zen.Application.Documents.GetByName('concatenated_stacks_position0' + str(l+1) + '.czi').Close()
             else:
                 FinalImage.Save(Path.Combine(OutputFolder, 'concatenated_stacks_position' + str(l+1) + '.czi'))
-                print('Saved as concatenated_stacks_position' + str(l+1) + '.czi')
+                print(('Saved as concatenated_stacks_position' + str(l+1) + '.czi'))
                 print('---------------')
                 Zen.Application.Documents.GetByName('concatenated_stacks_position' + str(l+1) + '.czi').Close()
             FinalImage.Close

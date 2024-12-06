@@ -31,7 +31,7 @@ try:
     from Microsoft.Office.Interop import Excel
     excelimport = True
 except:
-    print 'Could not import Excel functionality.'
+    print('Could not import Excel functionality.')
     excelimport = False
 
 import os
@@ -40,7 +40,7 @@ try:
     from collections import Counter
     usecounter = False
 except:
-    print 'Warning: Could not import module Collection.Counter.'
+    print('Warning: Could not import module Collection.Counter.')
     usecounter = True
 
 #########################################################################
@@ -126,25 +126,25 @@ def getLSMData(image):
         laserpower = image.Metadata.GetMetadataWithPath('Metadata/Information/Image/Dimensions/Channels[]/ChannelLaserScanInfo/LaserAttenuatorMeas')
     except ApplicationException as e:
         laserpower = 'na'
-        print 'Problem reading Laser Power: ', e.Message
+        print('Problem reading Laser Power: ', e.Message)
     
     try:
         attstate = image.Metadata.GetMetadataWithPath('Metadata/Information/Image/Dimensions/Channels[current]/ChannelLaserScanInfo/AttenuatorState')
     except ApplicationException as e:
         attstate = 'na'
-        print 'Problem Reading Attenuator State : ', e.Message
+        print('Problem Reading Attenuator State : ', e.Message)
         
     try:
         attbleach = image.Metadata.GetMetadataWithPath('Metadata/Information/Image/Dimensions/Channels[current]/ChannelLaserScanInfo/LaserAttenuatorBleach')
     except ApplicationException as e:
         attbleach = 'na'
-        print 'Problem Reading Laser Attenuator Bleach: ', e.Message
+        print('Problem Reading Laser Attenuator Bleach: ', e.Message)
         
     try:
         lli = image.Metadata.GetMetadataWithPath('Metadata/Information/Image/Dimensions/Channels[current]/LightSourceIntensity')
     except ApplicationException as e:
         lli = 'na'
-        print 'Problem reading Light Source Intensity : ', e.Message
+        print('Problem reading Light Source Intensity : ', e.Message)
 
     return laserpower, attstate, attbleach, lli
 
@@ -230,7 +230,7 @@ def ReadBarCodefromImage(image):
     # use the correct path to read the barcode from the image
     barcode_complete = image.Metadata.GetMetadataWithPath('Metadata/AttachmentInfos[]/Label/Barcodes[]/Content')
     if len(barcode_complete) == 0:
-        print 'No barcode was found.'
+        print('No barcode was found.')
         barcode = 'n.a.'
         barcodeinfo = 'n.a.'
         barcode_found = False
@@ -303,16 +303,16 @@ info = activeimage.Metadata.GetAllMetadata()
 
 # show optional output
 if verbose:
-    print '-----------------   GetAllMetadata()  -------------------------------'
+    print('-----------------   GetAllMetadata()  -------------------------------')
     for i in info: 
-        print i.Key, '\t ', i.Value
+        print(i.Key, '\t ', i.Value)
 
 # get additional metainformation
 metadata = getMetaDataExtra(activeimage, usecounter, fullwellinfo=fwinfo)
 
 if verbose:
-    for k, v in metadata.iteritems():
-        print k, '\t', v
+    for k, v in metadata.items():
+        print(k, '\t', v)
 
 # concatenate the two python dictionaries
 metadata.update(info)
@@ -324,7 +324,7 @@ table1.Columns.Add('Value',str)
 
 # fill the table from the dictionary
 r = 0
-for k, v in metadata.iteritems():
+for k, v in metadata.items():
     table1.Rows.Add()
     table1.SetValue(r, 0, k)
     table1.SetValue(r, 1, v)
@@ -337,17 +337,17 @@ Zen.Application.Documents.Add(table1_sorted)
 if savecsv:
     # Save data table
     csvfilename = activeimage.FileName[:-4] + '_MetaData.csv'
-    print 'CSV file to save: ', csvfilename
+    print('CSV file to save: ', csvfilename)
     table1_sorted.Save(csvfilename)
 
 
 if savetxt:
     # write text file
     txtfilename = activeimage.FileName[:-4] + '_MetaData.txt'
-    print 'TXT file to save: ', txtfilename
+    print('TXT file to save: ', txtfilename)
     wFile = open(txtfilename,'w')
     
-    for row in xrange(table1_sorted.RowCount):
+    for row in range(table1_sorted.RowCount):
         # Write text file
         wFile.write(table1_sorted.GetValue(row, 0) + ':')
         wFile.write ('\t')
@@ -373,7 +373,7 @@ if showxls:
         # set counter
         r = 1
         # iterate over all the entries from the metadata dictionary and add to worksheet
-        for k, v in metadata.iteritems():
+        for k, v in metadata.items():
             r = r + 1
             excel.Cells(r, 1).value = k
             excel.Cells(r, 2).value = v
@@ -395,16 +395,16 @@ if showxls:
     
     # save the worksheet with the metadata
     excelfilename = activeimage.FileName[:-4] + '_MetaData.xlsx'
-    print 'Excel file to save: ', excelfilename
+    print('Excel file to save: ', excelfilename)
     workbook.SaveAs(excelfilename)
 
     # close the workbook and excel
     if closetableexcel:
-        print 'Closing Excel.'
+        print('Closing Excel.')
         workbook.Close()
         excel.Application.Quit()
 
 # close ZEN table
 if closetablezen:
-    print 'Close the table in ZEN.'
+    print('Close the table in ZEN.')
     table1_sorted.Close()

@@ -64,11 +64,11 @@ params['RESULTIMAGE'] = ''
 # update dictionary
 params.update(metadata)
 
-print params
+print(params)
 
 # write JSON file for Fiji
 jsonfilepath = jt.write_json(params, jsonfile=params['FILEWOEXT'] + '.json', savepath=params['IMAGEDIR'])
-print('Save Data to JSON: ', jsonfilepath)
+print(('Save Data to JSON: ', jsonfilepath))
 
 # configre the options
 option1 = "--ij2 --headless --console --run " + SCRIPT + " "
@@ -80,7 +80,7 @@ print(option)
 
 fijistr = ft.createFijistring(IMAGEJDIR, SCRIPT, jsonfilepath)
 fijistr = fijistr.replace('\\', '\\\\')
-print fijistr
+print(fijistr)
 
 # start Fiji script in headless mode
 app = Process()
@@ -92,12 +92,12 @@ app.Start()
 app.WaitForExit()
 excode = app.ExitCode
 
-print('Exit Code: ', excode)
+print(('Exit Code: ', excode))
 print('Fiji Analysis Run Finished.')
 
 # read metadata JSON - the name of the file must be specified correctly
 md_out = jt.readjson(jsonfilepath)
-print('ResultTable: ', md_out['RESULTTABLE'])
+print(('ResultTable: ', md_out['RESULTTABLE']))
 
 # initialize ZenTable object
 SingleObj = ZenTable()

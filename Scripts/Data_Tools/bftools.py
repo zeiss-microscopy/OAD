@@ -155,10 +155,10 @@ def get_java_metadata_store(imagefile):
         for sc in range(0, totalseries):
             rdr.rdr.setSeries(sc)
             resolutioncount = rdr.rdr.getResolutionCount()
-            print('Resolution count for series #', sc, ' = ' + resolutioncount)
+            print(('Resolution count for series #', sc, ' = ' + resolutioncount))
             for res in range(0, resolutioncount):
                 rdr.rdr.setResolution(res)
-                print('Resolution #', res, ' dimensions = ', rdr.getSizeX(), ' x ', rdr.getSizeY())
+                print(('Resolution #', res, ' dimensions = ', rdr.getSizeX(), ' x ', rdr.getSizeY()))
     except:
         print('Multi-Resolution API not enabled yet.')
 
@@ -209,8 +209,8 @@ def get_metainfo_dimension(jmd, MetaInfo, imageID=0):
     MetaInfo['DimOrder BF'] = jmd.getPixelsDimensionOrder(imageID).getValue()
 
     print('Retrieving Image Dimensions ...')
-    print('T: ', MetaInfo['SizeT'], 'Z: ', MetaInfo['SizeZ'], 'C: ', MetaInfo['SizeC'], 'X: ',
-          MetaInfo['SizeX'], 'Y: ', MetaInfo['SizeY'])
+    print(('T: ', MetaInfo['SizeT'], 'Z: ', MetaInfo['SizeZ'], 'C: ', MetaInfo['SizeC'], 'X: ',
+          MetaInfo['SizeX'], 'Y: ', MetaInfo['SizeY']))
 
     return MetaInfo
 
@@ -381,12 +381,12 @@ def get_dimension_only(imagefile, imageID=0):
     SizeX = pixels.SizeX
     SizeY = pixels.SizeY
 
-    print('Series: ', totalseries)
-    print('Size T: ', SizeT)
-    print('Size Z: ', SizeZ)
-    print('Size C: ', SizeC)
-    print('Size X: ', SizeX)
-    print('Size Y: ', SizeY)
+    print(('Series: ', totalseries))
+    print(('Size T: ', SizeT))
+    print(('Size Z: ', SizeZ))
+    print(('Size C: ', SizeC))
+    print(('Size X: ', SizeX))
+    print(('Size Y: ', SizeY))
 
     # usually the x-axis of an image is from left --> right and y from top --> bottom
     # in order to be compatible with numpy arrays XY are switched
@@ -413,7 +413,7 @@ def get_planetable(imagefile, writecsv=False, separator='\t', imageID=0, showinf
         MetaInfo['SizeX'] = np.int(jmd.getPixelsSizeX(imageID).getValue().floatValue())
         MetaInfo['SizeY'] = np.int(jmd.getPixelsSizeY(imageID).getValue().floatValue())
     except:
-        print('Problem retrieving Java Metadata Store or Series size:', sys.exc_info()[0])
+        print(('Problem retrieving Java Metadata Store or Series size:', sys.exc_info()[0]))
         raise
 
     # get dimension information and MetaInfo
@@ -423,13 +423,13 @@ def get_planetable(imagefile, writecsv=False, separator='\t', imageID=0, showinf
         # show relevant image Meta-Information
         print('\n')
         print('-------------------------------------------------------------')
-        print('MutiResolution       : ', MetaInfo['MultiResolution'])
-        print('Series Dimensions    : ', MetaInfo['SeriesDimensions'])
-        print('Images Dim Sizes [0] : ', MetaInfo['Sizes'])
-        print('Image Dimensions     : ', MetaInfo['TotalSeries'], MetaInfo['SizeT'],
-              MetaInfo['SizeZ'], MetaInfo['SizeC'], MetaInfo['SizeY'], MetaInfo['SizeX'])
-        print('Scaling XYZ [micron] : ', MetaInfo['XScale'], MetaInfo['YScale'], MetaInfo['ZScale'])
-        print('ImageIDs             : ', MetaInfo['ImageIDs'])
+        print(('MutiResolution       : ', MetaInfo['MultiResolution']))
+        print(('Series Dimensions    : ', MetaInfo['SeriesDimensions']))
+        print(('Images Dim Sizes [0] : ', MetaInfo['Sizes']))
+        print(('Image Dimensions     : ', MetaInfo['TotalSeries'], MetaInfo['SizeT'],
+              MetaInfo['SizeZ'], MetaInfo['SizeC'], MetaInfo['SizeY'], MetaInfo['SizeX']))
+        print(('Scaling XYZ [micron] : ', MetaInfo['XScale'], MetaInfo['YScale'], MetaInfo['ZScale']))
+        print(('ImageIDs             : ', MetaInfo['ImageIDs']))
         print('\n')
 
     id = []
@@ -463,7 +463,7 @@ def get_planetable(imagefile, writecsv=False, separator='\t', imageID=0, showinf
                 id.append(imageIndex)
                 plane.append(planeIndex)
             except:
-                print('Could not retrieve plane data for imageIndex, PlaneIndex:', imageIndex, planeIndex)
+                print(('Could not retrieve plane data for imageIndex, PlaneIndex:', imageIndex, planeIndex))
 
         # create some kind of progress bar
         bar.update(imageIndex)
@@ -486,7 +486,7 @@ def get_planetable(imagefile, writecsv=False, separator='\t', imageID=0, showinf
         csvfile = imagefile[:-4] + '_planetable.csv'
         # use tab as separator and do not write the index to the CSV data table
         df.to_csv(csvfile, sep=separator, index=False)
-        print('\nWriting CSV file: ', csvfile)
+        print(('\nWriting CSV file: ', csvfile))
     if not writecsv:
         csvfile = None
 
@@ -519,7 +519,7 @@ def get_image6d(imagefile, sizes, pyramid='single',
 
         # main loop to read the images from the data file
         for seriesID in range(seriesIDsinglepylevel, seriesIDsinglepylevel + 1):
-            print("Series = ", seriesID)
+            print(("Series = ", seriesID))
             for timepoint in range(0, sizes[1]):
                 for zplane in range(0, sizes[2]):
                     for channel in range(0, sizes[3]):
@@ -529,7 +529,7 @@ def get_image6d(imagefile, sizes, pyramid='single',
                             img6d[0, timepoint, zplane, channel, :, :] = \
                                 rdr.read(series=seriesID, c=channel, z=zplane, t=timepoint, rescale=False)
                         except:
-                            print('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1])
+                            print(('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1]))
                             readstate = 'NOK'
                             readproblems = sys.exc_info()[1]
 
@@ -546,7 +546,7 @@ def get_image6d(imagefile, sizes, pyramid='single',
                             img6d[seriesID, timepoint, zplane, channel, :, :] = \
                                 rdr.read(series=seriesID, c=channel, z=zplane, t=timepoint, rescale=False)
                         except:
-                            print('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1])
+                            print(('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1]))
                             readstate = 'NOK'
                             readproblems = sys.exc_info()[1]
 
@@ -664,7 +664,7 @@ def care_getimages(imagefile, sizes):
             try:
                 img_care[seriesID, :, :, channel] = rdr.read(series=seriesID, c=channel, z=0, t=0, rescale=False)
             except:
-                print('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1])
+                print(('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1]))
                 readstate = 'NOK'
                 readproblems = sys.exc_info()[1]
 
@@ -712,7 +712,7 @@ def get_image6d_subset(imagefile, sizes,
                         img6dsubset[seriesID, timepoint, zplane, channel, :, :] =\
                             rdr.read(series=seriesID, c=channel, z=zplane, t=timepoint, rescale=False)
                     except:
-                        print('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1])
+                        print(('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1]))
                         readstate = 'NOK'
                         readproblems = sys.exc_info()[1]
 
@@ -763,7 +763,7 @@ def get_image6d_multires(imagefile, MetaInfo):
                         img5d[timepoint, zplane, channel, :, :] =\
                             rdr.read(series=seriesID, c=channel, z=zplane, t=timepoint, rescale=False)
                     except:
-                        print('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1])
+                        print(('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1]))
                         readstate = 'NOK'
                         readproblems = sys.exc_info()[1]
 
@@ -821,7 +821,7 @@ def get_image6d_pylevel(imagefile, MetaInfo, pylevel=0):
                     img6d[seriesID, timepoint, zplane, channel, :, :] =\
                         rdr.read(series=seriesID, c=channel, z=zplane, t=timepoint, rescale=False)
                 except:
-                    print('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1])
+                    print(('Problem reading data into Numpy Array for Series', seriesID, sys.exc_info()[1]))
                     readstate = 'NOK'
                     readproblems = sys.exc_info()[1]
 
@@ -934,14 +934,14 @@ def get_relevant_metainfo_wrapper(imagefile,
         jmd, MetaInfo['TotalSeries'], MetaInfo['ImageIDs'], MetaInfo['SeriesDimensions'],\
             MetaInfo['MultiResolution'] = get_java_metadata_store(imagefile)
     except:
-        print('Problem retrieving Java Metadata Store or Series size:', sys.exc_info()[0])
+        print(('Problem retrieving Java Metadata Store or Series size:', sys.exc_info()[0]))
         raise
 
     # get dimension information and MetaInfo
     try:
         MetaInfo = get_metainfo_dimension(jmd, MetaInfo, imageID=0)
     except:
-        print('Problem retrieving image dimensions:', sys.exc_info()[0])
+        print(('Problem retrieving image dimensions:', sys.exc_info()[0]))
 
     if imagefile[-4:] == '.czi':
         # get objective information using cziread
@@ -957,25 +957,25 @@ def get_relevant_metainfo_wrapper(imagefile,
     try:
         MetaInfo['Immersion'], MetaInfo['NA'], MetaInfo['ObjMag'], MetaInfo['ObjModel'] = get_metainfo_objective(jmd, imagefile, imageID=0)
     except:
-        print('Problem retrieving object information:', sys.exc_info()[0])
+        print(('Problem retrieving object information:', sys.exc_info()[0]))
 
     # get scaling information
     try:
         MetaInfo['XScale'], MetaInfo['YScale'], MetaInfo['ZScale'] = get_metainfo_scaling(jmd)
     except:
-        print('Problem retrieving scaling information:', sys.exc_info()[0])
+        print(('Problem retrieving scaling information:', sys.exc_info()[0]))
 
     # get wavelengths and dyes information
     try:
         MetaInfo['WLEx'], MetaInfo['WLEm'], MetaInfo['Dyes'], MetaInfo['Channels'] = get_metainfo_wavelengths(jmd)
     except:
-        print('Problem retrieving wavelength information:', sys.exc_info()[0])
+        print(('Problem retrieving wavelength information:', sys.exc_info()[0]))
 
     # get channel description
     try:
         MetaInfo['ChDesc'] = czt.get_metainfo_channel_description(imagefile)
     except:
-        print('Problem retrieving channel description:', sys.exc_info()[0])
+        print(('Problem retrieving channel description:', sys.exc_info()[0]))
 
     # summarize dimensions
     if xyorder == 'XY':
@@ -1020,7 +1020,7 @@ def get_relevant_metainfo_wrapper(imagefile,
 def calc_series_range(total_series, scenes, sceneID):
 
     sps = total_series / scenes  # series_per_scence = sps
-    series_seq = range(sceneID * sps - sps, sps * sceneID)
+    series_seq = list(range(sceneID * sps - sps, sps * sceneID))
 
     return series_seq
 
@@ -1031,7 +1031,7 @@ def calc_series_range_well(wellnumber, imgperwell):
     per well is equal for every well
     The well numbers start with Zero and have nothing to do with the actual wellID, e.g. C2
     """
-    seriesseq = range(wellnumber * imgperwell, wellnumber * imgperwell + imgperwell, 1)
+    seriesseq = list(range(wellnumber * imgperwell, wellnumber * imgperwell + imgperwell, 1))
 
     return seriesseq
 
@@ -1051,9 +1051,9 @@ def writeomexml(imagefile, method=1, writeczi_metadata=True):
             root = etl.fromstring(omexml)
             tree = etl.ElementTree(root)
             tree.write(xmlfile1, pretty_print=True, encoding='utf-8', method='xml')
-            print('Created OME-XML file for testdata: ', imagefile)
+            print(('Created OME-XML file for testdata: ', imagefile))
         except:
-            print('Creating OME-XML failed for testdata: ', imagefile)
+            print(('Creating OME-XML failed for testdata: ', imagefile))
 
     if method == 2:
 
@@ -1069,9 +1069,9 @@ def writeomexml(imagefile, method=1, writeczi_metadata=True):
             root = etl.fromstring(omexmlstring)
             tree = etl.ElementTree(root)
             tree.write(xmlfile2, pretty_print=True, encoding='utf-8', method='xml')
-            print('Created OME-XML file for : ', imagefile)
+            print(('Created OME-XML file for : ', imagefile))
         except:
-            print('Creating OME-XML failed for : ', imagefile)
+            print(('Creating OME-XML failed for : ', imagefile))
 
     if writeczi_metadata:
 
@@ -1081,7 +1081,7 @@ def writeomexml(imagefile, method=1, writeczi_metadata=True):
             try:
                 czt.writexml_czi(imagefile)
             except:
-                print('Could not write special CZI metadata for: ', imagefile)
+                print(('Could not write special CZI metadata for: ', imagefile))
 
 
 def getinfofromOMEXML(omexml, nodenames, ns='http://www.openmicroscopy.org/Schemas/OME/2015-01'):
@@ -1122,7 +1122,7 @@ def getinfofromOMEXML(omexml, nodenames, ns='http://www.openmicroscopy.org/Schem
     # define the namespace in order to find the correct path later on
     NSMAP = {'mw': ns}
     # enclose namespace with {...} and check the length
-    namespace = u'{%s}' % ns
+    namespace = '{%s}' % ns
     nsl = len(namespace)
 
     # construct the search string
@@ -1141,7 +1141,7 @@ def getinfofromOMEXML(omexml, nodenames, ns='http://www.openmicroscopy.org/Schem
         # create the dictionary from key - values pairs of the element
         dict = {}
         for k in range(0, len(out[i].attrib)):
-            dict[out[i].keys()[k]] = out[i].values()[k]
+            dict[list(out[i].keys())[k]] = list(out[i].values())[k]
         # add dictionary to the list
         dictlist.append(dict)
 
@@ -1158,19 +1158,19 @@ def parseXML(omexml, topchild, subchild, highdetail=False):
     tree = etl.ElementTree(root)
 
     for child in root:
-        print('*   ', child.tag, '--> ', child.attrib)
+        print(('*   ', child.tag, '--> ', child.attrib))
         if topchild in child.tag:
             # if child.tag == "{http://www.openmicroscopy.org/Schemas/OME/2015-01}Instrument":
             for step_child in child:
-                print('**  ', step_child.tag, '-->', step_child.attrib)
+                print(('**  ', step_child.tag, '-->', step_child.attrib))
 
                 if subchild in step_child.tag and highdetail:
-                    print("*** ", step_child.tag)
+                    print(("*** ", step_child.tag))
 
                     testdict = {}
                     if highdetail:
                         for step_child2 in step_child:
-                            print('****', step_child2.tag, step_child2.attrib)
+                            print(('****', step_child2.tag, step_child2.attrib))
                             testdict[step_child2.tag] = step_child2.attrib
 
 
@@ -1239,7 +1239,7 @@ def getWelllNamesfromCZI(imagefile, namespace='{http://www.openmicroscopy.org/Sc
         key = origin.find("{}Key".format(namespace)).text
         if key == wellkey:
             wellstring = origin.find("{}Value".format(namespace)).text
-            print("Value: {}".format(wellstring))
+            print(("Value: {}".format(wellstring)))
 
     return wellstring
 
@@ -1301,7 +1301,7 @@ def processWellStringfromCZI(wellstring):
     # count the content of the list, e.g. how many time a certain well was detected
     welldict = Counter(welllist)
     # count the number of different wells
-    numdifferentwells = len(welldict.keys())
+    numdifferentwells = len(list(welldict.keys()))
 
     # create
 
@@ -1354,10 +1354,10 @@ def getPlanesAndPixelsFromCZI(imagefile):
     for element in tree.iter():
         # print element.tag
         if "{}Plane".format(namespace) in element.tag:
-            tmpdict = dict(zip(element.keys(), element.values()))
+            tmpdict = dict(list(zip(list(element.keys()), list(element.values()))))
             planes.append(tmpdict)
         if "{}Pixels".format(namespace) in element.tag:
-            tmpdict = dict(zip(element.keys(), element.values()))
+            tmpdict = dict(list(zip(list(element.keys()), list(element.values()))))
             pixels.append(tmpdict)
 
     return planes, pixels
@@ -1375,7 +1375,7 @@ def output2file(scriptname, output_name='output.txt', targetdir=os.getcwd()):
     sys.stdout.close()
     sys.__stdout__
 
-    print('Output written to : ', filepath_output)
+    print(('Output written to : ', filepath_output))
 
     return filepath_output
 
@@ -1385,31 +1385,31 @@ def showtypicalmetadata(MetaInfo):
     # show relevant image Meta-Information
     print('\n')
     print('-------------------------------------------------------------')
-    print('Image Directory      : ', MetaInfo['Directory'])
-    print('Image Filename       : ', MetaInfo['Filename'])
-    print('MutiResolution       : ', MetaInfo['MultiResolution'])
-    print('Pyramid Levels       : ', MetaInfo['PyLevels'])
-    print('Series Dimensions    : ', MetaInfo['SeriesDimensions'])
-    print('Number of Scenes     : ', MetaInfo['NumScenes'])
-    print('Images Dim Sizes [0] : ', MetaInfo['Sizes'])
-    print('Dimension Order BF   : ', MetaInfo['DimOrder BF'])
-    print('Dimension Order CZI  : ', MetaInfo['OrderCZI'])
-    print('Shape CZI            : ', MetaInfo['ShapeCZI'])
-    print('Total Series Number  : ', MetaInfo['TotalSeries'])
-    print('Image Dimensions     : ', MetaInfo['TotalSeries'], MetaInfo['SizeT'],
-          MetaInfo['SizeZ'], MetaInfo['SizeC'], MetaInfo['SizeY'], MetaInfo['SizeX'])
-    print('Scaling XYZ [micron] : ', MetaInfo['XScale'], MetaInfo['YScale'], MetaInfo['ZScale'])
-    print('Objective M-NA-Imm   : ', MetaInfo['ObjMag'], MetaInfo['NA'], MetaInfo['Immersion'])
-    print('Objective Name       : ', MetaInfo['ObjModel'])
-    print('Ex. Wavelengths [nm] : ', MetaInfo['WLEx'])
-    print('Em. Wavelengths [nm] : ', MetaInfo['WLEm'])
-    print('Dyes                 : ', MetaInfo['Dyes'])
-    print('Detector Model       : ', MetaInfo['Detector Model'])
-    print('Detector Name        : ', MetaInfo['Detector Name'])
-    print('Detector ID          : ', MetaInfo['DetectorID'])
-    print('Channels             : ', MetaInfo['Channels'])
-    print('Channel Description  : ', MetaInfo['ChDesc'])
-    print('ImageIDs             : ', MetaInfo['ImageIDs'])
+    print(('Image Directory      : ', MetaInfo['Directory']))
+    print(('Image Filename       : ', MetaInfo['Filename']))
+    print(('MutiResolution       : ', MetaInfo['MultiResolution']))
+    print(('Pyramid Levels       : ', MetaInfo['PyLevels']))
+    print(('Series Dimensions    : ', MetaInfo['SeriesDimensions']))
+    print(('Number of Scenes     : ', MetaInfo['NumScenes']))
+    print(('Images Dim Sizes [0] : ', MetaInfo['Sizes']))
+    print(('Dimension Order BF   : ', MetaInfo['DimOrder BF']))
+    print(('Dimension Order CZI  : ', MetaInfo['OrderCZI']))
+    print(('Shape CZI            : ', MetaInfo['ShapeCZI']))
+    print(('Total Series Number  : ', MetaInfo['TotalSeries']))
+    print(('Image Dimensions     : ', MetaInfo['TotalSeries'], MetaInfo['SizeT'],
+          MetaInfo['SizeZ'], MetaInfo['SizeC'], MetaInfo['SizeY'], MetaInfo['SizeX']))
+    print(('Scaling XYZ [micron] : ', MetaInfo['XScale'], MetaInfo['YScale'], MetaInfo['ZScale']))
+    print(('Objective M-NA-Imm   : ', MetaInfo['ObjMag'], MetaInfo['NA'], MetaInfo['Immersion']))
+    print(('Objective Name       : ', MetaInfo['ObjModel']))
+    print(('Ex. Wavelengths [nm] : ', MetaInfo['WLEx']))
+    print(('Em. Wavelengths [nm] : ', MetaInfo['WLEm']))
+    print(('Dyes                 : ', MetaInfo['Dyes']))
+    print(('Detector Model       : ', MetaInfo['Detector Model']))
+    print(('Detector Name        : ', MetaInfo['Detector Name']))
+    print(('Detector ID          : ', MetaInfo['DetectorID']))
+    print(('Channels             : ', MetaInfo['Channels']))
+    print(('Channel Description  : ', MetaInfo['ChDesc']))
+    print(('ImageIDs             : ', MetaInfo['ImageIDs']))
 
     return None
 
@@ -1425,7 +1425,7 @@ def writeOMETIFFplanes(pixel, SizeT=1, SizeZ=1, SizeC=1, order='STZCXY', verbose
                 for c in range(SizeC):
 
                     if verbose:
-                        print('Write PlaneTable: ', t, z, c),
+                        print(('Write PlaneTable: ', t, z, c), end=' ')
                         sys.stdout.flush()
 
                     pixel.Plane(counter).TheT = t
@@ -1529,7 +1529,7 @@ def scatterplot(planetable, ImageID=0, T=0, Z=0, CH=0, size=35,
     # optional save figure as PNG
     if savefigure:
         fig1.savefig(figsavename, dpi=100)
-        print('Saved: ', figsavename)
+        print(('Saved: ', figsavename))
 
     # optional 3D plot of surface
     if showsurface:

@@ -127,7 +127,7 @@ if zoomDir == 'Zoom Out':
     Zen.Application.Documents.Add(imageMov)
     imageMov.Graphics.Clear()
 elif zoomDir == 'Zoom In':  # to zoom from large to small, reverse order of movie
-    for movFrame in reversed(range(steps+1)):
+    for movFrame in reversed(list(range(steps+1))):
         frameStr = 'T({})'.format(str(movFrame+1))
         tFrame = Zen.Processing.Utilities.CreateSubset(imageMov, frameStr, False, False)
         if movFrame == steps:
@@ -138,7 +138,7 @@ elif zoomDir == 'Zoom In':  # to zoom from large to small, reverse order of movi
     mirrorMov.Graphics.Clear()
 else:
     Zen.Application.Documents.Add(imageMov)
-    for movFrame in reversed(range(steps + 1)):
+    for movFrame in reversed(list(range(steps + 1))):
         frameStr = 'T({})'.format(str(movFrame + 1))
         tFrame = Zen.Processing.Utilities.CreateSubset(imageMov, frameStr, False, False)
         if movFrame == steps:

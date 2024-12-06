@@ -31,12 +31,12 @@ newnames = {0: 'CH1',
 #################################################
 
 # get number of channels in dict
-len(newnames.keys())
+len(list(newnames.keys()))
 
 # get the number of channels
 numch = image.Bounds.SizeC
 
-if numch != len(newnames.keys()):
+if numch != len(list(newnames.keys())):
     sys.exit('Number of Channel does not match number of new channel names.')
 else:
     for ch in range(numch):
@@ -45,10 +45,10 @@ else:
 
 # define new filename and save image
 newname = Path.Combine(Path.GetDirectoryName(filename), Path.GetFileNameWithoutExtension(filename) + '_newCH.czi')
-print 'New Filename : ', newname
+print('New Filename : ', newname)
 image.Save(newname)
 
 # close the image
 image.Close()
 
-print 'Done Renaming.'
+print('Done Renaming.')

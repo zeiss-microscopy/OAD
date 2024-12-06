@@ -6,13 +6,15 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 import re
+
 # from ipy_progressbar import ProgressBar
 import progressbar
+
 try:
     from IPython.display import display
     from ipywidgets import FloatProgress
 except:
-    print('Could not import IPython.Display or ipywidgets')
+    print("Could not import IPython.Display or ipywidgets")
 import os
 
 
@@ -27,13 +29,91 @@ def extract_labels(nr, nc):
     """
 
     # labeling schemes
-    labelX = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12',
-              '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24',
-              '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36',
-              '37', '38', '39', '40', '41', '42', '43', '44', '45', '46', '47', '48', ]
+    labelX = [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8",
+        "9",
+        "10",
+        "11",
+        "12",
+        "13",
+        "14",
+        "15",
+        "16",
+        "17",
+        "18",
+        "19",
+        "20",
+        "21",
+        "22",
+        "23",
+        "24",
+        "25",
+        "26",
+        "27",
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47",
+        "48",
+    ]
 
-    labelY = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-              'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF']
+    labelY = [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z",
+        "AA",
+        "AB",
+        "AC",
+        "AD",
+        "AE",
+        "AF",
+    ]
 
     lx = labelX[0:nc]
     ly = labelY[0:nr]
@@ -51,8 +131,40 @@ def convert_row_index(rowid):
     :return: rowindex - integer representing the row
     """
 
-    rowids = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
-              'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB', 'AC', 'AD', 'AE', 'AF']
+    rowids = [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G",
+        "H",
+        "I",
+        "J",
+        "K",
+        "L",
+        "M",
+        "N",
+        "O",
+        "P",
+        "Q",
+        "R",
+        "S",
+        "T",
+        "U",
+        "V",
+        "W",
+        "X",
+        "Y",
+        "Z",
+        "AA",
+        "AB",
+        "AC",
+        "AD",
+        "AE",
+        "AF",
+    ]
 
     # add one since the index in Python is zero-based
     # the column or row index from ZEN IAS is one-based
@@ -61,11 +173,14 @@ def convert_row_index(rowid):
     return rowindex
 
 
-def get_well_all_parameters(df, wellid,
-                            colname='all',
-                            wellID_key='WellID',
-                            rowID_key='RowID',
-                            colID_key='ColumnID'):
+def get_well_all_parameters(
+    df,
+    wellid,
+    colname="all",
+    wellID_key="WellID",
+    rowID_key="RowID",
+    colID_key="ColumnID",
+):
     """
     Gets all or specific columns for specific well.
     If the colname was specified, only this specific column will be returned.
@@ -78,13 +193,13 @@ def get_well_all_parameters(df, wellid,
 
     new_df = df.loc[df[wellID_key] == wellid]
 
-    if colname != 'all':
+    if colname != "all":
         new_df = new_df[[wellID_key, rowID_key, colID_key, colname]]
 
     return new_df
 
 
-def get_well_row(df, rowid, rowID_key='RowID'):
+def get_well_row(df, rowid, rowID_key="RowID"):
     """
     This function extracts all data based on the row index.
 
@@ -100,6 +215,15 @@ def get_well_row(df, rowid, rowID_key='RowID'):
 
 
 def convert_array_to_heatmap(hmarray, nr, nc):
+    """
+    Converts a numpy array into a heatmap DataFrame with well plate labels.
+    Parameters:
+    hmarray (numpy.ndarray): The input array to be converted into a heatmap.
+    nr (int): Number of rows in the well plate.
+    nc (int): Number of columns in the well plate.
+    Returns:
+    pandas.DataFrame: A DataFrame representing the heatmap with well plate labels.
+    """
 
     # get the labels for a well plate and create a data frame from the numpy array
     lx, ly = extract_labels(nr, nc)
@@ -109,15 +233,26 @@ def convert_array_to_heatmap(hmarray, nr, nc):
 
 
 def rename_columns(dfs, paramlist, verbose=False):
+    """
+    Rename the columns of a DataFrame with a list of new column names.
+    Parameters:
+    dfs (pd.DataFrame): The DataFrame whose columns are to be renamed.
+    paramlist (list): A list of new column names.
+    verbose (bool, optional): If True, prints the old and new column names during renaming. Defaults to False.
+    Returns:
+    pd.DataFrame: The DataFrame with renamed columns.
+    Raises:
+    Exception: If a column to be renamed is not found in the DataFrame.
+    """
 
     for i in range(0, len(paramlist)):
         # rename the columns with measured parameters and correct types
         if verbose:
-            print('Renamed : ', dfs.columns[i], ' to ', paramlist[i])
+            print(("Renamed : ", dfs.columns[i], " to ", paramlist[i]))
         try:
             dfs.rename(columns={dfs.columns[i]: paramlist[i]}, inplace=True)
         except:
-            print('Column not find inside table for renaming. Doing nothing.')
+            print("Column not find inside table for renaming. Doing nothing.")
 
     return dfs
 
@@ -137,19 +272,25 @@ def create_heatmap_list_arrays(numparams, nr, nc):
     heatmaplist_array = []
 
     for i in range(0, numparams + 1):
-            # create list containing all heatmaps for number of objects + all measured parameters
+        # create list containing all heatmaps for number of objects + all measured parameters
         heatmaplist_array.append(np.full([nr, nc], np.nan))
 
     return heatmaplist_array
 
 
-def fill_heatmaps(dfs, numparams, num_nonmp, nr, nc,
-                  statfunc='mean',
-                  showbar=False,
-                  verbose=False,
-                  wellID_key='WellID',
-                  rowID_key='RowID',
-                  colID_key='ColumnID'):
+def fill_heatmaps(
+    dfs,
+    numparams,
+    num_nonmp,
+    nr,
+    nc,
+    statfunc="mean",
+    showbar=False,
+    verbose=False,
+    wellID_key="WellID",
+    rowID_key="RowID",
+    colID_key="ColumnID",
+):
     """
     Create dictionary containing heatmaps (dataframes) for all measured parameters
 
@@ -176,50 +317,52 @@ def fill_heatmaps(dfs, numparams, num_nonmp, nr, nc,
     heatmap_dict = {}
 
     # get all wells containing some data
-    #wellID_key = WELLID_KEY  # 'ImageSceneContainerName::Image Scene Container Name '
-    print('---------------------------------------------------')
-    print('wellID_key : ', wellID_key)
-    print('Found keys:')
-    print(dfs.keys())
-    print('---------------------------------------------------')
+    # wellID_key = WELLID_KEY  # 'ImageSceneContainerName::Image Scene Container Name '
+    print("---------------------------------------------------")
+    print(("wellID_key : ", wellID_key))
+    print("Found keys:")
+    print((list(dfs.keys())))
+    print("---------------------------------------------------")
     wells_real = dfs[wellID_key].value_counts()
 
-    df_stats = pd.DataFrame(index=range(len(wells_real)), columns=dfs.columns)
-    #df_stats.drop(df_stats.columns[[3, 4]], axis=1, inplace=True)
+    df_stats = pd.DataFrame(index=list(range(len(wells_real))), columns=dfs.columns)
+    # df_stats.drop(df_stats.columns[[3, 4]], axis=1, inplace=True)
 
     try:
-        df_stats.drop(['ID', 'Index'], axis=1, inplace=True)
+        df_stats.drop(["ID", "Index"], axis=1, inplace=True)
     except:
-        print('Did not find RowID and ColumnID key in dataframe.')
+        print("Did not find RowID and ColumnID key in dataframe.")
 
     try:
-        df_stats.drop(['ParentID'], axis=1, inplace=True)
+        df_stats.drop(["ParentID"], axis=1, inplace=True)
     except:
-        print('Did not find ParentID key in dataframe.')
+        print("Did not find ParentID key in dataframe.")
 
     new_cols = df_stats.columns
     cols_orig = dfs.columns
 
     # create an additional columns of the object numbers
-    df_obj = pd.DataFrame(index=range(len(wells_real)), columns=['ObjectNumbers'])
+    df_obj = pd.DataFrame(index=list(range(len(wells_real))), columns=["ObjectNumbers"])
 
-    if showbar == True:
+    if showbar:
         # initialize the progress bar
         # pb1 = ProgressBar(len(wells_real), title='Processing Wells')
-        pb1 = iter(range(len(wells_real)))
+        pb1 = iter(list(range(len(wells_real))))
 
         try:
-            fp = FloatProgress(min=1,
-                               max=len(wells_real),
-                               step=1,
-                               description='Processing Wells',
-                               orientation='horizontal')
+            fp = FloatProgress(
+                min=1,
+                max=len(wells_real),
+                step=1,
+                description="Processing Wells",
+                orientation="horizontal",
+            )
             display(fp)
         except:
             # bar = progressbar.ProgressBar(redirect_stdout=True, max_value=len(wells_real))
             bar = progressbar.ProgressBar(max_value=len(wells_real))
     elif showbar is False:
-        pb1 = iter(range(len(wells_real)))
+        pb1 = iter(list(range(len(wells_real))))
 
     # iterate over all wells that were detected and do the statistics
     for well in pb1:
@@ -230,39 +373,46 @@ def fill_heatmaps(dfs, numparams, num_nonmp, nr, nc,
             bar.update(well)
 
         # extract current dataframe for all existing wells
-        current_wellid = wells_real.keys()[well]
+        current_wellid = list(wells_real.keys())[well]
 
         if verbose:
-            print("Found data for wells : ",  current_wellid)
+            print(("Found data for wells : ", current_wellid))
 
         # get all data for the current well from the over dataframe
-        df_tmp = get_well_all_parameters(dfs, current_wellid,
-                                         wellID_key='WellID',
-                                         rowID_key='RowID',
-                                         colID_key='ColumnID')
-        
-        df_stats.iloc[well][new_cols.get_loc('WellID')] = current_wellid
-        df_stats.iloc[well][new_cols.get_loc('RowID')] = df_tmp.iloc[0][cols_orig.get_loc('RowID')]
-        df_stats.iloc[well][new_cols.get_loc('ColumnID')] = df_tmp.iloc[0][cols_orig.get_loc('ColumnID')]
+        df_tmp = get_well_all_parameters(
+            dfs,
+            current_wellid,
+            wellID_key="WellID",
+            rowID_key="RowID",
+            colID_key="ColumnID",
+        )
+
+        df_stats.iloc[well][new_cols.get_loc("WellID")] = current_wellid
+        df_stats.iloc[well][new_cols.get_loc("RowID")] = df_tmp.iloc[0][
+            cols_orig.get_loc("RowID")
+        ]
+        df_stats.iloc[well][new_cols.get_loc("ColumnID")] = df_tmp.iloc[0][
+            cols_orig.get_loc("ColumnID")
+        ]
 
         colnames = df_tmp.columns[list(range(num_nonmp, num_nonmp + numparams))]
 
-        if statfunc == 'mean':
+        if statfunc == "mean":
             stats_out = df_tmp.mean(axis=0)[colnames]
             for col in colnames:
                 df_stats.iloc[well][col] = stats_out[col]
 
-        elif statfunc == 'median':
+        elif statfunc == "median":
             stats_out = df_tmp.median(axis=0)[colnames]
             for col in colnames:
                 df_stats.iloc[well][col] = stats_out[col]
 
-        elif statfunc == 'min':
+        elif statfunc == "min":
             stats_out = df_tmp.min(axis=0)[colnames]
             for col in colnames:
                 df_stats.iloc[well][col] = stats_out[col]
 
-        elif statfunc == 'max':
+        elif statfunc == "max":
             stats_out = df_tmp.max(axis=0)[colnames]
             for col in colnames:
                 df_stats.iloc[well][col] = stats_out[col]
@@ -273,7 +423,7 @@ def fill_heatmaps(dfs, numparams, num_nonmp, nr, nc,
         # find the row index for the current wellID ...
         tmprow = df_stats[wellID_key].values.tolist().index(current_wellid)
         # ... and use the index to add the object number to the dataframe for the numbers
-        df_obj['ObjectNumbers'][tmprow] = numobj_current_wellID
+        df_obj["ObjectNumbers"][tmprow] = numobj_current_wellID
 
     # join the data frame with object numbers to df_stats
     df_stats = pd.concat([df_stats, df_obj], axis=1)
@@ -290,7 +440,7 @@ def fill_heatmaps(dfs, numparams, num_nonmp, nr, nc,
         # create heatmap based on the platetype
         heatmap_array = np.full([nr, nc], np.nan)
         heatmap_name = df_stats.columns[int(hm)]
-        print('HeatMap: ', heatmap_name)
+        print(("HeatMap: ", heatmap_name))
 
         # cycle to df_stats based on the columns nam and transfer data to heatmap
         for v in range(0, df_stats.shape[0]):
@@ -311,37 +461,40 @@ def fill_heatmaps(dfs, numparams, num_nonmp, nr, nc,
     return heatmap_dict, welldata_dict
 
 
-def showheatmap(heatmap, parameter2display,
-                fontsize_title=12,
-                fontsize_label=10,
-                colormap='Blues',
-                linecolor='black',
-                linewidth=1.0,
-                save=False,
-                savename='Heatmap.png',
-                robust=True,
-                filename='test.csv',
-                dpi=100,
-                apeer=False):
+def showheatmap(
+    heatmap,
+    parameter2display,
+    fontsize_title=12,
+    fontsize_label=10,
+    colormap="Blues",
+    linecolor="black",
+    linewidth=1.0,
+    save=False,
+    savename="Heatmap.png",
+    robust=True,
+    filename="test.csv",
+    dpi=100,
+    apeer=False,
+):
 
     # create figure with subplots
     fig, ax = plt.subplots(1, 1, figsize=(10, 8))
 
     # create the heatmap
-    ax = sns.heatmap(heatmap,
-                     ax=ax,
-                     cmap=colormap,
-                     linecolor=linecolor,
-                     linewidths=linewidth,
-                     square=True,
-                     robust=robust,
-                     annot=False,
-                     cbar_kws={"shrink": 0.68})
+    ax = sns.heatmap(
+        heatmap,
+        ax=ax,
+        cmap=colormap,
+        linecolor=linecolor,
+        linewidths=linewidth,
+        square=True,
+        robust=robust,
+        annot=False,
+        cbar_kws={"shrink": 0.68},
+    )
 
     # customize the plot to your needs
-    ax.set_title(parameter2display,
-                 fontsize=fontsize_title,
-                 fontweight='normal')
+    ax.set_title(parameter2display, fontsize=fontsize_title, fontweight="normal")
 
     for tick in ax.xaxis.get_major_ticks():
         tick.label.set_fontsize(fontsize_label)
@@ -354,33 +507,34 @@ def showheatmap(heatmap, parameter2display,
 
     if save:
         if not apeer:
-            savename = filename[:-4] + '_HM_' + parameter2display + '.png'
+            savename = filename[:-4] + "_HM_" + parameter2display + ".png"
         elif apeer:
             pass
-        
-        fig.savefig(savename,
-                    dpi=dpi,
-                    orientation='portrait',
-                    transparent=False,
-                    frameon=False)
-        print('Heatmap image saved as: ', savename)
+
+        fig.savefig(
+            savename, dpi=dpi, orientation="portrait", transparent=False, frameon=False
+        )
+        print(("Heatmap image saved as: ", savename))
     else:
         savename = False
 
     return savename
 
 
-def showheatmap_all(heatmap_dict, subplots,
-                    fontsize_title=16,
-                    fontsize_label=12,
-                    colormap='Blues',
-                    linecolor='black',
-                    linewidth=1.0,
-                    save=False,
-                    robust=True,
-                    filename='Test.czi',
-                    dpi=100,
-                    deletelast=False):
+def showheatmap_all(
+    heatmap_dict,
+    subplots,
+    fontsize_title=16,
+    fontsize_label=12,
+    colormap="Blues",
+    linecolor="black",
+    linewidth=1.0,
+    save=False,
+    robust=True,
+    filename="Test.czi",
+    dpi=100,
+    deletelast=False,
+):
 
     # create figure with subplots
     fig, axn = plt.subplots(subplots[0], subplots[1], figsize=(12, 10))
@@ -388,20 +542,23 @@ def showheatmap_all(heatmap_dict, subplots,
     plotid = -1
 
     # cycle heatmaps heatmaps
-    for key in heatmap_dict.keys():  # python 3
+    for key in list(heatmap_dict.keys()):  # python 3
 
         plotid = plotid + 1
         # get the desired heatmap from the dictionary containing all heatmaps
         heatmap_test = heatmap_dict[key]
         # create the actual heatmap
-        ax = sns.heatmap(heatmap_test, ax=axn.flat[plotid],
-                         cmap=colormap,
-                         linecolor=linecolor,
-                         linewidths=linewidth,
-                         square=True,
-                         robust=robust,
-                         annot=False,
-                         cbar_kws={"shrink": 1.0})
+        ax = sns.heatmap(
+            heatmap_test,
+            ax=axn.flat[plotid],
+            cmap=colormap,
+            linecolor=linecolor,
+            linewidths=linewidth,
+            square=True,
+            robust=robust,
+            annot=False,
+            cbar_kws={"shrink": 1.0},
+        )
 
         # customize the plot to your needs
         ax.set_title(key, fontsize=fontsize_title)
@@ -412,15 +569,17 @@ def showheatmap_all(heatmap_dict, subplots,
 
     # delete last subplot for an uneven number of parameters
     if deletelast:
-        axn[subplots[0]-1, subplots[1]-1].remove()
+        axn[subplots[0] - 1, subplots[1] - 1].remove()
 
     # modify the layout so that titles do not overlap
     plt.tight_layout()
-        
+
     if save:
-        savename = filename[:-4] + '_HM_all.png'
-        fig.savefig(savename, dpi=dpi, orientation='portrait', transparent=False, frameon=False)
-        print('Heatmap image saved as: ', savename)
+        savename = filename[:-4] + "_HM_all.png"
+        fig.savefig(
+            savename, dpi=dpi, orientation="portrait", transparent=False, frameon=False
+        )
+        print(("Heatmap image saved as: ", savename))
     else:
         savename = False
 
@@ -452,7 +611,7 @@ def getwellIDfromfilename(filename):
     wellcoldigits = -2
     colid = filename_base_woext[wellcoldigits:]
     colindex = int(colid)
-    rowid = filename_base_woext[(wellcoldigits - 2):(wellcoldigits - 1)]
+    rowid = filename_base_woext[(wellcoldigits - 2) : (wellcoldigits - 1)]
     rowindex = convert_row_index(rowid)
     wellid = rowid + str(colindex)
 
@@ -462,9 +621,9 @@ def getwellIDfromfilename(filename):
 def addWellinfoColumns(dataframe):
 
     # add WellID, RowID and ColumnID to the existing dataframe
-    dataframe.insert(0, 'WellID', 'A1')
-    dataframe.insert(1, 'RowID', 1)
-    dataframe.insert(2, 'ColumnID', 1)
+    dataframe.insert(0, "WellID", "A1")
+    dataframe.insert(1, "RowID", 1)
+    dataframe.insert(2, "ColumnID", 1)
 
     return dataframe
 
@@ -485,9 +644,9 @@ def wellinfo2dataframe(df, colname_with_info):
         # get the well info based on the image filename for every row
         wellid, rowindex, colindex = getwellIDfromfilename(df[colname_with_info][i])
         # modify the dataframe accordingly
-        df.set_value(i, 'WellID', wellid)
-        df.set_value(i, 'RowID', rowindex)
-        df.set_value(i, 'ColumnID', colindex)
+        df.set_value(i, "WellID", wellid)
+        df.set_value(i, "RowID", rowindex)
+        df.set_value(i, "ColumnID", colindex)
 
     return df
 
@@ -520,6 +679,13 @@ def getrowandcolumn(platetype=96):
 
 
 def remove_units(df):
+    """
+    Remove the first row from a DataFrame, typically used to remove units from a table.
+    Parameters:
+    df (pandas.DataFrame): The DataFrame from which the first row (units) will be removed.
+    Returns:
+    pandas.DataFrame: The DataFrame with the first row removed.
+    """
 
     # remove units from table
     df.drop([0], inplace=True)
@@ -528,20 +694,40 @@ def remove_units(df):
 
 
 def convert_dec_sep(df, np):
+    """
+    Converts decimal separators from commas to dots in specified columns of a DataFrame.
+    Parameters:
+    df (pandas.DataFrame): The DataFrame containing the data to be converted.
+    np (int): The starting index of the columns to be converted.
+    Returns:
+    pandas.DataFrame: The DataFrame with converted decimal separators.
+    Notes:
+    - This function assumes that the columns to be converted contain string representations of numbers.
+    - If a column cannot be converted, a message will be printed indicating the column name.
+    """
 
     for id in range(np, len(df.columns)):
-        #print('Index: ', id)
+        # print('Index: ', id)
         try:
-            df.iloc[:, id] = df.iloc[:, id].str.replace(',', '.').astype('float')
+            df.iloc[:, id] = df.iloc[:, id].str.replace(",", ".").astype("float")
         except:
-            print('No correction of types possible for column: ', df.columns[id])
+            print(("No correction of types possible for column: ", df.columns[id]))
 
     return df
 
 
 def check_separator(csvfile):
+    """
+    Determines the delimiter used in a CSV file.
+    This function reads the given CSV file and identifies the delimiter used
+    to separate values in the file.
+    Args:
+        csvfile (str): The path to the CSV file to be checked.
+    Returns:
+        str: The delimiter used in the CSV file.
+    """
 
-    reader = pd.read_csv(csvfile, sep=None, engine='python', iterator=True)
+    reader = pd.read_csv(csvfile, sep=None, engine="python", iterator=True)
     sep = reader._engine.data.dialect.delimiter
     reader.close()
 
@@ -549,9 +735,19 @@ def check_separator(csvfile):
 
 
 def determine_plotgrid(num_parameter, columns=2):
+    """
+    Determine the grid layout for plotting based on the number of parameters and columns.
+    Parameters:
+    num_parameter (int): The total number of parameters to plot.
+    columns (int, optional): The number of columns in the plot grid. Default is 2.
+    Returns:
+    tuple: A tuple containing:
+        - plotgrid (list): A list with two elements, the number of rows and columns in the plot grid.
+        - empty (bool): A boolean indicating if there is an empty plot space in the grid.
+    """
 
     if np.mod(num_parameter, columns) == 0:
-        plotrows = np.int(num_parameter /columns)
+        plotrows = np.int(num_parameter / columns)
         empty = False
     if np.mod(num_parameter, columns) == 1:
         plotrows = np.int(num_parameter / columns) + 1

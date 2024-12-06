@@ -106,7 +106,7 @@ Usage Instructions
 
 if useCR:
     # correct uneven illumination
-    print 'Correct for uneven illumination ...'
+    print('Correct for uneven illumination ...')
     lowpasscount = 3
     lp_kernelsize = 300
     norm = ZenNormalizeMode.Auto
@@ -117,28 +117,28 @@ if useCR:
 
 if useRB:
     # apply background subtraction
-    print 'Applying RollingBall Background Substraction ...'
+    print('Applying RollingBall Background Substraction ...')
     rb_radius = 50
     isLightBackground=False
     img = Zen.Processing.Adjust.BackgroundSubtraction(img, rb_radius, doPreSmooth=False, createBackground=False, isLightBackground=False)
 
 if useFT:
     # apply filter
-    print 'Applying Filtering ...'
+    print('Applying Filtering ...')
     median_radius = 3
     img = Zen.Processing.Filter.Smooth.Median(img, median_radius, False)
 
 # apply threshold
-print 'Applying Automated Thresholding ...'
+print('Applying Automated Thresholding ...')
 #th_method = ZenThresholdingMethod.Otsu
 createBinary = True
 invertResult = lbg
-print 'Invert result : ', invertResult
+print('Invert result : ', invertResult)
 img = Zen.Processing.Segmentation.ThresholdAutomatic(img, th_method, createBinary, invertResult, False)
 
 if removeOB:
     # remove small objects
-    print 'Removing small objects ...'
+    print('Removing small objects ...')
     minarea = 1 
     maxarea = 100000000
     inrange = True
@@ -146,18 +146,18 @@ if removeOB:
 
 if fillHoles:
     # fill holes
-    print 'Fill Holes ...'
+    print('Fill Holes ...')
     img = Zen.Processing.Binary.FillHoles(img)
 
 if separateOB:
     # separate objects
-    print 'Trying to separate objects ...'
+    print('Trying to separate objects ...')
     sep_kernel = 5
     sep_method = ZenSeparationModes.Watersheds
     img = Zen.Processing.Binary.Separation(img, sep_method, sep_kernel, False)
 
 # cutout image by using the binary mask as a template on the original image
-print 'Using binary mask to cutout regions from original image ...'
+print('Using binary mask to cutout regions from original image ...')
 img = Zen.Processing.Binary.ApplyMask(img_orig, img, False)
 
 # change name
@@ -166,4 +166,4 @@ img.Name = Path.GetFileNameWithoutExtension(img_orig.FileName) + '_masked.czi'
 # show result in ZEN
 Zen.Application.Documents.Add(img)
 
-print 'Done.'
+print('Done.')

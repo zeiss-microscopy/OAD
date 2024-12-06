@@ -105,19 +105,19 @@ elif not surface_result:
 czifile = CZIdict[cziname]
 czifile_cmd = '"' + CZIdict[cziname] + '"'
 params = czifile_cmd + ' ' + writecsv + ' ' + separator + ' ' + save + ' ' + saveformat_result + ' ' + surface
-print 'CZI file to be used: ', czifile
-print 'Parameter : ', params
+print('CZI file to be used: ', czifile)
+print('Parameter : ', params)
 
 # when option to save the figure was set
 if save_result:
 
     savename = Path.GetFileNameWithoutExtension(czifile) + '_planetable_XYZ-Pos.' + saveformat_result
     savename_full = Path.Combine(Path.GetDirectoryName(czifile), savename)
-    print 'Savename: ', savename_full
+    print('Savename: ', savename_full)
     # delete older version of the figure if existing
     if File.Exists(savename_full):
         File.Delete(savename_full)
-        print 'Deleted older figure: ', savename_full
+        print('Deleted older figure: ', savename_full)
 
 # start the data display script as an external application
 app = Process()
@@ -128,11 +128,11 @@ app.Start()
 app.WaitForExit()
 
 if show_fig_result:
-    print 'Showing saved figure in ZEN.'
+    print('Showing saved figure in ZEN.')
     if File.Exists(savename_full):
         plotfigure = Zen.Application.LoadImage(savename_full, False)
         Zen.Application.Documents.Add(plotfigure)
     else:
-        print 'Saved figure not found.'
+        print('Saved figure not found.')
 
-print 'Done.'
+print('Done.')

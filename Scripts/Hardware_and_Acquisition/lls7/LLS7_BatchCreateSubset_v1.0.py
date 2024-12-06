@@ -46,7 +46,7 @@ filelist = [i for i in filelist if i.endswith('.czi') and not i.endswith('_MIP.c
 OutputFolder = str(imgfolder + "\Subsets")
 Directory.CreateDirectory(OutputFolder)
 print('---------------')
-print('Created new directory: ', OutputFolder)
+print(('Created new directory: ', OutputFolder))
 print('---------------')
 
 for j in range (0, len(filelist)):
@@ -63,7 +63,7 @@ for j in range (0, len(filelist)):
     
     for child in root.findall('.//Rectangle'):
         ID = child.get('Id')
-        print("Processing ROI " + ID)
+        print(("Processing ROI " + ID))
     
         SizeZ = Img.Bounds.SizeZ
         SizeY = Img.Bounds.SizeY

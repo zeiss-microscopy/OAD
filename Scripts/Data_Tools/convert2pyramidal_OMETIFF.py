@@ -97,11 +97,11 @@ cleanup = result.GetValue('clean')
 # define absolute paths for tools
 bf2raw = Path.Combine(bf2raw_dir, Path.Combine('bin', 'bioformats2raw'))
 raw2ome = Path.Combine(raw2ome_dir, Path.Combine('bin', 'raw2ometiff'))
-print("Path bioformats2raw : ", bf2raw)
-print("Path raw2ometiff : ", raw2ome)
-print("CZI File : ", czifile)
-print("Compression for OME-TIFF : ", compression)
-print("Cleaning up afterwards : ", cleanup)
+print(("Path bioformats2raw : ", bf2raw))
+print(("Path raw2ometiff : ", raw2ome))
+print(("CZI File : ", czifile))
+print(("Compression for OME-TIFF : ", compression))
+print(("Cleaning up afterwards : ", cleanup))
 
 # check if the tools exists on the speified location
 if not File.Exists(bf2raw):
@@ -112,28 +112,28 @@ if not File.Exists(raw2ome):
 # create the name for the required TMP folder and the output OME-TIFF
 tmpfolder = Path.Combine(Path.GetDirectoryName(czifile), Path.GetFileNameWithoutExtension(czifile))
 omefile = tmpfolder + '_PY.ome.tiff'
-print('TMP Folder : ', tmpfolder)
-print('OME-TIFF to be created : ', omefile)
+print(('TMP Folder : ', tmpfolder))
+print(('OME-TIFF to be created : ', omefile))
 
 # define parameters and run bioformats2raw
 bf2raw_params = '"' + czifile + '" ' + '"' + tmpfolder + '"' + ' --resolutions ' + str(resolutions) + ' --compression=raw'
-print('Command String : ', bf2raw_params)
+print(('Command String : ', bf2raw_params))
 done1 = run_tool(bf2raw, bf2raw_params)
-print('Done with conversion to RAW.', done1)
+print(('Done with conversion to RAW.', done1))
 
 # # define parameters and run raw2ometiff
 raw2ome_params = '"' + tmpfolder + '" ' + '"' + omefile + '"' + ' --compression=' + compression
-print('Command String : ', raw2ome_params)
+print(('Command String : ', raw2ome_params))
 done2 = run_tool(raw2ome, raw2ome_params)
-print('Done with conversion to pyramidal OME-TIFF', done2)
+print(('Done with conversion to pyramidal OME-TIFF', done2))
 
 # delete bfmemo file and TMP folder
 if cleanup:
     print('Cleaning up ...')
     delname = Path.Combine(czidir, '.' + cziname + '.bfmemo')
-    print('Deleting : ', delname)
+    print(('Deleting : ', delname))
     File.Delete(delname)
-    print('Deleting Folder : ', tmpfolder)
+    print(('Deleting Folder : ', tmpfolder))
     Directory.Delete(tmpfolder, True)
 
 print('Done.')

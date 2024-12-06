@@ -159,7 +159,7 @@ for slide in range(0, files.Length):
 
     # Give message, if files are corrupted
     except:
-        print 'Fatal error in: ' + PathAndFile
+        print('Fatal error in: ' + PathAndFile)
         saved = False
 
 # Show message

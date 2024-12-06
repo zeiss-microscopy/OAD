@@ -61,12 +61,12 @@ def dircheck(basefolder):
     base_exists = Directory.Exists(basefolder)
 
     if base_exists:
-        print('Selected Directory Exists: ', base_exists)
+        print(('Selected Directory Exists: ', base_exists))
         # specify the desired output format for the folder, e.g. 2017-08-08_17-47-41
         format = '%Y-%m-%d_%H-%M-%S'
         # create the new directory
         newdir = createfolder(basefolder, formatstring=format)
-        print('Created new directory: ', newdir)
+        print(('Created new directory: ', newdir))
     if not base_exists:
         Directory.CreateDirectory(basefolder)
         newdir = basefolder
@@ -106,9 +106,9 @@ def runSWAF_special(SWAF_exp,
         print('Running special SWAF ...')
         zSWAF = Zen.Acquisition.FindAutofocus(SWAF_exp, timeoutSeconds=timeout)
     except ApplicationException as e:
-        print('Application Exception : ', e.Message)
+        print(('Application Exception : ', e.Message))
     except TimeoutException as e:
-        print(e.Message)
+        print((e.Message))
 
     return zSWAF
 
@@ -129,7 +129,7 @@ def getclassnames(ias):
             cl = ias.GetRegionsClass(id)
 
         iaclasses[str(cl.ID)] = cl.Name
-        print('ID - ClassName: ', cl.ID, cl.Name)
+        print(('ID - ClassName: ', cl.ID, cl.Name))
 
     return iaclasses
 
@@ -180,8 +180,8 @@ def CreateRegionsFromIA(exp, snap, iasname,
     regionsclassname = iasclasses['2']
     regions = Zen.Analyzing.GetRegions(snap, regionsclassname)
 
-    print('RegionClassNames: ', iasclasses)
-    print('Analysis found ' + str(regions.Count) + 'regions!')
+    print(('RegionClassNames: ', iasclasses))
+    print(('Analysis found ' + str(regions.Count) + 'regions!'))
 
     # loop over all regions and get the points of polygon outlins of the region
     for i in range(0, regions.Count):
@@ -193,9 +193,9 @@ def CreateRegionsFromIA(exp, snap, iasname,
 
         if points.Length > minpoints:
             exp.AddPolygonExperimentRegion(scaling, stageTopLeft, expblock,  points, color, acquistion, bleaching, analysis)
-            print('Experiment region generated with region id ' + str(i + 2) + ' with ' + str(points.Length) + ' points')
+            print(('Experiment region generated with region id ' + str(i + 2) + ' with ' + str(points.Length) + ' points'))
         else:
-            print('For region id ' + str(i + 2) + ' no experiment region created. No enough Polygon Points.')
+            print(('For region id ' + str(i + 2) + ' no experiment region created. No enough Polygon Points.'))
 
     # save the experiment with the new regions
     exp.Save()
@@ -211,7 +211,7 @@ def cloneexp(expname, prefix='GA_', save=True, reloadexp=True):
     # save experiment
     if save:
         exp.SaveAs(exp_newname, False)
-        print('Saved Temporay Experiment as : ', exp_newname)
+        print(('Saved Temporay Experiment as : ', exp_newname))
         # close the original experiment object
         exp.Close()
         time.sleep(1)
@@ -299,15 +299,15 @@ if fs_before:
     # initial focussing via FindSurface to assure a good starting position
     try:
         Zen.Acquisition.FindSurface()
-        print('Z-Position after FindSurface: ', Zen.Devices.Focus.ActualPosition)
+        print(('Z-Position after FindSurface: ', Zen.Devices.Focus.ActualPosition))
     except ApplicationException as e:
-        print('Application Exception : ', e.Message)
-        print('Z-Position : ', Zen.Devices.Focus.ActualPosition)
+        print(('Application Exception : ', e.Message))
+        print(('Z-Position : ', Zen.Devices.Focus.ActualPosition))
     
 
 if swaf_before:
     # do an initial SWAF before the start of the workflow
-    print('Z-Position before special SWAF :', Zen.Devices.Focus.ActualPosition)
+    print(('Z-Position before special SWAF :', Zen.Devices.Focus.ActualPosition))
     zSWAF = runSWAF_special(dynexp,
                             delay=hwdelay,
                             searchStrategy='Smart',
@@ -318,7 +318,7 @@ if swaf_before:
 
 # get the resulting z-position
 znew = Zen.Devices.Focus.ActualPosition
-print('Z-Position before special SWAF :', znew)
+print(('Z-Position before special SWAF :', znew))
 
 
 # acquire SNAP using the experiment to detect objects
@@ -327,7 +327,7 @@ Zen.Application.Documents.Add(snap)
 
 # save the snap image inside the selected folder
 savename_snap = Path.Combine(savefolder, snap.Name)
-print('Save Snap as : ', savename_snap)
+print(('Save Snap as : ', savename_snap))
 snap.Save(savename_snap)
 
 # get all required objects to be ready to start the region creation
@@ -347,7 +347,7 @@ output = Zen.Acquisition.Execute(dynexp)
 
 # save the overview scan image inside the selected folder
 savename_result = Path.Combine(savefolder, output.Name)
-print('Save Image as : ', savename_result)
+print(('Save Image as : ', savename_result))
 output.Save(savename_result)
 
 # close the snap image and the experiment

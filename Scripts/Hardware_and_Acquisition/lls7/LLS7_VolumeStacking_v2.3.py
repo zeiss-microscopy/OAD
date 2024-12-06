@@ -62,12 +62,12 @@ def dircheck(basefolder):
     base_exists = Directory.Exists(basefolder)
 
     if base_exists:
-        print('Selected Directory Exists: ', base_exists)
+        print(('Selected Directory Exists: ', base_exists))
         # specify the desired output format for the folder, e.g. 2017-08-08_17-47-41
         format = '%Y-%m-%d_%H-%M-%S'
         # create the new directory
         newdir = createfolder(basefolder, formatstring=format)
-        print('Created new directory: ', newdir)
+        print(('Created new directory: ', newdir))
     if not base_exists:
         Directory.CreateDirectory(basefolder)
         newdir = basefolder
@@ -111,7 +111,7 @@ def cloneexp(expname, prefix='ZSYS_', save=True, reloadexp=True):
     # save experiment
     if save:
         exp.SaveAs(exp_newname, False)
-        print('Saved Temporay Experiment as : ', exp_newname)
+        print(('Saved Temporay Experiment as : ', exp_newname))
         # close the original experiment object
         exp.Close()
         time.sleep(1)
@@ -133,7 +133,7 @@ dir = 'C:/ProgramData/Carl Zeiss/MTB2011'
 MTBs = Directory.GetDirectories(dir)
 #print(MTBs)
 MTBs_short = getshortfiles(MTBs)
-print("MTBs detected: " + str(MTBs_short))
+print(("MTBs detected: " + str(MTBs_short)))
 
 # Get active MTB
 activeMTB =  max(MTBs, key=os.path.getmtime)
@@ -177,7 +177,7 @@ if result.HasCanceled:
 OutputFolder = str(result.GetValue('outfolder'))
 Overlap = result.GetValue('overlap')
 activeMTB = result.GetValue('activeMTB')
-print("Active MTB: " + str(activeMTB))
+print(("Active MTB: " + str(activeMTB)))
 TP = result.GetValue('TimePoints')
 Delay = result.GetValue('Delay')
 
@@ -193,12 +193,12 @@ print(xmlfile)
 xmldoc = minidom.parse(xmlfile)
 itemlist = xmldoc.getElementsByTagName('CalibrationUniqueDataValue')
 ScannerOffsetYCal = float(itemlist[int(ls)*3-1].attributes['Value'].value)
-print("Scanner Offset y: " + str(ScannerOffsetYCal))
+print(("Scanner Offset y: " + str(ScannerOffsetYCal)))
 
 # Check if Tiles experiment
 Exp1 = Zen.Acquisition.Experiments.ActiveExperiment
 YN = Exp1.IsTilesExperiment(0)
-print("Is Tiles Experiment: " + str(YN))
+print(("Is Tiles Experiment: " + str(YN)))
 
 # get z position and Focus Sheet close to coverslip
 #Zen.Acquisition.StartLive()
@@ -252,9 +252,9 @@ else:
 
 # print values
 #print('Y Stack Experiment : ' + ExpName)
-print('Overlap : ' + str(Overlap) + '%')
+print(('Overlap : ' + str(Overlap) + '%'))
 #print('Number of Stacks : ' + str(NStacks))
-print('Output Folder for Data : ' + OutputFolder)
+print(('Output Folder for Data : ' + OutputFolder))
 print('\n')
 
 # check directory
@@ -285,7 +285,7 @@ print('\nRunning Volume Stacking Experiment.\n')
 
 while ttt < TP+100:
     print('---------------')
-    print('Time Point # ' + str(ttt-99) + ', Volume Stack # 1')
+    print(('Time Point # ' + str(ttt-99) + ', Volume Stack # 1'))
     Zen.Devices.Focus.MoveTo(Z1)
     focus = Zen.Devices.Focus.ActualPosition
     #print(focus)
@@ -301,12 +301,12 @@ while ttt < TP+100:
     Zen.Devices.ApplyHardwareSetting(hardwaresetting1)
     Det.SetParameter('MTBMuSPIMImagingDevice','ScannerOffsetY', str(curf))
     FocusYActual = float(Det.GetParameter('MTBMuSPIMImagingDevice', 'ScannerOffsetY'))
-    print('Recording at z position: ' + str(curz))
-    print('with Focus Sheet position: ' + str(round((FocusYActual - ScannerOffsetYCal) * 10,3)))
+    print(('Recording at z position: ' + str(curz)))
+    print(('with Focus Sheet position: ' + str(round((FocusYActual - ScannerOffsetYCal) * 10,3))))
     hw = Zen.Devices.ReadHardwareSetting()
     test = float(hw.GetParameter('MTBMuSPIMLightSheetRefocus', 'Position'))
     #print('with Focus Waist position: ' + str(round(curw)))
-    print('with Focus Waist position: ' + str(round(test)))
+    print(('with Focus Waist position: ' + str(round(test))))
     output = Zen.Acquisition.Execute(Exp1)
     SizeY = output.Bounds.SizeY
     PixelSizeXY = output.Scaling.X
@@ -332,7 +332,7 @@ while ttt < TP+100:
     # record z stacks
     for i in range (11, NStacks+10):
         print('---------------')
-        print('Time Point # ' + str(ttt-99) + ', Volume Stack # ' + str(i-9))
+        print(('Time Point # ' + str(ttt-99) + ', Volume Stack # ' + str(i-9)))
         stack_name = 'volumestack_TP' + str(ttt) + str(i) + '_' + str(round((i-10)*dz,3)) + 'um.czi'
         Zen.Devices.Focus.MoveTo(focus-(i-10)*dz)
         curz = Zen.Devices.Focus.ActualPosition
@@ -344,12 +344,12 @@ while ttt < TP+100:
         Zen.Devices.ApplyHardwareSetting(hardwaresetting1)
         Det.SetParameter('MTBMuSPIMImagingDevice','ScannerOffsetY',str(curf))
         FocusYActual = float(Det.GetParameter('MTBMuSPIMImagingDevice', 'ScannerOffsetY'))
-        print('Recording at z position: ' + str(curz))
-        print('with Focus Sheet position: ' + str(round((FocusYActual - ScannerOffsetYCal) * 10,3)))
+        print(('Recording at z position: ' + str(curz)))
+        print(('with Focus Sheet position: ' + str(round((FocusYActual - ScannerOffsetYCal) * 10,3))))
         hw = Zen.Devices.ReadHardwareSetting()
         test = float(hw.GetParameter('MTBMuSPIMLightSheetRefocus', 'Position'))
         #print('with Focus Waist position: ' + str(round(curw)))
-        print('with Focus Waist position: ' + str(round(test)))
+        print(('with Focus Waist position: ' + str(round(test))))
         if YN == True:
             Exp1.ModifyTileRegionsZ(0,curz)
         output = Zen.Acquisition.Execute(Exp1)
@@ -376,7 +376,7 @@ OutputFolder = str(OutputFolder + "\deskewed")
 
 Directory.CreateDirectory(OutputFolder)
 print('---------------')
-print('Created new directory: ', OutputFolder)
+print(('Created new directory: ', OutputFolder))
 
 # Set parameters (deskew with cover glass transformation)
 myShear = ZenZAxisShear.None
@@ -409,7 +409,7 @@ OutputFolder = str(OutputFolder + "\concatenated")
 
 Directory.CreateDirectory(OutputFolder)
 print('---------------')
-print('Created new directory: ', OutputFolder)
+print(('Created new directory: ', OutputFolder))
 
 # get list of files to fuse
 filelist = os.listdir(InputFolder)

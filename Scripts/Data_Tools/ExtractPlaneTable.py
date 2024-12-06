@@ -141,13 +141,13 @@ SizeT = img.Bounds.SizeT
 SizeZ = img.Bounds.SizeZ
 SizeC = img.Bounds.SizeC
 
-print 'Scenes     : ', scenes
-print 'Tiles      : ', tiles
-print 'TimePoints : ', SizeT
-print 'Z-Planes   : ', SizeZ
-print 'Channels   : ', SizeC
-print 'Overall Image Count  : ', scenes * tiles * SizeT * SizeZ * SizeC
-print 'Total SubBlock Count : ', ZenTools.ImageTools.GetNumberOfSubblocks(image=img)
+print('Scenes     : ', scenes)
+print('Tiles      : ', tiles)
+print('TimePoints : ', SizeT)
+print('Z-Planes   : ', SizeZ)
+print('Channels   : ', SizeC)
+print('Overall Image Count  : ', scenes * tiles * SizeT * SizeZ * SizeC)
+print('Total SubBlock Count : ', ZenTools.ImageTools.GetNumberOfSubblocks(image=img))
 
 count = -1
 
@@ -173,7 +173,7 @@ for sb in sbs:
         
         count = count + 1
         if divmod(count, pbar)[1] == 0:
-            print '\b.',
+            print('\b.', end=' ')
         
         # allow data accsess
         sb.BeginImageDataAccess()
@@ -228,7 +228,7 @@ if savetable:
 
     # save the data to file
     tablefilename = img.FileName[:-4] + '_PlaneTable.csv'
-    print 'Data will be saved to: ', tablefilename
+    print('Data will be saved to: ', tablefilename)
     
     # check for exiting file
     if File.Exists(tablefilename):
