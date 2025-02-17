@@ -21,8 +21,8 @@
 import argparse
 import codecs
 import os
-import subprocess
 import re
+import lib2to3.main as lib2to3_module
 from xml.etree import ElementTree
 
 
@@ -66,10 +66,13 @@ def convert_macro(input_file_path: str, output_file_path: str):
 
         # Convert the python script from python2 to python3 syntax
         print('Converting temporary python script...')
-        subprocess.call(
-            args=['2to3', '-w', '-n', temp_python_script_file_path],
-            stdout=subprocess.DEVNULL,
-            stderr=subprocess.DEVNULL)
+        exit_code_lib2to3 = lib2to3_module.main(
+            fixer_pkg="lib2to3.fixes",
+            args=['--no-diffs', '-w', '-n', temp_python_script_file_path])
+
+        if exit_code_lib2to3 != 0:
+            print('Error: Failed to convert the python syntax')
+            return -2
 
         # Read the python file contents
         print('Loading converted python script content...')
@@ -119,5 +122,3 @@ if __name__ == '__main__':
 
     exit_code = convert_macro(args.input_file_path, args.output_file_path)
     exit(exit_code)
-
-
