@@ -1,15 +1,19 @@
-:: regScripting_Release.bat
+:: regScripting_zen311.bat --> works with ZEN 3.11 or newer !!!
+:: This needs to be run with administrator privileges !!!
 
 echo off
 
-pushd "C:\Windows\Microsoft.NET\Framework64\v4.0.30319"
+SET DLL1="c:\Program Files\Carl Zeiss\ZEN 2\ZEN 2 (blue edition)\Zeiss.Micro.Scripting.comhost.dll"
+SET DLL2="c:\Program Files\Carl Zeiss\ZEN 2\ZEN 2 (blue edition)\Zeiss.Micro.LM.Scripting.comhost.dll"
+SET DLL3="c:\Program Files\Carl Zeiss\ZEN 2\ZEN 2 (blue edition)\Zeiss.Micro.Scripting.Research.comhost.dll"
 
-SET dll-1="C:\Program Files\Carl Zeiss\ZEN 2\ZEN 2 (blue edition)\Zeiss.Micro.Scripting.dll"
-regasm /u /codebase /tlb %dll-1%
-regasm /codebase /tlb %dll-1%
+regsvr32.exe /u %DLL1%
+regsvr32.exe /u %DLL2%
+regsvr32.exe /u %DLL3%
 
-SET dll-2="C:\Program Files\Carl Zeiss\ZEN 2\ZEN 2 (blue edition)\Zeiss.Micro.LM.Scripting.dll"
-regasm /u /codebase /tlb %dll-2%
-regasm /codebase /tlb %dll-2%
+regsvr32.exe %DLL1%
+regsvr32.exe %DLL2%
+regsvr32.exe %DLL3%
+
 popd
 pause
