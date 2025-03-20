@@ -94,7 +94,7 @@ Python code that sends commands to ZEN over the specified port.
 
 ```python
 import os
-from zencontrol_short import ZenTCPIP
+from zencontrol import ZenTCPIP
 
 # open the TCP-IP connection to ZEN
 zentcp = ZenTCPIP()
