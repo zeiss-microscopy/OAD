@@ -1,32 +1,33 @@
 # -*- coding: utf-8 -*-
 
 #################################################################
-# File        : zentcontrol.py
-# Version     : 0.4
+# File        : zentcontrol_short.py
 # Author      : czsrh
-# Date        : 23.01.2020
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # Disclaimer: This tool is purely experimental. Feel free to
 # use it at your own risk.
 #
-# Copyright(c) 2020 Carl Zeiss AG, Germany. All Rights Reserved.
+# Copyright(c) 2024 Carl Zeiss AG, Germany. All Rights Reserved.
 #
 # Permission is granted to use, modify and distribute this code,
 # as long as this copyright notice remains part of the code.
 #################################################################
 
 import os
-import sys
 import pathlib
 import telnetlib
 import time
+from typing import Tuple, Union
 
 
-class ZenExperiment():
-    def __init__(self, experiment='test.czexp',
-                 savefolder=r'c:\zen_output',
-                 cziname='myimage.czi'):
+class ZenExperiment:
+    def __init__(
+        self,
+        experiment: str = "test.czexp",
+        savefolder: str = r"c:\zen_output",
+        cziname: str = "myimage.czi",
+    ):
         """Initialize a ZenExperiment object with default values to be used via
         the TCP-IP connection between Python and ZEN.
 
@@ -43,8 +44,8 @@ class ZenExperiment():
         self.savefolder = savefolder
         self.cziname = cziname
 
-    def startexperiment(self, timeout=200, port=52757):
-        """ Start the actual ZEN experiment. It will open a TCP-IP
+    def startexperiment(self, timeout: int = 200, port: int = 52757) -> str:
+        """Start the actual ZEN experiment. It will open a TCP-IP
         connection to ZEN and then send the list of commands
 
         :param timeout: [description], defaults to 200
@@ -57,26 +58,32 @@ class ZenExperiment():
 
         # get the list of existing CZI in the current folder
         czidocs = ZenDocuments()
-        czifiles_long, czifiles_short = czidocs.getfilenames(folder=self.savefolder,
-                                                             pattern='*.czi')
+        czifiles_long, czifiles_short = czidocs.getfilenames(
+            folder=self.savefolder, pattern="*.czi"
+        )
 
         # in case the czi does already exist do nothing
         if self.cziname in czifiles_short:
-            print('CZI already exits. Choose a different name.')
+            print(
+                "CZI already exits inside:", self.savefolder, "Choose a different name."
+            )
             return None
 
         # in case the czi does not already exist
         if self.cziname not in czifiles_short:
 
             # define the lists of commands to be send
-            commandlist = ['from System.IO import File, Directory, Path',
-                           'outputfolder = r"' + self.savefolder + '"',
-                           'exp = Zen.Acquisition.Experiments.GetByName(r"' + self.experiment + '")',
-                           'exp.SetActive()',
-                           'img = Zen.Acquisition.Execute(exp)',
-                           'img.Save(Path.Combine(outputfolder, "' + self.cziname + '"))',
-                           'img.Close()'
-                           ]
+            commandlist = [
+                "from System.IO import File, Directory, Path",
+                'outputfolder = r"' + self.savefolder + '"',
+                'exp = Zen.Acquisition.Experiments.GetByName(r"'
+                + self.experiment
+                + '")',
+                "exp.SetActive()",
+                "img = Zen.Acquisition.Execute(exp)",
+                'img.Save(Path.Combine(outputfolder, "' + self.cziname + '"))',
+                "img.Close()",
+            ]
 
             # open the TCP-IP connection to ZEN
             zentcp = ZenTCPIP()
@@ -86,7 +93,9 @@ class ZenExperiment():
             for command in commandlist:
                 # print the current command and execute it
                 print(command)
-                rt, an = zentcp.tcp_eval_expression_and_wait_for_ok(zentcp_connection, command, timeout)
+                rt, an = zentcp.tcp_eval_expression_and_wait_for_ok(
+                    zentcp_connection, command, timeout
+                )
 
             # finish and close TCP-IP connection to ZEN
             zentcp_connection.close()
@@ -96,12 +105,13 @@ class ZenExperiment():
             return czifilepath
 
 
-class ZenDocuments():
+class ZenDocuments:
     def __init__(self):
         pass
 
-    def getfilenames(self, folder=r'c:\temp',
-                     pattern="*.czexp"):
+    def getfilenames(
+        self, folder: str = r"c:\temp", pattern: str = "*.czexp"
+    ) -> Tuple[str, str]:
         """Get lists of all ZEN related files using a certain pattern.
 
         :param folder: file extension pattern, defaults to r"c:\temp"
@@ -127,14 +137,16 @@ class ZenDocuments():
         return files_long, files_short
 
 
-class ZenTCPIP():
+class ZenTCPIP:
     def __init__(self):
         """Initialize the object to connect with ZEN over the
         TCP-IP port.
         """
         pass
 
-    def tcp_open_port(self, timeout=200, port=52767):
+    def tcp_open_port(
+        self, timeout: int = 200, port: int = 52767
+    ) -> Union[telnetlib.Telnet, int]:
         """Open a connection to ZEN with a specified timeout and port number
 
         :param timeout: time in [s] the longest command is expected to take.
@@ -153,7 +165,7 @@ class ZenTCPIP():
             try:
                 telnet = telnetlib.Telnet("localhost", port)
                 success = True
-                print('Opened Port: ', port)
+                print("Opened Port: ", port)
                 break
             except Exception as e:
                 # print("type error: " + str(e)):
@@ -164,17 +176,19 @@ class ZenTCPIP():
 
         assert success is True
 
-        line = telnet.read_until(os.linesep.encode('ascii'), 1)
+        line = telnet.read_until(os.linesep.encode("ascii"), 1)
         # show output to check if it is really working
-        print('Received line: ', line.decode('utf-8'))
+        print("Received line: ", line.decode("utf-8"))
 
-        if line == b'Welcome to ZEN PythonScript\r\n':
+        if line == b"Welcome to ZEN PythonScript\r\n":
             return telnet
         else:
             return 0
 
-    def tcp_eval_expression_and_wait_for_ok(self, telnet, expression, timeout):
-        """ Evaluate the given python expression within ZEN and expect
+    def tcp_eval_expression_and_wait_for_ok(
+        self, telnet: telnetlib.Telnet, expression: str, timeout: float
+    ) -> Tuple[str, str]:
+        """Evaluate the given python expression within ZEN and expect
         an "OK" answer within given timeout (in seconds).
         Return True if "OK" was received within given timeout
 
@@ -201,7 +215,7 @@ class ZenTCPIP():
 
         return answer == "Ok", answer
 
-    def tcp_eval_expression(self, telnet, expression):
+    def tcp_eval_expression(self, telnet: telnetlib.Telnet, expression: str) -> None:
         """Evaluate the given python expression within ZEN
 
         :param telnet: [description]
@@ -210,9 +224,9 @@ class ZenTCPIP():
         :type expression: string
         """
 
-        telnet.write(("EVAL " + expression).encode('ascii'))
+        telnet.write(("EVAL " + expression).encode("ascii"))
 
-    def tcp_read_answer(self, telnet, timeout=0.1):
+    def tcp_read_answer(self, telnet: telnetlib.Telnet, timeout: float = 0.1) -> str:
         """Read the answer after sending an OAD command.
 
         :param telnet: Telnet object
@@ -222,12 +236,12 @@ class ZenTCPIP():
         """
 
         # Read one line and remove line breaks
-        line = telnet.read_until(os.linesep.encode('ascii'), float(timeout))
-        answer = line.decode('utf-8')[0:-2]
+        line = telnet.read_until(os.linesep.encode("ascii"), float(timeout))
+        answer = line.decode("utf-8")[0:-2]
 
         return answer
 
-    def tcp_read_all(self, telnet):
+    def tcp_read_all(self, telnet: telnetlib.Telnet) -> None:
         """Read everything from the buffer.
 
         :param telnet: Telnet object
@@ -235,8 +249,8 @@ class ZenTCPIP():
         """
 
         while True:
-            line = telnet.read_until(os.linesep.encode('ascii'), 0.5)
-            if line == b'':
+            line = telnet.read_until(os.linesep.encode("ascii"), 0.5)
+            if line == b"":
                 # read one more time to be sure
-                line = telnet.read_until(os.linesep.encode('ascii'), 0.5)
+                line = telnet.read_until(os.linesep.encode("ascii"), 0.5)
                 break
