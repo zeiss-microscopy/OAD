@@ -13,7 +13,7 @@ Its main components are:
 
 - **CZI image data format and its APIs**
 - **Python Scripting (OAD Simple API)**
-- **ZEN API Contraol ZEN from the outside**
+- **ZEN API - Control ZEN from the outside**
 - **Interfaces to ZEN (TCP-IP, COM, Extensions)**
 - **Experiment Feedback - Adaptive Acquisition with Online Image Analysis**
 
