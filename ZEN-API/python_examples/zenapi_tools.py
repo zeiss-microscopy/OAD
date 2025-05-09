@@ -64,7 +64,7 @@ def initialize_zenapi(
 
     # check if config file exists
     if not Path(config_file).exists():
-        logger.error(f"Configuration file {config_file} does not exist.")
+        logger.warning(f"Configuration file {config_file} does not exist.")
         logger.info("Searching for configuration file...")
         config_file = find_file(config_file)
         if config_file:
