@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Metadata>
+  <Property key="File.CreationTime" value="2024-09-06T14:03:37+02:00" type="System.DateTime" />
+  <Property key="File.LastWriteTime" value="2024-09-06T14:03:42+02:00" type="System.DateTime" />
+  <Property key="File.Size" value="6368" type="System.Int64" />
+  <Property key="File.Name" value="20240725_162439_4734.czjob" />
+  <Property key="Document.Title" value="ZEN-API Job" />
+  <Property key="Document.Description" value="Smoothing using a gauss filter" />
+  <Property key="Document.Rating" value="0" type="System.Int32" />
+  <Property key="Document.Keywords" value="" />
+  <Property key="Document.CreationTime" value="2024-07-25T16:25:10.1776338+02:00" type="System.DateTime" />
+  <Property key="Document.Comment" value="" />
+  <Property key="Document.LastWriteTime" value="2024-09-06T14:03:42.7816359+02:00" type="System.DateTime" />
+  <Property key="Job.Category" value="ZEN API" />
+  <Property key="Job.SubCategory" value="" />
+  <Property key="Job.AccessControlList" value="*" />
+  <Property key="Job.SystemAccessControlList" value="*" />
+  <Property key="Job.Status" value="Draft" />
+  <Property key="Thumbnail" value="thumb.png" />
+  <Property key="Attachments" value="thumb.png" />
+  <Property key="File.Type" value="CZJOB" />
+</Metadata>

@@ -1,0 +1,1 @@
+{"Id": "30c3f719-a7ac-41a3-9204-b6a026ea5b5a", "Type": "SingleClassSemanticSegmentation", "InputShape": [1024, 1024, 1], "OutputShape": [1024, 1024, 2], "MinOverlap": [128, 128], "Classes": ["background", "nuc"], "ModelName": "APEER-trained model"}
