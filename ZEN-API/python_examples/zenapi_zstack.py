@@ -20,14 +20,14 @@ from zenapi_tools import set_logging, initialize_zenapi
 from zenapi_experiment_tools import show_zstack_info_LM, save_experiment, delete_czifile
 
 # import the auto-generated python modules
-from zen_api.acquisition.v1beta import (
+from public.zen_api.acquisition.v1beta import (
     ExperimentServiceStub,
     ExperimentServiceLoadRequest,
     ExperimentServiceCloneRequest,
     ExperimentServiceRunExperimentRequest,
 )
 
-from zen_api.lm.acquisition.v1beta import (
+from public.zen_api.lm.acquisition.v1beta import (
     ZStackServiceStub,
     ZStackServiceGetZStackInfoRequest,
     ZStackServiceModifyZStackCenterRangeRequest,
@@ -35,7 +35,7 @@ from zen_api.lm.acquisition.v1beta import (
 )
 
 # import the auto-generated python modules
-from zen_api.lm.hardware.v2 import (
+from public.zen_api.lm.hardware.v2 import (
     FocusServiceGetPositionRequest,
     FocusServiceMoveToRequest,
     FocusServiceStub,

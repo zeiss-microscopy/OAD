@@ -4,7 +4,7 @@ import asyncio
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from zen_api.workflows.v3beta import (
+from public.zen_api.workflows.v3beta import (
     WorkflowServiceStub,
     WorkflowServiceGetAvailableJobTemplatesRequest,
 )

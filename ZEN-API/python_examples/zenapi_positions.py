@@ -19,13 +19,13 @@ from zenapi_tools import set_logging, initialize_zenapi
 from zenapi_experiment_tools import save_experiment, delete_czifile
 
 # import the auto-generated python modules
-from zen_api.acquisition.v1beta import (
+from public.zen_api.acquisition.v1beta import (
     ExperimentServiceStub,
     ExperimentServiceLoadRequest,
     ExperimentServiceCloneRequest,
 )
 
-from zen_api.lm.acquisition.v1beta import (
+from public.zen_api.lm.acquisition.v1beta import (
     TilesServiceStub,
     TilesServiceIsTilesExperimentRequest,
     TilesServiceClearRequest,

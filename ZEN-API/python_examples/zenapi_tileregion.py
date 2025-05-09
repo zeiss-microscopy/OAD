@@ -18,14 +18,14 @@ from pathlib import Path
 from zenapi_tools import set_logging, initialize_zenapi
 
 # import the auto-generated python modules
-from zen_api.acquisition.v1beta import (
+from public.zen_api.acquisition.v1beta import (
     ExperimentServiceStub,
     ExperimentServiceLoadRequest,
     ExperimentServiceCloneRequest,
     ExperimentServiceSaveRequest,
 )
 
-from zen_api.lm.acquisition.v1beta import (
+from public.zen_api.lm.acquisition.v1beta import (
     TilesServiceStub,
     TilesServiceIsTilesExperimentRequest,
     TilesServiceAddRectangleTileRegionRequest,

@@ -31,8 +31,8 @@ from pylibCZIrw import czi as pyczi
 import pandas as pd
 
 # import the auto-generated python modules for ZEN API
-from zen_api.common.v1 import DoublePoint
-from zen_api.acquisition.v1beta import (
+from public.zen_api.common.v1 import DoublePoint
+from public.zen_api.acquisition.v1beta import (
     ExperimentServiceStub,
     ExperimentServiceLoadRequest,
     ExperimentServiceCloneRequest,
@@ -41,7 +41,7 @@ from zen_api.acquisition.v1beta import (
     ExperimentServiceSaveRequest,
 )
 
-from zen_api.lm.acquisition.v1beta import (
+from public.zen_api.lm.acquisition.v1beta import (
     TilesServiceStub,
     TilesServiceIsTilesExperimentRequest,
     TilesServiceAddRectangleTileRegionRequest,

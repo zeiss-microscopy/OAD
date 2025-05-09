@@ -22,9 +22,10 @@ from pathlib import Path
 # from pydantic.error_wrappers import ValidationError
 from pydantic import ValidationError
 from dataclasses import dataclass, field
-from zen_api.common.v1 import DoublePoint
+from public.zen_api.common.v1 import DoublePoint
 from loguru import logger
 import sys
+import os
 
 
 def set_logging():
@@ -60,6 +61,17 @@ def initialize_zenapi(
     Returns:
         Tuple consisting of gRPC Channel and metadata as a list of tuples.
     """
+
+    # check if config file exists
+    if not Path(config_file).exists():
+        logger.error(f"Configuration file {config_file} does not exist.")
+        logger.info("Searching for configuration file...")
+        config_file = find_file(config_file)
+        if config_file:
+            logger.info(f"Configuration file found at {config_file}.")
+        else:
+            logger.error(f"Configuration file {config_file} not found.")
+            raise FileNotFoundError(f"Configuration file {config_file} does not exist.")
 
     # get the configuration
     config = configparser.ConfigParser()
@@ -98,6 +110,39 @@ def path_validator(v):
     if isinstance(v, (str, Path)):
         return Path(v)
     raise ValidationError("value is not a valid path")
+
+
+def find_file(filename: str, root_dir: str | os.PathLike | None = None) -> str | None:
+    """
+    Recursively search for a file and return its absolute path.
+
+    Parameters
+    ----------
+    filename : str
+        Name of the file to locate.
+    root_dir : str | os.PathLike | None, optional
+        Directory to start searching from.
+        • None (default) → directory that contains the running script
+        • Any valid path → search starts there
+
+    Returns
+    -------
+    str | None
+        Absolute path to the first match, or None if not found.
+    """
+    # Resolve default start dir
+    if root_dir is None:
+        root_dir = (
+            Path(__file__).resolve().parent if "__file__" in globals() else Path.cwd()
+        )
+
+    root_dir = Path(root_dir)
+
+    for path in root_dir.rglob("*"):
+        if path.name == filename:
+            return str(path.resolve())
+
+    return None
 
 
 @dataclass

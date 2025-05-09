@@ -12,7 +12,7 @@
 # as long as this copyright notice remains part of the code.
 #################################################################
 
-from zen_api.lm.acquisition.v1beta import (
+from public.zen_api.lm.acquisition.v1beta import (
     ZStackServiceGetZStackInfoResponse,
     TrackServiceGetTrackInfoResponse,
     ExperimentSwAutofocusServiceGetAutofocusParametersResponse,
@@ -20,7 +20,7 @@ from zen_api.lm.acquisition.v1beta import (
 )
 
 # import the auto-generated python modules
-from zen_api.acquisition.v1beta import (
+from public.zen_api.acquisition.v1beta import (
     ExperimentServiceStub,
     ExperimentServiceLoadResponse,
     ExperimentServiceSaveRequest,

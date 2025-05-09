@@ -18,7 +18,7 @@ import sys
 from zenapi_tools import set_logging, initialize_zenapi
 
 # import the auto-generated python modules
-from zen_api.lm.hardware.v2 import (
+from public.zen_api.lm.hardware.v2 import (
     StageServiceStub,
     StageServiceGetPositionRequest,
     StageServiceMoveToRequest,

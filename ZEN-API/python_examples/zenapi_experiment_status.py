@@ -21,7 +21,7 @@ from matplotlib import pyplot as plt
 import matplotlib.cm as cm
 
 # import the auto-generated python modules
-from zen_api.acquisition.v1beta import (
+from public.zen_api.acquisition.v1beta import (
     ExperimentServiceStub,
     ExperimentServiceLoadRequest,
     ExperimentServiceGetImageOutputPathRequest,

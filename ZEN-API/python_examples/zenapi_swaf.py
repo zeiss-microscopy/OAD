@@ -20,13 +20,13 @@ from zenapi_experiment_tools import show_swaf_info_LM, save_experiment
 from grpclib import GRPCError
 
 # import the auto-generated python modules
-from zen_api.acquisition.v1beta import (
+from public.zen_api.acquisition.v1beta import (
     ExperimentServiceStub,
     ExperimentServiceLoadRequest,
     ExperimentServiceCloneRequest,
 )
 
-from zen_api.lm.acquisition.v1beta import (
+from public.zen_api.lm.acquisition.v1beta import (
     ExperimentSwAutofocusServiceStub,
     ExperimentSwAutofocusServiceGetAutofocusParametersRequest,
     ExperimentSwAutofocusServiceSetAutofocusParametersRequest,
@@ -37,7 +37,7 @@ from zen_api.lm.acquisition.v1beta import (
 )
 
 # import the auto-generated python modules
-from zen_api.lm.hardware.v2 import (
+from public.zen_api.lm.hardware.v2 import (
     # StageServiceStub,
     StageServiceGetPositionRequest,
     # StageServiceMoveToRequest,

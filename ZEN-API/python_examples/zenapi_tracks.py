@@ -19,14 +19,14 @@ from zenapi_tools import set_logging, initialize_zenapi
 from zenapi_experiment_tools import show_track_info_LM
 
 # import the auto-generated python modules
-from zen_api.acquisition.v1beta import (
+from public.zen_api.acquisition.v1beta import (
     ExperimentServiceStub,
     ExperimentServiceLoadRequest,
     ExperimentServiceCloneRequest,
     ExperimentServiceSaveRequest,
 )
 
-from zen_api.lm.acquisition.v1beta import (
+from public.zen_api.lm.acquisition.v1beta import (
     TrackServiceGetTrackInfoRequest,
     TrackServiceActivateTrackRequest,
     TrackServiceDeactivateTrackRequest,

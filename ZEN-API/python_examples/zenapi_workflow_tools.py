@@ -14,7 +14,7 @@
 # import asyncio
 # import sys
 # import os
-from zen_api.workflows.v3beta import (
+from public.zen_api.workflows.v3beta import (
     JobTemplateInfo,
     WorkflowServiceStub,
     WorkflowServiceGetAvailableJobTemplatesRequest,
@@ -27,7 +27,7 @@ from zen_api.workflows.v3beta import (
     WorkflowServiceLoadJobTemplateRequest,
 )
 
-from zen_api.workflows.v1beta import (
+from public.zen_api.workflows.v1beta import (
     JobResourcesServiceStub,
     JobResourcesServiceSetIntegerValueRequest,
     JobResourcesServiceSetFloatValueRequest,

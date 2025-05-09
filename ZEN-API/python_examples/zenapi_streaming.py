@@ -24,7 +24,7 @@ from PyQt5.QtGui import QPen, QColor
 import pyqtgraph as pg
 import sys
 from pathlib import Path
-from zenapi_tools import initialize_zenapi, set_logging
+from zenapi_tools import initialize_zenapi, set_logging, find_file
 from processing_tools import ArrayProcessor
 from czmodel.pytorch.convert import DefaultConverter
 from czmodel import ModelMetadata
@@ -35,7 +35,7 @@ import random
 from typing import Optional, Union
 
 # import the auto-generated python modules for ZEN API
-from zen_api.acquisition.v1beta import (
+from public.zen_api.acquisition.v1beta import (
     ExperimentServiceStub,
     ExperimentStreamingServiceStub,
     ExperimentStreamingServiceMonitorExperimentRequest,
@@ -54,33 +54,6 @@ class Processing(Enum):
     SEG_THRESHOLD_MANUAL = 3
     SEG_SEMANTIC = 4
     DENOISE = 5
-
-
-#############################################################################################
-# The pixel type has to match the output from the running experiment. Please adapt if needed !
-px = np.dtype(np.uint16)
-czi_name = "zenapi_test"
-my_experiment = "ZEN_API_Test_w96_1024x1024_CH=2"
-channel_index = 0
-
-# define the desired online processing here
-# processing = Processing.NO_PROCESSING
-# processing = Processing.SEG_THRESHOLD_MANUAL
-# processing = Processing.SEG_THRESHOLD_OTSU
-processing = Processing.SEG_SEMANTIC  # --> cyto2022_nuc2.czann
-# processing = Processing.DENOISE  # --> LiveDenoise_DAPI.czann
-
-draw_bbox = True
-measure_properties = ("label", "area", "centroid", "bbox")
-exp_started_by_UI = True
-threshold = 850
-enable_raw_data = True  # if True scan lines will be read "line-wise"
-
-configfile = "config.ini"
-bbox_width = 0.05
-# czann_filepath = r"ai_models/simple_pytorch_nuclei_segmodel_pytorch.czann"
-czann_filepath = r"ai_models/cyto2022_nuc2.czann"
-# czann_filepath = r"ai_models/LiveDenoise_DAPI.czann"
 
 
 async def start_experiment(
@@ -107,7 +80,13 @@ async def start_experiment(
 
     """
     # get the gRPC channel and the metadata
-    channel, metadata = initialize_zenapi(configfile)
+    try:
+        channel, metadata = initialize_zenapi(configfile)
+    except Exception as e:
+        logger.error(
+            f"Failed to initialize ZEN API with config file '{configfile}': {e}"
+        )
+        raise
     exp_service = ExperimentServiceStub(channel=channel, metadata=metadata)
 
     # get available experiments from the ZEN core default folder
@@ -165,30 +144,42 @@ class MainWindow(QtWidgets.QMainWindow):
         self,
         loop=None,
         configfile: str = "config.ini",
-        exp_started_by_UI: bool = True,
+        start_experiment_from_UI: bool = True,
+        my_experiment: str = "my_exp.czexp",
+        czi_name: str = "my_image.czi",
         *args,
         **kwargs,
     ):
         super(MainWindow, self).__init__(*args, **kwargs)
 
-        self.expID = None
+        # self.expID will be assigned when needed
         self.loop = loop
         self.imageView = pg.ImageView()
         self.setWindowTitle("ZEN-API Pixel Stream")
         self.setCentralWidget(self.imageView)
         self.pen = QPen()
-        self.pen.setWidthF(bbox_width)
+        self.pen.setWidthF(0.05)  # set bounding box width
 
-        # get the gRPC channel and the metadata
-        self.channel, self.metadata = initialize_zenapi(configfile)
+        try:
+            # get the gRPC channel and the metadata
+            self.channel, self.metadata = initialize_zenapi(configfile)
+        except Exception as e:
+            logger.error(
+                f"Failed to initialize ZEN API with config file '{configfile}': {e}"
+            )
+            QtWidgets.QMessageBox.critical(
+                self, "Error", f"Failed to initialize ZEN API: {e}"
+            )
+            sys.exit(1)
+
         self.streaming_service = ExperimentStreamingServiceStub(
             channel=self.channel, metadata=self.metadata
         )
 
-        self.exp_started_by_UI = exp_started_by_UI
+        self.start_experiment_from_UI = start_experiment_from_UI
 
-        # if the experiment is not started from UI than start one vai ZEN API
-        if not self.exp_started_by_UI:
+        # if the experiment is not started from UI than start one via ZEN API
+        if not self.start_experiment_from_UI:
             logger.info(f"Starting Experiment via ZEN API: {my_experiment}")
             self.expID = asyncio.run(
                 start_experiment(
@@ -199,6 +190,7 @@ class MainWindow(QtWidgets.QMainWindow):
                     configfile=configfile,
                 )
             )
+            logger.info(f"Experiment ID: {self.expID}")
 
     async def read(
         self,
@@ -209,6 +201,8 @@ class MainWindow(QtWidgets.QMainWindow):
         model_metadata: Optional[ModelMetadata] = None,
         channel_index: Optional[Union[None, int]] = None,
         enable_raw_data: Optional[bool] = False,
+        draw_bbox: Optional[bool] = True,
+        measure_properties: Optional[tuple] = None,
         verbose=False,
     ):
         """
@@ -222,6 +216,7 @@ class MainWindow(QtWidgets.QMainWindow):
             model_metadata (Optional[ModelMetadata]): The metadata of the model.
             channel_index (Optional[Union[None, int]]): The index of the channel.
             enable_raw_data: Optional[bool]: Read partial frames or scan lines (True) or full frames (True)
+            draw_bbox (Optional[bool]): Whether to draw bounding boxes around detected objects.
             verbose (bool): show additional outputs for testing purposes
 
         Returns:
@@ -232,7 +227,7 @@ class MainWindow(QtWidgets.QMainWindow):
         # the channel index can be used to "filter" for specific channels.
         # If None, all channels are returned.
 
-        if self.exp_started_by_UI:
+        if self.start_experiment_from_UI:
             async_iterable = self.streaming_service.monitor_all_experiments(
                 ExperimentStreamingServiceMonitorAllExperimentsRequest(
                     channel_index=channel_index, enable_raw_data=enable_raw_data
@@ -240,7 +235,7 @@ class MainWindow(QtWidgets.QMainWindow):
             )
             logger.info("Getting PixelStream from Experiment started from UI")
 
-        if not self.exp_started_by_UI:
+        if not self.start_experiment_from_UI:
             async_iterable = self.streaming_service.monitor_experiment(
                 ExperimentStreamingServiceMonitorExperimentRequest(
                     experiment_id=self.expID,
@@ -401,23 +396,50 @@ class MainWindow(QtWidgets.QMainWindow):
             )
 
 
-def main(args):
+def main(
+    configfile: str,
+    pixeltype: np.dtype,
+    czi_name: str,
+    start_experiment_from_UI: bool,
+    my_experiment: str,
+    channel_index: int,
+    processing: Processing,
+    threshold: int,
+    czann_filepath: str,
+    enable_raw_data: bool = False,
+):
+
+    inferencer = None
+    measure_properties = ("label", "area", "centroid", "bbox")
 
     # start application and create async event loop to display the pixels
-    app = QtWidgets.QApplication(args)
+    app = QtWidgets.QApplication(sys.argv)
     loop = qasync.QEventLoop(app)
     asyncio.set_event_loop(loop)
 
     # create the main window and pass on the event loop
     window = MainWindow(
-        loop, configfile=configfile, exp_started_by_UI=exp_started_by_UI
+        loop,
+        configfile=configfile,
+        my_experiment=my_experiment,
+        start_experiment_from_UI=start_experiment_from_UI,
+        czi_name=czi_name,
     )
     window.show()
 
-    inferencer = None
-
     if processing is Processing.SEG_SEMANTIC or processing is Processing.DENOISE:
         # extract the model information and path and to the prediction
+
+        # check if the model file exits
+        if not Path(czann_filepath).exists():
+            logger.warning(f"Model file {czann_filepath} does not exist.")
+            logger.info("Searching for model file...")
+            czann_filepath = find_file(czann_filepath)
+            if czann_filepath:
+                logger.info(f"Model file found: {czann_filepath}")
+            else:
+                logger.error(f"Model file {czann_filepath} not found.")
+                raise FileNotFoundError(f"Model file {czann_filepath} does not exist.")
 
         # this is the new way of unpacking using the czann files
         model_metadata, model_path = DefaultConverter().unpack_model(
@@ -437,12 +459,13 @@ def main(args):
         asyncio.ensure_future(
             window.read(
                 processing=processing,
-                dtype=px,
+                dtype=pixeltype,
                 threshold=threshold,
                 inferencer=inferencer,
                 model_metadata=model_metadata,
                 channel_index=channel_index,
                 enable_raw_data=enable_raw_data,
+                measure_properties=measure_properties,
                 verbose=False,
             ),
             loop=loop,
@@ -453,5 +476,29 @@ def main(args):
 
 if __name__ == "__main__":
 
+    # define the desired online processing here
+    # processing = Processing.NO_PROCESSING
+    # processing = Processing.SEG_THRESHOLD_MANUAL
+    # processing = Processing.SEG_THRESHOLD_OTSU
+    processing = Processing.SEG_SEMANTIC  # --> cyto2022_nuc2.czann
+    # processing = Processing.DENOISE  # --> LiveDenoise_DAPI.czann
+
+    configfile = r"config.ini"  # use the correct path
+
+    # czann_filepath = r"ZEN-API\python_examples\ai_models/simple_pytorch_nuclei_segmodel_pytorch.czann"
+    czann_filepath = r"ZEN-API\python_examples\ai_models\cyto2022_nuc2.czann"
+    # czann_filepath = r"ZEN-API\python_examples\ai_models/LiveDenoise_DAPI.czann"
+
     logger = set_logging()
-    main(sys.argv)
+
+    main(
+        configfile=configfile,
+        pixeltype=np.dtype(np.uint16),  # must match experiment output
+        czi_name="zenapi_test",
+        start_experiment_from_UI=True,
+        my_experiment="ZEN_API_Test_w96_1024x1024_CH=2",
+        channel_index=0,
+        processing=processing,
+        threshold=850,
+        czann_filepath=czann_filepath,
+    )
