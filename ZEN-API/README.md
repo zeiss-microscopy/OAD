@@ -1,6 +1,8 @@
 - [ZEN API](#zen-api)
   - [General Overview](#general-overview)
-  - [Installation of ZEN API gateway](#installation-of-zen-api-gateway)
+  - [Supported ZEN and ZEN core Versions](#supported-zen-and-zen-core-versions)
+  - [Key Features](#key-features)
+  - [Installation of ZenApi Gateway](#installation-of-zenapi-gateway)
     - [What is the ZenApi gateway?](#what-is-the-zenapi-gateway)
   - [Configuration](#configuration)
     - [Application configuration](#application-configuration)
@@ -48,7 +50,7 @@ This includes both extracting information (**monitoring APIs**) and actively tak
 ZEN API may potentially expose any functionality of ZEN products with the exception of controlling the UI.
 
 ZEN API is a foundation for third parties to integrate our products and automate their processes.
-It opens a possibility for customers to create their own applications, UIs or workflows, based on our SW/HW capabilities and data​.
+It opens a possibility to create applications, UIs or workflows, based on ZEN's SW/HW capabilities and data​.
 
 > **IMPORTANT**: The core idea of ZEN API is to control the Imaging System **from the outside".
 
@@ -56,7 +58,34 @@ It opens a possibility for customers to create their own applications, UIs or wo
 
 > **IMPORTANT**: Note that ZEN API is not replacement for ZEN-internal Scripting based on IronPython (control from the Inside). Both exist and have their purpose and characteristics.
 
-## Installation of ZEN API gateway
+## Supported ZEN and ZEN core Versions
+
+- ZEN API is supported by ZEN (blue) and ZEN core starting with version starting with 3.11 (or better).
+- Not all API methods will work for every system or software version
+- The [ZEN API Documentation](../ZEN-API/documentation/ZEN_API_Documentation_20250509.md) is always based on the latest ZEN or ZEN core release
+
+## Key Features
+
+In its core ZEN APi is a programming interface that overs various method to control ZEN-base imaging system from the outside.To give a brief overview here some highlights:
+
+- **Managing ZEN Experiments and Acquisition**
+  - Check available experiments
+  - Loading, Cloning, XML-Export and Saving of an experiment
+  - Acquire a SNAP
+  - Start and Stop Live Acquisition and Continuous Mode
+  - Monitor, Start and Stop Experiments
+- **Move XY Stage and Focus**
+- **Run Software Autofocus**
+- **Modify Experiments**
+  - Modify TileRegions and Positions
+  - Modify the Z-Stack parameters
+  - (De-)Activate and Tracks & Channels
+- **Create PixelStream (to be read in Python as array etc.)**
+- **Execute ZEN core jobs**
+
+:point_right: Please feel free to use the github issues directly to request new ideas [here](https://github.com/zeiss-microscopy/OAD/issues).
+
+## Installation of ZenApi Gateway
 
 The _ZenApi Gateway_ that is required when using ZEN API. It can be easily installed using the official ZEISS Microscopy Installer Application (ZMI): [Download for ZEISS Microscopy Installer](https://zeiss-microscopy-installer.azureedge.net/public/latest/ZeissMicroscopyInstaller.msi)
 
@@ -159,16 +188,13 @@ The ZenApiGateway can be started with the following command-line options:
 |            | --show-console                  | Show console window on start (only available on Windows)                                     |                                   |
 | -l         | --log-level                     | Set the default log level                                                                    | Logging:LogLevel:Default          |
 | -g         | --generate-global-control-token | Generates a new global control token which replaces the old one                              |                                   |
-| -d         | --debug-mode                    | Enable debug mode (hidden option - not shown in "help")                                      | Application:DebugMode             |
 |            | --help                          | Displays help text                                                                           |                                   |
-
-**Note:** When "--show-console" is passed to the application in an console window the application will not block until finished but it will immediately return control to the console (i.e. you can call other commands). This is unfortunately a technical limitation of the used framework. To make the gateway block until it terminates you need to call it with the "start" command. Example:
 
 ```powershell
 start /wait ZenApiGateway.exe --show-console
 ```
 
-**Note:** Currently the "--debug-mode" option doesn't actually change the behavior of the gateway. The only difference so far is that we show windows notifications (e.g., when an app registers on the gateway) and we have an additional HTTP webpage on URL "/hello" which returns "Hello World!".
+**Note:** Currently the "--debug-mode" option doesn't actually change the behavior of the gateway. The only difference is that it show windows notifications (e.g., when an app registers on the gateway) and we have an additional HTTP webpage on URL "/hello" which returns "Hello World!".
 
 ### TLS & Certificates
 

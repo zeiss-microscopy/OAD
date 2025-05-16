@@ -182,7 +182,7 @@ async def check_experiment_api(
     await exp_service.stop(
         ExperimentServiceStopRequest(experiment_id=my_exp.experiment_id)
     )
-    time.sleep(waittime)  # this should not be needed soon !!!
+    # time.sleep(waittime)  # this should not be needed soon !!!
 
     # start and stop Continuous based on selected experiment
     logger.info("Starting Continuous ...")
