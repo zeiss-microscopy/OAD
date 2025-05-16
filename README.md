@@ -70,7 +70,7 @@ This is an collection of tools and scripts that is free to use for everybody.
 Carl Zeiss Microscopy GmbH's ZEN software undertakes no warranty concerning the use of those scripts, image analysis settings and ZEN experiments. Use them on your own risk.
 
 Additionally Carl Zeiss Microscopy GmbH's ZEN software allows connection and usage to the third party software packages.
-Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those software packages, makes no representation that they will work on your system and/or hardware and will not be liable for any damages caused by the use of this extension.
+Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those software packages, makes no representation that they will work on your system and/or hardware and will not be liable for any damages caused by the use of any scripts or examples inside this repository.
 
 By using any of those examples you agree to this disclaimer.
 
