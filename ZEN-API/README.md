@@ -1,3 +1,44 @@
+- [ZEN API](#zen-api)
+  - [General Overview](#general-overview)
+  - [Installation of ZEN API gateway](#installation-of-zen-api-gateway)
+    - [What is the ZenApi gateway?](#what-is-the-zenapi-gateway)
+  - [Configuration](#configuration)
+    - [Application configuration](#application-configuration)
+    - [Application options](#application-options)
+    - [Authentication options](#authentication-options)
+    - [Command-line options](#command-line-options)
+    - [TLS \& Certificates](#tls--certificates)
+  - [Control Management](#control-management)
+    - [Controlling and Monitoring APIs](#controlling-and-monitoring-apis)
+    - [API Mode](#api-mode)
+    - [Unsupervised API Mode](#unsupervised-api-mode)
+      - [ZEN Core](#zen-core)
+      - [ZEN (blue)](#zen-blue)
+    - [API Control Management](#api-control-management)
+      - [Global API Control Token](#global-api-control-token)
+    - [Combined View](#combined-view)
+  - [Troubleshooting](#troubleshooting)
+    - [Service Unavailable](#service-unavailable)
+    - [Reset Certificates](#reset-certificates)
+    - [Common Issues](#common-issues)
+      - [Server startup](#server-startup)
+        - [Invalid port](#invalid-port)
+        - [Used port](#used-port)
+        - [Blocked port](#blocked-port)
+        - [Invalid host name / IP address](#invalid-host-name--ip-address)
+      - [Invoking API methods](#invoking-api-methods)
+        - [Missing control token](#missing-control-token)
+        - [Cannot run controlling methods](#cannot-run-controlling-methods)
+        - [SSL issue on client side](#ssl-issue-on-client-side)
+  - [Glossary](#glossary)
+  - [Python Examples](#python-examples)
+    - [Python Environment](#python-environment)
+      - [Prerequisites](#prerequisites)
+      - [Python Scripts](#python-scripts)
+    - [Configuration File](#configuration-file)
+  - [Documentation](#documentation)
+  - [DISCLAIMER](#disclaimer)
+
 # ZEN API
 
 ## General Overview
@@ -22,8 +63,8 @@ The _ZenApi Gateway_ that is required when using ZEN API. It can be easily insta
 <img src=./images/zenapi_ZMI_installer.png alt="ZMI - ZEN API Installation" width=100%>
 
 - The installation of the protofiles (*.proto) describing the available API methods is optional
-  - if select, thge *.protofile will be stored in `C:\Users\Public\Documents\Carl Zeiss\ZEN API Proto Files`
-  - the provided Python Example will also work with those *.protofiles
+  - if selected, the `*.protofiles` will be stored in `C:\Users\Public\Documents\Carl Zeiss\ZEN API Proto Files`
+  - the provided Python examples will also work with those *.protofiles
 - When _ZenApi Gateway_ is being installed, the installer creates certificates and the control token in case they are missing.
 - If certificates or the control token already exist, they are not overwritten (i.e. they are re-used).
 
@@ -78,7 +119,7 @@ Application configuration is stored in **appsettings.json** file with some comma
 
 The user is expected to modify only the following sections in the configuration file:
 
-- **Logging:LogLevel** (described below in chapter **Logging**)
+- **Logging:LogLevel**
 - **Application**
 - **Authentication**
 
@@ -284,7 +325,6 @@ Depending on the configured mode, the implementation of some steps are slightly 
 | Is authenticated? | Request header contains global API control token                         |
 | Has control?      | Yes (obsolete in this case, as control token was already checked before) |
 
-
 ## Troubleshooting
 
 This page should give an overview of some common things to try when working with a development version. If this does not help, please contact your local ZEISS microscopy representative.
@@ -355,43 +395,16 @@ API clients need to use TLS encryption when connecting to the gateway. They may,
 
 ## Glossary
 
-**ZEN API**
-
-The whole product or some part of it, depending on the context.
-
-**ZEN API Infrastructure**
-
-The code that allows other teams to easily add and implement new APIs. Basically, the internal framework of ZEN API
-
-**Api Provider**
-
-An application from the ZEN ecosystem that participates in ZEN API, i.e. provides APIs (e.g. ZEN Blue Client, ZEN Core Client, ZEN Service, MTB, etc.)
-
-**ZEN API Gateway**
-
-A small application that:
-
-- needs to be installed with each system that should run ZEN API
-- serves as single point of contact for API clients (i.e. one address to connect to)
-- handles authentication and some other common concerns
-- forwards API calls to the proper API provider (of potentially multiple ones that can be registered)
-- can be considered part of ZEN API infrastructure
-
-**API Server**
-
-Server provided by API infrastructure which needs to be started within each API **Provider**
-
-**API Client**
-
-An application that wants to interact with any API provider via ZEN API which can be implemented in all kinds of programming languages.
-
-**gRPC**
-
-Transport technology / protocol ZEN API is using.
-
-**Proto File**
-
-Systematic description of a part of the API (in protobuf language, as used by gRPC)
+| Term                       | Definition                                                                                                                                                                                                                                                                                                                                                                                                          |
+| -------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **ZEN API**                | The whole product – or some part of it – depending on the context.                                                                                                                                                                                                                                                                                                                                                  |
+| **ZEN API Infrastructure** | The **internal** framework that allows to add and implement new APIs.                                                                                                                                                                                                                                                                                                                                               |
+| **API Provider**           | An application in the ZEN ecosystem that offers APIs (e.g., ZEN Blue Client, ZEN Core Client, ZEN Service, MTB, etc.).                                                                                                                                                                                                                                                                                              |
+| **ZEN API Gateway**        | A small application that:<br><br>- needs to be installed with each system that should run ZEN API<br>- serves as single point of contact for API clients (i.e. one address to connect to)<br>- handles authentication and some other common concerns<br>- forwards API calls to the proper API provider (of potentially multiple ones that can be registered)<br>- can be considered part of ZEN API infrastructure |
+| **API Server**             | Server supplied by the API infrastructure that must be started inside each API Provider.                                                                                                                                                                                                                                                                                                                            |
+| **API Client**             | Any application (written in any language) that interacts with an API Provider via ZEN API.                                                                                                                                                                                                                                                                                                                          |
+| **gRPC**                   | The transport technology/protocol used by ZEN API.<br><br>Google-developed, high-performance RPC framework that uses HTTP/2 and Protocol Buffers for fast, strongly-typed, cross-language communication.                                                                                                                                                                                                            |
+| **Proto File**             | Protobuf-language description of a portion of the API (as used by gRPC).                                                                                                                                                                                                                                                                                                                                            |
 
 ## Python Examples
 
@@ -406,7 +419,7 @@ In case one needs a new environment here please create on freshly using the [env
 
 - Make sure the ZEN API gateway is installed
 - Generate the control token
-- Install conda or [miniconda](https://docs.anaconda.com/free/miniconda/) or [miniforge](https://conda-forge.org/miniforge/) base environment 
+- Install conda or [miniconda](https://docs.anaconda.com/free/miniconda/) or [miniforge](https://conda-forge.org/miniforge/) base environment
 
 Open CMD or PowerShell etc. and create a new python environment:
 
@@ -438,9 +451,9 @@ Inside this repository one can find several example and the python classes, that
         └── ...
 ```
 
-Feel free to arange this to your needs but make sure the import inside your python scripts still work.
+Feel free to arrange this to your needs but make sure the import inside your python scripts still work.
 
-#### Configuration File
+### Configuration File
 
 Make sure the `config.ini` is adapted to reflect your local values. An example is shown here:
 
@@ -454,7 +467,7 @@ control-token = ...
 
 ## Documentation
 
-Currently the documentation for the latest ZEN release with resepct to ZEN API can be found here: **[ZEN API - Documentation](../ZEN-API/documentation/ZEN_API_Documentation_20250509.md)**
+Currently the documentation for the latest ZEN release with respect to ZEN API can be found here: **[ZEN API - Documentation](../ZEN-API/documentation/ZEN_API_Documentation_20250509.md)**
 
 ## DISCLAIMER
 
