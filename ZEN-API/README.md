@@ -269,7 +269,8 @@ Note:
 ### Unsupervised API Mode
 
 > **IMPORTANT**: _Unsupervised API Mode_ allows concurrent usage of UI and ZEN API (both _monitoring_ and _controlling_ APIs). This mode is meant for expert users as it is potentially unsafe and the user takes responsibility for the alignment of system interactions.
-> :warning: **Use at your own risk!**
+
+> :warning: **Use the unsupervised ZEN API mode at your own risk!**
 
 If _Unsupervised API Mode_ is not enabled, only _monitoring API_ calls can be used when in UI.
 
