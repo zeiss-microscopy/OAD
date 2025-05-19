@@ -1,5 +1,6 @@
 - [ZEN API](#zen-api)
   - [General Overview](#general-overview)
+    - [ZEN API and Internal Scripting (OAD)](#zen-api-and-internal-scripting-oad)
   - [Supported ZEN and ZEN core Versions](#supported-zen-and-zen-core-versions)
   - [Key Features](#key-features)
   - [Installation of ZenApi Gateway](#installation-of-zenapi-gateway)
@@ -18,7 +19,6 @@
       - [ZEN (blue)](#zen-blue)
     - [API Control Management](#api-control-management)
       - [Global API Control Token](#global-api-control-token)
-    - [Combined View](#combined-view)
   - [Troubleshooting](#troubleshooting)
     - [Service Unavailable](#service-unavailable)
     - [Reset Certificates](#reset-certificates)
@@ -56,7 +56,26 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 
 ![ZEN API Introduction](./images/zenapi_general1.png)
 
-> **IMPORTANT**: Note that ZEN API is not replacement for ZEN-internal Scripting based on IronPython (control from the Inside). Both exist and have their purpose and characteristics.
+> **IMPORTANT**: Note that **ZEN API is not replacement for ZEN-internal Scripting based on IronPython** (control from the Inside). Both exist and have their purpose and characteristics.
+
+### ZEN API and Internal Scripting (OAD)
+
+Zen already offers to option to automate workflows by using the ZEN internal scripting, which is using IronPython as its language. This allows to easily integrate a lot of ZEN functionality since it is based on .NET and written in C#.
+
+<img src=./images/oad_script_editor.png alt="ZEN - OAD Script Editor" width=100%>
+
+- when using the ZEN internal scripting one has access to basically most of the ZEN internal functionality
+- since it is using IronPython it does not allow to import CPython based libraries like NumPy etc.
+
+> **IMPORTANT**: The core idea of OAD (internal IronPython Scripting) is to create scripts where ZEN is the **master application**. It controls the workflow from within the ZEN Client.
+
+This is in contrast to using ZEN API, which allows you to control from the "outside". There can be situations where both approached will work to fulfill the requirements and there are no strict rules, when to use OAD vs. ZEN API but a few general rules.
+
+- if one really needs to control ZEN from the outside using Python (and other languages): :arrow_right: Use ZEN API
+- no need to to control from an external master application or no need to use external python functions: :arrow_right: Use OAD Scripting
+- one really likes using an IDEs like PyCharm, VScode etc. and the need to use normal Python libraries (NumPy etc.) and ZEN API offers the function you need: :arrow_right: Use ZEN API
+
+Remark: as of right now OAD offers a lot more functionality, which is not directly available via ZEN API (yet). For example all the ZEN internal image processing and image analysis function are not integrated into ZEN API
 
 ## Supported ZEN and ZEN core Versions
 
@@ -325,32 +344,6 @@ Since the global access control is currently the only enabled version of API con
 - changing the file where it is persisted (`%PROGRAMDATA%\Carl Zeiss\ZenApiGateway\GlobalControlToken.txt`) and by restarting the gateway so that it loads the new value
 
 A "global control token" is required for calling API methods. The token must be sent in the `control-token` header of the API call and it must match the token in the gateway. If the token is missing, the API call will be aborted with an access control error.
-
-### Combined View
-
-The following flow chart shows the steps and checks performed in the API gateway for incoming requests.
-
-<img src=./images/zenapi_combined_view.png alt="ZEN API - gateway validation Logic" width=50%>
-
-How decisions are made:
-
-**Kind of API?**
-
-- C# API definition marks monitoring API methods with the `[MonitoringApiMethod]` attribute (see above)
-- Based on that, the customized proto builder used in the ZEN API Server adds custom proto options to proto files that mark monitoring methods
-- The gateway uses gRPC reflection to extract the list of available APIs from the API providers. This is based on the proto files and thus contains the custom option on monitoring APIs
-- This is used to configure required authorization policies to access each API method
-
-**In API mode?**
-
-- The gateway provides a special, internal API to be used by API providers to control API mode, e.g. enter and leave it.
-
-Depending on the configured mode, the implementation of some steps are slightly different:
-
-| Decision          | Global Control Token                                                     |
-| ----------------- | ------------------------------------------------------------------------ |
-| Is authenticated? | Request header contains global API control token                         |
-| Has control?      | Yes (obsolete in this case, as control token was already checked before) |
 
 ## Troubleshooting
 
