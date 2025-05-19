@@ -106,7 +106,7 @@ One can copy the global control token to clipboard or generate a new one from th
 
 More info about global control token can be found [here](#global-api-control-token).
 
-![ZEN API - Copy GlobalControl Token](./images/zenapi_copy_token.png)
+![ZEN API - Copy GlobalControl Token](./images/zenapi_copy_token2.png)
 
 ### What is the ZenApi gateway?
 
@@ -498,9 +498,7 @@ Currently the documentation for the latest ZEN release with respect to ZEN API c
 
 ## DISCLAIMER
 
-- ZEN API is still in its early stages. Please be aware of this and expect update and changes.
-- The provided examples are free to use for everybody.
-Carl Zeiss Microscopy GmbH's ZEN software undertakes no warranty concerning the use of those scripts, image analysis settings and ZEN experiments.
+The provided examples are free to use for everybody. Carl Zeiss Microscopy GmbH's ZEN software undertakes no warranty concerning the use of those scripts, image analysis settings and ZEN experiments.
 
 > :warning: **Use ZEN API and the examples at your own risk!**
 
