@@ -56,7 +56,7 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 
 ![ZEN API Introduction](./images/zenapi_general1.png)
 
-> **IMPORTANT**: Note that **ZEN API is not replacement for ZEN-internal Scripting based on IronPython** (control from the Inside). Both exist and have their purpose and characteristics.
+> **IMPORTANT**: Note that **ZEN API is not replacement for ZEN-internal Scripting based on IronPython (OAD)** (control from the Inside). Both exist and have their purpose and characteristics.
 
 ### ZEN API and Internal Scripting (OAD)
 
