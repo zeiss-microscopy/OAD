@@ -1,5 +1,6 @@
 - [ZEN API](#zen-api)
   - [General Overview](#general-overview)
+    - [ZEN API - Python Examples](#zen-api---python-examples)
     - [ZEN API and Internal Scripting (OAD)](#zen-api-and-internal-scripting-oad)
   - [Supported ZEN and ZEN core Versions](#supported-zen-and-zen-core-versions)
   - [Key Features](#key-features)
@@ -57,6 +58,16 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 ![ZEN API Introduction](./images/zenapi_general1.png)
 
 > **IMPORTANT**: Note that **ZEN API is not replacement for ZEN-internal Scripting based on IronPython (OAD)** (control from the Inside). Both exist and have their purpose and characteristics.
+
+### ZEN API - Python Examples
+
+ZEN running an acquisition while the PixelStream is processed by a python client. For the code can be found at: [zenapi_streaming.py](./python_examples/zenapi_streaming.py)
+
+![ZEN API - Online Processing](./images/zenapi_online_process.gif)
+
+ZEN running a simple "guided acquisition" where the overview image is analyzed using python. Subsequently all found objects are acquire automatically. For the code can be found at: [zenapi_guidedacq.py](./python_examples/zenapi_guidedacq.py)
+
+![ZEN API - Guided Acquisition](./images/zenapi_guidedacq.gif)
 
 ### ZEN API and Internal Scripting (OAD)
 
