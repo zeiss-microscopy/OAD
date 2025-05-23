@@ -4,6 +4,8 @@
     - [ZEN API and Internal Scripting (OAD)](#zen-api-and-internal-scripting-oad)
   - [Supported ZEN and ZEN core Versions](#supported-zen-and-zen-core-versions)
   - [Key Features](#key-features)
+    - [ZEN Interfaces - ZEN API](#zen-interfaces---zen-api)
+    - [ZEN API - gRPC](#zen-api---grpc)
   - [Installation of ZEN API Gateway](#installation-of-zen-api-gateway)
     - [What is the ZEN API gateway?](#what-is-the-zen-api-gateway)
   - [Configuration](#configuration)
@@ -95,7 +97,6 @@ Remark: as of right now OAD offers a lot more functionality, which is not direct
 - The [ZEN API Documentation](../ZEN-API/documentation/ZEN_API_Documentation_20250509.md) is always based on the latest ZEN or ZEN core release
 - :arrow_right: ZEN API supports Light Microscopy Systems (LM) as well as Electron Microscopes (EM) - But not all functions are available for both.
 
-
 ## Key Features
 
 In its core, ZEN APi is a programming interface that overs various method to control the imaging system from the outside.To give a brief overview here some highlights:
@@ -116,6 +117,14 @@ In its core, ZEN APi is a programming interface that overs various method to con
 - **Execute ZEN core jobs**
 
 :point_right: Please feel free to use the github issues directly to request new ideas [here](https://github.com/zeiss-microscopy/OAD/issues).
+
+### ZEN Interfaces - ZEN API
+
+<img src=./images/ZEN_Interfaces-zenapi_only.png alt="ZEN - Interface ZEN API" width=60%>
+
+### ZEN API - gRPC
+
+<img src=./images/zenapi_grpc.png alt="ZEN API Gateway - gRPC" width=60%>
 
 ## Installation of ZEN API Gateway
 
