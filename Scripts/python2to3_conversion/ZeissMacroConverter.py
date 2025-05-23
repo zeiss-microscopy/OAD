@@ -48,6 +48,10 @@ def convert_macro(input_file_path: str, output_file_path: str):
         # Get the 'Text' element which contains the python script
         text_element = root_element.find('Text')
         python_script_contents = text_element.text
+        # keep going if an empyt *.czmac was detected 
+        if python_script_contents == None:
+            print(f'The macro is empty, skipping')
+            return 0
     except Exception as e:
         print('Error: This is not a valid macro file.')
         print('Details:')
