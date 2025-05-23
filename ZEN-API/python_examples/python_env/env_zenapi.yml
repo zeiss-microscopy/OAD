@@ -1,0 +1,76 @@
+# Tested on Windows only but should also work for Linux.
+#
+# Disclaimer:
+#
+# Carl Zeiss Microscopy GmbH's ZEN software undertakes no warranty concerning the use of this YML file.
+# By using any of those examples you agree to this disclaimer.
+
+name: zenapi
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.11
+  - docutils
+  - pip
+  - wheel
+  - pytorch
+  - torchvision
+  - pytorch-cuda=12.4
+  - fsspec
+  - setuptools
+  - nb_conda_kernels
+  - pytest
+  - ipyfilechooser
+  - ipywidgets
+  - shapely
+  - czifile
+  - validators
+  - ome-zarr
+  - tqdm
+  - pooch
+  - requests
+  - matplotlib
+  - pyqtgraph
+  - qasync
+  - numpy
+  - pandas
+  - plotly
+  - colormap
+  - zarr
+  - dask
+  - xmltodict
+  - seaborn
+  - python-dateutil
+  - python-box[all]
+  - scikit-image>=0.19.3
+  - grpclib
+
+  - pip:
+      - czmodel[pytorch]>=5
+      - onnxruntime-gpu=1.19.0 # needs to match CUDA etc.
+      - aicspylibczi
+      - pylibCZIrw
+      - czitools
+      #- betterproto
+      - --pre betterproto==2.0.0b7 # sometimes this does not get installed - try manually
+      - --pre betterproto[compiler]==2.0.0b7 # sometimes this does not get installed - try manually
+
+# Create an environment - use conda or mamba
+# conda env create --file env_zenapi.yml
+
+# Update an environment
+# conda env update --name zenapi --file env_zenapi.yml --prune
+
+# Remove an environment
+# conda remove --name zenapi --all
+# conda clean --all
+
+# verfify CUDA
+# nvcc --version
+# nvidia-smi
+
+# Show the locations of all versions of Python that are currently in the path
+# Windows: where python
+# Linux which -a python

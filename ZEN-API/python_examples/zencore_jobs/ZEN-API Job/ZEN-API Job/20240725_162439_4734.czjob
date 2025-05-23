@@ -1,0 +1,143 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Job Version="1.1">
+  <Metadata>
+    <Comment></Comment>
+    <CreationDate>2024-09-06T12:03:42.7791431Z</CreationDate>
+    <CustomAttributes>
+      <Status>Draft</Status>
+      <Category>ZEN API</Category>
+      <AccessControlList>*</AccessControlList>
+      <SystemAccessControlList>*</SystemAccessControlList>
+      <SubCategory></SubCategory>
+    </CustomAttributes>
+    <Description>Smoothing using a gauss filter</Description>
+    <Job.Status>Draft</Job.Status>
+    <Keywords></Keywords>
+    <Title>ZEN-API Job</Title>
+  </Metadata>
+  <OrganizationalStructure />
+  <Items>
+    <JobItem Id="LoadFileTask">
+      <Tasks>
+        <Task Id="LoadFileTask" UniqueId="0258f1ed-51d3-4b9e-8fc7-c04f0267003c" TypeKey="Task.Common.LoadFile" LocalizeId="LoadFileTask">
+          <RunSilent>true</RunSilent>
+          <OperatorHelperImages />
+          <Tools>
+            <Tool Id="ImageLoadTool" UniqueId="25682ed7-b2f8-4fd5-ada4-a150da7a0871" TypeKey="Tool.Common.ImageLoad" LocalizeId="ImageLoadTool">
+              <DisplayGroup>Load</DisplayGroup>
+              <Parameters>
+                <Parameter Id="FileName" UniqueId="47ac0cd8-fcfa-49be-9334-2c54c4b8b9b7" LocalizeId="ImageLoadTool_FileName" DataType="string" ResourceId="res_input_image_file_path">
+                  <Metadata>
+                    <Parameter Id="SuggestedUIElement" DataType="string">
+                      <Value>imagefilebrowser</Value>
+                    </Parameter>
+                    <Parameter Id="IsFileName" DataType="boolean">
+                      <Value>True</Value>
+                    </Parameter>
+                    <Parameter Id="OperatorRestriction" UniqueId="96760960-7167-4425-8b5c-dd6927908a19" DataType="string">
+                      <Value>Hidden</Value>
+                    </Parameter>
+                  </Metadata>
+                  <Value>C:\Users\XGDDRLJA\OneDrive - Carl Zeiss AG\Pictures\Count Cells Sample 1.czi</Value>
+                </Parameter>
+              </Parameters>
+              <Inputs />
+              <Outputs>
+                <Parameter Id="out" />
+              </Outputs>
+            </Tool>
+          </Tools>
+          <Parameters />
+          <Inputs />
+          <Outputs>
+            <Parameter Id="out" UniqueId="1fa40f77-e6b4-41b7-8e83-2ebde4610065" Name="out" />
+          </Outputs>
+        </Task>
+        <Task Id="ProcessingTask" UniqueId="2daf9c32-92e7-4824-b032-22a211a22b8d" TypeKey="Task.Common.Processing" LocalizeId="ProcessingTask">
+          <RunSilent>true</RunSilent>
+          <OperatorHelperImages />
+          <Tools>
+            <Tool Id="GaussTool" UniqueId="45a93bc2-6a2b-42ff-8577-bdd7c2b1d09e" TypeKey="Tool.Common.Gauss" LocalizeId="GaussTool">
+              <DisplayGroup>Smooth</DisplayGroup>
+              <Parameters>
+                <Parameter Id="SigmaX" UniqueId="3ab7d8da-4660-4c2c-a97f-4b284fda0c4e" LocalizeId="GaussTool_SigmaX" DataType="double" ResourceId="res_image_processing_sigma_x">
+                  <Metadata>
+                    <Parameter Id="Maximum" DataType="double">
+                      <Value>100</Value>
+                    </Parameter>
+                    <Parameter Id="Minimum" DataType="double">
+                      <Value>0.4</Value>
+                    </Parameter>
+                    <Parameter Id="SuggestedUIElement" DataType="string">
+                      <Value>slider</Value>
+                    </Parameter>
+                    <Parameter Id="SmallChange" DataType="double">
+                      <Value>0.01</Value>
+                    </Parameter>
+                    <Parameter Id="LargeChange" DataType="double">
+                      <Value>10</Value>
+                    </Parameter>
+                  </Metadata>
+                  <Value>5</Value>
+                </Parameter>
+                <Parameter Id="SigmaY" UniqueId="416f8460-17af-4c48-8c83-eb772d9b8031" LocalizeId="GaussTool_SigmaY" DataType="double" ResourceId="res_image_processing_sigma_y">
+                  <Metadata>
+                    <Parameter Id="Maximum" DataType="double">
+                      <Value>100</Value>
+                    </Parameter>
+                    <Parameter Id="Minimum" DataType="double">
+                      <Value>0.4</Value>
+                    </Parameter>
+                    <Parameter Id="SuggestedUIElement" DataType="string">
+                      <Value>slider</Value>
+                    </Parameter>
+                    <Parameter Id="SmallChange" DataType="double">
+                      <Value>0.01</Value>
+                    </Parameter>
+                    <Parameter Id="LargeChange" DataType="double">
+                      <Value>10</Value>
+                    </Parameter>
+                  </Metadata>
+                  <Value>5</Value>
+                </Parameter>
+              </Parameters>
+              <Inputs>
+                <Parameter Id="in" Name="out" />
+              </Inputs>
+              <Outputs>
+                <Parameter Id="out" />
+              </Outputs>
+            </Tool>
+          </Tools>
+          <Inputs>
+            <Parameter Id="in" UniqueId="06e6a474-dd10-4011-9db9-7f572da4e8c9" Name="out" />
+          </Inputs>
+          <Outputs>
+            <Parameter Id="out" UniqueId="1edc5be1-427f-48f8-9d82-8fcbf5ae3ed5" Name="out">
+              <Metadata>
+                <Parameter Id="PreviewResult" DataType="boolean">
+                  <Value>True</Value>
+                </Parameter>
+              </Metadata>
+            </Parameter>
+          </Outputs>
+        </Task>
+      </Tasks>
+      <Children />
+    </JobItem>
+  </Items>
+  <Resources>
+    <Parameter Id="res_input_image_file_path" UniqueId="res_input_image_file_path_unique_id">
+      <Value>C:\Users\XGDDRLJA\OneDrive - Carl Zeiss AG\Pictures\Count Cells Sample 1 - CH1.czi</Value>
+    </Parameter>
+    <Parameter Id="res_image_processing_sigma_x" UniqueId="res_image_processing_sigma_x_unique_id">
+      <Value>5</Value>
+    </Parameter>
+    <Parameter Id="res_image_processing_sigma_y" UniqueId="res_image_processing_sigma_y_unique_id">
+      <Value>5</Value>
+    </Parameter>
+  </Resources>
+  <UIBehavior>
+    <JobTaskUIBehaviors />
+  </UIBehavior>
+</Job>

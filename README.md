@@ -12,8 +12,8 @@ In order to fulfill the request for automation the ZEN Blue platform offers vari
 Its main components are:
 
 - **CZI image data format and its APIs**
-- **Python Scripting (OAD Simple API)**
-- **ZEN API - Control ZEN from the outside**
+- **Python Scripting (OAD Simple API) using IronPython**
+- **ZEN API Control ZEN from the outside**
 - **Interfaces to ZEN (TCP-IP, COM, Extensions)**
 - **Experiment Feedback - Adaptive Acquisition with Online Image Analysis**
 
@@ -70,10 +70,10 @@ This is an collection of tools and scripts that is free to use for everybody.
 Carl Zeiss Microscopy GmbH's ZEN software undertakes no warranty concerning the use of those scripts, image analysis settings and ZEN experiments. Use them on your own risk.
 
 Additionally Carl Zeiss Microscopy GmbH's ZEN software allows connection and usage to the third party software packages.
-Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those software packages, makes no representation that they will work on your system and/or hardware and will not be liable for any damages caused by the use of this extension.
+Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those software packages, makes no representation that they will work on your system and/or hardware and will not be liable for any damages caused by the use of any scripts or examples inside this repository.
 
 By using any of those examples you agree to this disclaimer.
 
-Version: 2024.11.26
+Version: 2025.05.09
 
-Copyright (c) 2024 Carl Zeiss AG, Germany. All Rights Reserved.
+Copyright (c) 2025 Carl Zeiss AG, Germany. All Rights Reserved.

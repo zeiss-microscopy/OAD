@@ -1,7 +1,0 @@
-aicsimageio>=3.3.4,<4
-aicspylibczi>=2.8.0,<4
-czifile>=2019.7.2
-apeer-dev-kit>=1.2.2,<2
-apeer-ometiff-library>=1.7.2,<2
-
-

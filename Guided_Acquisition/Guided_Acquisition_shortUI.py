@@ -130,15 +130,15 @@ def get_module(module_name, module_version=0):
     mymodule = find_module(module_name)
 
     if mymodule is not None:
-        print 'Module : ' + module_name + ' found.'
+        print('Module : ' + module_name + ' found.')
     elif mymodule is None:
-        print 'Module : ' + module_name + ' not found.'
+        print('Module : ' + module_name + ' not found.')
 
     if str(module_version) in mymodule.AvailableVersions:
-        print 'Module : ' + module_name + ' Version ' + str(module_version) + ' found.'
+        print('Module : ' + module_name + ' Version ' + str(module_version) + ' found.')
         version_found = True
     elif not str(module_version) in mymodule.AvailableVersions:
-        print 'Module : ' + module_name + ' Version ' + str(module_version) + ' not found.'
+        print('Module : ' + module_name + ' Version ' + str(module_version) + ' not found.')
 
     return mymodule, version_found
 
@@ -198,13 +198,13 @@ def dircheck(basefolder):
     base_exists = Directory.Exists(basefolder)
 
     if base_exists:
-        print('Selected Directory Exists: ', base_exists)
+        print(('Selected Directory Exists: ', base_exists))
         # specify the desired output format for the folder, e.g. 2017-08-08_17-47-41
         format = '%Y-%m-%d_%H-%M-%S'
         
         # create the new directory
         newdir = createfolder(basefolder, formatstring=format)
-        print('Created new directory: ', newdir)
+        print(('Created new directory: ', newdir))
     
     if not base_exists:
         Directory.CreateDirectory(basefolder)
@@ -264,7 +264,7 @@ def cloneexp(expname, prefix='GA_', save=True, reloadexp=True):
     # save experiment
     if save:
         exp.SaveAs(exp_newname, False)
-        print('Saved Temporay Experiment as : ', exp_newname)
+        print(('Saved Temporay Experiment as : ', exp_newname))
         # close the original experiment object
         exp.Close()
         time.sleep(1)
@@ -307,7 +307,7 @@ def runSWAF_special(SWAF_exp,
 
     # get current z-Position
     zSWAF = Zen.Devices.Focus.ActualPosition
-    print('Z-Position before special SWAF :', zSWAF)
+    print(('Z-Position before special SWAF :', zSWAF))
 
     # set DetailScan active and wait for moving hardware due to settings
     SWAF_exp.SetActive()
@@ -322,11 +322,11 @@ def runSWAF_special(SWAF_exp,
         print('Running special SWAF ...')
         zSWAF = Zen.Acquisition.FindAutofocus(SWAF_exp, timeoutSeconds=timeout)
     except ApplicationException as e:
-        print('Application Exception : ', e.Message)
+        print(('Application Exception : ', e.Message))
     except TimeoutException as e:
-        print(e.Message)
+        print((e.Message))
 
-    print('Z-Position after initial SWAF [micron]: ', zSWAF)
+    print(('Z-Position after initial SWAF [micron]: ', zSWAF))
 
     return zSWAF
 
@@ -358,7 +358,7 @@ def run_postprocessing(image, parameters={}, func='topography'):
         # saving file to the directory
         topo_filepath = Path.Combine(outputfolder, Path.GetFileNameWithoutExtension(image.FileName) + ext)
         Zen.Processing.Utilities.ExportHeightmapFromTopography(imgtop, topo_filepath)
-        print('Exported to : ', topo_filepath)
+        print(('Exported to : ', topo_filepath))
         imgtop.Close()
 
     return image
@@ -379,12 +379,12 @@ def apply_recall_focus():
         Zen.Acquisition.RecallFocus()
         zpos = Zen.Devices.Focus.ActualPosition
         print('Recall Focus (Definite Focus) applied.')
-        print('Updated Z-Position: ', zpos)
+        print(('Updated Z-Position: ', zpos))
     except ApplicationException as e:
-        print('Application Exception : ', e.Message)
+        print(('Application Exception : ', e.Message))
         print('Recalling Focus (Definite Focus 2) failed.')
 
-    print('New Z-Position before Detail Experiment will start:', zpos)
+    print(('New Z-Position before Detail Experiment will start:', zpos))
 
     return zpos
 
@@ -416,17 +416,17 @@ def modify_tileexperiment_rect(tileexp, blockindex=0,
     :rtype: ZenExperiment
     """
 
-    print('Width and Height : ', '%.2f' % bcwidth, '%.2f' % bcheight)
+    print(('Width and Height : ', '%.2f' % bcwidth, '%.2f' % bcheight))
     print('Modifying Tile Properties XYZ Position and width and height.')
 
     # Modify the XYZ position and size of the TileRegion on-the-fly
-    print('Starting Z-Position for current Object: ', '%.2f' % zpos)
-    print('New Tile Properties: ', '%.2f' % xpos, '%.2f' % ypos, '%.2f' % zpos, '%.2f' % bcwidth, '%.2f' % bcheight)
+    print(('Starting Z-Position for current Object: ', '%.2f' % zpos))
+    print(('New Tile Properties: ', '%.2f' % xpos, '%.2f' % ypos, '%.2f' % zpos, '%.2f' % bcwidth, '%.2f' % bcheight))
     tileexp.ClearTileRegionsAndPositions(blockindex)
     try:
         tileexp.AddRectangleTileRegion(blockindex, xpos, ypos, bcwidth, bcheight, zpos)
     except ApplicationException as e:
-        print('Application Exception : ', e.Message)
+        print(('Application Exception : ', e.Message))
 
     return tileexp
 
@@ -450,12 +450,12 @@ def modify_tileexperiment_polygon(tileexp, polyregion,
     """
                                   
     print('Modifying Tile Properties using Polygon for ZEN Image Analysis.')
-    print('Starting Z-Position for current Object: ', '%.2f' % zpos)
+    print(('Starting Z-Position for current Object: ', '%.2f' % zpos))
     tileexp.ClearTileRegionsAndPositions(blockindex)
     try:
         tileexp.AddPolygonTileRegion(blockindex, polyregion, zpos)
     except ApplicationException as e:
-        print('Application Exception : ', e.Message)
+        print(('Application Exception : ', e.Message))
 
     return tileexp
 
@@ -513,7 +513,7 @@ def getclassnames(ias):
             cl = ias.GetRegionsClass(id)
 
         iaclasses[cl.ID] = cl.Name
-        print('ID - RegionClassName: ', cl.ID, cl.Name)
+        print(('ID - RegionClassName: ', cl.ID, cl.Name))
 
     return iaclasses
 
@@ -585,14 +585,14 @@ use_polygon = result.GetValue('use_poly')
 
 
 # print values
-print('Overview Scan Experiment : ', OverViewExpName)
+print(('Overview Scan Experiment : ', OverViewExpName))
 if not use_apeer:
-    print('Image Analysis Pipeline : ', ImageAS)
-    print('Use IA Polygon instead of BBox : ', use_polygon)
+    print(('Image Analysis Pipeline : ', ImageAS))
+    print(('Use IA Polygon instead of BBox : ', use_polygon))
 if use_apeer:
-    print('Use Apeer Module Setting : ', ApeerMS)
-print('Detailed Scan Experiment : ', DetailExpName)
-print('Output Folder for Data : ', OutputFolder)
+    print(('Use Apeer Module Setting : ', ApeerMS))
+print(('Detailed Scan Experiment : ', DetailExpName))
+print(('Output Folder for Data : ', OutputFolder))
 print('\n')
 
 # check directory
@@ -613,7 +613,7 @@ OVScanIsTileExp = OVScan_reloaded.IsTilesExperiment(blockindex)
 if fs_beforeOV:
     # initial focussing via FindSurface to assure a good starting position
     Zen.Acquisition.FindSurface()
-    print('Z-Position after FindSurface: ', Zen.Devices.Focus.ActualPosition)
+    print(('Z-Position after FindSurface: ', Zen.Devices.Focus.ActualPosition))
 
 if SWAF_beforeOV:
     zSWAF = runSWAF_special(OVScan_reloaded,
@@ -630,7 +630,7 @@ znew = Zen.Devices.Focus.ActualPosition
 # adapt the Overview Scan Tile Experiment with new Z-Position
 if OVScanIsTileExp:
     OVScan_reloaded.ModifyTileRegionsZ(blockindex, znew)
-    print('Adapted Z-Position of Tile OverView. New Z = ', '%.2f' % znew)
+    print(('Adapted Z-Position of Tile OverView. New Z = ', '%.2f' % znew))
 
 # execute the experiment
 print('\nRunning OverviewScan Experiment.\n')
@@ -677,8 +677,8 @@ if not use_apeer:
         # get the individual image analysis regions from 1st IA class (!!!)
         # ATTENTION: the first single objects class will be used. It has ID = 2
         regions = Zen.Analyzing.GetRegions(output_OVScan, iasclasses[2])
-        print('RegionClassNames: ', iasclasses)
-        print('Analysis found ' + str(regions.Count) + 'regions!')
+        print(('RegionClassNames: ', iasclasses))
+        print(('Analysis found ' + str(regions.Count) + 'regions!'))
     
         # create dictionary for polygon regions
         polyregions = {}
@@ -722,9 +722,9 @@ if use_apeer:
     ams.Load(Path.GetFileNameWithoutExtension(ApeerMS))
     
     print('-----   Apeer Module Setting   -----')
-    print('Module Name    : ', ams.ModuleName)
-    print('Module Version : ', ams.ModuleVersion)
-    print('Module Parameters    : ', ams.Parameters)
+    print(('Module Name    : ', ams.ModuleName))
+    print(('Module Version : ', ams.ModuleVersion))
+    print(('Module Parameters    : ', ams.Parameters))
 
     # get module and check
     mymodule, version_found = get_module(ams.ModuleName, module_version=ams.ModuleVersion)
@@ -761,10 +761,10 @@ if use_apeer:
                                                             
         for op in runoutputs.GetEnumerator():
             print('-----    Outputs   -----')
-            print(op.Key, ' : ', op.Value)
+            print((op.Key, ' : ', op.Value))
         
     except ApplicationException as e:
-        print('Module Run failded.', e.Message)
+        print(('Module Run failded.', e.Message))
         raise SystemExit
 
     # get results storage locations
@@ -849,9 +849,9 @@ if fs_beforeDT:
     try:
         # initial focussing via FindSurface to assure a good starting position
         Zen.Acquisition.FindSurface()
-        print('Z-Position after FindSurface: ', Zen.Devices.Focus.ActualPosition)
+        print(('Z-Position after FindSurface: ', Zen.Devices.Focus.ActualPosition))
     except ApplicationException as e:
-        print('Application Exception : ', e.Message)
+        print(('Application Exception : ', e.Message))
         print('FindSurface (Definite Focus) failed.')
 
 if SWAF_beforeDT:
@@ -871,7 +871,7 @@ if RecallFocus:
         Zen.Acquisition.StoreFocus()
         userecallfocus = True
     except ApplicationException as e:
-        print('Application Exception : ', e.Message)
+        print(('Application Exception : ', e.Message))
         print('StoreFocus (Definite Focus) failed.')
         userecallfocus = False
 
@@ -898,7 +898,7 @@ if not use_apeer:
 
         # move to the current position
         Zen.Devices.Stage.MoveTo(xpos + dx_detector, ypos + dy_detector)
-        print('Moving Stage to Object ID:', POI_ID, ' at :', '%.2f' % xpos, '%.2f' % ypos)
+        print(('Moving Stage to Object ID:', POI_ID, ' at :', '%.2f' % xpos, '%.2f' % ypos))
 
         # try to apply RecallFocus (DF only) when this option is used
         if userecallfocus:
@@ -935,7 +935,7 @@ if not use_apeer:
         try:
             output_detailscan = Zen.Acquisition.Execute(DetailScan_reloaded)
         except ApplicationException as e:
-            print('Application Exception : ', e.Message)
+            print(('Application Exception : ', e.Message))
 
         # get the image data name
         dtscan_name = output_detailscan.Name
@@ -968,7 +968,7 @@ if not use_apeer:
             well_id = SingleObj.GetValue(obj, column_wellid)
             newname_dtscan = 'DTScan_Well_' + str(well_id) + '_ID_' + str(POI_ID) + '.czi'
 
-        print('Renaming File: ' + dtscan_name + ' to: ' + newname_dtscan + '\n')
+        print(('Renaming File: ' + dtscan_name + ' to: ' + newname_dtscan + '\n'))
         File.Move(Path.Combine(OutputFolder, dtscan_name), Path.Combine(OutputFolder, newname_dtscan))
 
         ############ OPTIONAL POSTPROCESSING ###############
@@ -1003,7 +1003,7 @@ if use_apeer:
 
         # move to the current position
         Zen.Devices.Stage.MoveTo(xpos + dx_detector, ypos + dy_detector)
-        print('Moving Stage to Object:', POI_ID + 1, ' at :', '%.2f' % xpos, '%.2f' % ypos)
+        print(('Moving Stage to Object:', POI_ID + 1, ' at :', '%.2f' % xpos, '%.2f' % ypos))
 
         # try to apply RecallFocus (DF only) when this option is used
         if userecallfocus:
@@ -1035,7 +1035,7 @@ if use_apeer:
         try:
             output_detailscan = Zen.Acquisition.Execute(DetailScan_reloaded)
         except ApplicationException as e:
-            print('Application Exception : ', e.Message)
+            print(('Application Exception : ', e.Message))
 
         # get the image data name
         dtscan_name = output_detailscan.Name
@@ -1075,7 +1075,7 @@ if use_apeer:
             well_id = SingleObj.GetValue(obj, column_wellid)
             newname_dtscan = 'DTScan_Well_' + str(well_id) + '_ID_' + str(POI_ID) + '.czi'
 
-        print('Renaming File: ' + dtscan_name + ' to: ' + newname_dtscan + '\n')
+        print(('Renaming File: ' + dtscan_name + ' to: ' + newname_dtscan + '\n'))
         File.Move(Path.Combine(OutputFolder, dtscan_name), Path.Combine(OutputFolder, newname_dtscan))
 
         ############ OPTIONAL POSTPROCESSING ###############
