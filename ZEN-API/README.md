@@ -3,8 +3,8 @@
     - [ZEN API and Internal Scripting (OAD)](#zen-api-and-internal-scripting-oad)
   - [Supported ZEN and ZEN core Versions](#supported-zen-and-zen-core-versions)
   - [Key Features](#key-features)
-  - [Installation of ZenApi Gateway](#installation-of-zenapi-gateway)
-    - [What is the ZenApi gateway?](#what-is-the-zenapi-gateway)
+  - [Installation of ZEN API Gateway](#installation-of-zen-api-gateway)
+    - [What is the ZEN API gateway?](#what-is-the-zen-api-gateway)
   - [Configuration](#configuration)
     - [Application configuration](#application-configuration)
     - [Application options](#application-options)
@@ -16,7 +16,7 @@
     - [API Mode](#api-mode)
     - [Unsupervised API Mode](#unsupervised-api-mode)
       - [ZEN Core](#zen-core)
-      - [ZEN (blue)](#zen-blue)
+      - [ZEN](#zen)
     - [API Control Management](#api-control-management)
       - [Global API Control Token](#global-api-control-token)
   - [Troubleshooting](#troubleshooting)
@@ -52,7 +52,7 @@ ZEN API may potentially expose any functionality of ZEN products with the except
 ZEN API is a foundation for third parties to integrate our products and automate their processes.
 It opens a possibility to create applications, UIs or workflows, based on ZEN's SW/HW capabilities and data​.
 
-> **IMPORTANT**: The core idea of ZEN API is to control the Imaging System **from the outside".
+> **IMPORTANT**: The core idea of ZEN API is to control the Imaging System **from the outside" using an external client.
 
 ![ZEN API Introduction](./images/zenapi_general1.png)
 
@@ -60,7 +60,7 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 
 ### ZEN API and Internal Scripting (OAD)
 
-Zen already offers to option to automate workflows by using the ZEN internal scripting, which is using IronPython as its language. This allows to easily integrate a lot of ZEN functionality since it is based on .NET and written in C#.
+Zen already offers the option to automate workflows by using the ZEN internal scripting, which is using IronPython as a programming language. This allows to easily integrate a lot of ZEN functionality since it is based on .NET and written in C#.
 
 <img src=./images/oad_script_editor.png alt="ZEN - OAD Script Editor" width=100%>
 
@@ -69,10 +69,10 @@ Zen already offers to option to automate workflows by using the ZEN internal scr
 
 > **IMPORTANT**: The core idea of OAD (internal IronPython Scripting) is to create scripts where ZEN is the **master application**. It controls the workflow from within the ZEN Client.
 
-This is in contrast to using ZEN API, which allows you to control from the "outside". There can be situations where both approached will work to fulfill the requirements and there are no strict rules, when to use OAD vs. ZEN API but a few general rules.
+This is in contrast to using ZEN API, which allows you to control from the "outside". There can be situations where both approaches will work to fulfill the requirements and there are no strict rules, when to use OAD vs. ZEN API but a few general rules.
 
 - if one really needs to control ZEN from the outside using Python (and other languages): :arrow_right: Use ZEN API
-- no need to to control from an external master application or no need to use external python functions: :arrow_right: Use OAD Scripting
+- no need to control from an external master application or no need to use external python functions: :arrow_right: Use OAD Scripting
 - one really likes using an IDEs like PyCharm, VScode etc. and the need to use normal Python libraries (NumPy etc.) and ZEN API offers the function you need: :arrow_right: Use ZEN API
 
 Remark: as of right now OAD offers a lot more functionality, which is not directly available via ZEN API (yet). For example all the ZEN internal image processing and image analysis function are not integrated into ZEN API
@@ -82,10 +82,12 @@ Remark: as of right now OAD offers a lot more functionality, which is not direct
 - ZEN API is supported by ZEN (blue) and ZEN core starting with version starting with 3.11 (or better).
 - Not all API methods will work for every system or software version
 - The [ZEN API Documentation](../ZEN-API/documentation/ZEN_API_Documentation_20250509.md) is always based on the latest ZEN or ZEN core release
+- :arrow_right: ZEN API supports Light Microscopy Systems (LM) as well as Electron Microscopes (EM) - But not all functions are available for both.
+
 
 ## Key Features
 
-In its core ZEN APi is a programming interface that overs various method to control ZEN-base imaging system from the outside.To give a brief overview here some highlights:
+In its core, ZEN APi is a programming interface that overs various method to control the imaging system from the outside.To give a brief overview here some highlights:
 
 - **Managing ZEN Experiments and Acquisition**
   - Check available experiments
@@ -104,34 +106,34 @@ In its core ZEN APi is a programming interface that overs various method to cont
 
 :point_right: Please feel free to use the github issues directly to request new ideas [here](https://github.com/zeiss-microscopy/OAD/issues).
 
-## Installation of ZenApi Gateway
+## Installation of ZEN API Gateway
 
-The _ZenApi Gateway_ that is required when using ZEN API. It can be easily installed using the official ZEISS Microscopy Installer Application (ZMI): [Download for ZEISS Microscopy Installer](https://zeiss-microscopy-installer.azureedge.net/public/latest/ZeissMicroscopyInstaller.msi)
+The _ZEN API Gateway_ that is required when using ZEN API. It can be easily installed using the official ZEISS Microscopy Installer Application (ZMI): [Download for ZEISS Microscopy Installer](https://zeiss-microscopy-installer.azureedge.net/public/latest/ZeissMicroscopyInstaller.msi)
 
 <img src=./images/zenapi_ZMI_installer.png alt="ZMI - ZEN API Installation" width=100%>
 
 - The installation of the protofiles (*.proto) describing the available API methods is optional
-  - if selected, the `*.protofiles` will be stored in `C:\Users\Public\Documents\Carl Zeiss\ZEN API Proto Files`
-  - the provided Python examples will also work with those *.protofiles
-- When _ZenApi Gateway_ is being installed, the installer creates certificates and the control token in case they are missing.
+  - if selected, the `*.proto` files will be stored in `C:\Users\Public\Documents\Carl Zeiss\ZEN API Proto Files`
+  - the provided Python examples will also work with those `*.proto` files
+- When _ZEN API Gateway_ is being installed, the installer creates certificates and the control token in case they are missing.
 - If certificates or the control token already exist, they are not overwritten (i.e. they are re-used).
 
-**Run _ZenApi Gateway_**
+**Run _ZEN API Gateway_**
 
-- _ZenApi Gateway_ will be automatically run with start of ZEN (core).
-- _ZenApi Gateway_ can be also run as standalone App from start menu.
+- _ZEN API Gateway_ will be automatically run with start of ZEN (core).
+- _ZEN API Gateway_ can be also run as standalone App from start menu.
 
-One can copy the global control token to clipboard or generate a new one from the system tray icon of _ZenApi Gateway_ (see the screenshot below). Additionally, the control token can be read from file located at _C:\ProgramData\Carl Zeiss\ZenApiGateway\GlobalControlToken.txt_.
+One can copy the global control token to clipboard or generate a new one from the system tray icon of _ZEN API Gateway_ (see the screenshot below). Additionally, the control token can be read from file located at _C:\ProgramData\Carl Zeiss\ZEN APIGateway\GlobalControlToken.txt_.
 
 More info about global control token can be found [here](#global-api-control-token).
 
 ![ZEN API - Copy GlobalControl Token](./images/zenapi_copy_token2.png)
 
-### What is the ZenApi gateway?
+### What is the ZEN API gateway?
 
-The ZenApi Gateway is a separate application that is required when using ZenApi. It fulfills multiple purposes.
+The ZEN API Gateway is a separate application that is required when using ZEN API. It fulfills multiple purposes.
 
-- serve as single point of contact for ZenApi clients. Otherwise they would need to connect to every Api provider separately, which would require to know the internal architecture of different processes in a Zeiss Microscope software setup and also know exactly which of those applications is implementing which API.
+- serve as single point of contact for ZEN API clients. Otherwise they would need to connect to every Api provider separately, which would require to know the internal architecture of different processes in a Zeiss Microscope software setup and also know exactly which of those applications is implementing which API.
 
 To avoid this, the gateway
 
@@ -159,11 +161,38 @@ Technically, it
 
 ## Configuration
 
-The ZenApiGateway can be configured/controlled by the configuration and command-line options.
+The ZEN APIGateway can be configured/controlled by the configuration and command-line options.
 
 ### Application configuration
 
-Application configuration is stored in **appsettings.json** file with some command-line options having the possibility to override the configuration values they are mapped to.
+Application configuration is stored in **appsettings.json** file with some command-line options having the possibility to override the configuration values they are mapped to. The file is usually located at _C:\Program Files\Carl Zeiss\ZenApiGateway\appsettings.json_
+
+Example:
+
+```json
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Grpc": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information",
+      "System": "Warning",
+      "ZenApiGateway.Authentication.JWT.TokenGenerator": "Trace"
+    }
+  },
+  "AllowedHosts": "*",
+  "Application": {
+    "Port": 5002,
+    "Address": "localhost"
+  },
+  "Kestrel": {
+    "EndpointDefaults": {
+      "Protocols": "Http1AndHttp2"
+    }
+  }
+}
+```
 
 The user is expected to modify only the following sections in the configuration file:
 
@@ -196,7 +225,7 @@ The special addresses have the following meaning/effect:
 
 ### Command-line options
 
-The ZenApiGateway can be started with the following command-line options:
+The ZEN APIGateway can be started with the following command-line options:
 
 | Short name | Long name                       | Description                                                                                  | Overrides configuration parameter |
 | ---------- | ------------------------------- | -------------------------------------------------------------------------------------------- | --------------------------------- |
@@ -210,7 +239,7 @@ The ZenApiGateway can be started with the following command-line options:
 |            | --help                          | Displays help text                                                                           |                                   |
 
 ```powershell
-start /wait ZenApiGateway.exe --show-console
+start /wait ZEN APIGateway.exe --show-console
 ```
 
 **Note:** Currently the "--debug-mode" option doesn't actually change the behavior of the gateway. The only difference is that it show windows notifications (e.g., when an app registers on the gateway) and we have an additional HTTP webpage on URL "/hello" which returns "Hello World!".
@@ -220,7 +249,7 @@ start /wait ZenApiGateway.exe --show-console
 The gateway will use TLS if possible.
 
 - If a certificate is configured, it is used
-- Otherwise if a certificate at the default location (C:\ProgramData\Carl Zeiss\ZenApiGateway\Certificates) is found, it is used
+- Otherwise if a certificate at the default location (C:\ProgramData\Carl Zeiss\ZEN APIGateway\Certificates) is found, it is used
 - Otherwise a certificate at the default location is generated and used (using a self-signed root certificate that is also generated)
 
 The gateway uses mTLS to communicate with Zen applications ("api providers"). For that, the same certificate is used as a client certificate (when the gateway connects to Zen the gateway acts as a client). Both applications validate the certificate of the other site. For that, the normal root certificates installed on the machine (either for the user or machine) are used.
@@ -237,12 +266,7 @@ In order to not limit ZEN API access excessively where not needed, ZEN API metho
 
 - _monitoring APIs_ are methods that do not have side effects, i.e. do not change the state of the system and thus must not create conflicts when executed at any time. For example, reading a hardware parameter or some other state would be a monitoring method. Access to those is considered uncritical and will not be limited (in addition to authentication).
 
-When defining APIs, monitoring API methods need to be marked as such with the `[MonitoringApiMethod]` attribute.
-
 - _controlling APIs_ are all other methods that may cause conflicts or errors when executed randomly or in an unexpected sequence, for example moving hardware.
-When defining APIs, controlling API methods do not need to be marked as such as this is the default (since _monitoring_ should be well considered).
-
-:point_right: There will be cases that may not clearly map to one of those categories.
 
 ### API Mode
 
@@ -251,39 +275,6 @@ _API Mode_ is a way to prevent actions to be started via UI and API at the same 
 It is possible to disable control synchronization and allow (potentially unsafe) usage of ZEN API and UI at the same time for expert users. Such mode is called _Unsupervised API Mode_ and, when enabled, the user is responsible for the alignment of system interactions. Please refer to [Unsupervised API Mode section](#unsupervised-api-mode) for more details.  
 
 Some functions cannot be represented in both modes and need a clear owner. E.g. when exiting _API Mode_ and a controlling ZEN API call (e.g. workflow, experiment or stage movement) is still running, the user will be informed about it and asked to stop it or to stay in _API Mode_.
-
-_API Mode_ can have one of the following values:
-
-- **On**: controlling and monitoring API methods can be called
-- **Off**: only monitoring API methods can be called
-- **Leaving**: implicit API mode representing the transition from _On_ to _Off_
-- **Disabled**: Unsupervised API Mode
-
-ZEN client requests change of API mode (to On, Off or Disabled) to the gateway.
-
-The following diagram shows the possible transitions between API Modes:
-
-```mermaid
-stateDiagram-v2
-    [*] --> Off
-    Off --> On
-    Off --> Disabled
-    On --> Disabled
-    Leaving --> On
-    Leaving --> Disabled
-    Disabled --> Off
-    Disabled --> On
-    On --> Leaving: implicit
-    Leaving --> Off: implicit
-```
-
-Note: The transition from _On_ to _Off_ is done through _Leaving_ API mode. The gateway will first change the _API Mode_ to _Leaving_ which will prevent the users from calling the controlling API methods but still make it possible for the currently active controlling API method calls to finish. The gateway will change the _API Mode_ from _Leaving_ to _Off_ only once all active controlling API method calls are finished. It is possible to return back to _API Mode_ _On_ while _API Mode_ is set to _Leaving_.
-
-Note:
-
-- The active controlling API calls can be cancelled by an API provider.
-- The controlling API calls can be of two types: direct and detached.
-- The direct API calls are directly cancelled by the gateway, but for detached calls a cancellation request is sent to the API provider to which the detached call belongs to.
 
 ### Unsupervised API Mode
 
@@ -303,20 +294,20 @@ If _Unsupervised API Mode_ is enabled, "_API Mode_" button in UI home screen is 
 
 <img src=./images/zenapi_zencore_homescreen.png alt="ZEN core - ZEN API Home Screen button" width=20%>
 
-Information that _Unsupervised API Mode_ is running in shown in the main tool bar of ZEN Core (top right part of the application) if:
+Information that _Unsupervised API Mode_ is running is shown in the main tool bar of ZEN Core (top right part of the application) if:
 
 - _Unsupervised API Mode_ is enabled, and
 - API server is running.
 
 <img src=./images/zenapi_running_core.png alt="ZEN core - API Server is running" width=70%>
 
-#### ZEN (blue)
+#### ZEN
 
 Enabling and disabling of _Unsupervised API Mode_ can be done in _Tools_ -> _Options_ -> _ZEN API_ using the checkbox "Enable Unsupervised API Mode".
 
 ![ZEN - ZEN API Unsupervised Mode](./images/zenapi_zenblue_apimode.png)
 
-Information that _Unsupervised API Mode_ is running in shown in the status bar of ZEN (bottom right part of the application) if:
+Information that _Unsupervised API Mode_ is running is shown in the status bar of ZEN (bottom right part of the application) if:
 
 - _Unsupervised API Mode_ is enabled, and
 - API server is running.
@@ -327,7 +318,7 @@ Information that _Unsupervised API Mode_ is running in shown in the status bar o
 
 ### API Control Management
 
-In order to align calls to controlling APIs, i.e. those that change the state of the system, the right to do this should be limited to one entity. This entity may consist of multiple processes or applications, but those are responsible then to sync their actions.
+In order to coordinate calls to controlling APIs, i.e. those that change the state of the system, the right to do this should be limited to one entity. This entity may consist of multiple processes or applications, but those are responsible then to sync their actions.
 
 To support complex multi-client cases but keep it easier for simple cases, there is currently only one version of API control management:
 
@@ -341,7 +332,7 @@ Since the global access control is currently the only enabled version of API con
 
 - changing the token in the system tray app (Windows only)
 - changing the token with a command-line option
-- changing the file where it is persisted (`%PROGRAMDATA%\Carl Zeiss\ZenApiGateway\GlobalControlToken.txt`) and by restarting the gateway so that it loads the new value
+- changing the file where it is persisted (`%PROGRAMDATA%\Carl Zeiss\ZEN APIGateway\GlobalControlToken.txt`) and by restarting the gateway so that it loads the new value
 
 A "global control token" is required for calling API methods. The token must be sent in the `control-token` header of the API call and it must match the token in the gateway. If the token is missing, the API call will be aborted with an access control error.
 
@@ -353,7 +344,7 @@ This page should give an overview of some common things to try when working with
 
 Ensure that the application providing the called API is:
 
-- running (e.g. ZEN Core/blue)
+- running (e.g. ZEN or ZEN Core)
 - connected to the gateway
 - providing that exact service and method (e.g. that it is actually implemented and included in the currently running profile)
 
@@ -365,9 +356,9 @@ To check basic connection, have a look in the tool-tip of the tray icon of the g
 
 Certificates are used to securely communicate between ZEN applications, the gateway, and clients. By default, we use self-signed certificates that are automatically generated by the gateway if not available.
 
-Therefore, if you suspect some issue with them, you can try to delete them and and let the Gateway generate new ones the next time it is started.
+Therefore, if you suspect some issue with them, you can try to delete them and let the ZEn API Gateway generate new ones the next time it is started.
 
-Certificates are located in `C:\ProgramData\Carl Zeiss\ZenApiGateway\Certificates`
+Certificates are located in `C:\ProgramData\Carl Zeiss\ZEN APIGateway\Certificates`
 
 ### Common Issues
 
@@ -428,12 +419,12 @@ API clients need to use TLS encryption when connecting to the gateway. They may,
 
 ## Python Examples
 
-Those examples are meant tp "play around" and test ZEN API functionality. They come without any warranty and can be used at your own risk. See also [DISCLAIMER](#disclaimer)
+These examples are meant to "play around" and test ZEN API functionality. They come without any warranty and can be used at your own risk. See also [DISCLAIMER](#disclaimer)
 
 ### Python Environment
 
 In order to use ZEN API from Python one needs to create a suitable python environment.
-In case one needs a new environment here please create on freshly using the [env_zenapi.yml](../ZEN-API/python_examples/python_env/env_zenapi.yml)
+In case one needs a new environment here please create a new environment using the [env_zenapi.yml](../ZEN-API/python_examples/python_env/env_zenapi.yml)
 
 #### Prerequisites
 
@@ -481,7 +472,7 @@ Make sure the `config.ini` is adapted to reflect your local values. An example i
 [api]
 host = 127.0.0.1
 port = 5000
-cert_file = C:\ProgramData\Carl Zeiss\ZenApiGateway\Certificates\ZenApiPersonalSigningRootCA.pem
+cert_file = C:\ProgramData\Carl Zeiss\ZEN APIGateway\Certificates\ZEN APIPersonalSigningRootCA.pem
 control-token = ...
 ```
 
@@ -500,6 +491,6 @@ Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those sof
 
 By using any of those examples you agree to this disclaimer.
 
-Version: 2025.05.16
+Version: 2025.05.23
 
 Copyright (c) 2025 Carl Zeiss AG, Germany. All Rights Reserved.
