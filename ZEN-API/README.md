@@ -55,7 +55,7 @@ ZEN API may potentially expose any functionality of ZEN products with the except
 ZEN API is a foundation for third parties to integrate our products and automate their processes.
 It opens a possibility to create applications, UIs or workflows, based on ZEN's SW/HW capabilities and data​.
 
-> **IMPORTANT**: The core idea of ZEN API is to control the Imaging System **from the outside" using an external client.
+> **IMPORTANT**: The core idea of ZEN API is to control the Imaging System **from the outside** using an external client.
 
 ![ZEN API Introduction](./images/zenapi_general1.png)
 
