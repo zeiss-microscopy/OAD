@@ -2,7 +2,7 @@
 #
 # Disclaimer:
 #
-# Carl Zeiss Microscopy GmbH's ZEN software undertakes no warranty concerning the use of this YML file.
+# Carl Zeiss Microscopy GmbH's ZEN software undertakes no warranty concerning the use of this YML file. Use at your own risk.
 # By using any of those examples you agree to this disclaimer.
 
 name: zenapi
@@ -22,25 +22,18 @@ dependencies:
   - setuptools
   - nb_conda_kernels
   - pytest
-  - ipyfilechooser
-  - ipywidgets
   - shapely
-  - czifile
   - validators
-  - ome-zarr
-  - tqdm
   - pooch
   - requests
   - matplotlib
+  - pyqt=5
   - pyqtgraph
   - qasync
-  - numpy
+  - numpy<2
   - pandas
   - plotly
   - colormap
-  - zarr
-  - dask
-  - xmltodict
   - seaborn
   - python-dateutil
   - python-box[all]
@@ -49,13 +42,14 @@ dependencies:
 
   - pip:
       - czmodel[pytorch]>=5
-      - onnxruntime-gpu=1.19.0 # needs to match CUDA etc.
+      - onnxruntime-gpu==1.19.0 # needs to match CUDA etc.
+      - bioio
+      - bioio-czi
       - aicspylibczi
       - pylibCZIrw
       - czitools
-      #- betterproto
-      - --pre betterproto==2.0.0b7 # sometimes this does not get installed - try manually
-      - --pre betterproto[compiler]==2.0.0b7 # sometimes this does not get installed - try manually
+      - --pre betterproto==2.0.0b7 # sometimes this does not get installed - try manually !!!
+      - --pre betterproto[compiler]==2.0.0b7 # sometimes this does not get installed - try manually !!!
 
 # Create an environment - use conda or mamba
 # conda env create --file env_zenapi.yml
@@ -66,10 +60,6 @@ dependencies:
 # Remove an environment
 # conda remove --name zenapi --all
 # conda clean --all
-
-# verfify CUDA
-# nvcc --version
-# nvidia-smi
 
 # Show the locations of all versions of Python that are currently in the path
 # Windows: where python

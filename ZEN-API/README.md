@@ -461,6 +461,12 @@ conda activate zenapi
 
 > **IMPORTANT**: Please feel free to use your own environment and install only the packages you really need!
 
+In some case the installation of `betterproto` pre-release from the YML file does not seem to work correctly. if that happens please run:
+
+```powershell
+pip install --pre betterproto==2.0.0b7 betterproto[compiler]==2.0.0b7 -U
+```
+
 #### Python Scripts
 
 Inside this repository one can find several example and the python classes, that were translated from protofiles automatically inside the [python_examples\public](../ZEN-API/python_examples/public/) folder.

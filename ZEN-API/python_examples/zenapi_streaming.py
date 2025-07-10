@@ -83,9 +83,7 @@ async def start_experiment(
     try:
         channel, metadata = initialize_zenapi(configfile)
     except Exception as e:
-        logger.error(
-            f"Failed to initialize ZEN API with config file '{configfile}': {e}"
-        )
+        logger.error(f"Failed to initialize ZEN API with config file '{configfile}': {e}")
         raise
     exp_service = ExperimentServiceStub(channel=channel, metadata=metadata)
 
@@ -101,14 +99,10 @@ async def start_experiment(
             logger.info(exp.name + ".czexp")
 
     # load experiment by its name without the *.czexp extension
-    my_exp = await exp_service.load(
-        ExperimentServiceLoadRequest(experiment_name=exp_name)
-    )
+    my_exp = await exp_service.load(ExperimentServiceLoadRequest(experiment_name=exp_name))
 
     # show output path for images
-    save_path = await exp_service.get_image_output_path(
-        ExperimentServiceGetImageOutputPathRequest()
-    )
+    save_path = await exp_service.get_image_output_path(ExperimentServiceGetImageOutputPathRequest())
     logger.info("Saving Location for CZI Images:" + save_path.image_output_path)
 
     # check if such an image already exists and delete it
@@ -119,18 +113,14 @@ async def start_experiment(
         elif not overwrite:
             logger.error("CZI file: " + czi_name + ".czi cannot be overwritten")
             channel.close()
-            raise FileExistsError(
-                "CZI file: " + czi_name + ".czi cannot be overwritten"
-            )
+            raise FileExistsError("CZI file: " + czi_name + ".czi cannot be overwritten")
 
     # execute experiment
     logger.info("Starting Experiment Execution ...")
 
     # start the experiment (and do not wait until it is finished)
     await exp_service.start_experiment(
-        ExperimentServiceStartExperimentRequest(
-            experiment_id=my_exp.experiment_id, output_name=czi_name
-        )
+        ExperimentServiceStartExperimentRequest(experiment_id=my_exp.experiment_id, output_name=czi_name)
     )
 
     # close the channel
@@ -164,17 +154,11 @@ class MainWindow(QtWidgets.QMainWindow):
             # get the gRPC channel and the metadata
             self.channel, self.metadata = initialize_zenapi(configfile)
         except Exception as e:
-            logger.error(
-                f"Failed to initialize ZEN API with config file '{configfile}': {e}"
-            )
-            QtWidgets.QMessageBox.critical(
-                self, "Error", f"Failed to initialize ZEN API: {e}"
-            )
+            logger.error(f"Failed to initialize ZEN API with config file '{configfile}': {e}")
+            QtWidgets.QMessageBox.critical(self, "Error", f"Failed to initialize ZEN API: {e}")
             sys.exit(1)
 
-        self.streaming_service = ExperimentStreamingServiceStub(
-            channel=self.channel, metadata=self.metadata
-        )
+        self.streaming_service = ExperimentStreamingServiceStub(channel=self.channel, metadata=self.metadata)
 
         self.start_experiment_from_UI = start_experiment_from_UI
 
@@ -262,9 +246,7 @@ class MainWindow(QtWidgets.QMainWindow):
             # Together with the start position property, this represents the rectangle where the pixels are located inside the full frame.
             # For ordinary acquisition this will be the full frame size, but for partial acquisition this can be just one part of the full frame.
 
-            partial_size = (
-                response.frame_data.pixel_data.size
-            )  # partial frame sizeXY [pixel]
+            partial_size = response.frame_data.pixel_data.size  # partial frame sizeXY [pixel]
 
             if verbose:
                 logger.info(
@@ -277,14 +259,14 @@ class MainWindow(QtWidgets.QMainWindow):
 
             # convert the byte stream into 2d image
             if not enable_raw_data:
-                stream2d = np.frombuffer(
-                    response.frame_data.pixel_data.raw_data, dtype=dtype
-                ).reshape((full_size.height, full_size.width))
+                stream2d = np.frombuffer(response.frame_data.pixel_data.raw_data, dtype=dtype).reshape(
+                    (full_size.height, full_size.width)
+                )
 
             if enable_raw_data:
-                stream2d = np.frombuffer(
-                    response.frame_data.pixel_data.raw_data, dtype=dtype
-                ).reshape((partial_size.height, partial_size.width))
+                stream2d = np.frombuffer(response.frame_data.pixel_data.raw_data, dtype=dtype).reshape(
+                    (partial_size.height, partial_size.width)
+                )
 
             # rotate and flip the image to have the same orientation as in ZEN
             stream2d = np.flipud(np.rot90(stream2d))
@@ -477,10 +459,10 @@ def main(
 if __name__ == "__main__":
 
     # define the desired online processing here
-    # processing = Processing.NO_PROCESSING
+    processing = Processing.NO_PROCESSING
     # processing = Processing.SEG_THRESHOLD_MANUAL
     # processing = Processing.SEG_THRESHOLD_OTSU
-    processing = Processing.SEG_SEMANTIC  # --> cyto2022_nuc2.czann
+    # processing = Processing.SEG_SEMANTIC  # --> cyto2022_nuc2.czann
     # processing = Processing.DENOISE  # --> LiveDenoise_DAPI.czann
 
     configfile = r"config.ini"  # use the correct path
