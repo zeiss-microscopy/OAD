@@ -34,7 +34,8 @@ ZEN API - CellDiscoverer 7 Example Workflow (part 2){
         ZEN -> CD7: Find Surface {style: ${participant_style}}
         CD7 -> ZC: Return Z-Values {style: ${participant_style}}
         ZC -> ZC: Modify SWAF with Z-Values {style: ${participant_style}}
-        ZEN -> CD7: API: Execute SWAF {style: ${participant_style}}
+        ZC -> ZEN: API: Execute SWAF {style: ${participant_style}}
+        ZEN -> CD7: Execute SWAF {style: ${participant_style}}
         CD7 -> ZC: Return Z-Values {style: ${participant_style}}
         ZC -> ZC: Modify Z-Stack Experiment using Z-Values {style: ${participant_style}}
         ZC -> ZEN: API: Execute Z-Stack Experiment {style: ${participant_style}}

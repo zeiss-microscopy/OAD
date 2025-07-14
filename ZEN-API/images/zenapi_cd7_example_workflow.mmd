@@ -31,7 +31,8 @@ sequenceDiagram
     ZEN->>CD7: Find Surface
     CD7-->>ZC: Return Z-Values
     ZC->>ZC: Modify SWAF with Z-Values
-    ZEN->>CD7: API: Execute SWAF
+    ZC->>ZEN: API: Execute SWAF
+    ZEN->>CD7: Execute SWAF
     CD7-->>ZC: Return Z-Values
     ZC->>ZC: Modify Z-Stack Experiment<br/>using Z-Values
     ZC->>ZEN: API: Execute Z-Stack Experiment
