@@ -16,6 +16,7 @@ import asyncio
 import numpy as np
 import sys
 from zenapi_tools import set_logging, initialize_zenapi
+import time
 
 # import the auto-generated python modules
 from public.zen_api.lm.hardware.v2 import (
@@ -37,9 +38,7 @@ async def main(args):
 
     # get the stage positions in [m]
     posXY = await stage_service.get_position(StageServiceGetPositionRequest())
-    logger.info(
-        f"Stage XY Position 1: {np.round(posXY.x * 1e6, 2)} - {np.round(posXY.y * 1e6, 2)} [micron]"
-    )
+    logger.info(f"Stage XY Position 1: {np.round(posXY.x * 1e6, 2)} - {np.round(posXY.y * 1e6, 2)} [micron]")
 
     # move to new position in [m]
     new_posx = 13000 * 1e-6
@@ -47,16 +46,16 @@ async def main(args):
 
     await stage_service.move_to(StageServiceMoveToRequest(x=new_posx, y=new_posy))
     new_posXY = await stage_service.get_position(StageServiceGetPositionRequest())
-    logger.info(
-        f"Stage XY Position 2: {np.round(new_posXY.x * 1e6, 2)} - {np.round(new_posXY.y * 1e6, 2)} [micron]"
-    )
+    logger.info(f"Stage XY Position 2: {np.round(new_posXY.x * 1e6, 2)} - {np.round(new_posXY.y * 1e6, 2)} [micron]")
+
+    # wait for a while
+    logger.info("Waiting for 3 seconds...")
+    time.sleep(3)
 
     # move back to initial position
     await stage_service.move_to(StageServiceMoveToRequest(x=posXY.x, y=posXY.y))
     posXY = await stage_service.get_position(StageServiceGetPositionRequest())
-    logger.info(
-        f"Stage XY Position 1: {np.round(posXY.x * 1e6, 2)} - {np.round(posXY.y * 1e6, 2)} [micron]"
-    )
+    logger.info(f"Stage XY Position 1: {np.round(posXY.x * 1e6, 2)} - {np.round(posXY.y * 1e6, 2)} [micron]")
 
     # close the channel
     channel.close()
