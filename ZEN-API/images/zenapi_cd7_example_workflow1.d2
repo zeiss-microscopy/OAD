@@ -1,0 +1,44 @@
+# define styles and variables for the diagram
+vars: {
+    arrow_style: {
+        bold: true
+        font-size: 20
+    }
+        interaction_style: {
+        bold: true
+        font-size: 24
+    }
+    participant_style: {
+        bold: true
+        font-size: 28
+    }
+
+}
+
+ZEN API - CellDiscoverer 7 Example Workflow (part 1){
+
+# define the type of diagram
+    shape: sequence_diagram
+
+    ZC: ZEN API Client\n(Python Client etc.) {style: ${participant_style}}
+    ZEN: ZEN Application\n(ZEN LiveScan) {style: ${participant_style}}
+    CD7: CellDiscoverer 7\nImage System {style: ${participant_style}}
+    HD: Data Storage Location\nfor CZI Files {style: ${participant_style}}
+
+   ZEN - Create Acquisition Experiment in ZEN {
+       ZEN -> ZEN: Define Z-Stack Experiment {style: ${participant_style}}
+       style: ${interaction_style}
+    }
+
+    ZEN API - Sample Carrier PreScan: {
+        ZC -> ZEN: Define Storage Location for CZI Images {style: ${participant_style}}
+        ZC -> ZEN: API: Define Carrier and PreScan Options {style: ${participant_style}}
+        ZC -> ZEN: API: Load Sample Carrier {style: ${participant_style}}
+        ZEN -> CD7: Load Carrier & Execute PreScan {style: ${participant_style}}
+        style: ${interaction_style}
+    }
+
+    # the the heading
+    style.font-size: 48
+    style.bold: true
+}

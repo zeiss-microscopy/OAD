@@ -48,8 +48,8 @@ dependencies:
       - aicspylibczi
       - pylibCZIrw
       - czitools
-      - --pre betterproto==2.0.0b7 # sometimes this does not get installed - try manually !!!
-      - --pre betterproto[compiler]==2.0.0b7 # sometimes this does not get installed - try manually !!!
+      - betterproto==2.0.0b7 # sometimes this does not get installed - try manually !!!
+      - betterproto[compiler]==2.0.0b7 # sometimes this does not get installed - try manually !!!
 
 # Create an environment - use conda or mamba
 # conda env create --file env_zenapi.yml

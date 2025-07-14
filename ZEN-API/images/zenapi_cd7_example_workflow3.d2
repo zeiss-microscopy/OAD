@@ -1,0 +1,45 @@
+# define styles and variables for the diagram
+vars: {
+    arrow_style: {
+        bold: true
+        font-size: 20
+    }
+        interaction_style: {
+        bold: true
+        font-size: 24
+    }
+    participant_style: {
+        bold: true
+        font-size: 28
+    }
+
+}
+
+ZEN API - CellDiscoverer 7 Example Workflow (part 3){
+
+# define the type of diagram
+    shape: sequence_diagram
+
+    ZC: ZEN API Client\n(Python Client etc.) {style: ${participant_style}}
+    ZEN: ZEN Application\n(ZEN LiveScan) {style: ${participant_style}}
+    CD7: CellDiscoverer 7\nImage System {style: ${participant_style}}
+    HD: Data Storage Location\nfor CZI Files {style: ${participant_style}}
+
+    ZEN API - Custom Image Analysis or Processing: {
+        ZC -> HD: Read CZI data and do Custom Analysis etc. {style: ${participant_style}}
+        ZC -> ZC: Run Image Analysis {style: ${participant_style}}
+    
+
+    # Note
+    ZC."React on Analysis Results, e.g. Run High Resolution Scan"
+
+        ZC -> ZEN: API: Move to next Well {style: ${participant_style}}
+
+    ZC."Continue with workflow"
+
+        style: ${interaction_style}
+    }
+    # the the heading
+    style.font-size: 48
+    style.bold: true
+}

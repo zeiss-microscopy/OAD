@@ -6,6 +6,11 @@
   - [Key Features](#key-features)
     - [ZEN Interfaces - ZEN API](#zen-interfaces---zen-api)
     - [ZEN API - gRPC](#zen-api---grpc)
+      - [**Flow: From C# Interfaces to Python Files**](#flow-from-c-interfaces-to-python-files)
+        - [1. ZEN API Interfaces in .NET](#1-zen-api-interfaces-in-net)
+        - [2. Generating `.proto` Files](#2-generating-proto-files)
+        - [3. Compiling `.proto` Files with gRPC](#3-compiling-proto-files-with-grpc)
+        - [4. Creating Python Files](#4-creating-python-files)
   - [Installation of ZEN API Gateway](#installation-of-zen-api-gateway)
     - [What is the ZEN API gateway?](#what-is-the-zen-api-gateway)
   - [Configuration](#configuration)
@@ -41,6 +46,7 @@
       - [Prerequisites](#prerequisites)
       - [Python Scripts](#python-scripts)
     - [Configuration File](#configuration-file)
+    - [Python - Outlook](#python---outlook)
   - [Documentation](#documentation)
   - [DISCLAIMER](#disclaimer)
 
@@ -125,6 +131,42 @@ In its core, ZEN APi is a programming interface that overs various method to con
 ### ZEN API - gRPC
 
 <img src=./images/zenapi_grpc.png alt="ZEN API Gateway - gRPC" width=60%>
+
+Here’s the flow description in **Markdown** format:
+
+---
+
+#### **Flow: From C# Interfaces to Python Files**
+
+##### 1. ZEN API Interfaces in .NET
+
+- The ZEN API is initially designed and implemented in **C#**, where the core functionality and interfaces are defined.
+- These interfaces specify the services and methods that the API provides, including the input and output data structures.
+
+##### 2. Generating `.proto` Files
+
+- The C# interfaces are translated into **Protocol Buffer (`.proto`) files**.
+- These `.proto` files serve as a language-neutral contract, describing:
+  - The API services.
+  - The methods (e.g., RPC calls).
+  - The data structures (messages) used for communication.
+- This step ensures that the API can be used across multiple programming languages.
+
+##### 3. Compiling `.proto` Files with gRPC
+
+- The `.proto` files are compiled using the **gRPC compiler (`protoc`)**.
+- The `protoc` compiler generates client and server code in various programming languages, including Python, C++, Java, etc.
+- For Python, the compiler generates:
+  - A Python module containing the gRPC client stubs.
+  - Classes for the defined services and messages.
+
+##### 4. Creating Python Files
+
+- The generated Python files act as the **client-side interface** for interacting with the ZEN API.
+- These files include:
+  - Methods for calling the API services.
+  - Data structures for sending and receiving messages.
+- Developers can then import these Python files into their custom applications to interact with the ZEN API.
 
 ## Installation of ZEN API Gateway
 
@@ -441,6 +483,8 @@ API clients need to use TLS encryption when connecting to the gateway. They may,
 
 These examples are meant to "play around" and test ZEN API functionality. They come without any warranty and can be used at your own risk. See also [DISCLAIMER](#disclaimer)
 
+> **REMARK**: In order to run the examples using the AI-based online segmentation the example environment contains also packages like PyTorch & CUDA etc., which are not required to run ZEN API of course. But without them the AI models can not be executed.
+
 ### Python Environment
 
 In order to use ZEN API from Python one needs to create a suitable python environment.
@@ -461,7 +505,7 @@ conda activate zenapi
 
 > **IMPORTANT**: Please feel free to use your own environment and install only the packages you really need!
 
-In some case the installation of `betterproto` pre-release from the YML file does not seem to work correctly. if that happens please run:
+In some case the installation of `betterproto` pre-release from the YML file does not seem to work correctly in the past. If that happens please run:
 
 ```powershell
 pip install --pre betterproto==2.0.0b7 betterproto[compiler]==2.0.0b7 -U
@@ -502,6 +546,10 @@ cert_file = C:\ProgramData\Carl Zeiss\ZEN APIGateway\Certificates\ZEN APIPersona
 control-token = ...
 ```
 
+### Python - Outlook
+
+ZEN API is still very new and under constant development. One of the planned improvements is to create a simple python package which installs the python bindings using pip.
+
 ## Documentation
 
 Currently the documentation for the latest ZEN release with respect to ZEN API can be found here: **[ZEN API - Documentation](../ZEN-API/documentation/ZEN_API_Documentation_20250509.md)**
@@ -517,6 +565,6 @@ Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those sof
 
 By using any of those examples you agree to this disclaimer.
 
-Version: 2025.05.23
+Version: 2025.07.11
 
 Copyright (c) 2025 Carl Zeiss AG, Germany. All Rights Reserved.

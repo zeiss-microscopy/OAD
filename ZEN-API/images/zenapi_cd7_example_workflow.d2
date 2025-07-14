@@ -1,0 +1,74 @@
+# define styles and variables for the diagram
+vars: {
+    arrow_style: {
+        bold: true
+        font-size: 20
+    }
+        interaction_style: {
+        bold: true
+        font-size: 24
+    }
+    participant_style: {
+        bold: true
+        font-size: 28
+    }
+
+}
+
+ZEN API - CellDiscoverer 7 Example Workflow {
+
+# define the type of diagram
+    shape: sequence_diagram
+
+    ZC: ZEN API Client\n(Python Client etc.) {style: ${participant_style}}
+    ZEN: ZEN Application\n(ZEN LiveScan) {style: ${participant_style}}
+    CD7: CellDiscoverer 7\nImage System {style: ${participant_style}}
+    HD: Data Storage Location\nfor CZI Files {style: ${participant_style}}
+
+   ZEN - Create Acquisition Experiment in ZEN {
+       ZEN -> ZEN: Define Z-Stack Experiment {style: ${participant_style}}
+       style: ${interaction_style}
+    }
+
+    ZEN API - Sample Carrier PreScan: {
+        ZC -> ZEN: Define Storage Location for CZI Images {style: ${participant_style}}
+        ZC -> ZEN: API: Define Carrier and PreScan Options {style: ${participant_style}}
+        ZC -> ZEN: API: Load Sample Carrier {style: ${participant_style}}
+        ZEN -> CD7: Load Carrier & Execute PreScan {style: ${participant_style}}
+        style: ${interaction_style}
+    }
+
+    ZEN API - Acquisition Workflow : {
+        
+        ZC -> ZC: Define Wells for Acquisition (List of Wells){style: ${participant_style}}
+        ZC -> ZEN: API: Move to 1st Well {style: ${participant_style}}
+        ZEN -> CD7: Move StageXY to Well {style: ${participant_style}}
+        ZC -> ZEN: API: Find Surface using DF {style: ${participant_style}}
+        ZEN -> CD7: Find Surface {style: ${participant_style}}
+        CD7 -> ZC: Return Z-Values {style: ${participant_style}}
+        ZC -> ZC: Modify SWAF with Z-Values {style: ${participant_style}}
+        ZEN -> CD7: API: Execute SWAF {style: ${participant_style}}
+        CD7 -> ZC: Return Z-Values {style: ${participant_style}}
+        ZC -> ZC: Modify Z-Stack Experiment using Z-Values {style: ${participant_style}}
+        ZC -> ZEN: API: Execute Z-Stack Experiment {style: ${participant_style}}
+        ZEN -> CD7: Run Image Acquisition {style: ${participant_style}}
+        CD7 -> HD: Store CZI Image File for current Well {style: ${participant_style}}
+        style: ${interaction_style}
+    }
+
+    ZEN API - Custom Image Analysis or Processing: {
+        ZC -> HD: Read CZI data and do Custom Analysis etc. {style: ${participant_style}}
+        ZC -> ZC: Run Image Analysis {style: ${participant_style}}
+    
+
+    # Note
+    ZC."React on Analysis Results, e.g. Run High Resolution Scan"
+
+        ZC -> ZEN: API: Move to next Well {style: ${participant_style}}
+
+        style: ${interaction_style}
+    }
+    # the the heading
+    style.font-size: 48
+    style.bold: true
+}

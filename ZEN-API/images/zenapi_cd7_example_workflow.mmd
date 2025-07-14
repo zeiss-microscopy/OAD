@@ -1,0 +1,50 @@
+---
+config:
+  theme: "neutral"
+---
+
+%% Sequence diagram for ZEN API - CellDiscoverer 7 Example Workflow
+sequenceDiagram
+    %% Participants
+    participant ZC as ZEN API Client<br/>(Python Client etc.)
+    participant ZEN as ZEN Application<br/>(ZEN LiveScan)
+    participant CD7 as CellDiscoverer 7<br/>Image System
+    participant HD as Data Storage Location<br/>for CZI Files
+
+    %% Section 1: Create Acquisition Experiment
+    Note over ZEN: Create Acquisition Experiment in ZEN
+    ZEN->>ZEN: Define Z-Stack Experiment
+
+    %% Section 2: Sample Carrier PreScan
+    Note over ZC,ZEN: Sample Carrier PreScan
+    ZC->>ZEN: Define Storage Location for CZI Images
+    ZC->>ZEN: API: Define Carrier and PreScan Options
+    ZC->>ZEN: API: Load Sample Carrier
+    ZEN->>CD7: Load Carrier & Execute PreScan
+
+    %% Section 3: Acquisition Workflow
+    Note over ZC,ZEN: Acquisition Workflow
+    ZC->>ZC: Define Wells for Acquisition<br/>(List of Wells)
+    ZC->>ZEN: API: Move to 1st Well
+    ZEN->>CD7: Move StageXY to Well
+    ZC->>ZEN: API: Find Surface using DF
+    ZEN->>CD7: Find Surface
+    CD7-->>ZC: Return Z-Values
+    ZC->>ZC: Modify SWAF with Z-Values
+    ZEN->>CD7: API: Execute SWAF
+    CD7-->>ZC: Return Z-Values
+    ZC->>ZC: Modify Z-Stack Experiment<br/>using Z-Values
+    ZC->>ZEN: API: Execute Z-Stack Experiment
+    ZEN->>CD7: Run Image Acquisition
+    CD7->>HD: Store CZI Image File<br/>for current Well
+
+    %% Section 4: Custom Image Analysis or Processing
+    Note over ZC,HD: Custom Image Analysis or Processing
+    ZC->>HD: Read CZI data and do Custom Analysis
+    ZC->>ZC: Run Image Analysis
+
+    %% Note for reaction
+    Note over ZC: React on Analysis Results<br/>e.g., Run High Resolution Scan
+
+    %% Loop for next well
+    ZC->>ZEN: API: Move to next Well
