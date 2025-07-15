@@ -76,19 +76,13 @@ async def gca_run_detailscan(
     """
 
     # load experiment by its name without the *.czexp extension
-    my_exp = await exp_service.load(
-        ExperimentServiceLoadRequest(experiment_name=experiment)
-    )
+    my_exp = await exp_service.load(ExperimentServiceLoadRequest(experiment_name=experiment))
 
     # clone the experiment
-    my_exp_cloned = await exp_service.clone(
-        ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id)
-    )
+    my_exp_cloned = await exp_service.clone(ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id))
 
     # clear existing TileRegions
-    await tile_service.clear(
-        TilesServiceClearRequest(experiment_id=my_exp_cloned.experiment_id)
-    )
+    await tile_service.clear(TilesServiceClearRequest(experiment_id=my_exp_cloned.experiment_id))
 
     if isinstance(tileregion, TileRegionRectangle):
 
@@ -156,9 +150,7 @@ async def gca_run_detailscan(
 
     # execute the actual experiment and wait until it is finished
     exp_result = await exp_service.run_experiment(
-        ExperimentServiceRunExperimentRequest(
-            experiment_id=my_exp_cloned.experiment_id, output_name=cziname
-        )
+        ExperimentServiceRunExperimentRequest(experiment_id=my_exp_cloned.experiment_id, output_name=cziname)
     )
 
     return exp_result
@@ -182,23 +174,17 @@ async def gca_run_overviewscan(
     """
 
     # load experiment by its name without the *.czexp extension
-    my_exp = await exp_service.load(
-        ExperimentServiceLoadRequest(experiment_name=experiment)
-    )
+    my_exp = await exp_service.load(ExperimentServiceLoadRequest(experiment_name=experiment))
 
     # clone the experiment
-    my_exp_cloned = await exp_service.clone(
-        ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id)
-    )
+    my_exp_cloned = await exp_service.clone(ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id))
 
     # create the correct name for the CZI
     cziname = output_name + "_OV"
 
     # execute the actual experiment and wait until it is finished
     exp_result = await exp_service.run_experiment(
-        ExperimentServiceRunExperimentRequest(
-            experiment_id=my_exp_cloned.experiment_id, output_name=cziname
-        )
+        ExperimentServiceRunExperimentRequest(experiment_id=my_exp_cloned.experiment_id, output_name=cziname)
     )
 
     return exp_result
@@ -259,8 +245,11 @@ async def main():
 
     # simulate overview scan by loading a CZI image
     show_overview = True
+
+    # please adapt to your needs
     filepath_overview = Path(
-        r"F:\AzureDevOps\RMS_Users\Playground\ZEN_API\data\OverViewScan.czi"
+        # r"F:\AzureDevOps\RMS_Users\Playground\ZEN_API\data\OverViewScan.czi"
+        r"F:\Github\OAD\ZEN-API\python_examples\data\OverViewScan.czi"
     )
 
     # DETAIL SCAN
@@ -290,9 +279,7 @@ async def main():
     timestamp_folder = now.strftime("%Y-%m-%d_%H-%M-%S")
 
     # read the planetable to derive a Z-value for the TileRegion modification
-    planetable = misc.get_planetable(
-        filepath_overview, pt_complete=False, t=0, c=0, z=0
-    )
+    planetable = misc.get_planetable(filepath_overview, pt_complete=False, t=0, c=0, z=0)
 
     # get the median Z-value
     zvalue_image = np.round(planetable.loc[:, "Z[micron]"].median(), 2)
@@ -304,9 +291,7 @@ async def main():
     exp_service = ExperimentServiceStub(channel=channel, metadata=metadata)
 
     # show output path for images
-    zen_savefolder = await exp_service.get_image_output_path(
-        ExperimentServiceGetImageOutputPathRequest()
-    )
+    zen_savefolder = await exp_service.get_image_output_path(ExperimentServiceGetImageOutputPathRequest())
 
     # exp_result = await gca_run_overviewscan(overview_exp, exp_service)
     # cziname_ov = f"{exp_result.output_name}.czi"
@@ -384,9 +369,7 @@ async def main():
             tr.height = results.loc[tr_id, "bbox_height_scaled"] * 1e-6
             tr.zvalue = zvalue_image * 1e-6
             if verbose:
-                logger.info(
-                    f"XY Center TileRegion Rectangle: {tr.center_x}, {tr.center_y}"
-                )
+                logger.info(f"XY Center TileRegion Rectangle: {tr.center_x}, {tr.center_y}")
 
         # in case TileRegion should be an ellipse
         if region_type == "ellipse":
@@ -400,9 +383,7 @@ async def main():
             tr.y_diameter = results.loc[tr_id, "bbox_height_scaled"] * 1e-6
             tr.zvalue = zvalue_image * 1e-6
             if verbose:
-                logger.info(
-                    f"XY Center TileRegion Ellipse: {tr.center_x}, {tr.center_y}"
-                )
+                logger.info(f"XY Center TileRegion Ellipse: {tr.center_x}, {tr.center_y}")
 
         # run the actual detail scan for every object
         exp_result = await gca_run_detailscan(
@@ -415,9 +396,7 @@ async def main():
         )
 
         # move the CZI to ist final destination
-        src_path = (
-            Path(zen_savefolder.image_output_path) / f"{exp_result.output_name}.czi"
-        )
+        src_path = Path(zen_savefolder.image_output_path) / f"{exp_result.output_name}.czi"
         detail_scan_czifile.append(src_path)
 
     # close the channel

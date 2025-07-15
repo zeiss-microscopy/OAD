@@ -58,9 +58,7 @@ open_czi = True
 
 
 # this is the main test script
-async def check_experiment_api(
-    experiment_name: str, configfile: str = "config.ini"
-) -> Dict[str, Union[str, Path]]:
+async def check_experiment_api(experiment_name: str, configfile: str = "config.ini") -> Dict[str, Union[str, Path]]:
     """
     Tries to run all available experiments methods for ZEN-API.
 
@@ -85,9 +83,7 @@ async def check_experiment_api(
     exp_service = ExperimentServiceStub(channel=channel, metadata=metadata)
 
     # show output path for images
-    save_path = await exp_service.get_image_output_path(
-        ExperimentServiceGetImageOutputPathRequest()
-    )
+    save_path = await exp_service.get_image_output_path(ExperimentServiceGetImageOutputPathRequest())
     logger.info("Saving Location for CZI Images:" + save_path.image_output_path)
 
     # get available experiments from the ZEN core default folder
@@ -95,26 +91,21 @@ async def check_experiment_api(
     available_experiments = await exp_service.get_available_experiments(
         ExperimentServiceGetAvailableExperimentsRequest()
     )
-    logger.info("Available Experiment File(s) inside ZEN folder:")
-    for exp in available_experiments.experiments:
-        logger.info(exp.name + ".czexp")
+    logger.info(f"Number of available Experiment File(s) inside ZEN folder: {len(available_experiments.experiments)}")
+
+    # for exp in available_experiments.experiments:
+    #    logger.info(exp.name + ".czexp")
 
     # load the desired experiment and return its reference id
     logger.info("Loading Experiment ...")
 
     # load experiment by its name without the *.czexp extension
-    my_exp = await exp_service.load(
-        ExperimentServiceLoadRequest(experiment_name=experiment_name)
-    )
-    logger.info(
-        "ExperimentName:" + my_experiment + " Reference Id: " + my_exp.experiment_id
-    )
+    my_exp = await exp_service.load(ExperimentServiceLoadRequest(experiment_name=experiment_name))
+    logger.info("ExperimentName:" + my_experiment + " Reference Id: " + my_exp.experiment_id)
 
     # clone the experiment
     logger.info("Cloning Experiment ...")
-    my_exp_cloned = await exp_service.clone(
-        ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id)
-    )
+    my_exp_cloned = await exp_service.clone(ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id))
 
     # check if such an experiment already exists and delete it
     if Path(exp_folder / (exp_cloned_name + ".czexp")).exists():
@@ -124,9 +115,7 @@ async def check_experiment_api(
     # save the clones experiment using a defined name without the *.czexp extension
     logger.info("Saving Experiment ...")
     await exp_service.save(
-        ExperimentServiceSaveRequest(
-            experiment_id=my_exp_cloned.experiment_id, experiment_name=exp_cloned_name
-        )
+        ExperimentServiceSaveRequest(experiment_id=my_exp_cloned.experiment_id, experiment_name=exp_cloned_name)
     )
 
     # export the experiment as XML string
@@ -142,16 +131,12 @@ async def check_experiment_api(
 
     # import an experiment from XML string
     logger.info("Importing Experiment from XML String ...")
-    imported_exp = await exp_service.import_(
-        ExperimentServiceImportRequest(exp_xml.xml)
-    )
+    imported_exp = await exp_service.import_(ExperimentServiceImportRequest(exp_xml.xml))
     logger.info("Reference Id (imported): " + imported_exp.experiment_id)
 
     # delete the clones experiment
     logger.info("Delete cloned Experiment ...")
-    await exp_service.delete(
-        ExperimentServiceDeleteRequest(experiment_name=exp_cloned_name)
-    )
+    await exp_service.delete(ExperimentServiceDeleteRequest(experiment_name=exp_cloned_name))
 
     # check if the experiment is really gone
     if not Path(exp_folder / (exp_cloned_name + ".czexp")).exists():
@@ -161,39 +146,25 @@ async def check_experiment_api(
     logger.info("Start SNAP Experiment ...")
 
     # wait until snap is finished
-    snap = await exp_service.run_snap(
-        ExperimentServiceRunSnapRequest(experiment_id=my_exp.experiment_id)
-    )
+    snap = await exp_service.run_snap(ExperimentServiceRunSnapRequest(experiment_id=my_exp.experiment_id))
 
-    results["snap_path"] = Path(save_path.image_output_path) / (
-        snap.output_name + ".czi"
-    )
+    results["snap_path"] = Path(save_path.image_output_path) / (snap.output_name + ".czi")
     logger.info("Saving Location: " + str(results["snap_path"]))
 
     # start and stop live based on the selected experiment
     logger.info("Starting Live ...")
-    await exp_service.start_live(
-        ExperimentServiceStartLiveRequest(
-            experiment_id=my_exp.experiment_id, track_index=0
-        )
-    )
+    await exp_service.start_live(ExperimentServiceStartLiveRequest(experiment_id=my_exp.experiment_id, track_index=0))
 
     logger.info("Stopping Live ...")
-    await exp_service.stop(
-        ExperimentServiceStopRequest(experiment_id=my_exp.experiment_id)
-    )
+    await exp_service.stop(ExperimentServiceStopRequest(experiment_id=my_exp.experiment_id))
     # time.sleep(waittime)  # this should not be needed soon !!!
 
     # start and stop Continuous based on selected experiment
     logger.info("Starting Continuous ...")
-    await exp_service.start_continuous(
-        ExperimentServiceStartContinuousRequest(experiment_id=my_exp.experiment_id)
-    )
+    await exp_service.start_continuous(ExperimentServiceStartContinuousRequest(experiment_id=my_exp.experiment_id))
 
     logger.info("Stopping Continuous ...")
-    await exp_service.stop(
-        ExperimentServiceStopRequest(experiment_id=my_exp.experiment_id)
-    )
+    await exp_service.stop(ExperimentServiceStopRequest(experiment_id=my_exp.experiment_id))
     time.sleep(waittime)  # this should not be needed soon !!!
 
     # check if such an experiment already exists and delete it
@@ -205,20 +176,14 @@ async def check_experiment_api(
     logger.info("Starting Experiment Execution ...")
 
     exp_result = await exp_service.run_experiment(
-        ExperimentServiceRunExperimentRequest(
-            experiment_id=my_exp.experiment_id, output_name=czi_name
-        )
+        ExperimentServiceRunExperimentRequest(experiment_id=my_exp.experiment_id, output_name=czi_name)
     )
 
-    exp_status = await exp_service.get_status(
-        ExperimentServiceGetStatusRequest(experiment_id=my_exp.experiment_id)
-    )
+    exp_status = await exp_service.get_status(ExperimentServiceGetStatusRequest(experiment_id=my_exp.experiment_id))
 
     logger.info(exp_status)
 
-    results["exp_result_path"] = Path(save_path.image_output_path) / (
-        exp_result.output_name + ".czi"
-    )
+    results["exp_result_path"] = Path(save_path.image_output_path) / (exp_result.output_name + ".czi")
     logger.info("Saving Location Experiment Run: " + str(results["exp_result_path"]))
 
     # close the channel
@@ -232,9 +197,7 @@ if __name__ == "__main__":
     logger = set_logging()
 
     # run the main function to check zen api methods
-    results = asyncio.run(
-        check_experiment_api(experiment_name=my_experiment, configfile=configfile)
-    )
+    results = asyncio.run(check_experiment_api(experiment_name=my_experiment, configfile=configfile))
 
     logger.info(results)
 
@@ -243,7 +206,13 @@ if __name__ == "__main__":
         with pyczi.open_czi(str(results["exp_result_path"])) as czidoc:
 
             # read a 2d image plane
-            img2d = czidoc.read(plane={"C": 0})
+            t = 0
+            c = 0
+            s = 0
+            z = 0
+
+            # read the actual pixel data
+            img2d = czidoc.read(plane={"C": c, "T": t, "Z": z}, scene=s)
             logger.info(f"Shape of 2D plane: {img2d.shape}")
 
             # get the total size of all existing dimension for this CZI image
@@ -254,5 +223,5 @@ if __name__ == "__main__":
         logger.info("Displaying CZI image data ...")
         fig1, ax = plt.subplots(1, 1, figsize=(12, 8))
         ax.imshow(img2d[..., 0], cmap=cm.inferno, vmin=100, vmax=5000)
-        ax.set_title(results["exp_result_path"])
+        ax.set_title(f"{results['exp_result_path']}: S={s} T={t} C={c} Z={z}")
         plt.show()

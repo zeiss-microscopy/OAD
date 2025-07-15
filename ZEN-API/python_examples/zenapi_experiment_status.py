@@ -49,15 +49,11 @@ async def main(args):
     exp_service = ExperimentServiceStub(channel=channel, metadata=metadata)
 
     # load experiment by its name without the *.czexp extension
-    my_exp = await exp_service.load(
-        ExperimentServiceLoadRequest(experiment_name=my_experiment)
-    )
+    my_exp = await exp_service.load(ExperimentServiceLoadRequest(experiment_name=my_experiment))
     logger.info(f"ExperimentName: {my_experiment} Reference Id: {my_exp.experiment_id}")
 
     # show output path for images
-    save_path = await exp_service.get_image_output_path(
-        ExperimentServiceGetImageOutputPathRequest()
-    )
+    save_path = await exp_service.get_image_output_path(ExperimentServiceGetImageOutputPathRequest())
     logger.info(f"Saving Location for CZI Images: {save_path.image_output_path}")
 
     if overwrite:
@@ -69,15 +65,11 @@ async def main(args):
             elif not overwrite:
                 logger.error("CZI file: " + czi_name + ".czi cannot be overwritten")
                 channel.close()
-                raise FileExistsError(
-                    "CZI file: " + czi_name + ".czi cannot be overwritten"
-                )
+                raise FileExistsError("CZI file: " + czi_name + ".czi cannot be overwritten")
 
     # start the actual experiment
     exp_result = await exp_service.start_experiment(
-        ExperimentServiceStartExperimentRequest(
-            experiment_id=my_exp.experiment_id, output_name=czi_name
-        )
+        ExperimentServiceStartExperimentRequest(experiment_id=my_exp.experiment_id, output_name=czi_name)
     )
 
     # define api method for the "observable"
@@ -112,13 +104,18 @@ async def main(args):
     channel.close()
 
     if open_czi:
-        czi_fullpath = Path(save_path.image_output_path) / (
-            exp_result.output_name + ".czi"
-        )
+        czi_fullpath = str(Path(save_path.image_output_path) / (exp_result.output_name + ".czi"))
 
-        with pyczi.open_czi(str(czi_fullpath)) as czidoc:
+        with pyczi.open_czi(czi_fullpath) as czidoc:
+
             # read a 2d image plane
-            img2d = czidoc.read(plane={"C": 0})
+            t = 0
+            c = 0
+            s = 0
+            z = 0
+
+            # read the actual pixel data
+            img2d = czidoc.read(plane={"C": c, "T": t, "Z": z}, scene=s)
             logger.info(f"Shape of 2D plane: {img2d.shape}")
 
             # get the total size of all existing dimension for this CZI image
@@ -128,8 +125,8 @@ async def main(args):
         # show the 2D image plane
         logger.info("Displaying CZI image data ...")
         fig1, ax = plt.subplots(1, 1, figsize=(12, 8))
-        ax.imshow(img2d[..., 0], cmap=cm.inferno)
-        ax.set_title(exp_result.output_name + ".czi")
+        ax.imshow(img2d[..., 0], cmap=cm.inferno, vmin=100, vmax=5000)
+        ax.set_title(f"{czi_fullpath}: S={s} T={t} C={c} Z={z}")
         plt.show()
 
 
