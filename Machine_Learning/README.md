@@ -26,7 +26,7 @@
     - [How to use a model (trained on all channels) inside an Image Analysis pipeline](#how-to-use-a-model-trained-on-all-channels-inside-an-image-analysis-pipeline)
   - [How train a model for Instance Segmentation](#how-train-a-model-for-instance-segmentation)
   - [How to use an Instance Segmentation model in ZEN](#how-to-use-an-instance-segmentation-model-in-zen)
-    - [Integration into BioApps](#integration-into-bioapps)
+    - [Integration into Bio_Application](#integration-into-Bio_Application)
     - [Integration into Material Workflows](#integration-into-material-workflows)
   - [Bringing CZANNs and ZEISS software ecosystem together](#bringing-czanns-and-zeiss-software-ecosystem-together)
     - [The challenges of deployment](#the-challenges-of-deployment)
@@ -94,7 +94,7 @@ These solutions build upon established and widely recognized tools and framework
 
 - **arivis Cloud incl arivis AI**
   - [arivis AI] for data-driven training of Deep Learning models (semantic and instance segmentation) incl. annotation tools
-  - Models can be used inside ZEN and arivis Pro for various applications (2D and 3D Analysis, [BioApps], Material Modules etc.)
+  - Models can be used inside ZEN and arivis Pro for various applications (2D and 3D Analysis, [Bio_Application], Material Modules etc.)
 - **ZEN Intellesis Segmentation**
   - Local training of Pixel Classifier (based on Random Forrest)
   - Full Integration of all types models incl. Deep Learning into Image Analysis applications
@@ -225,7 +225,7 @@ The three main software packages all offer a range of segmentation methods that 
 ## ZEN Intellesis Segmentation
 
 - Machine- and Deep Learning algorithms to **segment** images
-- Full Integration into Image Analysis Workflows, Material Modules, [BioApps] and Guided Acquisition
+- Full Integration into Image Analysis Workflows, Material Modules, [Bio_Application] and Guided Acquisition
 - Import of externally trained Deep Neural networks
 
 ![Intellesis Segmentation](../Images/intellesis_segmentation_tool.png)
@@ -425,21 +425,21 @@ In order to use Instance Segmentation models it is required to annotate data and
 
 ![Using the Instance model inside ZEN Image Analysis](../Machine_Learning/images/instance3.png)
 
-- evaluate the results of the image analysis using the instance segmentation - here inside the Cell Counting [BioApps]
+- evaluate the results of the image analysis using the instance segmentation - here inside the Cell Counting [Bio_Application]
 
 ![Using the Instance model inside ZEN Image Analysis](../Machine_Learning/images/instance4.png)
 
-### Integration into [BioApps]
+### Integration into [Bio_Application]
 
 Bio Apps comprise a streamlined suite of image analysis tools meticulously tailored for common tasks in cell biology and cancer research. These tools provide specialized solutions for tasks such as cell counting, cellular gene expression analysis, and nuclear translocation studies.
 
 The cells displayed in the figure were imaged using a ZEISS Celldiscoverer 7 microscope, employing oblique contrast imaging to enhance cellular morphology and facilitate better segmentation. The channel corresponding to mCherry fluorescence is colored in pink and displayed alongside the cell channel, as shown in the top right in the [figure](#bioapp1) below. A Deep Learning model for instance segmentation, trained on the ZEISS arivis Cloud platform, was imported into the Gene Expression BioApp in ZEN to perform automated cellular segmentation.
 
-<p><img src="./images/bioapps1.png" id="bioapp1" title="Gene Expression BioApp" width="800"></p>
+<p><img src="./images/Bio_Application1.png" id="bioapp1" title="Gene Expression BioApp" width="800"></p>
 
 An instance segmentation model trained on [arivis Cloud] is used for the segmentation of cells in the oblique channel. Following cell segmentation, mCherry-positive cells are identified to evaluate the expression rate. The result of analyzing a multi-well plate using the Gene-Expression Bio App as heatmap.
 
-<p><img src="./images/bioapps2.png" id="bioapp1" title="Gene Expression BioApp  Heatmap" width="800"></p>
+<p><img src="./images/Bio_Application2.png" id="bioapp1" title="Gene Expression BioApp  Heatmap" width="800"></p>
 
 ### Integration into Material Workflows
 
@@ -487,7 +487,7 @@ For a simple example of such a pipeline see the attached Jupyter notebook (ready
 - the PyPi package [czmodel](https://pypi.org/project/czmodel/) is used to convert and package the model as a *.czann file
 - the *.czann file is imported into ZEN using the normal **Import** mechanisms
 
-From here on the network can be used inside the ZEN Image Analysis, Processing functions, [BioApps], Material Modules and also inside [Guided Acquisition Workflows](https://github.com/zeiss-microscopy/OAD/tree/master/Guided_Acquisition)
+From here on the network can be used inside the ZEN Image Analysis, Processing functions, [Bio_Application], Material Modules and also inside [Guided Acquisition Workflows](https://github.com/zeiss-microscopy/OAD/tree/master/Guided_Acquisition)
 
 ## Importing a model into ZEN blue, ZEN core and arivis Pro
 
@@ -817,5 +817,5 @@ In general, the optimal values for these parameters will depend on the specific 
 [Scikit-Learn]: https://scikit-learn.org/
 [Tensorflow]: https://www.tensorflow.org/
 [Napari]: https://napari.org/
-[BioApps]: https://www.zeiss.com/microscopy/en/products/software/zeiss-zen/bio-apps.html
+[Bio_Application]: https://www.zeiss.com/microscopy/en/products/software/zeiss-zen/bio-apps.html
 [ZEN Intellesis]: https://www.zeiss.com/microscopy/int/products/microscope-software/zen-intellesis-image-segmentation-by-deep-learning.html

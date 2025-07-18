@@ -1,6 +1,6 @@
-# BioApps
+# Bio Applications
 
-**BioApps** are typical imaging workflows in the field of Life Science Research and similar or related fields. Typical steps involved are
+**Bio Applications* are typical imaging workflows in the field of Life Science Research and similar or related fields. Typical steps involved are
 
 * Image Acquisition with certain parameters on specific imaging systems
 * Image Processing and Analysis
@@ -17,7 +17,7 @@ Typical example for such applications are:
 * Confluence Measurements
 * ...
 
-This repository will contain some useful Image Analysis Settings, tools and scripts that can be used for various things "surrounding" those **BioApps**.
+This repository will contain some useful Image Analysis Settings, tools and scripts that can be used for various things "surrounding" those **Bio Applications**.
 
 The Image Analysis Settings (*.czias) can be used inside ZEN Blue or ZEN Core with the example images. Depending on the real images those settings must be obviously modified.
 
