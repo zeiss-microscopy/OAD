@@ -26,7 +26,7 @@
     - [How to use a model (trained on all channels) inside an Image Analysis pipeline](#how-to-use-a-model-trained-on-all-channels-inside-an-image-analysis-pipeline)
   - [How train a model for Instance Segmentation](#how-train-a-model-for-instance-segmentation)
   - [How to use an Instance Segmentation model in ZEN](#how-to-use-an-instance-segmentation-model-in-zen)
-    - [Integration into Bio_Application](#integration-into-Bio_Application)
+    - [Integration into Bio\_Application](#integration-into-bio_application)
     - [Integration into Material Workflows](#integration-into-material-workflows)
   - [Bringing CZANNs and ZEISS software ecosystem together](#bringing-czanns-and-zeiss-software-ecosystem-together)
     - [The challenges of deployment](#the-challenges-of-deployment)
@@ -69,7 +69,7 @@
 
 # ZEISS - Open Ecosystem for Integrated Machine Learning Workflows
 
-The [ZEN blue], [ZEN core] and [arivis Pro] software together with and the [arivis Cloud] platform offer various tools and solutions to integrate machine learning methods and Deep learning into image processing and analysis workflows.
+The [ZEN blue], [ZEN core] and [arivis Platform] offer various tools and solutions to integrate machine learning methods and Deep learning into image processing and analysis workflows.
 
 The mission statement for the ecosystem can be described as:
 
@@ -95,13 +95,14 @@ These solutions build upon established and widely recognized tools and framework
 - **arivis Cloud incl arivis AI**
   - [arivis AI] for data-driven training of Deep Learning models (semantic and instance segmentation) incl. annotation tools
   - Models can be used inside ZEN and arivis Pro for various applications (2D and 3D Analysis, [Bio_Application], Material Modules etc.)
-- **ZEN Intellesis Segmentation**
-  - Local training of Pixel Classifier (based on Random Forrest)
-  - Full Integration of all types models incl. Deep Learning into Image Analysis applications
-- **ZEN Intellesis Object Classification**
-  - Feature-based Object Classification
-- **ZEN Intellesis Denoising**
-  - Local training and usage of Noise2Void
+- [ZEN AI Toolkit] 
+  - **ZEN Intellesis Segmentation**
+    - Local training of Pixel Classifier (based on Random Forrest)
+    - Full Integration of all types models incl. Deep Learning into Image Analysis applications
+  - **ZEN Intellesis Object Classification**
+    - Feature-based Object Classification
+  - **ZEN Intellesis Denoising**
+    - Local training and usage of Noise2Void
 - **arivis Pro**
   - Use DL models for segmentation, Classify Objects and use regression models
 - **ZEISS ML-Stack** (Python)
@@ -186,11 +187,11 @@ The sketch below outlines "the bigger" picture and vision and will be updated fr
 
 ### Semantic Segmentation
 
-Deep-Learning Models for semantic segmentation can be trained on the [cloud platform](https://www.apeer.com/app/ai-toolkit/overview) or "externally" and then packaged as a CZANN file using the [czmodel](#the-czmodel-pypi-package). The artifact that is "shipped" is only the model and the actual platform, where the model will be used later, has to make sure all required dependencies are available
+Deep-Learning Models for semantic segmentation can be trained on the [arivis AI] or "externally" and then packaged as a CZANN file using the [czmodel](#the-czmodel-pypi-package). The artifact that is "shipped" is only the model and the actual platform, where the model will be used later, has to make sure all required dependencies are available
 
 ### Instance Segmentation
 
-For the Instance Segmentation models the annotation and training process also takes place on the [cloud platform](https://www.apeer.com/app/ai-toolkit/overview) but the deployment is done differently compared to simple DL models for semantic segmentation.
+For the Instance Segmentation models the annotation and training process also takes place on the [arivis AI] but the deployment is done differently compared to simple DL models for semantic segmentation.
 
 AI Models for Instance Segmentation will be deployed including all code for DataIO, pre-processing, Inference and PostProcessing as a container, which can be deployed across platforms to ensure identical results.The artifact that is "shipped" i only the model & code inside a container and the actual platform, where the model will be used later, does not need to provide all rhe required packages to execute the actual AI model.
 
@@ -803,19 +804,15 @@ In general, the optimal values for these parameters will depend on the specific 
 - check [Colab notebooks](https://colab.research.google.com/github/zeiss-microscopy/OAD/blob/master/Machine_Learning/notebooks/czmodel/Regresssion_3_0_0.ipynb)
 - Support of Denoising and Regression model inside [czmodel] package
 
-
 [ZEN blue]: https://www.zeiss.com/microscopy/en/products/software/zeiss-zen.html
 [ZEN core]: https://www.zeiss.com/microscopy/en/products/software/zeiss-zen-core.html
 [PyPI]: https://pypi.org/
 [czmodel]: https://pypi.org/project/czmodel/
 [cztile]: https://pypi.org/project/cztile/
-[arivis Cloud]: https://www.apeer.com/
-[arivis Pro]: https://www.arivis.com/products/pro
-[arivis AI]: https://www.apeer.com/app/ai-toolkit/overview
+[arivis Platform]: https://www.zeiss.com/microscopy/en/products/software/advanced-image-analysis.html
+[arivis AI]: https://www.arivis.cloud/app/ai-toolkit/overview
 [Python]: https://www.python.org/
-[Dask]: https://dask.org/
-[Scikit-Learn]: https://scikit-learn.org/
-[Tensorflow]: https://www.tensorflow.org/
 [Napari]: https://napari.org/
 [Bio_Application]: https://www.zeiss.com/microscopy/en/products/software/zeiss-zen/bio-apps.html
-[ZEN Intellesis]: https://www.zeiss.com/microscopy/int/products/microscope-software/zen-intellesis-image-segmentation-by-deep-learning.html
+[ZEN Intellesis]: https://www.zeiss.com/microscopy/en/products/software/zeiss-zen/ai-toolkit.html
+[ZEN AI Toolkit]: https://www.zeiss.com/microscopy/en/products/software/zeiss-zen/ai-toolkit.html
