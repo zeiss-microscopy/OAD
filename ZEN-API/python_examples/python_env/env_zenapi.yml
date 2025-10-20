@@ -15,9 +15,6 @@ dependencies:
   - docutils
   - pip
   - wheel
-  - pytorch
-  - torchvision
-  - pytorch-cuda=12.4
   - fsspec
   - setuptools
   - nb_conda_kernels
@@ -41,8 +38,6 @@ dependencies:
   - grpclib
 
   - pip:
-      - czmodel[pytorch]>=5
-      - onnxruntime-gpu==1.19.0 # needs to match CUDA etc.
       - bioio
       - bioio-czi
       - aicspylibczi

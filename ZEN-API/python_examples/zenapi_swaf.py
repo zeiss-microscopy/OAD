@@ -15,18 +15,18 @@
 import asyncio
 import sys
 from pathlib import Path
-from zenapi_tools import set_logging, initialize_zenapi
-from zenapi_experiment_tools import show_swaf_info_LM, save_experiment
+from zen_api_utils.misc import set_logging, initialize_zenapi
+from zen_api_utils.experiment import show_swaf_info_LM, save_experiment
 from grpclib import GRPCError
 
 # import the auto-generated python modules
-from public.zen_api.acquisition.v1beta import (
+from zen_api.acquisition.v1beta import (
     ExperimentServiceStub,
     ExperimentServiceLoadRequest,
     ExperimentServiceCloneRequest,
 )
 
-from public.zen_api.lm.acquisition.v1beta import (
+from zen_api.lm.acquisition.v1beta import (
     ExperimentSwAutofocusServiceStub,
     ExperimentSwAutofocusServiceGetAutofocusParametersRequest,
     ExperimentSwAutofocusServiceSetAutofocusParametersRequest,
@@ -37,15 +37,17 @@ from public.zen_api.lm.acquisition.v1beta import (
 )
 
 # import the auto-generated python modules
-from public.zen_api.lm.hardware.v2 import (
-    # StageServiceStub,
+from zen_api.lm.hardware.v2 import (
     StageServiceGetPositionRequest,
-    # StageServiceMoveToRequest,
     FocusServiceStub,
-    # FocusServiceGetPositionRequest,
 )
 
-configfile = r"config.ini"
+# Get the directory where the current script is located
+script_dir = Path(__file__).parent
+
+# Build the path to config.ini relative to the script
+config_path = script_dir / "config.ini"
+
 expname = "ZEN_API_SWAF"
 expname_cloned = "ZEN_API_SWAF_cloned"
 image_folder = Path(r"f:\Zen_Output\temp")
@@ -55,7 +57,7 @@ exp_folder = Path(r"f:\Documents\Carl Zeiss\ZEN\Documents\Experiment Setups")
 async def main(args):
 
     # get the gRPC channel and the metadata
-    channel, metadata = initialize_zenapi(configfile)
+    channel, metadata = initialize_zenapi(config_path)
 
     # create the experiment service
     exp_service = ExperimentServiceStub(channel=channel, metadata=metadata)

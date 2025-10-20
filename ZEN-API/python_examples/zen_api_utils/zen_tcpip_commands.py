@@ -16,8 +16,8 @@
 
 
 from typing import List
-from zenapi_tools import set_logging
-from zen_tcpip import ZenCommands
+from zen_api_utils.misc import set_logging
+from zen_api_utils.zen_tcpip import ZenCommands
 
 # create logger
 logger = set_logging()
@@ -63,9 +63,7 @@ def set_experiment_active(experiment_name: str) -> List[str]:
     return commandlist
 
 
-def run_experiment_and_save_image(
-    experiment_name: str, savefolder: str, cziname: str
-) -> List[str]:
+def run_experiment_and_save_image(experiment_name: str, savefolder: str, cziname: str) -> List[str]:
     """
     Runs an experiment and saves the resulting image.
 

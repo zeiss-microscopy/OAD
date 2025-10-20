@@ -18,7 +18,7 @@ import os
 import telnetlib
 import time
 from typing import Tuple, Union, List
-from zenapi_tools import set_logging
+from zen_api_utils.misc import set_logging
 
 
 # create logger
@@ -75,9 +75,7 @@ class ZenCommands:
             if self.verbose:
                 logger.info(f"TCP-IP: {command}")
 
-            rt, an = zentcp.tcp_eval_expression_and_wait_for_ok(
-                zentcp_connection, command, self.timeout
-            )
+            rt, an = zentcp.tcp_eval_expression_and_wait_for_ok(zentcp_connection, command, self.timeout)
 
         # finish and close TCP-IP connection to ZEN
         zentcp_connection.close()
@@ -90,9 +88,7 @@ class ZenTCPIP:
         """
         pass
 
-    def tcp_open_port(
-        self, timeout: int = 200, port: int = 52767, verbose=False
-    ) -> Union[telnetlib.Telnet, int]:
+    def tcp_open_port(self, timeout: int = 200, port: int = 52767, verbose=False) -> Union[telnetlib.Telnet, int]:
         """Open a connection to ZEN with a specified timeout and port number
 
         :param timeout: time in [s] the longest command is expected to take.

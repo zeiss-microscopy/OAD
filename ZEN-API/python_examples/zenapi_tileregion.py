@@ -15,17 +15,18 @@
 import asyncio
 import sys
 from pathlib import Path
-from zenapi_tools import set_logging, initialize_zenapi
+import numpy as np
+from zen_api_utils.misc import set_logging, initialize_zenapi
 
 # import the auto-generated python modules
-from public.zen_api.acquisition.v1beta import (
+from zen_api.acquisition.v1beta import (
     ExperimentServiceStub,
     ExperimentServiceLoadRequest,
     ExperimentServiceCloneRequest,
     ExperimentServiceSaveRequest,
 )
 
-from public.zen_api.lm.acquisition.v1beta import (
+from zen_api.lm.acquisition.v1beta import (
     TilesServiceStub,
     TilesServiceIsTilesExperimentRequest,
     TilesServiceAddRectangleTileRegionRequest,
@@ -34,13 +35,18 @@ from public.zen_api.lm.acquisition.v1beta import (
 
 exp_folder = Path(r"f:\Documents\Carl Zeiss\ZEN\Documents\Experiment Setups")
 my_experiments = ["ZEN_API_TileRegion_Test"]  # , "ZEN_API_TileRegion_Test_notiles"]
-configfile = r"config.ini"
+
+# Get the directory where the current script is located
+script_dir = Path(__file__).parent
+
+# Build the path to config.ini relative to the script
+config_path = script_dir / "config.ini"
 
 
 async def main(args):
 
     # get the gRPC channel and the metadata
-    channel, metadata = initialize_zenapi(configfile)
+    channel, metadata = initialize_zenapi(config_path)
 
     # create the experiment service
     exp_service = ExperimentServiceStub(channel=channel, metadata=metadata)
@@ -66,7 +72,7 @@ async def main(args):
 
         if has_tiles.is_tiles_experiment:
 
-            expname_cloned = expname + "_clone"
+            expname_cloned = expname + "_cloned"
 
             my_exp_cloned = await exp_service.clone(
                 ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id)
@@ -79,14 +85,23 @@ async def main(args):
             )
 
             # add a tile region to the experiment (experiment needs to have a tileRegion already)
+            center_x = 58500 * 1e-6
+            center_y = 35500 * 1e-6
+            width = 2000 * 1e-6
+            height = 1000 * 1e-6
+            z = -7000 * 1e-6
+
+            logger.info(f"Adding TileRegion at X: {np.round(center_x, 3)} Y: {np.round(center_y, 3)} Z: {np.round(z, 3)} [micron]")
+            
+            # remarks only works in "TileMode" but in "CarrierMode" right now
             await tile_service.add_rectangle_tile_region(
                 TilesServiceAddRectangleTileRegionRequest(
                     experiment_id=my_exp_cloned.experiment_id,
-                    center_x=4500 * 1e-6,
-                    center_y=8500 * 1e-6,
-                    width=2000 * 1e-6,
-                    height=1000 * 1e-6,
-                    z=-7000 * 1e-6,
+                    center_x=center_x,
+                    center_y=center_y,
+                    width=width,
+                    height=height,
+                    z=z,
                 )
             )
 

@@ -44,6 +44,7 @@
   - [Python Examples](#python-examples)
     - [Python Environment](#python-environment)
       - [Prerequisites](#prerequisites)
+      - [Experimental python package](#experimental-python-package)
       - [Python Scripts](#python-scripts)
     - [Configuration File](#configuration-file)
     - [Python - Outlook](#python---outlook)
@@ -488,7 +489,9 @@ These examples are meant to "play around" and test ZEN API functionality. They c
 ### Python Environment
 
 In order to use ZEN API from Python one needs to create a suitable python environment.
-In case one needs a new environment here please create a new environment using the [env_zenapi.yml](../ZEN-API/python_examples/python_env/env_zenapi.yml)
+In case one needs a new environment here please create a new environment using the [env_zenapi.yml](../ZEN-API/python_examples/python_env/env_zenapi.yml) or [env_smartmic.yml](../ZEN-API/python_examples/python_env/env_smartmic.yml)
+
+Remark: The "smartmic" environment is much larger but also allows to run the examples using the AI models.
 
 #### Prerequisites
 
@@ -505,15 +508,20 @@ conda activate zenapi
 
 > **IMPORTANT**: Please feel free to use your own environment and install only the packages you really need!
 
-In some case the installation of `betterproto` pre-release from the YML file does not seem to work correctly in the past. If that happens please run:
+#### Experimental python package
+
+The repo contains also an _experimental_ python package that allows to install ZEN API via:
 
 ```powershell
-pip install --pre betterproto==2.0.0b7 betterproto[compiler]==2.0.0b7 -U
+conda activate zenapi
+pip install "ZEN-API\python_examples\python_packages\zen312\dist\zen_api-2025.5.1-py3-none-any.whl"
 ```
+
+The other option is to import the python classes directly from `ZEN-API\python_examples\python_packages\zen312\src\zen_api` from source. In this case make sure that one adapts the imports inside the examples accordingly.
 
 #### Python Scripts
 
-Inside this repository one can find several example and the python classes, that were translated from protofiles automatically inside the [python_examples\public](../ZEN-API/python_examples/public/) folder.
+Inside this repository one can find several examples inside the [python_examples](../ZEN-API/python_examples/) folder.
 
 ```txt
 .
@@ -548,7 +556,7 @@ control-token = ...
 
 ### Python - Outlook
 
-ZEN API is still very new and under constant development. One of the planned improvements is to create a simple python package which installs the python bindings using pip.
+ZEN API is still very new and under constant development. Expect frequent changes.
 
 ## Documentation
 
@@ -565,6 +573,6 @@ Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those sof
 
 By using any of those examples you agree to this disclaimer.
 
-Version: 2025.07.11
+Version: 2025.10.20
 
 Copyright (c) 2025 Carl Zeiss AG, Germany. All Rights Reserved.

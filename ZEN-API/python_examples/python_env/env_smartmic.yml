@@ -1,0 +1,113 @@
+# Tested on Windows only (but should also work for Linux)
+#
+# Disclaimer:
+#
+# The author(s) undertakes no warranty concerning the use of this YML file. Use at your own risk.
+# By using any of those examples you agree to this disclaimer.
+
+name: smartmic
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.11
+  - colormap
+  - czifile
+  - cudnn=9.13.1.26
+  - dask
+  - dask-image
+  - docker-py
+  - docutils
+  - fastapi
+  - flask
+  - fsspec
+  - ipyfilechooser
+  - ipykernel
+  - magicgui
+  - marimo
+  - matplotlib
+  - napari>=0.6.5
+  - numpy
+  - ome-zarr
+  - opencv
+  - pandas
+  - pip
+  - plotly
+  - pooch
+  - pyqt=5
+  - pyqtgraph
+  - pytest
+  - pytest-cov
+  - pytorch::pytorch=2.5.1
+  - pytorch::pytorch-cuda=12.4
+  - python-box[all]
+  - python-dateutil
+  - qasync
+  - requests
+  - scikit-image>=0.19.3
+  - seaborn
+  - setuptools
+  - shapely
+  - superqt
+  - pytorch::torchvision
+  #- pytorch::torchvision=0.20.1
+  - tqdm
+  - validators
+  - wheel
+  - xarray
+  - xarray[complete]
+  - xmltodict
+  - zarr
+
+  - pip:
+      - aicspylibczi>=3.3.1
+      - betterproto==2.0.0b7 # sometimes this does not get installed - try manually
+      - betterproto[compiler]==2.0.0b7 # sometimes this does not get installed - try manually
+      - bioio
+      - bioio-czi
+      - bioio-imageio
+      - bioio-ome-tiff
+      - bioio-ome-zarr
+      - czmodel[pytorch]>=5
+      - cztile
+      - czitools
+      - grpclib
+      - loguru
+      - mowidget
+      - napari-assistant
+      - napari-brightness-contrast
+      - napari-clusters-plotter
+      - napari-crop
+      - napari-czann-segment
+      - napari-czitools
+      - napari-layer-details-display
+      - napari-ome-zarr
+      - napari-plugin-search
+      - napari-simpleitk-image-processing
+      - napari-skimage-regionprops
+      - napari-orthogonal-views
+      - ngff-zarr
+      - ngff-zarr[dask-image]
+      - ngff-zarr[validate]
+      - onnxruntime-gpu==1.19.0
+      - pylibCZIrw
+      - ryomen
+      - tiler
+      - wigglystuff
+      - GPUtil
+      - psutil
+
+# Create an environment - use conda or mamba
+# conda env create --file env_smartmic.yml
+
+# Update an environment
+# conda env update --name smartmic --file env_smartmic.yml --prune
+
+# Remove an environment
+# conda remove --name smartmic --all
+# conda clean --all
+
+# Show the locations of all versions of Python that are currently in the path
+# Windows: where python
+# Linux which -a python

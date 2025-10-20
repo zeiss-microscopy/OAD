@@ -1,5 +1,5 @@
 import os
-from zencontrol_short import ZenTCPIP
+from zen_api_utils.zencontrol_short import ZenTCPIP
 
 
 # Define place to store the CZI file

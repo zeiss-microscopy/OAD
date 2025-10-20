@@ -16,7 +16,6 @@ from typing import Tuple, Optional, List, Literal, Union
 from typing_extensions import Annotated
 from pydantic import Field, validate_arguments
 
-# from pydantic.error_wrappers import ValidationError
 from skimage.filters import threshold_triangle, median, gaussian
 from skimage.measure import label, regionprops_table, find_contours
 from skimage.morphology import remove_small_objects, disk, ball, remove_small_holes
@@ -27,8 +26,7 @@ from skimage.color import label2rgb
 from skimage.util import invert
 import numpy as np
 
-# from zenapi_tools import get_logger
-from zenapi_tools import set_logging
+from zen_api_utils.misc import set_logging
 from onnx_inference import OnnxInferencer
 import pandas as pd
 import os
@@ -39,7 +37,6 @@ from tqdm.contrib.itertools import product
 from shapely.geometry import Polygon
 
 # get the logger
-# logger = get_logger()
 logger = set_logging()
 
 

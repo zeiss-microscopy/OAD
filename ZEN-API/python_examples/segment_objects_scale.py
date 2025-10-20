@@ -13,7 +13,8 @@ sf = 0.2
 min_objectsize = int(np.round(100000 / (1 / sf**2), 0))
 max_holsize = int(np.round(1000 / (1 / sf**2), 0))
 
-filepath = r"data\OverViewScan.czi"
+filepath = r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\data\OverViewScan.czi"
+
 savename_seg, results, csvfile, objects = segment_czi(
     filepath,
     savepath=r"data",

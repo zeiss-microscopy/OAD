@@ -24,7 +24,7 @@ from PyQt5.QtGui import QPen, QColor
 import pyqtgraph as pg
 import sys
 from pathlib import Path
-from zenapi_tools import initialize_zenapi, set_logging, find_file
+from zen_api_utils.misc import initialize_zenapi, set_logging
 from processing_tools import ArrayProcessor
 from czmodel.pytorch.convert import DefaultConverter
 from czmodel import ModelMetadata
@@ -35,7 +35,7 @@ import random
 from typing import Optional, Union
 
 # import the auto-generated python modules for ZEN API
-from public.zen_api.acquisition.v1beta import (
+from zen_api.acquisition.v1beta import (
     ExperimentServiceStub,
     ExperimentStreamingServiceStub,
     ExperimentStreamingServiceMonitorExperimentRequest,
@@ -412,16 +412,11 @@ def main(
     if processing is Processing.SEG_SEMANTIC or processing is Processing.DENOISE:
         # extract the model information and path and to the prediction
 
-        # check if the model file exits
-        if not Path(czann_filepath).exists():
-            logger.warning(f"Model file {czann_filepath} does not exist.")
-            logger.info("Searching for model file...")
-            czann_filepath = find_file(czann_filepath)
-            if czann_filepath:
-                logger.info(f"Model file found: {czann_filepath}")
-            else:
-                logger.error(f"Model file {czann_filepath} not found.")
-                raise FileNotFoundError(f"Model file {czann_filepath} does not exist.")
+        # this is the new way of unpacking using the czann files
+        model_metadata, model_path = DefaultConverter().unpack_model(
+            model_file=czann_filepath,
+            target_dir=Path.cwd() / os.path.dirname(czann_filepath),
+        )
 
         # this is the new way of unpacking using the czann files
         model_metadata, model_path = DefaultConverter().unpack_model(
@@ -461,20 +456,24 @@ if __name__ == "__main__":
     # define the desired online processing here
     # processing = Processing.NO_PROCESSING
     # processing = Processing.SEG_THRESHOLD_MANUAL
-    # processing = Processing.SEG_THRESHOLD_OTSU
-    processing = Processing.SEG_SEMANTIC  # --> cyto2022_nuc2.czann
+    processing = Processing.SEG_THRESHOLD_OTSU
+    # processing = Processing.SEG_SEMANTIC  # --> cyto2022_nuc2.czann
     # processing = Processing.DENOISE  # --> LiveDenoise_DAPI.czann
 
-    configfile = r"config.ini"  # use the correct path
+    # Get the directory where the current script is located
+    script_dir = Path(__file__).parent
 
-    # czann_filepath = r"ZEN-API\python_examples\ai_models/simple_pytorch_nuclei_segmodel_pytorch.czann"
-    czann_filepath = r"ZEN-API\python_examples\ai_models\cyto2022_nuc2.czann"
-    # czann_filepath = r"ZEN-API\python_examples\ai_models/LiveDenoise_DAPI.czann"
+    # Build the path to config.ini relative to the script
+    config_path = script_dir / "config.ini"
+
+    #czann_filepath = r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\zen_api\ai_models\simple_pytorch_nuclei_segmodel_pytorch.czann"
+    czann_filepath = r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\zen_api\ai_models\cyto2022_nuc2.czann"
+    # czann_filepath = r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\zen_api\ai_models\LiveDenoise_DAPI.czann"
 
     logger = set_logging()
 
     main(
-        configfile=configfile,
+        configfile=config_path,
         pixeltype=np.dtype(np.uint16),  # must match experiment output
         czi_name="zenapi_test",
         start_experiment_from_UI=True,
