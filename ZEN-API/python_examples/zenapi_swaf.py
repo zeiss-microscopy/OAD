@@ -26,7 +26,7 @@ from zen_api.acquisition.v1beta import (
     ExperimentServiceCloneRequest,
 )
 
-from zen_api.lm.acquisition.v1beta import (
+from zen_api.lm.acquisition.v1 import (
     ExperimentSwAutofocusServiceStub,
     ExperimentSwAutofocusServiceGetAutofocusParametersRequest,
     ExperimentSwAutofocusServiceSetAutofocusParametersRequest,
@@ -69,15 +69,11 @@ async def main(args):
     focus_service = FocusServiceStub(channel=channel, metadata=metadata)
 
     # load experiment by its name without the *.czexp extension
-    my_exp = await exp_service.load(
-        ExperimentServiceLoadRequest(experiment_name=expname)
-    )
+    my_exp = await exp_service.load(ExperimentServiceLoadRequest(experiment_name=expname))
 
     # get the information about the SWAF parameters
     swaf_info = await swaf_service.get_autofocus_parameters(
-        ExperimentSwAutofocusServiceGetAutofocusParametersRequest(
-            experiment_id=my_exp.experiment_id
-        )
+        ExperimentSwAutofocusServiceGetAutofocusParametersRequest(experiment_id=my_exp.experiment_id)
     )
 
     # show the SWAF parameters
@@ -85,9 +81,7 @@ async def main(args):
 
     # clone the experiment
     logger.info("Cloning Experiment ...")
-    my_exp_cloned = await exp_service.clone(
-        ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id)
-    )
+    my_exp_cloned = await exp_service.clone(ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id))
 
     # modify the SWAF
     await swaf_service.set_autofocus_parameters(
@@ -108,15 +102,11 @@ async def main(args):
     )
 
     # save the modified experiment to disk as an *.czexp file
-    await save_experiment(
-        my_exp_cloned, exp_service, expname=expname_cloned, overwrite=True
-    )
+    await save_experiment(my_exp_cloned, exp_service, expname=expname_cloned, overwrite=True)
 
     # get the information about the SWAF parameters
     swaf_info = await swaf_service.get_autofocus_parameters(
-        ExperimentSwAutofocusServiceGetAutofocusParametersRequest(
-            experiment_id=my_exp_cloned.experiment_id
-        )
+        ExperimentSwAutofocusServiceGetAutofocusParametersRequest(experiment_id=my_exp_cloned.experiment_id)
     )
 
     # show the SWAF parameters

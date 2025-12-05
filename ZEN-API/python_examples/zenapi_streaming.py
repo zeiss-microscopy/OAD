@@ -26,7 +26,7 @@ import sys
 from pathlib import Path
 from zen_api_utils.misc import initialize_zenapi, set_logging
 from processing_tools import ArrayProcessor
-from czmodel.pytorch.convert import DefaultConverter
+from czmodel.core.util._extract_model import extract_czann_model
 from czmodel import ModelMetadata
 from onnx_inference import OnnxInferencer
 from enum import Enum, unique
@@ -413,14 +413,8 @@ def main(
         # extract the model information and path and to the prediction
 
         # this is the new way of unpacking using the czann files
-        model_metadata, model_path = DefaultConverter().unpack_model(
-            model_file=czann_filepath,
-            target_dir=Path.cwd() / os.path.dirname(czann_filepath),
-        )
-
-        # this is the new way of unpacking using the czann files
-        model_metadata, model_path = DefaultConverter().unpack_model(
-            model_file=czann_filepath,
+        model_metadata, model_path = extract_czann_model(
+            path=czann_filepath,
             target_dir=Path.cwd() / os.path.dirname(czann_filepath),
         )
 
@@ -466,8 +460,10 @@ if __name__ == "__main__":
     # Build the path to config.ini relative to the script
     config_path = script_dir / "config.ini"
 
-    #czann_filepath = r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\zen_api\ai_models\simple_pytorch_nuclei_segmodel_pytorch.czann"
-    czann_filepath = r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\zen_api\ai_models\cyto2022_nuc2.czann"
+    # czann_filepath = r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\zen_api\ai_models\simple_pytorch_nuclei_segmodel_pytorch.czann"
+    czann_filepath = (
+        r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\zen_api\ai_models\cyto2022_nuc2.czann"
+    )
     # czann_filepath = r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\zen_api\ai_models\LiveDenoise_DAPI.czann"
 
     logger = set_logging()

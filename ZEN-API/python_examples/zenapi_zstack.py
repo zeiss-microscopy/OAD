@@ -27,7 +27,7 @@ from zen_api.acquisition.v1beta import (
     ExperimentServiceRunExperimentRequest,
 )
 
-from zen_api.lm.acquisition.v1beta import (
+from zen_api.lm.acquisition.v1 import (
     ZStackServiceStub,
     ZStackServiceGetZStackInfoRequest,
     ZStackServiceModifyZStackCenterRangeRequest,
@@ -77,9 +77,7 @@ async def main(args):
     logger.info(f"Initial Z-Drive: {np.round(new_posZ.value, 2)} [micron]")
 
     # load experiment by its name without the *.czexp extension
-    my_exp = await exp_service.load(
-        ExperimentServiceLoadRequest(experiment_name=expname)
-    )
+    my_exp = await exp_service.load(ExperimentServiceLoadRequest(experiment_name=expname))
 
     # get the information about the stack
     zstack_info1 = await zstack_service.get_z_stack_info(
@@ -94,16 +92,12 @@ async def main(args):
     delete_czifile(image_folder, czi_name_orig)
 
     await exp_service.run_experiment(
-        ExperimentServiceRunExperimentRequest(
-            experiment_id=my_exp.experiment_id, output_name=czi_name_orig
-        )
+        ExperimentServiceRunExperimentRequest(experiment_id=my_exp.experiment_id, output_name=czi_name_orig)
     )
 
     # clone the original experiment
     logger.info("Cloning Experiment ...")
-    my_exp_mod1 = await exp_service.clone(
-        ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id)
-    )
+    my_exp_mod1 = await exp_service.clone(ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id))
 
     # modify the z-stack center and range
     await zstack_service.modify_z_stack_center_range(
@@ -129,15 +123,11 @@ async def main(args):
     # run the modified experiment
     logger.info(f"Experiment Execution: {expname_mod1}")
     await exp_service.run_experiment(
-        ExperimentServiceRunExperimentRequest(
-            experiment_id=my_exp_mod1.experiment_id, output_name=czi_name_mod1
-        )
+        ExperimentServiceRunExperimentRequest(experiment_id=my_exp_mod1.experiment_id, output_name=czi_name_mod1)
     )
 
     # save the modified experiment to disk as an *.czexp file
-    await save_experiment(
-        my_exp_mod1, exp_service, expname=expname_mod1, overwrite=True
-    )
+    await save_experiment(my_exp_mod1, exp_service, expname=expname_mod1, overwrite=True)
 
     # modify the experiment again
     await zstack_service.modify_z_stack_first_last(
@@ -159,14 +149,10 @@ async def main(args):
     # execute experiment
     logger.info(f"Experiment Execution: {expname_mod2}")
     await exp_service.run_experiment(
-        ExperimentServiceRunExperimentRequest(
-            experiment_id=my_exp_mod1.experiment_id, output_name=czi_name_mod2
-        )
+        ExperimentServiceRunExperimentRequest(experiment_id=my_exp_mod1.experiment_id, output_name=czi_name_mod2)
     )
 
-    await save_experiment(
-        my_exp_mod1, exp_service, expname=expname_mod2, overwrite=True
-    )
+    await save_experiment(my_exp_mod1, exp_service, expname=expname_mod2, overwrite=True)
 
     # close the channel
     channel.close()
