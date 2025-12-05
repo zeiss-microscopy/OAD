@@ -560,7 +560,11 @@ ZEN API is still very new and under constant development. Expect frequent change
 
 ## Documentation
 
-Currently the documentation for the latest ZEN release with respect to ZEN API can be found here: **[ZEN API - Documentation](../ZEN-API/documentation/ZEN_API_Documentation_20250509.md)**
+The documentation for the latest ZEN release with respect to ZEN API can be found here: **[ZEN API - Documentation](../ZEN-API/python_packages/zen_api-2025.10.1/docs/ZEN_API_Documentation.md)**
+
+The `../docs`folder is a subfolder of the respective python package folder, aka it can be found here:
+
+- `../ZEN-API/python_package/zen_api-2025.10.1/docs/ZEN_API_Documentation.pdf`
 
 ## DISCLAIMER
 
