@@ -562,6 +562,10 @@ ZEN API is still very new and under constant development. Expect frequent change
 
 The documentation for the latest ZEN release with respect to ZEN API can be found here: **[ZEN API - Documentation](../ZEN-API/python_packages/zen_api-2025.10.1/docs/ZEN_API_Documentation.md)**
 
+The `../docs`folder is a subfolder of the respective python package folder, aka it can be found here:
+
+- `../ZEN-API/python_package/zen_api-2025.10.1/docs/ZEN_API_Documentation.pdf`
+
 ## DISCLAIMER
 
 The provided examples are free to use for everybody. Carl Zeiss Microscopy GmbH's ZEN software undertakes no warranty concerning the use of those scripts, image analysis settings and ZEN experiments.
