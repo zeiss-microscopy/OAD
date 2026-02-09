@@ -1,5 +1,3 @@
-# Tested on Windows only (but should also work for Linux)
-#
 # Disclaimer:
 #
 # The author(s) undertakes no warranty concerning the use of this YML file. Use at your own risk.
@@ -51,7 +49,6 @@ dependencies:
   - shapely
   - superqt
   - pytorch::torchvision
-  #- pytorch::torchvision=0.20.1
   - tqdm
   - validators
   - wheel
