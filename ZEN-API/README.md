@@ -27,6 +27,7 @@
       - [ZEN](#zen)
     - [API Control Management](#api-control-management)
       - [Global API Control Token](#global-api-control-token)
+  - [Activation of ZEN API inside software](#activation-of-zen-api-inside-software)
   - [Troubleshooting](#troubleshooting)
     - [Service Unavailable](#service-unavailable)
     - [Reset Certificates](#reset-certificates)
@@ -399,6 +400,13 @@ Since the global access control is currently the only enabled version of API con
 
 A "global control token" is required for calling API methods. The token must be sent in the `control-token` header of the API call and it must match the token in the gateway. If the token is missing, the API call will be aborted with an access control error.
 
+
+## Activation of ZEN API inside software
+
+In order to be able to use ZEN API and the gateway the toolkit ZEN API needs to activated.
+
+<img src=./images/zenapi_toolkit_active.png alt="ZEN API - Tookit Activation" width=60%>
+
 ## Troubleshooting
 
 This page should give an overview of some common things to try when working with a development version. If this does not help, please contact your local ZEISS microscopy representative.
@@ -517,7 +525,7 @@ conda activate zenapi
 pip install "ZEN-API\python_examples\python_packages\zen312\dist\zen_api-2025.5.1-py3-none-any.whl"
 ```
 
-The other option is to import the python classes directly from `ZEN-API\python_examples\python_packages\zen312\src\zen_api` from source. In this case make sure that one adapts the imports inside the examples accordingly.
+The other option is to import the python classes directly from `ZEN-API\python_examples` from source. In this case make sure that one adapts the imports inside the examples accordingly.
 
 #### Python Scripts
 
@@ -560,11 +568,11 @@ ZEN API is still very new and under constant development. Expect frequent change
 
 ## Documentation
 
-The documentation for the latest ZEN release with respect to ZEN API can be found here: **[ZEN API - Documentation](../ZEN-API/python_packages/zen_api-2025.10.1/docs/ZEN_API_Documentation.md)**
+The documentation for the latest ZEN release with respect to ZEN API can be found here: **[ZEN API - Documentation](../ZEN-API/python_packages/zen_api-2025.10.1/docs/ZEN_API_Documentation_2025.10.1.md)**
 
 The `../docs`folder is a subfolder of the respective python package folder, aka it can be found here:
 
-- `../ZEN-API/python_package/zen_api-2025.10.1/docs/ZEN_API_Documentation.pdf`
+- `../ZEN-API/python_package/zen_api-2025.10.1/docs/ZEN_API_Documentation_2025.10.1.pdf`
 
 ## DISCLAIMER
 
@@ -577,6 +585,6 @@ Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those sof
 
 By using any of those examples you agree to this disclaimer.
 
-Version: 2025.10.20
+Version: 2026.02.06
 
-Copyright (c) 2025 Carl Zeiss AG, Germany. All Rights Reserved.
+Copyright (c) 2026 Carl Zeiss AG, Germany. All Rights Reserved.
