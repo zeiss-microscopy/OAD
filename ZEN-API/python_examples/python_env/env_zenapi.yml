@@ -32,7 +32,7 @@ dependencies:
   - shapely
   - python-dateutil
   - python-box[all]
-  - scikit-image>=0.19.3
+  - scikit-image
   - grpclib
 
   - pip:

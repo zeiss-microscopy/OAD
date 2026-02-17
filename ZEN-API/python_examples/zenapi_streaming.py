@@ -473,9 +473,9 @@ if __name__ == "__main__":
     # define the desired online processing here
     # processing = Processing.NO_PROCESSING
     # processing = Processing.SEG_THRESHOLD_MANUAL
-    # processing = Processing.SEG_THRESHOLD_OTSU
+    processing = Processing.SEG_THRESHOLD_OTSU
     # ------------- WILL ONLY WORK WITH THE APPROPRIATE MODEL FILES and ENVIRONMENT-------------
-    processing = Processing.SEG_SEMANTIC  # --> cyto2022_nuc2.czann
+    # processing = Processing.SEG_SEMANTIC  # --> cyto2022_nuc2.czann
     # processing = Processing.DENOISE  # --> LiveDenoise_DAPI.czann
 
     # Get the directory where the current script is located
