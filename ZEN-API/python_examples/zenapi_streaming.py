@@ -26,9 +26,6 @@ import sys
 from pathlib import Path
 from zen_api_utils.misc import initialize_zenapi, set_logging
 from processing_tools import ArrayProcessor
-from czmodel.core.util._extract_model import extract_czann_model
-from czmodel import ModelMetadata
-from onnx_inference import OnnxInferencer
 from enum import Enum, unique
 import os
 import random
@@ -45,6 +42,19 @@ from zen_api.acquisition.v1beta import (
     ExperimentServiceGetAvailableExperimentsRequest,
     ExperimentServiceStartExperimentRequest,
 )
+
+logger = set_logging()
+
+try:
+    from czmodel.core.util._extract_model import extract_czann_model
+    from czmodel import ModelMetadata
+    from onnx_inference import OnnxInferencer
+except ImportError:
+    logger.warning(
+        "Could not import ONNX inferencing tools. Please make sure to install the required dependencies for semantic segmentation and denoising processing options."
+    )
+    OnnxInferencer = None
+    ModelMetadata = None
 
 
 @unique
@@ -311,7 +321,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 ):
                     ap = ArrayProcessor(pro2d)
                     pro2d, num_objects, props = ap.label_objects(
-                        min_size=100,
+                        max_size_remove=100,
                         label_rgb=False,
                         orig_image=None,
                         bg_label=0,
@@ -451,6 +461,7 @@ if __name__ == "__main__":
     # processing = Processing.NO_PROCESSING
     # processing = Processing.SEG_THRESHOLD_MANUAL
     processing = Processing.SEG_THRESHOLD_OTSU
+    # ------------- WILL ONLY WORK WITH THE APPROPRIATE MODEL FILES and ENVIRONMENT-------------
     # processing = Processing.SEG_SEMANTIC  # --> cyto2022_nuc2.czann
     # processing = Processing.DENOISE  # --> LiveDenoise_DAPI.czann
 
@@ -465,8 +476,6 @@ if __name__ == "__main__":
         r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\zen_api\ai_models\cyto2022_nuc2.czann"
     )
     # czann_filepath = r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\zen_api\ai_models\LiveDenoise_DAPI.czann"
-
-    logger = set_logging()
 
     main(
         configfile=config_path,

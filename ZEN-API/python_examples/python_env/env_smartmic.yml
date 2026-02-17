@@ -59,8 +59,8 @@ dependencies:
 
   - pip:
       - aicspylibczi>=3.3.1
-      - betterproto==2.0.0b7 # sometimes this does not get installed - try manually
-      - betterproto[compiler]==2.0.0b7 # sometimes this does not get installed - try manually
+      - betterproto==2.0.0b7
+      - betterproto[compiler]==2.0.0b7
       - bioio
       - bioio-czi
       - bioio-imageio

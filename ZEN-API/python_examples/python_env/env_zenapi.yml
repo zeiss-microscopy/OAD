@@ -7,7 +7,8 @@ name: zenapi
 channels:
   - conda-forge
 dependencies:
-  - python=3.11
+  - python=3.12
+  - czifile
   - docutils
   - pip
   - wheel
@@ -15,7 +16,6 @@ dependencies:
   - setuptools
   - nb_conda_kernels
   - pytest
-  - shapely
   - validators
   - pooch
   - requests
@@ -23,11 +23,13 @@ dependencies:
   - pyqt=5
   - pyqtgraph
   - qasync
-  - numpy<2
+  - numpy
+  - napari>=0.6.5
   - pandas
   - plotly
   - colormap
   - seaborn
+  - shapely
   - python-dateutil
   - python-box[all]
   - scikit-image>=0.19.3
@@ -36,11 +38,18 @@ dependencies:
   - pip:
       - bioio
       - bioio-czi
+      - bioio-ome-zarr
       - aicspylibczi
       - pylibCZIrw
       - czitools
-      - betterproto==2.0.0b7 # sometimes this does not get installed - try manually !!!
-      - betterproto[compiler]==2.0.0b7 # sometimes this does not get installed - try manually !!!
+      - betterproto==2.0.0b7
+      - betterproto[compiler]==2.0.0b7
+      - napari-crop
+      - napari-czitools
+      - napari-layer-details-display
+      - ngff-zarr
+      - ngff-zarr[dask-image]
+      - ngff-zarr[validate]
 
 # Create an environment - use conda or mamba
 # conda env create --file env_zenapi.yml

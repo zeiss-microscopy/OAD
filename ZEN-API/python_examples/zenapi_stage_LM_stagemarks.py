@@ -16,6 +16,7 @@ import asyncio
 import numpy as np
 from pathlib import Path
 import sys
+import time
 from zen_api_utils.misc import set_logging, initialize_zenapi
 from zen_api_utils.stage import parse_stage_marks, move_xyz, PosXYZ
 
@@ -64,6 +65,9 @@ async def main(args):
         # Move the focus to the specified Z position
         await focus_service.move_to(FocusServiceMoveToRequest(value=mark.z))
 
+        # just for demonstration purposes - wait a bit
+        time.sleep(1.0)
+
         # Retrieve the current stage positions and convert to microns
         posXY = await stage_service.get_position(StageServiceGetPositionRequest())
         posZ = await focus_service.get_position(FocusServiceGetPositionRequest())
@@ -84,6 +88,9 @@ async def main(args):
             logger.info(
                 f"New XYZ Position {mark.index}: X: {np.round(pos_xyz.x_micron, 1)} - Y: {np.round(pos_xyz.y_micron, 1)} - Z: {np.round(pos_xyz.z_micron, 1)} [micron]"
             )
+
+            # just for demonstration purposes - wait a bit
+            time.sleep(1.0)
 
     # Close the gRPC channel to release resources
     channel.close()
