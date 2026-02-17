@@ -20,14 +20,13 @@ from skimage.filters import threshold_triangle, median, gaussian
 from skimage.measure import label, regionprops_table, find_contours
 from skimage.morphology import remove_small_objects, disk, ball, remove_small_holes
 from skimage.morphology import white_tophat, black_tophat
-from skimage import measure, segmentation
+from skimage import segmentation
 from skimage.filters import threshold_otsu
 from skimage.color import label2rgb
 from skimage.util import invert
 import numpy as np
 
 from zen_api_utils.misc import set_logging
-from onnx_inference import OnnxInferencer
 import pandas as pd
 import os
 from czitools.metadata_tools import czi_metadata as czimd
@@ -38,6 +37,12 @@ from shapely.geometry import Polygon
 
 # get the logger
 logger = set_logging()
+
+try:
+    from onnx_inference import OnnxInferencer
+except ImportError:
+    logger.warning("ONNX Inferencer module not found. Semantic segmentation and regression methods will not work.")
+    OnnxInferencer = None
 
 
 class ArrayProcessor:
@@ -99,9 +104,7 @@ class ArrayProcessor:
         ValueError: If sigma parameter is invalid.
         """
         if isinstance(sigma, int) and sigma > 1:
-            return gaussian(
-                self.array, sigma=sigma, preserve_range=True, mode="nearest"
-            ).astype(self.array.dtype)
+            return gaussian(self.array, sigma=sigma, preserve_range=True, mode="nearest").astype(self.array.dtype)
         else:
             raise ValueError("Sigma parameter is invalid.")
 
@@ -119,9 +122,7 @@ class ArrayProcessor:
         ValueError: If Footprint parameter is invalid.
         """
         if isinstance(filter_size, int):
-            return median(self.array, footprint=disk(filter_size)).astype(
-                self.array.dtype
-            )
+            return median(self.array, footprint=disk(filter_size)).astype(self.array.dtype)
         else:
             raise ValueError("Filter Size parameter is invalid.")
 
@@ -200,28 +201,19 @@ class ArrayProcessor:
         ValueError: If one of input parameters is invalid.
         """
 
-        if (
-            self.array.shape[0] != input_shape[0]
-            or self.array.shape[1] != input_shape[1]
-        ):
+        if self.array.shape[0] != input_shape[0] or self.array.shape[1] != input_shape[1]:
             raise ValueError(
                 f"Array shape {self.array.shape[0]}x{self.array.shape[1]} does not match the model input shape {input_shape[0]}x{input_shape[1]}."
             )
 
-        if (
-            isinstance(inferencer, OnnxInferencer)
-            and isinstance(class_index, int)
-            and class_index > 0
-        ):
+        if isinstance(inferencer, OnnxInferencer) and isinstance(class_index, int) and class_index > 0:
 
             # rescale - use with arivisAI models
             max_value = np.iinfo(self.array.dtype).max
             self.array = self.array / (max_value - 1)
 
             # run prediction
-            self.array = inferencer.predict(
-                [self.array[..., np.newaxis]], use_gpu=use_gpu
-            )[0]
+            self.array = inferencer.predict([self.array[..., np.newaxis]], use_gpu=use_gpu)[0]
 
             # get the labels and add 1 to reflect the real values
             self.array = np.argmax(self.array, axis=-1) + 1
@@ -233,9 +225,7 @@ class ArrayProcessor:
         else:
             raise ValueError("Parameters are invalid.")
 
-    def apply_regression(
-        self, inferencer: OnnxInferencer, input_shape: List[int], use_gpu: bool = False
-    ) -> np.ndarray:
+    def apply_regression(self, inferencer: OnnxInferencer, input_shape: List[int], use_gpu: bool = False) -> np.ndarray:
         """
         Applies regression to the input array using the provided inferencer.
 
@@ -251,18 +241,13 @@ class ArrayProcessor:
         ValueError: If ONNX Inferencer is invalid.
         """
 
-        if (
-            self.array.shape[0] != input_shape[0]
-            or self.array.shape[1] != input_shape[1]
-        ):
+        if self.array.shape[0] != input_shape[0] or self.array.shape[1] != input_shape[1]:
             raise ValueError("Input shape does not match the model input shape.")
 
         if isinstance(inferencer, OnnxInferencer):
 
             # run prediction
-            self.array = inferencer.predict(
-                [self.array[..., np.newaxis]], use_gpu=use_gpu
-            )[0]
+            self.array = inferencer.predict([self.array[..., np.newaxis]], use_gpu=use_gpu)[0]
 
             return self.array.astype(np.int16)
         else:
@@ -270,7 +255,7 @@ class ArrayProcessor:
 
     def label_objects(
         self,
-        min_size: int = 10,
+        max_size_remove: int = 10,
         max_size: int = 100000000,
         fill_holes: bool = True,
         max_holesize: int = 1,
@@ -289,7 +274,7 @@ class ArrayProcessor:
         Counts objects in the input array and returns labeled image with the count.
 
         Parameters:
-        min_size (int): Minimum size of the objects (default 10)
+        max_size_remove (int): Maximum size of the objects to be removed (default 10)
         max_size (int): Maximum size of the objects (default 100000000)
         fill_holes (bool): Option to fill holes (default True)
         max_holesize (int): Maximum size of holes to be filled (default 1)
@@ -306,35 +291,31 @@ class ArrayProcessor:
         ValueError: If min_size parameter is invalid.
         """
         if (
-            isinstance(min_size, int)
-            and min_size >= 1
+            isinstance(max_size_remove, int)
+            and max_size_remove >= 1
             and max_holesize >= 1
             and isinstance(fill_holes, bool)
         ):
 
             # Remove contiguous holes smaller than the specified size
             if not np.issubdtype(self.array.dtype, bool):
-                self.array = remove_small_holes(
-                    self.array.astype(bool), area_threshold=max_holesize, connectivity=1
-                )
+                # self.array = remove_small_holes(self.array.astype(bool), area_threshold=max_holesize, connectivity=1)
+                self.array = remove_small_holes(self.array.astype(bool), max_size=max_holesize, connectivity=1)
             else:
-                self.array = remove_small_holes(
-                    self.array, area_threshold=max_holesize, connectivity=1
-                )
+                # self.array = remove_small_holes(self.array, area_threshold=max_holesize, connectivity=1)
+                self.array = remove_small_holes(self.array, max_size=max_holesize, connectivity=1)
 
             # remove small objects
             if not np.issubdtype(self.array.dtype, bool):
-                self.array = remove_small_objects(self.array.astype(bool), min_size)
+                self.array = remove_small_objects(self.array.astype(bool), max_size=max_size_remove)
             else:
-                self.array = remove_small_objects(self.array, min_size)
+                self.array = remove_small_objects(self.array, max_size=max_size_remove)
 
             # clear the border
             self.array = segmentation.clear_border(self.array, bgval=bg_label)
 
             # label the particles
-            self.array, num_label = label(
-                self.array, background=bg_label, return_num=True, connectivity=2
-            )
+            self.array, num_label = label(self.array, background=bg_label, return_num=True, connectivity=2)
 
             # measure the specified parameters store in dataframe
             props = None
@@ -343,9 +324,7 @@ class ArrayProcessor:
                 if orig_image is None:
 
                     props = pd.DataFrame(
-                        regionprops_table(
-                            self.array.astype(np.uint16), properties=measure_properties
-                        )
+                        regionprops_table(self.array.astype(np.uint16), properties=measure_properties)
                     ).set_index("label")
                 else:
                     props = pd.DataFrame(
@@ -357,16 +336,14 @@ class ArrayProcessor:
                     ).set_index("label")
 
                     # filter objects by size
-                props = props[(props["area"] >= min_size) & (props["area"] <= max_size)]
+                props = props[(props["area"] >= max_size_remove) & (props["area"] <= max_size)]
 
             # apply RGB labels
             if label_rgb:
                 if orig_image is None:
                     self.array = label2rgb(self.array, image=None, bg_label=bg_label)
                 else:
-                    self.array = label2rgb(
-                        self.array, image=orig_image, bg_label=bg_label
-                    )
+                    self.array = label2rgb(self.array, image=orig_image, bg_label=bg_label)
 
             return self.array, num_label, props
         else:
@@ -585,13 +562,9 @@ def segment_czi(
 
                 # read 2D plane in case there are (no) scenes
                 if mdata.image.SizeS is None:
-                    img2d = czidoc_r.read(
-                        plane={"T": t, "Z": z, "C": chindex}, zoom=zoomlevel
-                    )[..., 0]
+                    img2d = czidoc_r.read(plane={"T": t, "Z": z, "C": chindex}, zoom=zoomlevel)[..., 0]
                 else:
-                    img2d = czidoc_r.read(
-                        plane={"T": t, "Z": z, "C": chindex}, zoom=zoomlevel, scene=s
-                    )[..., 0]
+                    img2d = czidoc_r.read(plane={"T": t, "Z": z, "C": chindex}, zoom=zoomlevel, scene=s)[..., 0]
 
                 ap = ArrayProcessor(img2d)
 
@@ -600,13 +573,9 @@ def segment_czi(
                     processed = img2d
 
                 if filter_method == "median":
-                    processed = ArrayProcessor(img2d).apply_median_filter(
-                        footprint=disk(filter_size)
-                    )
+                    processed = ArrayProcessor(img2d).apply_median_filter(footprint=disk(filter_size))
                 if filter_method == "gaussian":
-                    processed = ArrayProcessor(img2d).apply_gaussian_filter(
-                        sigma=filter_size
-                    )
+                    processed = ArrayProcessor(img2d).apply_gaussian_filter(sigma=filter_size)
 
                 # segment the image
                 processed = ArrayProcessor(processed).apply_triangle_threshold()
@@ -641,9 +610,7 @@ def segment_czi(
 
                 # count the number of objects and update the dataframe
                 values["Number"] = props.shape[0]
-                objects = pd.concat(
-                    [objects, pd.DataFrame(values, index=[0])], ignore_index=True
-                )
+                objects = pd.concat([objects, pd.DataFrame(values, index=[0])], ignore_index=True)
 
                 results = pd.concat([results, props], ignore_index=True)
 

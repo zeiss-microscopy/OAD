@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 #################################################################
-# File        : stage_xyz.py
+# File        : stage.py
 # Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
@@ -24,7 +24,7 @@ from zen_api.lm.hardware.v2 import (
     FocusServiceStub,
     StageServiceGetPositionRequest,
     StageServiceMoveToRequest,
-    StageServiceStub
+    StageServiceStub,
 )
 
 from zen_api_utils.misc import set_logging
@@ -103,11 +103,11 @@ class StageMark:
 def parse_stage_marks(file_path: str | Path):
     """
     Parses an XML file to extract StageMark elements and their attributes.
-    
+
     Args:
-        file_path (str | Path): The path to the XML file to be parsed. 
+        file_path (str | Path): The path to the XML file to be parsed.
                                 Can be a string or Path object.
-    
+
     Returns:
         list: A list of StageMark objects, each representing a StageMark element
               from the XML file. Each object contains the attributes:
@@ -115,7 +115,7 @@ def parse_stage_marks(file_path: str | Path):
               - x (float): The X coordinate in meters.
               - y (float): The Y coordinate in meters.
               - z (float): The Z coordinate in meters.
-    
+
     Raises:
         FileNotFoundError: If the XML file does not exist.
         ET.ParseError: If the XML file is malformed.
@@ -137,7 +137,7 @@ def parse_stage_marks(file_path: str | Path):
     xml_path = Path(file_path)
     if not xml_path.exists():
         raise FileNotFoundError(f"XML file not found: {xml_path}")
-    
+
     # Parse the XML file
     tree = ET.parse(xml_path)
     root = tree.getroot()
@@ -243,6 +243,7 @@ async def move_xyz(channel, metadata, pos_xyz: PosXYZ) -> PosXYZ:
 
     # Move the stage to the specified X and Y coordinates
     await stage_service.move_to(StageServiceMoveToRequest(x=pos_xyz.x_meter, y=pos_xyz.y_meter))
+
     # Move the focus to the specified Z position
     await focus_service.move_to(FocusServiceMoveToRequest(value=pos_xyz.z_meter))
 

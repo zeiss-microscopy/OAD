@@ -1,11 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <StageMarks>
-  <StageMark ItemIndex="1" X="30942.246" Y="10873.572" Z="0.0" />
-  <StageMark ItemIndex="2" X="40870.512" Y="10207.245" Z="100.0" />
-  <StageMark ItemIndex="3" X="47667.044" Y="10107.296" Z="200.0" />
-  <StageMark ItemIndex="4" X="56662.453" Y="10540.409" Z="300.0" />
-  <StageMark ItemIndex="5" X="31308.725" Y="19635.767" Z="-100.0" />
-  <StageMark ItemIndex="6" X="39704.441" Y="19402.553" Z="-200.0" />
-  <StageMark ItemIndex="7" X="48266.737" Y="18802.859" Z="-300.0" />
-  <StageMark ItemIndex="8" X="56196.024" Y="18869.491" Z="0.0" />
+  <StageMark ItemIndex="1" X="30942.246" Y="10873.572" Z="0" />
+  <StageMark ItemIndex="2" X="40690.17104029122" Y="10159.983245902695" Z="0" />
+  <StageMark ItemIndex="3" X="47850.17157508705" Y="10126.20965847441" Z="0" />
+  <StageMark ItemIndex="4" X="56496.209956727296" Y="10328.851183044104" Z="0" />
+  <StageMark ItemIndex="5" X="31233.5665603722" Y="19413.94620125202" Z="0" />
+  <StageMark ItemIndex="6" X="39474.321892873064" Y="19380.17261382374" Z="0" />
+  <StageMark ItemIndex="7" X="48154.13386194159" Y="18535.832928116684" Z="0" />
+  <StageMark ItemIndex="8" X="56327.34201958589" Y="18941.115977256068" Z="0" />
 </StageMarks>
