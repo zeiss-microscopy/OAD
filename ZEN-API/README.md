@@ -1,7 +1,7 @@
 - [ZEN API](#zen-api)
   - [General Overview](#general-overview)
     - [ZEN API - Python Examples](#zen-api---python-examples)
-    - [ZEN API and Internal Scripting (OAD)](#zen-api-and-internal-scripting-oad)
+    - [ZEN API and Internal Scripting](#zen-api-and-internal-scripting)
   - [Supported ZEN and ZEN core Versions](#supported-zen-and-zen-core-versions)
   - [Key Features](#key-features)
     - [ZEN Interfaces - ZEN API](#zen-interfaces---zen-api)
@@ -67,7 +67,7 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 
 ![ZEN API Introduction](./images/zenapi_general1.png)
 
-> **IMPORTANT**: Note that **ZEN API is not replacement for ZEN-internal Scripting based on IronPython (OAD)** (control from the Inside). Both exist and have their purpose and characteristics.
+> **IMPORTANT**: Note that **ZEN API is not replacement for ZEN-internal Scripting based on IronPython** (control from the Inside). Both exist and have their purpose and characteristics.
 
 ### ZEN API - Python Examples
 
@@ -79,24 +79,24 @@ ZEN running a simple "guided acquisition" where the overview image is analyzed u
 
 ![ZEN API - Guided Acquisition](./images/zenapi_guidedacq.gif)
 
-### ZEN API and Internal Scripting (OAD)
+### ZEN API and Internal Scripting
 
 Zen already offers the option to automate workflows by using the ZEN internal scripting, which is using IronPython as a programming language. This allows to easily integrate a lot of ZEN functionality since it is based on .NET and written in C#.
 
-<img src=./images/oad_script_editor.png alt="ZEN - OAD Script Editor" width=100%>
+<img src=./images/oad_script_editor.png alt="ZEN - Internal Script Editor" width=100%>
 
 - when using the ZEN internal scripting one has access to basically most of the ZEN internal functionality
 - since it is using IronPython it does not allow to import CPython based libraries like NumPy etc.
 
-> **IMPORTANT**: The core idea of OAD (internal IronPython Scripting) is to create scripts where ZEN is the **master application**. It controls the workflow from within the ZEN Client.
+> **IMPORTANT**: The core idea of Internal IronPython Scripting is to create scripts where ZEN is the **master application**. It controls the workflow from within the ZEN Client.
 
-This is in contrast to using ZEN API, which allows you to control from the "outside". There can be situations where both approaches will work to fulfill the requirements and there are no strict rules, when to use OAD vs. ZEN API but a few general rules.
+This is in contrast to using ZEN API, which allows you to control from the "outside". There can be situations where both approaches will work to fulfill the requirements and there are no strict rules, when to use Internal Scripting vs. ZEN API but a few general rules.
 
 - if one really needs to control ZEN from the outside using Python (and other languages): :arrow_right: Use ZEN API
-- no need to control from an external master application or no need to use external python functions: :arrow_right: Use OAD Scripting
+- no need to control from an external master application or no need to use external python functions: :arrow_right: Use Internal Scripting Scripting
 - one really likes using an IDEs like PyCharm, VScode etc. and the need to use normal Python libraries (NumPy etc.) and ZEN API offers the function you need: :arrow_right: Use ZEN API
 
-Remark: as of right now OAD offers a lot more functionality, which is not directly available via ZEN API (yet). For example all the ZEN internal image processing and image analysis function are not integrated into ZEN API
+Remark: As of right now Internal Scripting offers a lot more functionality, which is not directly available via ZEN API (yet). For example all the ZEN internal image processing and image analysis function are not integrated into ZEN API
 
 ## Supported ZEN and ZEN core Versions
 
@@ -506,6 +506,7 @@ Remark: The "smartmic" environment is much larger but also allows to run the exa
 - Make sure the ZEN API gateway is installed
 - Generate the control token
 - Install conda or [miniconda](https://docs.anaconda.com/free/miniconda/) or [miniforge](https://conda-forge.org/miniforge/) base environment
+- Optional: Activate shell integration via `conda init` or `conda init powershell` etc.
 
 Open CMD or PowerShell etc. and create a new python environment:
 
@@ -522,30 +523,29 @@ The repo contains also an _experimental_ python package that allows to install Z
 
 ```powershell
 conda activate zenapi
-pip install "ZEN-API\python_examples\python_packages\zen312\dist\zen_api-2025.5.1-py3-none-any.whl"
+pip install "ZEN-API\python_examples\python_package\zen_api-2025.10.1\dist\zen_api-2025.10.1-py3-none-any.whl"
 ```
-
-The other option is to import the python classes directly from `ZEN-API\python_examples` from source. In this case make sure that one adapts the imports inside the examples accordingly.
 
 #### Python Scripts
 
 Inside this repository one can find several examples inside the [python_examples](../ZEN-API/python_examples/) folder.
 
 ```txt
-.
-└── target_folder/
-    ├── public/
-        ├── zen_api/
-        │   ├── acquisition/
-        │   ├── application/
-        │   ├── common/
-        │   ├── hardware/
-        │   ├── lm/
-        │   ├── workflows/
-        │   └── __init__.py
-        ├── __init__.py
-    ├── your_zenapi_scripts.py
-        └── ...
+└── 📁ZEN-API
+    └── 📁images
+    └── 📁python_examples
+        └── 📁ai_models
+        └── 📁data
+        └── 📁python_env
+        └── 📁zen_api_utils
+        └── 📁zencore_jobs
+        ├── config.ini
+        ├── example1.py
+        ├── example2.py
+        ...
+    └── 📁python_package
+    └── README.md
+```   └── ...
 ```
 
 Feel free to arrange this to your needs but make sure the import inside your python scripts still work.
@@ -585,6 +585,6 @@ Therefore Carl Zeiss Microscopy GmbH undertakes no warranty concerning those sof
 
 By using any of those examples you agree to this disclaimer.
 
-Version: 2026.02.06
+Version: 2026.02.18
 
 Copyright (c) 2026 Carl Zeiss AG, Germany. All Rights Reserved.
