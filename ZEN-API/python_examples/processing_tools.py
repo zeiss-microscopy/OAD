@@ -582,7 +582,7 @@ def segment_czi(
 
                 ap = ArrayProcessor(processed)
                 processed, num_objects, props = ap.label_objects(
-                    min_size=min_objectsize,
+                    max_size_remove=min_objectsize,
                     max_size=max_objectsize,
                     label_rgb=False,
                     orig_image=None,
