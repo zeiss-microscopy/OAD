@@ -301,7 +301,6 @@ async def main():
     zen_savefolder = await exp_service.get_image_output_path(ExperimentServiceGetImageOutputPathRequest())
 
     # exp_result = await gca_run_overviewscan(overview_exp, exp_service)
-    # cziname_ov = f"{exp_result.output_name}.czi"
     cziname_ov = filepath_overview.stem + "_OV.czi"
 
     # run the overview scan
