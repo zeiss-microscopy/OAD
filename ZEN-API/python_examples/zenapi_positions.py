@@ -16,7 +16,7 @@ import asyncio
 import sys
 from pathlib import Path
 from zen_api_utils.misc import set_logging, initialize_zenapi
-from zen_api_utils.experiment  import save_experiment
+from zen_api_utils.experiment import save_experiment
 
 # import the auto-generated python modules
 from zen_api.acquisition.v1beta import (
@@ -25,7 +25,7 @@ from zen_api.acquisition.v1beta import (
     ExperimentServiceCloneRequest,
 )
 
-from zen_api.lm.acquisition.v1beta import (
+from zen_api.lm.acquisition.v1 import (
     TilesServiceStub,
     TilesServiceIsTilesExperimentRequest,
     TilesServiceClearRequest,
@@ -70,43 +70,31 @@ async def main(args):
     tile_service = TilesServiceStub(channel=channel, metadata=metadata)
 
     # load experiment by its name without the *.czexp extension
-    my_exp = await exp_service.load(
-        ExperimentServiceLoadRequest(experiment_name=expname)
-    )
+    my_exp = await exp_service.load(ExperimentServiceLoadRequest(experiment_name=expname))
 
     # check if the experiment has tiles or positions
     has_tiles_or_positions = await tile_service.is_tiles_experiment(
         TilesServiceIsTilesExperimentRequest(experiment_id=my_exp.experiment_id)
     )
 
-    logger.info(
-        f"ExperimentName: {expname} has Tiles or Positions: {has_tiles_or_positions.is_tiles_experiment}"
-    )
+    logger.info(f"ExperimentName: {expname} has Tiles or Positions: {has_tiles_or_positions.is_tiles_experiment}")
 
     if has_tiles_or_positions.is_tiles_experiment:
 
         # clone the experiment
         logger.info("Cloning Experiment ...")
-        my_exp_cloned = await exp_service.clone(
-            ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id)
-        )
+        my_exp_cloned = await exp_service.clone(ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id))
 
         # clear existing tile region
         logger.info("Clearing TileRegions or Positions...")
-        await tile_service.clear(
-            TilesServiceClearRequest(experiment_id=my_exp_cloned.experiment_id)
-        )
+        await tile_service.clear(TilesServiceClearRequest(experiment_id=my_exp_cloned.experiment_id))
 
         # adding a list with positions
         for pos in pos_new:
-            logger.info(
-                f"Adding Position X: {pos.x*1e6:.3f} Y: {pos.y*1e6:.3f} Z: {pos.z*1e6:.3f}"
-            )
+            logger.info(f"Adding Position X: {pos.x*1e6:.3f} Y: {pos.y*1e6:.3f} Z: {pos.z*1e6:.3f}")
 
         await tile_service.add_positions(
-            TilesServiceAddPositionsRequest(
-                experiment_id=my_exp_cloned.experiment_id, positions=pos_new
-            )
+            TilesServiceAddPositionsRequest(experiment_id=my_exp_cloned.experiment_id, positions=pos_new)
         )
 
         # save the modified experiment to disk as an *.czexp file

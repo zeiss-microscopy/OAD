@@ -26,7 +26,7 @@ from zen_api.acquisition.v1beta import (
     ExperimentServiceSaveRequest,
 )
 
-from zen_api.lm.acquisition.v1beta import (
+from zen_api.lm.acquisition.v1 import (
     TrackServiceGetTrackInfoRequest,
     TrackServiceActivateTrackRequest,
     TrackServiceDeactivateTrackRequest,
@@ -59,40 +59,28 @@ async def main(args):
     track_service = TrackServiceStub(channel=channel, metadata=metadata)
 
     # load experiment by its name without the *.czexp extension
-    my_exp = await exp_service.load(
-        ExperimentServiceLoadRequest(experiment_name=expname)
-    )
+    my_exp = await exp_service.load(ExperimentServiceLoadRequest(experiment_name=expname))
 
     # get the information about the track parameters
-    track_info = await track_service.get_track_info(
-        TrackServiceGetTrackInfoRequest(experiment_id=my_exp.experiment_id)
-    )
+    track_info = await track_service.get_track_info(TrackServiceGetTrackInfoRequest(experiment_id=my_exp.experiment_id))
 
     # show the track parameters
     tracks = show_track_info_LM(track_info)
 
     # clone the experiment
     logger.info("Cloning Experiment ...")
-    my_exp_cloned = await exp_service.clone(
-        ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id)
+    my_exp_cloned = await exp_service.clone(ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id))
+
+    await track_service.deactivate_track(
+        TrackServiceDeactivateTrackRequest(experiment_id=my_exp_cloned.experiment_id, track_index=1)
     )
 
     await track_service.deactivate_track(
-        TrackServiceDeactivateTrackRequest(
-            experiment_id=my_exp_cloned.experiment_id, track_index=1
-        )
-    )
-
-    await track_service.deactivate_track(
-        TrackServiceDeactivateTrackRequest(
-            experiment_id=my_exp_cloned.experiment_id, track_index=2
-        )
+        TrackServiceDeactivateTrackRequest(experiment_id=my_exp_cloned.experiment_id, track_index=2)
     )
 
     await track_service.deactivate_channel(
-        TrackServiceDeactivateChannelRequest(
-            experiment_id=my_exp_cloned.experiment_id, track_index=2, channel_index=0
-        )
+        TrackServiceDeactivateChannelRequest(experiment_id=my_exp_cloned.experiment_id, track_index=2, channel_index=0)
     )
 
     # check if such an experiment already exists and delete it
@@ -103,9 +91,7 @@ async def main(args):
     # save the cloned experiment using a defined name without the *.czexp extension
     logger.info("Saving Experiment ...")
     await exp_service.save(
-        ExperimentServiceSaveRequest(
-            experiment_id=my_exp_cloned.experiment_id, experiment_name=expname_cloned
-        )
+        ExperimentServiceSaveRequest(experiment_id=my_exp_cloned.experiment_id, experiment_name=expname_cloned)
     )
 
     # get the information about the tracks

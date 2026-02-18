@@ -13,11 +13,11 @@
 #################################################################
 
 
-from zen_api.lm.acquisition.v1beta import (
+from zen_api.lm.acquisition.v1 import (
     ZStackServiceGetZStackInfoResponse,
     TrackServiceGetTrackInfoResponse,
     ExperimentSwAutofocusServiceGetAutofocusParametersResponse,
-    TrackInfo
+    TrackInfo,
 )
 
 # import the auto-generated python modules
@@ -62,7 +62,6 @@ def show_zstack_info_LM(zstack_info: ZStackServiceGetZStackInfoResponse) -> None
     logger.info(f"Center Mode: {zstack_info.is_center_mode}")
     logger.info(f"Offset: {zstack_info.offset}")
     logger.info("------------  Z-Stack Information End  ------------")
-
 
 
 def show_swaf_info_LM(
