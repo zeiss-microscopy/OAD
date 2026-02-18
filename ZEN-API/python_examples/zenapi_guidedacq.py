@@ -41,7 +41,7 @@ from zen_api.acquisition.v1beta import (
     ExperimentServiceSaveRequest,
 )
 
-from zen_api.lm.acquisition.v1beta import (
+from zen_api.lm.acquisition.v1 import (
     TilesServiceStub,
     TilesServiceIsTilesExperimentRequest,
     TilesServiceAddRectangleTileRegionRequest,
@@ -257,7 +257,7 @@ async def main():
     detail_exp = "ZEN_API_GuidedAcq"
 
     # general parameters
- 
+
     # Get the directory where the current script is located
     script_dir = Path(__file__).parent
 
@@ -280,11 +280,13 @@ async def main():
     # Get the current date and time
     now = datetime.now()
 
-    # Format the date and time as a string  
+    # Format the date and time as a string
     timestamp_folder = now.strftime("%Y-%m-%d_%H-%M-%S")
 
     # read the planetable to derive a Z-value for the TileRegion modification
-    pt, savepath = planetable.get_planetable(filepath_overview, save_table=False, planes={"time": 0, "channel": 0, "zplane": 0})
+    pt, savepath = planetable.get_planetable(
+        filepath_overview, save_table=False, planes={"time": 0, "channel": 0, "zplane": 0}
+    )
 
     # get the median Z-value
     zvalue_image = np.round(pt.loc[:, "Z[micron]"].median(), 2)

@@ -5,14 +5,11 @@
 
 name: smartmic
 channels:
-  - pytorch
-  - nvidia
   - conda-forge
 dependencies:
-  - python=3.11
+  - python=3.12
   - colormap
   - czifile
-  - cudnn=9.13.1.26
   - dask
   - dask-image
   - docker-py
@@ -25,7 +22,7 @@ dependencies:
   - magicgui
   - marimo
   - matplotlib
-  - napari>=0.6.5
+  - napari>=0.6.6
   - numpy
   - ome-zarr
   - opencv
@@ -37,18 +34,15 @@ dependencies:
   - pyqtgraph
   - pytest
   - pytest-cov
-  - pytorch::pytorch=2.5.1
-  - pytorch::pytorch-cuda=12.4
   - python-box[all]
   - python-dateutil
   - qasync
   - requests
-  - scikit-image>=0.19.3
+  - scikit-image>=0.26.0
   - seaborn
   - setuptools
   - shapely
   - superqt
-  - pytorch::torchvision
   - tqdm
   - validators
   - wheel
@@ -58,6 +52,9 @@ dependencies:
   - zarr
 
   - pip:
+      - --extra-index-url https://download.pytorch.org/whl/cu128
+      - torch==2.7.1+cu128
+      - torchvision==0.22.1+cu128
       - aicspylibczi>=3.3.1
       - betterproto==2.0.0b7
       - betterproto[compiler]==2.0.0b7
@@ -66,7 +63,7 @@ dependencies:
       - bioio-imageio
       - bioio-ome-tiff
       - bioio-ome-zarr
-      - czmodel[pytorch]>=5
+      - czmodel[pytorch]>=6.1.1,<7.0.0
       - cztile
       - czitools
       - grpclib
@@ -87,7 +84,7 @@ dependencies:
       - ngff-zarr
       - ngff-zarr[dask-image]
       - ngff-zarr[validate]
-      - onnxruntime-gpu==1.19.0
+      - onnxruntime-gpu==1.24.1
       - pylibCZIrw
       - ryomen
       - tiler

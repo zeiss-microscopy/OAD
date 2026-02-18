@@ -16,6 +16,19 @@
 # as long as this copyright notice remains part of the code.
 #################################################################
 
+import os
+
+# to avoid a potential error with multiple OpenMP instances when using PyQtGraph and ONNX Runtime in the same environment
+os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"
+
+try:
+    # Import torch first to ensure DLLs are loaded properly
+    import torch
+except ImportError:
+    print(
+        "PyTorch is not installed. Please make sure to install the required dependencies for semantic segmentation and denoising."
+    )
+
 import asyncio
 import qasync
 import numpy as np
@@ -27,7 +40,7 @@ from pathlib import Path
 from zen_api_utils.misc import initialize_zenapi, set_logging
 from processing_tools import ArrayProcessor
 from enum import Enum, unique
-import os
+
 import random
 from typing import Optional, Union
 
@@ -43,18 +56,18 @@ from zen_api.acquisition.v1beta import (
     ExperimentServiceStartExperimentRequest,
 )
 
-logger = set_logging()
-
 try:
     from czmodel.core.util._extract_model import extract_czann_model
     from czmodel import ModelMetadata
     from onnx_inference import OnnxInferencer
 except ImportError:
-    logger.warning(
-        "Could not import ONNX inferencing tools. Please make sure to install the required dependencies for semantic segmentation and denoising processing options."
+    print(
+        "Could not import ONNX inferencing tools. Please make sure to install the required dependencies for semantic segmentation and denoising."
     )
     OnnxInferencer = None
     ModelMetadata = None
+
+logger = set_logging()
 
 
 @unique
@@ -471,11 +484,8 @@ if __name__ == "__main__":
     # Build the path to config.ini relative to the script
     config_path = script_dir / "config.ini"
 
-    # czann_filepath = r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\zen_api\ai_models\simple_pytorch_nuclei_segmodel_pytorch.czann"
-    czann_filepath = (
-        r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\zen_api\ai_models\cyto2022_nuc2.czann"
-    )
-    # czann_filepath = r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\zen_api\ai_models\LiveDenoise_DAPI.czann"
+    czann_filepath = r"F:\GitHub\OAD\ZEN-API\python_examples\ai_models\cyto2022_nuc2.czann"
+    # czann_filepath = r"F:\GitHub\OAD\ZEN-API\python_examples\ai_models\LiveDenoise_DAPI.czann"
 
     main(
         configfile=config_path,

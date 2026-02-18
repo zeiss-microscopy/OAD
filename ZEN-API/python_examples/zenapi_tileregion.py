@@ -26,7 +26,7 @@ from zen_api.acquisition.v1beta import (
     ExperimentServiceSaveRequest,
 )
 
-from zen_api.lm.acquisition.v1beta import (
+from zen_api.lm.acquisition.v1 import (
     TilesServiceStub,
     TilesServiceIsTilesExperimentRequest,
     TilesServiceAddRectangleTileRegionRequest,
@@ -57,9 +57,7 @@ async def main(args):
     for expname in my_experiments:
 
         # load experiment by its name without the *.czexp extension
-        my_exp = await exp_service.load(
-            ExperimentServiceLoadRequest(experiment_name=expname)
-        )
+        my_exp = await exp_service.load(ExperimentServiceLoadRequest(experiment_name=expname))
 
         # do something with the TileRegions
         has_tiles = await tile_service.is_tiles_experiment(
@@ -74,15 +72,11 @@ async def main(args):
 
             expname_cloned = expname + "_cloned"
 
-            my_exp_cloned = await exp_service.clone(
-                ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id)
-            )
+            my_exp_cloned = await exp_service.clone(ExperimentServiceCloneRequest(experiment_id=my_exp.experiment_id))
 
             # clear existing tile region
             logger.info("Clearing TileRegions ...")
-            await tile_service.clear(
-                TilesServiceClearRequest(experiment_id=my_exp_cloned.experiment_id)
-            )
+            await tile_service.clear(TilesServiceClearRequest(experiment_id=my_exp_cloned.experiment_id))
 
             # add a tile region to the experiment (experiment needs to have a tileRegion already)
             center_x = 58500 * 1e-6
@@ -91,8 +85,10 @@ async def main(args):
             height = 1000 * 1e-6
             z = -7000 * 1e-6
 
-            logger.info(f"Adding TileRegion at X: {np.round(center_x, 3)} Y: {np.round(center_y, 3)} Z: {np.round(z, 3)} [micron]")
-            
+            logger.info(
+                f"Adding TileRegion at X: {np.round(center_x, 3)} Y: {np.round(center_y, 3)} Z: {np.round(z, 3)} [micron]"
+            )
+
             # remarks only works in "TileMode" but in "CarrierMode" right now
             await tile_service.add_rectangle_tile_region(
                 TilesServiceAddRectangleTileRegionRequest(
