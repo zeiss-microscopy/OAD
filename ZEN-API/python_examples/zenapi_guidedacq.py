@@ -26,7 +26,6 @@ from datetime import datetime
 import shutil
 from typing import Union
 from matplotlib import pyplot as plt
-import matplotlib.cm as cm
 from pylibCZIrw import czi as pyczi
 import pandas as pd
 
@@ -195,7 +194,7 @@ def show_segmentation(
     results: pd.DataFrame,
     channel: int = 0,
     export: bool = False,
-) -> Union[str, None]:
+) -> Union[str, Path, None]:
     """
     Displays a 2D image plane from a CZI file and overlays segmentation results.
 
@@ -215,7 +214,7 @@ def show_segmentation(
     # show the 2D image plane
     plt.ion()
     fig1, ax = plt.subplots(1, 1, figsize=(12, 8))
-    ax.imshow(img2d[..., 0], cmap=cm.inferno, vmin=img2d.min(), vmax=img2d.max())
+    ax.imshow(img2d[..., 0], cmap="inferno", vmin=img2d.min(), vmax=img2d.max())
 
     for tr_id in range(results.shape[0]):
 
@@ -225,15 +224,15 @@ def show_segmentation(
 
         ax.plot(xpos, ypos, "w--", lw=2, alpha=1.0)
 
-    ax.set_title(savename_seg)
+    ax.set_title(str(savename_seg))
     plt.show(block=False)
     plt.pause(0.5)  # Pause for a short period to allow the plot to update
 
     if export:
-        plt.savefig(savename_seg.with_suffix(".png"), dpi=300)
+        plt.savefig(Path(savename_seg).with_suffix(".png"), dpi=300)
         plt.close(fig1)
 
-        return savename_seg.with_suffix(".png")
+        return Path(savename_seg).with_suffix(".png")
 
     return None
 
@@ -363,33 +362,36 @@ async def main():
                 logger.info(f"TileRegion PolyGon ID: {tr.id}")
 
         # in case TileRegion should be a rectangle
-        if region_type == "rectangle":
+        elif region_type == "rectangle":
 
             tr = TileRegionRectangle()
             tr.id = tr_id
 
             # update values in [m]
-            tr.center_x = results.loc[tr_id, "bbox_center_stageX"] * 1e-6
-            tr.center_y = results.loc[tr_id, "bbox_center_stageY"] * 1e-6
-            tr.width = results.loc[tr_id, "bbox_width_scaled"] * 1e-6
-            tr.height = results.loc[tr_id, "bbox_height_scaled"] * 1e-6
+            tr.center_x = float(results.loc[tr_id, "bbox_center_stageX"]) * 1e-6  # type: ignore
+            tr.center_y = float(results.loc[tr_id, "bbox_center_stageY"]) * 1e-6  # type: ignore
+            tr.width = float(results.loc[tr_id, "bbox_width_scaled"]) * 1e-6  # type: ignore
+            tr.height = float(results.loc[tr_id, "bbox_height_scaled"]) * 1e-6  # type: ignore
             tr.zvalue = zvalue_image * 1e-6
             if verbose:
                 logger.info(f"XY Center TileRegion Rectangle: {tr.center_x}, {tr.center_y}")
 
         # in case TileRegion should be an ellipse
-        if region_type == "ellipse":
+        elif region_type == "ellipse":
 
             tr = TileRegionEllipse()
             tr.id = tr_id
             # update values in [m]
-            tr.center_x = results.loc[tr_id, "bbox_center_stageX"] * 1e-6
-            tr.center_y = results.loc[tr_id, "bbox_center_stageY"] * 1e-6
-            tr.x_diameter = results.loc[tr_id, "bbox_width_scaled"] * 1e-6
-            tr.y_diameter = results.loc[tr_id, "bbox_height_scaled"] * 1e-6
+            tr.center_x = float(results.loc[tr_id, "bbox_center_stageX"]) * 1e-6  # type: ignore
+            tr.center_y = float(results.loc[tr_id, "bbox_center_stageY"]) * 1e-6  # type: ignore
+            tr.x_diameter = float(results.loc[tr_id, "bbox_width_scaled"]) * 1e-6  # type: ignore
+            tr.y_diameter = float(results.loc[tr_id, "bbox_height_scaled"]) * 1e-6  # type: ignore
             tr.zvalue = zvalue_image * 1e-6
             if verbose:
                 logger.info(f"XY Center TileRegion Ellipse: {tr.center_x}, {tr.center_y}")
+
+        else:
+            raise ValueError(f"Invalid region_type: {region_type}. Must be 'polygon', 'rectangle', or 'ellipse'.")
 
         # run the actual detail scan for every object
         exp_result = await gca_run_detailscan(
