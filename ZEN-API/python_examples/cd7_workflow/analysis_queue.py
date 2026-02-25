@@ -29,14 +29,14 @@ import asyncio
 from pathlib import Path
 from typing import Optional
 
-import pandas as pd
+# import pandas as pd
 from tqdm import tqdm
 
 from zen_api_utils.misc import set_logging
 from image_analysis import run_analysis
 
-from zen_api.workflows.v3beta import WorkflowServiceStub
-from zen_api.workflows.v1beta import JobResourcesServiceStub
+# from zen_api.workflows.v3beta import WorkflowServiceStub
+# from zen_api.workflows.v1beta import JobResourcesServiceStub
 
 logger = set_logging()
 
@@ -173,6 +173,7 @@ async def analysis_worker(
         stem_parts = czi_path.stem.split("_")
         well_id = "_".join(stem_parts[:-2]) if len(stem_parts) > 2 else czi_path.stem
 
+        # here the actual image analysis happens
         try:
             counts: list[int] = await run_analysis(
                 czi_path,

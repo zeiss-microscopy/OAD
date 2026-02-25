@@ -103,7 +103,7 @@ async def main() -> None:
 
     try:
         # -------------------------------------------------------------------
-        # 2. Instantiate all services
+        # Instantiate all services
         # -------------------------------------------------------------------
         sample_carrier_service = SampleCarrierServiceStub(channel=channel, metadata=metadata)
         focus_service = FocusServiceStub(channel=channel, metadata=metadata)
@@ -114,7 +114,7 @@ async def main() -> None:
         exp_service = ExperimentServiceStub(channel=channel, metadata=metadata)
 
         # -------------------------------------------------------------------
-        # 3. Discover plate layout from the hardware
+        # Discover plate layout from the hardware
         # -------------------------------------------------------------------
         info = await sample_carrier_service.get_info(SampleCarrierServiceGetInfoRequest())
         logger.info(f"Sample carrier: {info.name}  " f"({info.rows} rows × {info.columns} columns)")
@@ -128,7 +128,7 @@ async def main() -> None:
             )
 
         # -------------------------------------------------------------------
-        # 4. Pre-load experiments once (avoids repeated disk I/O per well)
+        # Pre-load experiments once (avoids repeated disk I/O per well)
         # -------------------------------------------------------------------
         if cfg.RUN_SWAF:
             logger.info(f"Loading SWAF experiment: '{cfg.SWAF_EXPERIMENT}' ...")
@@ -138,7 +138,7 @@ async def main() -> None:
         acq_exp = await exp_service.load(ExperimentServiceLoadRequest(experiment_name=cfg.ACQ_EXPERIMENT))
 
         # -------------------------------------------------------------------
-        # 5. Start background analysis worker
+        # Start background analysis worker
         # -------------------------------------------------------------------
         analysis_queue: asyncio.Queue[Path] = asyncio.Queue()
 
@@ -167,7 +167,7 @@ async def main() -> None:
         logger.info("Analysis worker started.")
 
         # -------------------------------------------------------------------
-        # 6. Per-well acquisition loop
+        # Per-well acquisition loop
         # -------------------------------------------------------------------
         enqueue_tasks = []
 
@@ -183,7 +183,7 @@ async def main() -> None:
             logger.info(f"Well: {well_id}")
             logger.info("-" * 60)
 
-            # 6a. Move to well
+            # Move to well
             await move_to_well(
                 sample_carrier_service,
                 plate,
@@ -205,7 +205,7 @@ async def main() -> None:
                 if cfg.CHANGE_TO_SWAF_OBJECTIVE:
                     await switch_objective(objchanger_service, cfg.OBJECTIVE_POS_SWAF)
 
-                # 6d. Run SWAF
+                # Run SWAF
                 try:
                     z_focus = await run_swaf(
                         swaf_service,
@@ -220,11 +220,11 @@ async def main() -> None:
                 logger.info(f"[{well_id}] Focus  Z = {z_focus * 1e6:.3f} µm")
 
             if cfg.CHANGE_TO_ACQ_OBJECTIVE:
-                # 6e. Switch to acquisition objective (high magnification)
+                # Switch to acquisition objective (high magnification)
                 await switch_objective(objchanger_service, cfg.OBJECTIVE_POS_ACQ)
 
             if cfg.MODIFY_ZSTACK:
-                # 6f. Clone acquisition experiment, update z-stack center to SWAF focus
+                # Clone acquisition experiment, update z-stack center to SWAF focus
                 well_exp_id = await prepare_zstack_experiment(
                     exp_service=exp_service,
                     zstack_service=zstack_service,
@@ -236,9 +236,9 @@ async def main() -> None:
             else:
                 well_exp_id = acq_exp.experiment_id
 
-            # 6g. Run acquisition — CZI filename: <well>_<timestamp>.czi
-            #     ZEN saves to its own output path; the file is then moved to
-            #     cfg.EXPERIMENT_SUBFOLDER (one timestamped folder per run).
+            # Run acquisition — CZI filename: <well>_<timestamp>.czi
+            # ZEN saves to its own output path; the file is then moved to
+            # cfg.EXPERIMENT_SUBFOLDER (one timestamped folder per run).
             try:
                 czi_path = await run_acquisition(
                     exp_service=exp_service,
@@ -252,9 +252,9 @@ async def main() -> None:
                 continue
 
             if cfg.RUN_IMAGE_ANALYSIS:
-                # 6h. Submit file to analysis queue as soon as it is fully written.
-                #     create_task() returns immediately — the acquisition loop
-                #     continues to the next well while this waits in the background.
+                # Submit file to analysis queue as soon as it is fully written.
+                # create_task() returns immediately — the acquisition loop
+                # continues to the next well while this waits in the background.
                 task = asyncio.create_task(
                     enqueue_when_ready(
                         queue=analysis_queue,
@@ -266,13 +266,13 @@ async def main() -> None:
                 enqueue_tasks.append(task)
 
         # -------------------------------------------------------------------
-        # 7. Wait for all CZI files to be enqueued …
+        # Wait for all CZI files to be enqueued …
         # -------------------------------------------------------------------
         logger.info("All wells acquired. Waiting for remaining files to be enqueued ...")
         await asyncio.gather(*enqueue_tasks, return_exceptions=True)
 
         # -------------------------------------------------------------------
-        # 8. … then wait for all analysis jobs to finish.
+        # Wait for all analysis jobs to finish.
         # -------------------------------------------------------------------
         logger.info("All files enqueued. Waiting for analysis jobs to complete ...")
         await analysis_queue.join()
@@ -287,7 +287,7 @@ async def main() -> None:
             pass
 
         # -------------------------------------------------------------------
-        # 9. Export accumulated analysis results to CSV
+        # Export accumulated analysis results to CSV
         # -------------------------------------------------------------------
         if cfg.RUN_IMAGE_ANALYSIS and analysis_results:
             df = pd.DataFrame(analysis_results)
