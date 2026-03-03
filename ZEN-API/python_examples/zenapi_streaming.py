@@ -57,6 +57,7 @@ from zen_api.acquisition.v1beta import (
 )
 
 if TYPE_CHECKING:
+    from czmodel.core.util._extract_model import extract_czann_model
     from czmodel import ModelMetadata
     from onnx_inference import OnnxInferencer
 else:
@@ -68,6 +69,7 @@ else:
         print(
             "Could not import ONNX inferencing tools. Please make sure to install the required dependencies for semantic segmentation and denoising."
         )
+        extract_czann_model = None  # type: ignore
         OnnxInferencer = None  # type: ignore
         ModelMetadata = None  # type: ignore
 
@@ -419,6 +421,7 @@ def main(
 ):
 
     inferencer = None
+    clean_models = False
     measure_properties = ("label", "area", "centroid", "bbox")
 
     # start application and create async event loop to display the pixels
@@ -438,6 +441,11 @@ def main(
 
     if processing is Processing.SEG_SEMANTIC or processing is Processing.DENOISE:
         # extract the model information and path and to the prediction
+        if extract_czann_model is None or OnnxInferencer is None:
+            raise ImportError(
+                "czmodel and onnx_inference packages are required for SEG_SEMANTIC and DENOISE processing. "
+                "Please install the required dependencies."
+            )
 
         # this is the new way of unpacking using the czann files
         model_metadata, model_path = extract_czann_model(
@@ -445,9 +453,18 @@ def main(
             target_dir=Path.cwd() / os.path.dirname(czann_filepath),
         )
 
+        logger.info(f"Model Path: {model_path}")
+        logger.info(f"Model Name: {model_metadata.model_name}")
+        logger.info(f"Model Type: {model_metadata.model_type}")
+        logger.info(f"Model Input Shape: {model_metadata.input_shape}")
+        logger.info(f"Model Output Shape: {model_metadata.output_shape}")
+        logger.info(f"Overlap Tile Size: {model_metadata.min_overlap}")
+
         # create ONNX inferencer once and use it for every tile
         inferencer = OnnxInferencer(str(model_path))
         logger.info("Started ONNXInferencer Session.")
+
+        clean_models = True  # set this to False if you want to keep the extracted model files (e.g. for multiple runs or for debugging)
     else:
         model_metadata = None
 
@@ -469,7 +486,19 @@ def main(
             loop=loop,
         )
 
-        loop.run_forever()
+        try:
+            loop.run_forever()
+        finally:
+            # clean up the model files if they were extracted from the czann
+            # placed in finally block to ensure cleanup runs even if the loop exits via exception (e.g. closing the Qt window)
+            if clean_models:
+                if model_path.exists():
+                    model_path.unlink()
+                    logger.info(f"Deleted extracted model file: {model_path}")
+                model_json = model_path.parent / "model.json"
+                if model_json.exists():
+                    model_json.unlink()
+                    logger.info(f"Deleted extracted model metadata: {model_json}")
 
 
 if __name__ == "__main__":
@@ -477,26 +506,30 @@ if __name__ == "__main__":
     # define the desired online processing here
     # processing = Processing.NO_PROCESSING
     # processing = Processing.SEG_THRESHOLD_MANUAL
-    processing = Processing.SEG_THRESHOLD_OTSU
+    # processing = Processing.SEG_THRESHOLD_OTSU
     # ------------- WILL ONLY WORK WITH THE APPROPRIATE MODEL FILES and ENVIRONMENT-------------
     # processing = Processing.SEG_SEMANTIC  # --> cyto2022_nuc2.czann
-    # processing = Processing.DENOISE  # --> LiveDenoise_DAPI.czann
+    processing = Processing.DENOISE  # --> LiveDenoise_DAPI.czann
 
     # Get the directory where the current script is located
     script_dir = Path(__file__).parent
 
     # Build the path to config.ini relative to the script
-    config_path = script_dir / "config.ini"
+    # config_path = script_dir / "config.ini"
+    config_path = script_dir / "my_config.ini"
 
-    czann_filepath = r"F:\GitHub\OAD\ZEN-API\python_examples\ai_models\cyto2022_nuc2.czann"
-    # czann_filepath = r"F:\GitHub\OAD\ZEN-API\python_examples\ai_models\LiveDenoise_DAPI.czann"
+    # requires a suitable python environment with ONNX Runtime, PyTorch, czmodel etc. and the appropriate model files
+    # czann_filepath = r"F:\GitHub\OAD\ZEN-API\python_examples\ai_models\cyto2022_nuc2.czann" # --> frame 1014 x 1024 AcqRoi
+    czann_filepath = (
+        r"F:\GitHub\OAD\ZEN-API\python_examples\ai_models\LiveDenoise_DAPI.czann"  # --> 512 x 512 pixel AcqROI
+    )
 
     main(
         configfile=config_path,
         pixeltype=np.dtype(np.uint16),  # must match experiment output
         czi_name="zenapi_test",
         start_experiment_from_UI=True,
-        my_experiment="ZEN_API_Test_w96_1024x1024_CH=2",
+        my_experiment="ZEN_API_Test_w96_1024x1024_CH=2",  # only relevant if start_experiment_from_UI=False
         channel_index=0,
         processing=processing,
         threshold=850,
