@@ -26,10 +26,10 @@
 #
 # Examples:
 #   # Config mode, start experiment from script (INI default):
-#   python zenapi_stream2omezarr.py --experiment-config experiment_config.ini
+#   python zenapi_stream2omezarr.py --experiment-config experiment_streaming_config.ini
 #
 #   # Config mode, wait for user to start from ZEN UI:
-#   python zenapi_stream2omezarr.py --experiment-config experiment_config.ini --no-start-experiment
+#   python zenapi_stream2omezarr.py --experiment-config experiment_streaming_config.ini --no-start-experiment
 #
 #   # CLI mode, start from UI:
 #   python zenapi_stream2omezarr.py --experiment MyExp --output-dir ./output
@@ -42,6 +42,7 @@
 
 import argparse
 import asyncio
+import itertools
 import numpy as np
 import sys
 from datetime import datetime
@@ -70,7 +71,7 @@ logger = set_logging()
 
 
 async def stream_to_omezarr(
-    configfile: str | Path,
+    zenapi_config: str | Path,
     experiment_name: str,
     output_dir: str | Path,
     dtype: np.dtype = np.dtype(np.uint16),
@@ -84,7 +85,7 @@ async def stream_to_omezarr(
     """Stream ZEN pixel data into an OME-ZARR file.
 
     Args:
-        configfile: Path to the ZEN-API gateway config.ini.
+        zenapi_config: Path to the ZEN-API gateway config.ini.
         experiment_name: ZEN experiment name (without .czexp).
         output_dir: Folder where the OME-ZARR will be created.
         dtype: Pixel data type (must match the experiment output).
@@ -110,7 +111,7 @@ async def stream_to_omezarr(
     logger.info(f"OME-ZARR output path: {zarr_path}")
 
     # ----- connect to ZEN-API streaming service -----
-    channel, metadata = initialize_zenapi(configfile)
+    channel, metadata = initialize_zenapi(zenapi_config)
     streaming_service = ExperimentStreamingServiceStub(channel=channel, metadata=metadata)
 
     # ----- open the pixel stream FIRST (before starting the experiment) -----
@@ -129,7 +130,7 @@ async def stream_to_omezarr(
             exp_name=experiment_name,
             czi_name=czi_name,
             overwrite=overwrite_czi,
-            configfile=configfile,
+            zenapi_config=zenapi_config,
         )
         logger.info(f"Experiment ID: {exp_id}")
         logger.info(f"CZI file will be saved to: {czi_path}")
@@ -415,7 +416,7 @@ async def stream_to_omezarr_with_config(ecfg: ExperimentConfig) -> Path:
             exp_name=ecfg.experiment_name,
             czi_name=ecfg.czi_name,
             overwrite=ecfg.overwrite_czi,
-            configfile=ecfg.zenapi_config,
+            zenapi_config=ecfg.zenapi_config,
         )
         logger.info(f"Experiment ID: {exp_id}")
         logger.info(f"CZI file will be saved to: {czi_path}")
@@ -424,15 +425,12 @@ async def stream_to_omezarr_with_config(ecfg: ExperimentConfig) -> Path:
 
     # ----- Pre-compute the linear index for every (t, s, m, c, z) combination -----
     # Expected order: T -> P(S*M) -> C -> Z  (matching the dimensions list)
-    coord_to_linear: dict[tuple[int, int, int, int, int], int] = {}
-    linear = 0
-    for t_idx in range(num_t):
-        for s_idx in range(num_s):
-            for m_idx in range(num_m):
-                for c_idx in range(num_c):
-                    for z_idx in range(num_z):
-                        coord_to_linear[(t_idx, s_idx, m_idx, c_idx, z_idx)] = linear
-                        linear += 1
+    coord_to_linear = {
+        coord: idx
+        for idx, coord in enumerate(
+            itertools.product(range(num_t), range(num_s), range(num_m), range(num_c), range(num_z))
+        )
+    }
 
     # We receive frames in the order ZEN sends them which may differ from
     # the dimension iteration order above.  Buffer out-of-order frames in
@@ -584,7 +582,7 @@ async def stream_to_omezarr_with_config(ecfg: ExperimentConfig) -> Path:
     # After the async stream ends, flush remaining buffered frames
     # (fill gaps with skips for any frames that never arrived)
     if zarr_stream is not None:
-        while next_write < linear:
+        while next_write < len(coord_to_linear):
             if next_write in pending:
                 frm, fmeta = pending.pop(next_write)
                 zarr_stream.append(frm, frame_metadata=fmeta)
@@ -623,7 +621,7 @@ def parse_args() -> argparse.Namespace:
         ),
     )
     parser.add_argument(
-        "--config",
+        "--zenapi-config",
         type=str,
         default=str(Path(__file__).parent / "config.ini"),
         help="Path to the ZEN-API configuration file.",
@@ -721,7 +719,7 @@ def main() -> None:
 
         zarr_path = asyncio.run(
             stream_to_omezarr(
-                configfile=args.config,
+                zenapi_config=args.zenapi_config,
                 experiment_name=args.experiment,
                 output_dir=args.output_dir,
                 dtype=np.dtype(args.dtype),

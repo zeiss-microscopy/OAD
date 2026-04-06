@@ -116,7 +116,7 @@ async def start_experiment(
     exp_name: str,
     czi_name: str,
     overwrite: bool = False,
-    configfile: str | Path = "config.ini",
+    zenapi_config: str | Path = "config.ini",
 ) -> tuple[str, Path]:
     """Start a ZEN experiment via the ZEN-API.
 
@@ -124,12 +124,12 @@ async def start_experiment(
         exp_name: Experiment name (without .czexp extension).
         czi_name: Desired CZI output name (without .czi extension).
         overwrite: Allow overwriting an existing CZI.
-        configfile: Path to the ZEN-API config file.
+        zenapi_config: Path to the ZEN-API config file.
 
     Returns:
         Tuple of (experiment_id, czi_path).
     """
-    channel, metadata = initialize_zenapi(configfile)
+    channel, metadata = initialize_zenapi(zenapi_config)
     exp_service = ExperimentServiceStub(channel=channel, metadata=metadata)
 
     # load experiment
