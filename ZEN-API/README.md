@@ -400,12 +400,11 @@ Since the global access control is currently the only enabled version of API con
 
 A "global control token" is required for calling API methods. The token must be sent in the `control-token` header of the API call and it must match the token in the gateway. If the token is missing, the API call will be aborted with an access control error.
 
-
 ## Activation of ZEN API inside software
 
 In order to be able to use ZEN API and the gateway the toolkit ZEN API needs to activated.
 
-<img src=./images/zenapi_toolkit_active.png alt="ZEN API - Tookit Activation" width=60%>
+<img src=./images/zenapi_toolkit_active.png alt="ZEN API - Toolkit Activation" width=60%>
 
 ## Troubleshooting
 

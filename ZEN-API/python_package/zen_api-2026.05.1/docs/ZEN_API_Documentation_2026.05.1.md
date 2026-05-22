@@ -1,6 +1,6 @@
 # ZEN API Documentation
 
-ZEN Release 3.14 - Spring 2026 Version:-2026.05.1
+ZEN Release 3.14 - Spring 2026 Version: 2026.05.1
 
 ## Table of Contents
 
@@ -7309,7 +7309,7 @@ Data container for information about the hardware state.
 | --- | --- | --- | --- |
 | is\_idle | [bool](#bool) |  | A value indicating whether an Axioscan system is idle. |
 | is\_scan\_running | [bool](#bool) |  | A value indicating whether a scan is running. |
-| is\_preview\_scan\_running | [bool](#bool) |  | A value indicating whether a preview scan is running. |
+| is\_preview\_scan\_running | [bool](#bool) |  | A value indicating whether a preview scan is running. This property is deprecated. Use IsScanRunning instead. |
 | is\_tray\_initializing | [bool](#bool) |  | A value indicating whether a tray is being initialized. |
 
 ## zen\_api/lm/slide\_scan/v1/profile\_information.proto
@@ -7400,6 +7400,7 @@ SlideInformation holds information about an Axioscan slide.
 | preview\_image\_path | [string](#string) |  | The path to the preview image. |
 | scan\_image\_path | [string](#string) |  | The path to the scan image. |
 | state\_last\_error | [string](#string) |  | The SlideItem.LastError of the slide. |
+| prescan\_image\_path | [string](#string) |  | The path to the prescan image. |
 
 ## zen\_api/lm/slide\_scan/v1/slide\_position\_information.proto
 

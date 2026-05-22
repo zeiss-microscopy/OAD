@@ -231,7 +231,7 @@
 
     <h1 id="title">ZEN API Documentation</h1>
 
-    ZEN Release 3.14 - Spring 2026 Version:-2026.05.1
+    ZEN Release 3.14 - Spring 2026 Version: 2026.05.1
     <h2>Table of Contents</h2>
 
     <div id="toc-container">
@@ -28228,7 +28228,8 @@ The exposure time is set in milliseconds. (Values ranging from 0.1 to 2000ms). <
                   <td>is_preview_scan_running</td>
                   <td><a href="#bool">bool</a></td>
                   <td></td>
-                  <td><p>A value indicating whether a preview scan is running. </p></td>
+                  <td><p>A value indicating whether a preview scan is running.
+This property is deprecated. Use IsScanRunning instead. </p></td>
                 </tr>
               
                 <tr>
@@ -28571,6 +28572,13 @@ If not set or set to false, the label detection will be performed as defined in 
                   <td><a href="#string">string</a></td>
                   <td></td>
                   <td><p>The SlideItem.LastError of the slide. </p></td>
+                </tr>
+              
+                <tr>
+                  <td>prescan_image_path</td>
+                  <td><a href="#string">string</a></td>
+                  <td></td>
+                  <td><p>The path to the prescan image. </p></td>
                 </tr>
               
             </tbody>

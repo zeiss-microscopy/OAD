@@ -296,6 +296,9 @@ class SlideInformation(betterproto.Message):
     state_last_error: str = betterproto.string_field(9)
     """The SlideItem.LastError of the slide."""
 
+    prescan_image_path: str = betterproto.string_field(10)
+    """The path to the prescan image."""
+
 
 @dataclass(eq=False, repr=False)
 class TrayInformation(betterproto.Message):
@@ -370,7 +373,10 @@ class SlideScanSystemInformation(betterproto.Message):
     """A value indicating whether a scan is running."""
 
     is_preview_scan_running: bool = betterproto.bool_field(3)
-    """A value indicating whether a preview scan is running."""
+    """
+    A value indicating whether a preview scan is running.
+     This property is deprecated. Use IsScanRunning instead.
+    """
 
     is_tray_initializing: bool = betterproto.bool_field(4)
     """A value indicating whether a tray is being initialized."""

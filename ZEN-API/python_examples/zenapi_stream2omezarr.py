@@ -25,14 +25,39 @@
 #   python zenapi_stream2omezarr.py --help
 #
 # Examples:
-#   # Config mode, start experiment from script (INI default):
+#
+#   --- Config mode (recommended for production) ---
+#   Dimensions are read from an INI file so frames are written on-the-fly.
+#
+#   # Use INI defaults (start_from_script is read from the INI):
 #   python zenapi_stream2omezarr.py --experiment-config experiment_streaming_config.ini
 #
-#   # Config mode, wait for user to start from ZEN UI:
+#   # Override INI: wait for user to start experiment from ZEN UI:
 #   python zenapi_stream2omezarr.py --experiment-config experiment_streaming_config.ini --no-start-experiment
 #
-#   # CLI mode, start from UI:
+#   # Override INI: force experiment start from script:
+#   python zenapi_stream2omezarr.py --experiment-config experiment_streaming_config.ini --start-experiment
+#
+#   # Config mode + open result in ndv viewer:
+#   python zenapi_stream2omezarr.py --experiment-config experiment_streaming_config.ini --viewer ndv
+#
+#   --- CLI mode (quick experiments, no INI needed) ---
+#   Dimensions are discovered from the stream; all frames buffered, then written.
+#
+#   # Start experiment from ZEN UI, save OME-ZARR to ./output:
 #   python zenapi_stream2omezarr.py --experiment MyExp --output-dir ./output
+#
+#   # Start experiment from script, custom CZI name, 8-bit data:
+#   python zenapi_stream2omezarr.py --experiment MyExp --output-dir ./output \
+#       --start-experiment --czi-name my_acquisition --dtype uint8
+#
+#   # Stream only channel 0, use lz4 compression, view in napari:
+#   python zenapi_stream2omezarr.py --experiment MyExp --output-dir ./output \
+#       --channel-index 0 --compression blosc-lz4 --viewer napari
+#
+#   # Use a custom ZEN-API gateway config:
+#   python zenapi_stream2omezarr.py --experiment MyExp --output-dir ./output \
+#       --zenapi-config /path/to/my_config.ini
 #
 # Copyright(c) 2026 Carl Zeiss AG, Germany. All Rights Reserved.
 #
@@ -42,11 +67,13 @@
 
 import argparse
 import asyncio
+import contextlib
 import itertools
 import numpy as np
 import sys
 from datetime import datetime
 from pathlib import Path
+from typing import Any
 
 from zen_api_utils.misc import initialize_zenapi, set_logging
 from zen_api_utils.zen_omezarr import (
@@ -60,6 +87,8 @@ from zen_api_utils.zen_omezarr import (
 
 # ZEN API auto-generated stubs
 from zen_api.acquisition.v1beta import (
+    ExperimentServiceRegisterOnStatusChangedRequest,
+    ExperimentServiceStub,
     ExperimentStreamingServiceStub,
     ExperimentStreamingServiceMonitorAllExperimentsRequest,
 )
@@ -69,18 +98,81 @@ from ome_writers import AcquisitionSettings, Dimension, Position, create_stream
 
 logger = set_logging()
 
+# Default data type for pixel streaming
+DEFAULT_DTYPE = np.dtype(np.uint16)
+
+# Inactivity timeout (seconds) – for the status-poll loop.
+_STATUS_POLL_TIMEOUT: float = 30.0
+
+
+async def _monitor_status_until_done(
+    zenapi_config: str | Path,
+    exp_id: str,
+    stop_event: asyncio.Event,
+    timeout: float = _STATUS_POLL_TIMEOUT,
+) -> None:
+    """Monitor ZEN experiment status and set stop_event when finished.
+
+    Connects to the ZEN ExperimentService and streams status updates via
+    ``register_on_status_changed``.  Sets ``stop_event`` as soon as
+    ``is_experiment_running`` becomes False, or when no status update
+    arrives within ``timeout`` seconds.
+
+    Args:
+        zenapi_config: Path to the ZEN-API gateway config.ini.
+        exp_id: Experiment ID returned by ``start_experiment()``.
+        stop_event: Shared event; set when the experiment is done.
+        timeout: Seconds to wait for each status update before giving up.
+    """
+    # Use a dedicated gRPC channel so the status monitor does not
+    # contend with the pixel-streaming channel for bandwidth.
+    channel, metadata = initialize_zenapi(zenapi_config)
+    exp_service = ExperimentServiceStub(channel=channel, metadata=metadata)
+    # register_on_status_changed returns an async generator that yields one
+    # message each time ZEN updates the experiment state (acquisition
+    # started, T/C/Z index advanced, finished, etc.).
+    status_stream = exp_service.register_on_status_changed(ExperimentServiceRegisterOnStatusChangedRequest(exp_id))
+    try:
+        while not stop_event.is_set():
+            # wait_for raises TimeoutError if ZEN goes silent for `timeout`
+            # seconds, which is treated as "experiment must be done".
+            response = await asyncio.wait_for(status_stream.__anext__(), timeout=timeout)
+            if not response.status.is_experiment_running:
+                logger.info("Experiment finished - status monitor signalling stop.")
+                stop_event.set()
+                break
+            logger.debug(
+                "Experiment status: "
+                f"acq={response.status.is_acquisition_running} "
+                f"T={response.status.time_points_index} "
+                f"C={response.status.channels_index} "
+                f"Z={response.status.zstack_slices_index}"
+            )
+    except asyncio.TimeoutError:
+        logger.warning(f"Status monitor: no update for {timeout:.0f}s" " - assuming experiment finished.")
+        stop_event.set()
+    except StopAsyncIteration:
+        logger.info("Status stream closed - experiment finished.")
+        stop_event.set()
+    except asyncio.CancelledError:
+        # Task was cancelled by the caller during cleanup; exit silently.
+        pass
+    finally:
+        channel.close()
+
 
 async def stream_to_omezarr(
     zenapi_config: str | Path,
     experiment_name: str,
     output_dir: str | Path,
-    dtype: np.dtype = np.dtype(np.uint16),
+    dtype: np.dtype | None = None,
     start_experiment_from_script: bool = False,
     czi_name: str = "zenapi_stream",
     overwrite_czi: bool = True,
     channel_index: int | None = None,
     overwrite_zarr: bool = True,
     compression: str | None = "blosc-zstd",
+    inactivity_timeout: float = _STATUS_POLL_TIMEOUT,
 ) -> Path:
     """Stream ZEN pixel data into an OME-ZARR file.
 
@@ -95,7 +187,11 @@ async def stream_to_omezarr(
         overwrite_czi: Allow overwriting an existing CZI.
         channel_index: Optional channel filter index (None = all channels).
         overwrite_zarr: Overwrite an existing OME-ZARR at the output path.
-        compression: Compression for ZARR ('blosc-zstd', 'blosc-lz4', 'zstd', 'none', or None).
+        compression: Compression for ZARR
+            ('blosc-zstd', 'blosc-lz4', 'zstd', 'none', or None).
+        inactivity_timeout: Seconds without a new frame before the stream
+            is considered finished.  Also used as the status-poll window
+            when an experiment_id is available.
 
     Returns:
         Path to the created OME-ZARR directory.
@@ -115,6 +211,9 @@ async def stream_to_omezarr(
     streaming_service = ExperimentStreamingServiceStub(channel=channel, metadata=metadata)
 
     # ----- open the pixel stream FIRST (before starting the experiment) -----
+    # Opening before triggering the experiment ensures no early frames are
+    # dropped.  monitor_all_experiments is a perpetual gRPC server-streaming
+    # call – the server pushes frames as soon as they are produced.
     async_iterable = streaming_service.monitor_all_experiments(
         ExperimentStreamingServiceMonitorAllExperimentsRequest(
             channel_index=channel_index,
@@ -124,6 +223,12 @@ async def stream_to_omezarr(
     logger.info("Pixel stream opened (monitoring all experiments).")
 
     # ----- now optionally start the experiment -----
+    # stop_event is shared between this coroutine and the status-monitor
+    # task below.  The monitor sets it when ZEN reports the experiment
+    # has finished, which breaks the frame-receive loop.
+    stop_event = asyncio.Event()
+    _status_task: asyncio.Task | None = None
+
     if start_experiment_from_script:
         logger.info(f"Starting experiment '{experiment_name}' via ZEN-API ...")
         exp_id, czi_path = await start_experiment(
@@ -134,8 +239,17 @@ async def stream_to_omezarr(
         )
         logger.info(f"Experiment ID: {exp_id}")
         logger.info(f"CZI file will be saved to: {czi_path}")
+        # Spawn a concurrent task that polls ZEN's status stream and sets
+        # stop_event when is_experiment_running becomes False.  This gives
+        # a reliable termination signal alongside the inactivity timeout.
+        _status_task = asyncio.create_task(
+            _monitor_status_until_done(zenapi_config, exp_id, stop_event, inactivity_timeout)
+        )
     else:
-        logger.info("Waiting for experiment to be started from ZEN UI. " "Please start the experiment now ...")
+        logger.info(
+            "Waiting for experiment to be started from ZEN UI. "
+            f"Stream stops after {inactivity_timeout:.0f}s of inactivity."
+        )
 
     # ----- collect frames & metadata in first pass to build dimensions -----
     # We need to know the full extent of the acquisition before we can
@@ -166,32 +280,53 @@ async def stream_to_omezarr(
 
     logger.info("Receiving pixel stream ...")
 
-    async for response in async_iterable:
+    # We iterate the gRPC stream manually (via __aiter__ + __anext__)
+    # instead of `async for` so we can wrap each step in wait_for() to
+    # detect inactivity (no frame for `inactivity_timeout` seconds) and
+    # react to stop_event set by the concurrent status-monitor task.
+    async_iter = async_iterable.__aiter__()
+    while not stop_event.is_set():
+        try:
+            response = await asyncio.wait_for(async_iter.__anext__(), timeout=inactivity_timeout)
+        except asyncio.TimeoutError:
+            logger.info(f"No frames for {inactivity_timeout:.0f}s" " - assuming experiment finished.")
+            break
+        except StopAsyncIteration:
+            break
+
         fd = response.frame_data
         fp = fd.frame_position
 
+        # Extract 5-D acquisition coordinate of this frame.
         t = fp.t
         z = fp.z
         c = fp.c
-        m = fp.m
-        s = fp.s
+        m = fp.m  # tile index
+        s = fp.s  # scene index
 
         full_size = fd.frame_size
+        # ZEN API reports scaling in metres; convert to µm for OME metadata.
         sx = fd.scaling.x * 1e6  # m -> µm
         sy = fd.scaling.y * 1e6
 
-        stage_x = fd.frame_stage_position.x * 1e6  # type: ignore[operator]  # ZEN API stubs type x/y/z as float | None
+        # Stage positions also in metres -> µm.
+        # type: ignore[operator]: stubs declare float | None but values are
+        # always numeric during an active acquisition.
+        stage_x = fd.frame_stage_position.x * 1e6  # type: ignore[operator]
         stage_y = fd.frame_stage_position.y * 1e6  # type: ignore[operator]
         stage_z = fd.frame_stage_position.z * 1e6  # type: ignore[operator]
 
-        # reshape the raw bytes into a 2D frame
+        # pixel_data.raw_data is a flat bytes buffer; reshape to (H, W).
         frame = np.frombuffer(fd.pixel_data.raw_data, dtype=dtype).reshape((full_size.height, full_size.width))
 
-        # apply same orientation fix as zenapi_streaming.py
+        # ZEN streams frames in a rotated/flipped orientation relative to
+        # the physical stage.  Apply the same fix as the legacy
+        # zenapi_streaming.py reference implementation.
         frame = np.flipud(np.rot90(frame))
+        # Ensure C-contiguous memory layout for efficient downstream writes.
         frame = np.ascontiguousarray(frame, dtype=dtype)
 
-        # store
+        # Accumulate frames and coordinates for the second-pass write.
         frames.append(frame)
         frame_coords.append({"t": t, "z": z, "c": c, "m": m, "s": s})
         frame_metadata_list.append(
@@ -202,13 +337,15 @@ async def stream_to_omezarr(
             }
         )
 
-        # update extents
+        # Track the highest seen index in each dimension so we can infer
+        # the full shape once the stream ends (max_index + 1 == count).
         max_t = max(max_t, t)
         max_z = max(max_z, z)
         max_c = max(max_c, c)
         max_m = max(max_m, m)
         max_s = max(max_s, s)
 
+        # Capture pixel dimensions and physical scale from the first frame.
         if frame_height is None:
             frame_height = frame.shape[0]
             frame_width = frame.shape[1]
@@ -221,12 +358,22 @@ async def stream_to_omezarr(
         sys.stdout.write(build_progress_bar(frame_count, None))
         sys.stdout.flush()
 
+        if stop_event.is_set():
+            logger.info("Stop event from status monitor – closing pixel stream.")
+            break
+
     # newline after progress bar
     sys.stdout.write("\n")
     logger.info(f"Stream finished. Total frames received: {frame_count}")
 
     if frame_count == 0:
         logger.warning("No frames received. Nothing to write.")
+        if _status_task is not None and not _status_task.done():
+            _status_task.cancel()
+            # Awaiting a cancelled task re-raises CancelledError; suppress it
+            # so the caller receives a clean return rather than an exception.
+            with contextlib.suppress(asyncio.CancelledError):
+                await _status_task
         channel.close()
         return zarr_path
 
@@ -333,38 +480,50 @@ async def stream_to_omezarr(
         coord_to_idx[key] = idx
 
     # ----- write to OME-ZARR -----
+    # itertools.product generates (t, s, m, c, z) tuples in the same
+    # T→S→M→C→Z order as the dimension list, so the stream receives
+    # frames in the expected sequence.  For any missing frame we call
+    # stream.skip() to keep the ZARR layout fully rectangular.
     logger.info(f"Writing {frame_count} frames to OME-ZARR ...")
     written = 0
 
     with create_stream(settings) as stream:
-        for t_idx in range(num_t):
-            for s_idx in range(num_s):
-                for m_idx in range(num_m):
-                    for c_idx in range(num_c):
-                        for z_idx in range(num_z):
-                            key = (t_idx, s_idx, m_idx, c_idx, z_idx)
-                            if key in coord_to_idx:
-                                fidx = coord_to_idx[key]
-                                stream.append(
-                                    frames[fidx],
-                                    frame_metadata=frame_metadata_list[fidx],
-                                )
-                            else:
-                                # frame was not received – skip
-                                stream.skip(frames=1)
-                                logger.warning(f"Missing frame at T={t_idx} S={s_idx} M={m_idx} C={c_idx} Z={z_idx}")
+        coords = itertools.product(range(num_t), range(num_s), range(num_m), range(num_c), range(num_z))
+        for t_idx, s_idx, m_idx, c_idx, z_idx in coords:
+            key = (t_idx, s_idx, m_idx, c_idx, z_idx)
+            if key in coord_to_idx:
+                fidx = coord_to_idx[key]
+                stream.append(
+                    frames[fidx],
+                    frame_metadata=frame_metadata_list[fidx],
+                )
+            else:
+                # Frame was not received (dropped or filtered by
+                # channel_index).  Emit a placeholder so the ZARR shape
+                # remains rectangular.
+                stream.skip(frames=1)
+                logger.warning(f"Missing frame at " f"T={t_idx} S={s_idx} M={m_idx} C={c_idx} Z={z_idx}")
 
-                            written += 1
-                            sys.stdout.write(build_progress_bar(written, total_expected))
-                            sys.stdout.flush()
+            written += 1
+            sys.stdout.write(build_progress_bar(written, total_expected))
+            sys.stdout.flush()
 
     sys.stdout.write("\n")
     logger.info(f"OME-ZARR written successfully: {zarr_path}")
+    if _status_task is not None and not _status_task.done():
+        _status_task.cancel()
+        # Awaiting a cancelled task re-raises CancelledError; suppress it
+        # so the caller receives a clean return rather than an exception.
+        with contextlib.suppress(asyncio.CancelledError):
+            await _status_task
     channel.close()
     return zarr_path
 
 
-async def stream_to_omezarr_with_config(ecfg: ExperimentConfig) -> Path:
+async def stream_to_omezarr_with_config(
+    ecfg: ExperimentConfig,
+    inactivity_timeout: float = _STATUS_POLL_TIMEOUT,
+) -> Path:
     """Stream ZEN pixel data into OME-ZARR using known dimensions from config.
 
     Because the dimensions are known upfront the OME-ZARR stream is opened
@@ -373,6 +532,8 @@ async def stream_to_omezarr_with_config(ecfg: ExperimentConfig) -> Path:
 
     Args:
         ecfg: Parsed ExperimentConfig.
+        inactivity_timeout: Seconds to wait for the next frame before
+            treating the acquisition as finished.
 
     Returns:
         Path to the created OME-ZARR directory.
@@ -421,7 +582,10 @@ async def stream_to_omezarr_with_config(ecfg: ExperimentConfig) -> Path:
         logger.info(f"Experiment ID: {exp_id}")
         logger.info(f"CZI file will be saved to: {czi_path}")
     else:
-        logger.info("Waiting for experiment to be started from ZEN UI. " "Please start the experiment now ...")
+        logger.info(
+            "Waiting for experiment to be started from ZEN UI. "
+            f"Stream stops after {inactivity_timeout:.0f}s of inactivity."
+        )
 
     # ----- Pre-compute the linear index for every (t, s, m, c, z) combination -----
     # Expected order: T -> P(S*M) -> C -> Z  (matching the dimensions list)
@@ -447,7 +611,23 @@ async def stream_to_omezarr_with_config(ecfg: ExperimentConfig) -> Path:
 
     logger.info("Waiting for first frame to determine frame size ...")
 
-    async for response in async_iterable:
+    # We iterate the gRPC stream manually (via __aiter__ + __anext__)
+    # instead of `async for` so we can wrap each step in wait_for() to
+    # detect inactivity (no frame for `inactivity_timeout` seconds).
+    # In config mode the total frame count is known upfront, so the
+    # primary exit condition is frame_count >= total_expected.
+    # Intentionally NO status-monitor stop_event here: ZEN delivers the
+    # experiment-finished status *before* all pixel data has been pushed
+    # through gRPC, so reacting to it would truncate the write.
+    async_iter = async_iterable.__aiter__()
+    while True:
+        try:
+            response = await asyncio.wait_for(async_iter.__anext__(), timeout=inactivity_timeout)
+        except asyncio.TimeoutError:
+            logger.info(f"No frames for {inactivity_timeout:.0f}s - assuming experiment finished.")
+            break
+        except StopAsyncIteration:
+            break
         fd = response.frame_data
         fp = fd.frame_position
 
