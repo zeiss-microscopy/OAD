@@ -1,0 +1,10 @@
+include LICENSE.txt
+include COPYRIGHT.txt
+include NOTICE.txt
+include README.md
+recursive-include src *.py
+recursive-exclude test *
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude *.pyo
+global-exclude .git*

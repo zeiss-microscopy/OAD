@@ -42,7 +42,7 @@ from processing_tools import ArrayProcessor
 from enum import Enum, unique
 
 import random
-from typing import Optional, Union
+from typing import Optional, Union, TYPE_CHECKING
 
 # import the auto-generated python modules for ZEN API
 from zen_api.acquisition.v1beta import (
@@ -56,16 +56,22 @@ from zen_api.acquisition.v1beta import (
     ExperimentServiceStartExperimentRequest,
 )
 
-try:
+if TYPE_CHECKING:
     from czmodel.core.util._extract_model import extract_czann_model
     from czmodel import ModelMetadata
     from onnx_inference import OnnxInferencer
-except ImportError:
-    print(
-        "Could not import ONNX inferencing tools. Please make sure to install the required dependencies for semantic segmentation and denoising."
-    )
-    OnnxInferencer = None
-    ModelMetadata = None
+else:
+    try:
+        from czmodel.core.util._extract_model import extract_czann_model
+        from czmodel import ModelMetadata
+        from onnx_inference import OnnxInferencer
+    except ImportError:
+        print(
+            "Could not import ONNX inferencing tools. Please make sure to install the required dependencies for semantic segmentation and denoising."
+        )
+        extract_czann_model = None  # type: ignore
+        OnnxInferencer = None  # type: ignore
+        ModelMetadata = None  # type: ignore
 
 logger = set_logging()
 
@@ -156,7 +162,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def __init__(
         self,
         loop=None,
-        configfile: str = "config.ini",
+        configfile: Path | str = "config.ini",
         start_experiment_from_UI: bool = True,
         my_experiment: str = "my_exp.czexp",
         czi_name: str = "my_image.czi",
@@ -202,13 +208,13 @@ class MainWindow(QtWidgets.QMainWindow):
     async def read(
         self,
         processing: Processing = Processing.NO_PROCESSING,
-        dtype: np.dtype = np.uint8,
+        dtype: np.dtype = np.dtype(np.uint8),
         threshold: Optional[int] = 0,
         inferencer: Optional[OnnxInferencer] = None,
         model_metadata: Optional[ModelMetadata] = None,
         channel_index: Optional[Union[None, int]] = None,
-        enable_raw_data: Optional[bool] = False,
-        draw_bbox: Optional[bool] = True,
+        enable_raw_data: bool = False,
+        draw_bbox: bool = True,
         measure_properties: Optional[tuple] = None,
         verbose=False,
     ):
@@ -276,9 +282,9 @@ class MainWindow(QtWidgets.QMainWindow):
                     f"Full Size: {full_size} PartialSize: {partial_size} Scaling: {scale_x:.3f} - {scale_y:.3f}"
                 )
 
-            stage_x = response.frame_data.frame_stage_position.x * 1e6  # StageX [m]
-            stage_y = response.frame_data.frame_stage_position.y * 1e6  # StageY [m]
-            stage_z = response.frame_data.frame_stage_position.z * 1e6  # StageZ [m]
+            stage_x = response.frame_data.frame_stage_position.x * 1e6  # StageX [m] # type: ignore
+            stage_y = response.frame_data.frame_stage_position.y * 1e6  # StageY [m] # type: ignore
+            stage_z = response.frame_data.frame_stage_position.z * 1e6  # StageZ [m] # type: ignore
 
             # convert the byte stream into 2d image
             if not enable_raw_data:
@@ -313,7 +319,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 # apply threshold segmentation MANUAL
                 if processing is Processing.SEG_THRESHOLD_MANUAL:
 
-                    pro2d = ap.apply_threshold(value=threshold, invert_result=False)
+                    pro2d = ap.apply_threshold(value=threshold if threshold is not None else 0, invert_result=False)
 
                 # apply a semantic segmentation
                 if processing is Processing.SEG_SEMANTIC:
@@ -358,8 +364,8 @@ class MainWindow(QtWidgets.QMainWindow):
                             roi = pg.ROI(
                                 [row["bbox-0"], row["bbox-1"]],  # [x, y]
                                 [
-                                    row["bbox-2"] - row["bbox-0"],  # width
-                                    row["bbox-3"] - row["bbox-1"],  # height
+                                    row["bbox-2"] - row["bbox-0"],  # width # type: ignore
+                                    row["bbox-3"] - row["bbox-1"],  # height # type: ignore
                                 ],
                                 removable=True,
                                 resizable=False,
@@ -402,7 +408,7 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
 def main(
-    configfile: str,
+    configfile: Path | str,
     pixeltype: np.dtype,
     czi_name: str,
     start_experiment_from_UI: bool,
@@ -415,6 +421,7 @@ def main(
 ):
 
     inferencer = None
+    clean_models = False
     measure_properties = ("label", "area", "centroid", "bbox")
 
     # start application and create async event loop to display the pixels
@@ -434,6 +441,11 @@ def main(
 
     if processing is Processing.SEG_SEMANTIC or processing is Processing.DENOISE:
         # extract the model information and path and to the prediction
+        if extract_czann_model is None or OnnxInferencer is None:
+            raise ImportError(
+                "czmodel and onnx_inference packages are required for SEG_SEMANTIC and DENOISE processing. "
+                "Please install the required dependencies."
+            )
 
         # this is the new way of unpacking using the czann files
         model_metadata, model_path = extract_czann_model(
@@ -441,9 +453,18 @@ def main(
             target_dir=Path.cwd() / os.path.dirname(czann_filepath),
         )
 
+        logger.info(f"Model Path: {model_path}")
+        logger.info(f"Model Name: {model_metadata.model_name}")
+        logger.info(f"Model Type: {model_metadata.model_type}")
+        logger.info(f"Model Input Shape: {model_metadata.input_shape}")
+        logger.info(f"Model Output Shape: {model_metadata.output_shape}")
+        logger.info(f"Overlap Tile Size: {model_metadata.min_overlap}")
+
         # create ONNX inferencer once and use it for every tile
         inferencer = OnnxInferencer(str(model_path))
         logger.info("Started ONNXInferencer Session.")
+
+        clean_models = True  # set this to False if you want to keep the extracted model files (e.g. for multiple runs or for debugging)
     else:
         model_metadata = None
 
@@ -465,7 +486,19 @@ def main(
             loop=loop,
         )
 
-        loop.run_forever()
+        try:
+            loop.run_forever()
+        finally:
+            # clean up the model files if they were extracted from the czann
+            # placed in finally block to ensure cleanup runs even if the loop exits via exception (e.g. closing the Qt window)
+            if clean_models:
+                if model_path.exists():
+                    model_path.unlink()
+                    logger.info(f"Deleted extracted model file: {model_path}")
+                model_json = model_path.parent / "model.json"
+                if model_json.exists():
+                    model_json.unlink()
+                    logger.info(f"Deleted extracted model metadata: {model_json}")
 
 
 if __name__ == "__main__":
@@ -473,26 +506,30 @@ if __name__ == "__main__":
     # define the desired online processing here
     # processing = Processing.NO_PROCESSING
     # processing = Processing.SEG_THRESHOLD_MANUAL
-    processing = Processing.SEG_THRESHOLD_OTSU
+    # processing = Processing.SEG_THRESHOLD_OTSU
     # ------------- WILL ONLY WORK WITH THE APPROPRIATE MODEL FILES and ENVIRONMENT-------------
     # processing = Processing.SEG_SEMANTIC  # --> cyto2022_nuc2.czann
-    # processing = Processing.DENOISE  # --> LiveDenoise_DAPI.czann
+    processing = Processing.DENOISE  # --> LiveDenoise_DAPI.czann
 
     # Get the directory where the current script is located
     script_dir = Path(__file__).parent
 
     # Build the path to config.ini relative to the script
-    config_path = script_dir / "config.ini"
+    # config_path = script_dir / "config.ini"
+    config_path = script_dir / "my_config.ini"
 
-    czann_filepath = r"F:\GitHub\OAD\ZEN-API\python_examples\ai_models\cyto2022_nuc2.czann"
-    # czann_filepath = r"F:\GitHub\OAD\ZEN-API\python_examples\ai_models\LiveDenoise_DAPI.czann"
+    # requires a suitable python environment with ONNX Runtime, PyTorch, czmodel etc. and the appropriate model files
+    # czann_filepath = r"F:\GitHub\OAD\ZEN-API\python_examples\ai_models\cyto2022_nuc2.czann" # --> frame 1014 x 1024 AcqRoi
+    czann_filepath = (
+        r"F:\GitHub\OAD\ZEN-API\python_examples\ai_models\LiveDenoise_DAPI.czann"  # --> 512 x 512 pixel AcqROI
+    )
 
     main(
         configfile=config_path,
         pixeltype=np.dtype(np.uint16),  # must match experiment output
         czi_name="zenapi_test",
         start_experiment_from_UI=True,
-        my_experiment="ZEN_API_Test_w96_1024x1024_CH=2",
+        my_experiment="ZEN_API_Test_w96_1024x1024_CH=2",  # only relevant if start_experiment_from_UI=False
         channel_index=0,
         processing=processing,
         threshold=850,

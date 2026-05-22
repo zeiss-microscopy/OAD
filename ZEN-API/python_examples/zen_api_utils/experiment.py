@@ -30,6 +30,8 @@ from zen_api.acquisition.v1beta import (
     ExperimentServiceSaveRequest,
 )
 
+from zen_api.lm.hardware.v1 import SampleCarrierServiceGetConfiguredContainersRequest, SampleCarrierServiceStub
+
 from dataclasses import dataclass
 from typing import List
 from zen_api_utils.misc import set_logging
@@ -272,3 +274,28 @@ async def run_experiment(experiment_service: ExperimentServiceStub, experiment_i
     response = await experiment_service.run_experiment(ExperimentServiceRunExperimentRequest(experiment_id))
 
     return Path(image_output_path) / f"{response.output_name}.czi"
+
+
+async def get_configured_containernames(
+    sample_carrier_service: SampleCarrierServiceStub, experiment_id: str
+) -> List[str]:
+    """
+    Retrieve a list of configured containers for a specific experiment.
+
+    Args:
+        sample_carrier_service (SampleCarrierServiceStub): The gRPC service stub for sample carrier operations.
+        experiment_id (str): The unique identifier of the experiment to get configured containers for.
+
+    Returns:
+        List[str]: A list of names of the configured containers associated with the specified experiment.
+
+    Raises:
+        grpc.RpcError: If the gRPC call fails or the experiment ID is not found.
+    """
+    configured_containers = await sample_carrier_service.get_configured_containers(
+        SampleCarrierServiceGetConfiguredContainersRequest(experiment_id=experiment_id)
+    )
+
+    container_names = [container.container_name for container in configured_containers.configured_containers]
+
+    return container_names

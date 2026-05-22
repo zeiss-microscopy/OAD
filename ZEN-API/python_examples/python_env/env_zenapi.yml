@@ -24,7 +24,6 @@ dependencies:
   - pyqtgraph
   - qasync
   - numpy
-  - napari>=0.6.5
   - pandas
   - plotly
   - colormap
@@ -44,12 +43,17 @@ dependencies:
       - czitools
       - betterproto==2.0.0b7
       - betterproto[compiler]==2.0.0b7
+      - napari>=0.7.0
       - napari-crop
       - napari-czitools
-      - napari-layer-details-display
+      - napari-layer-statistics
       - ngff-zarr
       - ngff-zarr[dask-image]
       - ngff-zarr[validate]
+      - ome-writers
+      - ome-writers[acquire-zarr]
+      - ndv
+
 
 # Create an environment - use conda or mamba
 # conda env create --file env_zenapi.yml

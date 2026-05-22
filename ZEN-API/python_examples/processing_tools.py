@@ -40,7 +40,7 @@ logger = set_logging()
 
 try:
     from onnx_inference import OnnxInferencer
-except ImportError:
+except (ImportError, OSError):
     logger.warning("ONNX Inferencer module not found. Semantic segmentation and regression methods will not work.")
     OnnxInferencer = None
 
