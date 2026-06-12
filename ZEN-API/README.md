@@ -1,8 +1,8 @@
 - [ZEN API](#zen-api)
   - [General Overview](#general-overview)
-    - [ZEN API - Python Examples](#zen-api---python-examples)
+  - [Supported ZEN and ZEN core Versions and documentation](#supported-zen-and-zen-core-versions-and-documentation)
+    - [ZEN API - Examples](#zen-api---examples)
     - [ZEN API and Internal Scripting](#zen-api-and-internal-scripting)
-  - [Supported ZEN and ZEN core Versions](#supported-zen-and-zen-core-versions)
   - [Key Features](#key-features)
     - [ZEN Interfaces - ZEN API](#zen-interfaces---zen-api)
     - [ZEN API - gRPC](#zen-api---grpc)
@@ -69,13 +69,28 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 
 > **IMPORTANT**: Note that **ZEN API is not replacement for ZEN-internal Scripting based on IronPython** (control from the Inside). Both exist and have their purpose and characteristics.
 
-### ZEN API - Python Examples
+## Supported ZEN and ZEN core Versions and documentation
+
+- :arrow_right:ZEN API is supported by ZEN (blue) and ZEN core starting with version starting with 3.11 (or better).
+- :arrow_right:Not all API methods will work for every system or software version
+- :arrow_right: ZEN API supports Light Microscopy Systems (LM) as well as Electron Microscopes (EM) - But not all functions are available for both.
+
+| ZEN API Python Package | ZEN Versions | Documentation                                                                        |
+| :--------------------: | :----------: | ------------------------------------------------------------------------------------ |
+|   zen_api-2025.10.1    |     3.13     | [2025.10.1](../ZEN-API/python_package/zen_api-2025.10.1/docs/mkdocs_site/index.html) |
+|   zen_api-2026.05.1    |     3.14     | [2026.10.1](../ZEN-API/python_package/zen_api-2026.05.1/docs/mkdocs_site/index.html) |
+
+Older documentations are available on request.
+
+### ZEN API - Examples
 
 ZEN running an acquisition while the PixelStream is processed by a python client. For the code can be found at: [zenapi_streaming.py](./python_examples/zenapi_streaming.py)
 
 ![ZEN API - Online Processing](./images/zenapi_online_process.gif)
 
 ZEN running a simple "guided acquisition" where the overview image is analyzed using python. Subsequently all found objects are acquire automatically. For the code can be found at: [zenapi_guidedacq.py](./python_examples/zenapi_guidedacq.py)
+
+> Note: More python examples can be found here: [Python Examples](../ZEN-API/python_examples/)
 
 ![ZEN API - Guided Acquisition](./images/zenapi_guidedacq.gif)
 
@@ -98,16 +113,11 @@ This is in contrast to using ZEN API, which allows you to control from the "outs
 
 Remark: As of right now Internal Scripting offers a lot more functionality, which is not directly available via ZEN API (yet). For example all the ZEN internal image processing and image analysis function are not integrated into ZEN API
 
-## Supported ZEN and ZEN core Versions
 
-- ZEN API is supported by ZEN (blue) and ZEN core starting with version starting with 3.11 (or better).
-- Not all API methods will work for every system or software version
-- The [ZEN API Documentation](../ZEN-API/documentation/ZEN_API_Documentation_20250509.md) is always based on the latest ZEN or ZEN core release
-- :arrow_right: ZEN API supports Light Microscopy Systems (LM) as well as Electron Microscopes (EM) - But not all functions are available for both.
 
 ## Key Features
 
-In its core, ZEN APi is a programming interface that overs various method to control the imaging system from the outside.To give a brief overview here some highlights:
+In its core, ZEN API is a programming interface that overs various method to control the imaging system from the outside.To give a brief overview here some highlights:
 
 - **Managing ZEN Experiments and Acquisition**
   - Check available experiments
