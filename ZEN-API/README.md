@@ -78,10 +78,10 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 
 ### Documentation
 
-| ZEN API Python Package | ZEN Versions | Documentation                                                                        |
-| :--------------------: | :----------: | ------------------------------------------------------------------------------------ |
-|   zen_api-2025.10.1    |     3.13     | [2025.10.1](https://zeiss-microscopy.github.io/OAD/2025.10.1/)                       |
-|   zen_api-2026.05.1    |     3.14     | [2026.05.1](https://zeiss-microscopy.github.io/OAD/2026.05.1/)                       |
+| ZEN API Python Package | ZEN Versions | Documentation                                                  |
+| :--------------------: | :----------: | -------------------------------------------------------------- |
+|   zen_api-2025.10.1    |     3.13     | [2025.10.1](https://zeiss-microscopy.github.io/OAD/2025.10.1/) |
+|   zen_api-2026.05.1    |     3.14     | [2026.05.1](https://zeiss-microscopy.github.io/OAD/2026.05.1/) |
 
 Older documentations are available on request.
 

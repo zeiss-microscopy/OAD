@@ -1,111 +1,111 @@
 name: Deploy ZEN API docs
 
 on:
-  workflow_dispatch:
-    inputs:
-      versions:
-        description: Space-separated ZEN API package versions to publish
-        required: true
-        default: "2026.05.1 2025.10.1"
-        type: string
+    workflow_dispatch:
+        inputs:
+            versions:
+                description: Space-separated ZEN API package versions to publish
+                required: true
+                default: "2026.05.1 2025.10.1"
+                type: string
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+    contents: read
+    pages: write
+    id-token: write
 
 concurrency:
-  group: github-pages
-  cancel-in-progress: false
+    group: github-pages
+    cancel-in-progress: false
 
 jobs:
-  deploy-docs:
-    name: Deploy ZEN API documentation to GitHub Pages
-    runs-on: ubuntu-latest
+    deploy-docs:
+        name: Deploy ZEN API documentation to GitHub Pages
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12"
-          cache: pip
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+                  cache: pip
 
-      - name: Install MkDocs
-        run: |
-          python -m pip install --upgrade pip
-          python -m pip install mkdocs
+            - name: Install MkDocs
+              run: |
+                  python -m pip install --upgrade pip
+                  python -m pip install mkdocs
 
-      - name: Prepare versioned MkDocs project
-        shell: bash
-        run: |
-          set -euo pipefail
+            - name: Prepare versioned MkDocs project
+              shell: bash
+              run: |
+                  set -euo pipefail
 
-          DOCS_BUILD_DIR="_zen_api_pages"
-          SITE_DIR="site"
+                  DOCS_BUILD_DIR="_zen_api_pages"
+                  SITE_DIR="site"
 
-          rm -rf "${DOCS_BUILD_DIR}" "${SITE_DIR}"
-          mkdir -p "${DOCS_BUILD_DIR}/docs"
+                  rm -rf "${DOCS_BUILD_DIR}" "${SITE_DIR}"
+                  mkdir -p "${DOCS_BUILD_DIR}/docs"
 
-          cat > "${DOCS_BUILD_DIR}/docs/index.md" <<'EOF'
-          # ZEN API Documentation
+                  cat > "${DOCS_BUILD_DIR}/docs/index.md" <<'EOF'
+                  # ZEN API Documentation
 
-          Select one of the published ZEN API documentation versions:
-          EOF
+                  Select one of the published ZEN API documentation versions:
+                  EOF
 
-          cat > "${DOCS_BUILD_DIR}/mkdocs.yml" <<'EOF'
-          site_name: ZEN API Documentation
-          site_url: https://zeiss-microscopy.github.io/OAD/
-          use_directory_urls: true
-          nav:
-            - Home: index.md
-          EOF
+                  cat > "${DOCS_BUILD_DIR}/mkdocs.yml" <<'EOF'
+                  site_name: ZEN API Documentation
+                  site_url: https://zeiss-microscopy.github.io/OAD/
+                  use_directory_urls: true
+                  nav:
+                    - Home: index.md
+                  EOF
 
-          for VERSION in ${{ inputs.versions }}; do
-            PACKAGE_DIR="ZEN-API/python_package/zen_api-${VERSION}"
-            SOURCE_DOCS_DIR="${PACKAGE_DIR}/docs"
-            SOURCE_MARKDOWN="${SOURCE_DOCS_DIR}/ZEN_API_Documentation_${VERSION}.md"
-            TARGET_DOCS_DIR="${DOCS_BUILD_DIR}/docs/${VERSION}"
+                  for VERSION in ${{ inputs.versions }}; do
+                    PACKAGE_DIR="ZEN-API/python_package/zen_api-${VERSION}"
+                    SOURCE_DOCS_DIR="${PACKAGE_DIR}/docs"
+                    SOURCE_MARKDOWN="${SOURCE_DOCS_DIR}/ZEN_API_Documentation_${VERSION}.md"
+                    TARGET_DOCS_DIR="${DOCS_BUILD_DIR}/docs/${VERSION}"
 
-            if [[ ! -d "${PACKAGE_DIR}" ]]; then
-              echo "Package directory not found: ${PACKAGE_DIR}" >&2
-              exit 1
-            fi
+                    if [[ ! -d "${PACKAGE_DIR}" ]]; then
+                      echo "Package directory not found: ${PACKAGE_DIR}" >&2
+                      exit 1
+                    fi
 
-            if [[ ! -f "${SOURCE_MARKDOWN}" ]]; then
-              echo "Markdown documentation not found: ${SOURCE_MARKDOWN}" >&2
-              exit 1
-            fi
+                    if [[ ! -f "${SOURCE_MARKDOWN}" ]]; then
+                      echo "Markdown documentation not found: ${SOURCE_MARKDOWN}" >&2
+                      exit 1
+                    fi
 
-            mkdir -p "${TARGET_DOCS_DIR}"
-            cp "${SOURCE_MARKDOWN}" "${TARGET_DOCS_DIR}/index.md"
+                    mkdir -p "${TARGET_DOCS_DIR}"
+                    cp "${SOURCE_MARKDOWN}" "${TARGET_DOCS_DIR}/index.md"
 
-            echo "- [ZEN API ${VERSION}](${VERSION}/)" >> "${DOCS_BUILD_DIR}/docs/index.md"
+                    echo "- [ZEN API ${VERSION}](${VERSION}/)" >> "${DOCS_BUILD_DIR}/docs/index.md"
 
-            # Keep the generated HTML/PDF files downloadable from the Pages site as well.
-            find "${SOURCE_DOCS_DIR}" -maxdepth 1 -type f \( -name '*.html' -o -name '*.pdf' \) -exec cp {} "${TARGET_DOCS_DIR}/" \;
+                    # Keep the generated HTML/PDF files downloadable from the Pages site as well.
+                    find "${SOURCE_DOCS_DIR}" -maxdepth 1 -type f \( -name '*.html' -o -name '*.pdf' \) -exec cp {} "${TARGET_DOCS_DIR}/" \;
 
-            cat >> "${DOCS_BUILD_DIR}/mkdocs.yml" <<EOF
-            - ${VERSION}: ${VERSION}/index.md
-          EOF
-          done
+                    cat >> "${DOCS_BUILD_DIR}/mkdocs.yml" <<EOF
+                    - ${VERSION}: ${VERSION}/index.md
+                  EOF
+                  done
 
-      - name: Build MkDocs site
-        run: |
-          python -m mkdocs build \
-            --config-file _zen_api_pages/mkdocs.yml \
-            --site-dir "${GITHUB_WORKSPACE}/site"
+            - name: Build MkDocs site
+              run: |
+                  python -m mkdocs build \
+                    --config-file _zen_api_pages/mkdocs.yml \
+                    --site-dir "${GITHUB_WORKSPACE}/site"
 
-      - name: Configure GitHub Pages
-        uses: actions/configure-pages@v5
+            - name: Configure GitHub Pages
+              uses: actions/configure-pages@v5
 
-      - name: Upload GitHub Pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: site
+            - name: Upload GitHub Pages artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: site
 
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4
