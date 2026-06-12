@@ -1,0 +1,61 @@
+name: Deploy ZEN API docs
+
+on:
+    push:
+        branches:
+            # Temporary trigger to test this workflow before it is merged into master.
+            - add_mkdocs_for_zenapi
+    workflow_dispatch:
+        inputs:
+            versions:
+                description: Space-separated ZEN API package versions to publish
+                required: true
+                default: "2026.05.1 2025.10.1"
+                type: string
+
+permissions:
+    contents: read
+    pages: write
+    id-token: write
+
+env:
+    DOC_VERSIONS: ${{ github.event.inputs.versions || '2026.05.1 2025.10.1' }}
+
+concurrency:
+    group: github-pages
+    cancel-in-progress: false
+
+jobs:
+    deploy-docs:
+        name: Deploy ZEN API documentation to GitHub Pages
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Set up Python
+              uses: actions/setup-python@v5
+              with:
+                  python-version: "3.12"
+                  cache: pip
+
+            - name: Install MkDocs dependencies
+              run: |
+                  python -m pip install --upgrade pip
+                  python -m pip install mkdocs-material mkdocstrings[python] mike pyyaml
+
+            - name: Build versioned MkDocs Material sites
+              run: python .github/scripts/build_zen_api_docs.py --versions ${{ env.DOC_VERSIONS }}
+
+            - name: Configure GitHub Pages
+              uses: actions/configure-pages@v5
+
+            - name: Upload GitHub Pages artifact
+              uses: actions/upload-pages-artifact@v3
+              with:
+                  path: site
+
+            - name: Deploy to GitHub Pages
+              id: deployment
+              uses: actions/deploy-pages@v4
