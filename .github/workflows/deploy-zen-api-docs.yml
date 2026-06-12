@@ -20,6 +20,7 @@ permissions:
 
 env:
     DOC_VERSIONS: ${{ github.event.inputs.versions || '2026.05.1 2025.10.1' }}
+    FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 concurrency:
     group: github-pages
