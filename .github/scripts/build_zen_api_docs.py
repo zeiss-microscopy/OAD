@@ -10,6 +10,8 @@ from pathlib import Path
 
 import yaml
 
+ZENAPI_PAGES_PATH = "zenapi"
+
 DOMAIN_LABELS = {
     "acquisition": "Acquisition",
     "application": "Application",
@@ -151,7 +153,7 @@ def build_landing_page(build_dir: Path, site_dir: Path, versions: list[str]) -> 
     docs_dir = build_dir / "landing" / "docs"
     docs_dir.mkdir(parents=True, exist_ok=True)
 
-    version_links = "\n".join(f"- [ZEN API {version}]({version}/)" for version in versions)
+    version_links = "\n".join(f"- [ZEN API {version}]({ZENAPI_PAGES_PATH}/{version}/)" for version in versions)
     (docs_dir / "index.md").write_text(
         f"# ZEN API Documentation\n\nSelect one of the published ZEN API documentation versions:\n\n{version_links}\n",
         encoding="utf-8",
@@ -181,7 +183,7 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
     src_dir = package_dir / "src"
     version_build_dir = build_dir / version
     docs_dir = version_build_dir / "docs"
-    version_site_dir = site_dir / version
+    version_site_dir = site_dir / ZENAPI_PAGES_PATH / version
     docs_dir.mkdir(parents=True, exist_ok=True)
 
     (docs_dir / "index.md").write_text(
@@ -238,7 +240,7 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
     nav_items = generate_reference_pages(src_dir, docs_dir)
     config = mkdocs_material_config(
         site_name=f"ZEN API {version}",
-        site_url=f"https://zeiss-microscopy.github.io/OAD/{version}/",
+        site_url=f"https://zeiss-microscopy.github.io/OAD/{ZENAPI_PAGES_PATH}/{version}/",
         docs_dir=docs_dir,
         site_dir=version_site_dir,
     )
