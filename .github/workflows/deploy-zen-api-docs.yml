@@ -1,6 +1,10 @@
 name: Deploy ZEN API docs
 
 on:
+    push:
+        branches:
+            # Temporary trigger to test this workflow before it is merged into master.
+            - add_mkdocs_for_zenapi
     workflow_dispatch:
         inputs:
             versions:
@@ -13,6 +17,9 @@ permissions:
     contents: read
     pages: write
     id-token: write
+
+env:
+    DOC_VERSIONS: ${{ github.event.inputs.versions || '2026.05.1 2025.10.1' }}
 
 concurrency:
     group: github-pages
@@ -63,7 +70,7 @@ jobs:
                     - Home: index.md
                   EOF
 
-                  for VERSION in ${{ inputs.versions }}; do
+                  for VERSION in ${DOC_VERSIONS}; do
                     PACKAGE_DIR="ZEN-API/python_package/zen_api-${VERSION}"
                     SOURCE_DOCS_DIR="${PACKAGE_DIR}/docs"
                     SOURCE_MARKDOWN="${SOURCE_DOCS_DIR}/ZEN_API_Documentation_${VERSION}.md"
