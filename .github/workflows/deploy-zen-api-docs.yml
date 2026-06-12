@@ -40,70 +40,13 @@ jobs:
                   python-version: "3.12"
                   cache: pip
 
-            - name: Install MkDocs
+            - name: Install MkDocs dependencies
               run: |
                   python -m pip install --upgrade pip
-                  python -m pip install mkdocs
+                  python -m pip install mkdocs-material mkdocstrings[python] mike pyyaml
 
-            - name: Prepare versioned MkDocs project
-              shell: bash
-              run: |
-                  set -euo pipefail
-
-                  DOCS_BUILD_DIR="_zen_api_pages"
-                  SITE_DIR="site"
-
-                  rm -rf "${DOCS_BUILD_DIR}" "${SITE_DIR}"
-                  mkdir -p "${DOCS_BUILD_DIR}/docs"
-
-                  cat > "${DOCS_BUILD_DIR}/docs/index.md" <<'EOF'
-                  # ZEN API Documentation
-
-                  Select one of the published ZEN API documentation versions:
-                  EOF
-
-                  cat > "${DOCS_BUILD_DIR}/mkdocs.yml" <<'EOF'
-                  site_name: ZEN API Documentation
-                  site_url: https://zeiss-microscopy.github.io/OAD/
-                  use_directory_urls: true
-                  nav:
-                    - Home: index.md
-                  EOF
-
-                  for VERSION in ${DOC_VERSIONS}; do
-                    PACKAGE_DIR="ZEN-API/python_package/zen_api-${VERSION}"
-                    SOURCE_DOCS_DIR="${PACKAGE_DIR}/docs"
-                    SOURCE_MARKDOWN="${SOURCE_DOCS_DIR}/ZEN_API_Documentation_${VERSION}.md"
-                    TARGET_DOCS_DIR="${DOCS_BUILD_DIR}/docs/${VERSION}"
-
-                    if [[ ! -d "${PACKAGE_DIR}" ]]; then
-                      echo "Package directory not found: ${PACKAGE_DIR}" >&2
-                      exit 1
-                    fi
-
-                    if [[ ! -f "${SOURCE_MARKDOWN}" ]]; then
-                      echo "Markdown documentation not found: ${SOURCE_MARKDOWN}" >&2
-                      exit 1
-                    fi
-
-                    mkdir -p "${TARGET_DOCS_DIR}"
-                    cp "${SOURCE_MARKDOWN}" "${TARGET_DOCS_DIR}/index.md"
-
-                    echo "- [ZEN API ${VERSION}](${VERSION}/)" >> "${DOCS_BUILD_DIR}/docs/index.md"
-
-                    # Keep the generated HTML/PDF files downloadable from the Pages site as well.
-                    find "${SOURCE_DOCS_DIR}" -maxdepth 1 -type f \( -name '*.html' -o -name '*.pdf' \) -exec cp {} "${TARGET_DOCS_DIR}/" \;
-
-                    cat >> "${DOCS_BUILD_DIR}/mkdocs.yml" <<EOF
-                    - ${VERSION}: ${VERSION}/index.md
-                  EOF
-                  done
-
-            - name: Build MkDocs site
-              run: |
-                  python -m mkdocs build \
-                    --config-file _zen_api_pages/mkdocs.yml \
-                    --site-dir "${GITHUB_WORKSPACE}/site"
+            - name: Build versioned MkDocs Material sites
+              run: python .github/scripts/build_zen_api_docs.py --versions ${{ env.DOC_VERSIONS }}
 
             - name: Configure GitHub Pages
               uses: actions/configure-pages@v5
