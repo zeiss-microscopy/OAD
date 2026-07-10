@@ -50,7 +50,6 @@
       - [Python Scripts](#python-scripts)
     - [Configuration File](#configuration-file)
     - [Python - Outlook](#python---outlook)
-  - [Documentation](#documentation-1)
   - [DISCLAIMER](#disclaimer)
 
 # ZEN API
@@ -83,7 +82,11 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 |   zen_api-2025.10.1    |     3.13     | [2025.10.1](https://zeiss-microscopy.github.io/OAD/zenapi/2025.10.1/) |
 |   zen_api-2026.05.1    |     3.14     | [2026.05.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.05.1/) |
 
-Older documentations are available on request.
+Older documentations are available on request. In addition The documentation for ZEN API is availabe as HTML, MD and PDF documents.
+
+The `../docs`folder is a subfolder of the respective python package folder, aka it can be found here:
+
+- `../ZEN-API/python_package/zen_api-2025.10.1/docs/ZEN_API_Documentation_2026.05.1.pdf`
 
 ### ZEN API - Examples
 
@@ -144,8 +147,6 @@ In its core, ZEN API is a programming interface that overs various method to con
 ### ZEN API - gRPC
 
 <img src=./images/zenapi_grpc.png alt="ZEN API Gateway - gRPC" width=60%>
-
-Here’s the flow description in **Markdown** format:
 
 ---
 
@@ -575,14 +576,6 @@ control-token = ...
 ### Python - Outlook
 
 ZEN API is still very new and under constant development. Expect frequent changes.
-
-## Documentation
-
-The documentation for the latest ZEN release with respect to ZEN API can be found here: **[ZEN API - Documentation](../ZEN-API/python_package/zen_api-2025.10.1/docs/ZEN_API_Documentation_2025.10.1.md)**
-
-The `../docs`folder is a subfolder of the respective python package folder, aka it can be found here:
-
-- `../ZEN-API/python_package/zen_api-2025.10.1/docs/ZEN_API_Documentation_2025.10.1.pdf`
 
 ## DISCLAIMER
 
