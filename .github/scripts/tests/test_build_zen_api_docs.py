@@ -48,15 +48,15 @@ def sources(tmp_path):
     proto.mkdir(parents=True)
     (proto / "sample.proto").write_text(
         'syntax = "proto3";\npackage zen_api.common.v1;\n'
-        '// Request documentation.\nmessage Request {\n'
-        '  // Value description.\n  string value = 1;\n'
-        '  optional int32 count = 2;\n'
-        '  map<string, string> labels = 3;\n'
-        '  oneof choice { string text = 4; int32 number = 5; }\n'
-        '  enum State { UNKNOWN = 0; READY = 1; }\n'
-        '  State state = 6;\n}\n'
-        'service SampleService {\n  // Streaming documentation.\n'
-        '  rpc Watch (stream Request) returns (stream Request);\n}\n',
+        "// Request documentation.\nmessage Request {\n"
+        "  // Value description.\n  string value = 1;\n"
+        "  optional int32 count = 2;\n"
+        "  map<string, string> labels = 3;\n"
+        "  oneof choice { string text = 4; int32 number = 5; }\n"
+        "  enum State { UNKNOWN = 0; READY = 1; }\n"
+        "  State state = 6;\n}\n"
+        "service SampleService {\n  // Streaming documentation.\n"
+        "  rpc Watch (stream Request) returns (stream Request);\n}\n",
         encoding="utf-8",
     )
     return tmp_path

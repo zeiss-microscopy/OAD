@@ -221,8 +221,12 @@ class ProtoRenderer:
     def render_enum(self, enum, parent: str, file, path: tuple, level: int) -> list[str]:
         name = f"{parent}.{enum.name}".lstrip(".")
         lines = [
-            f"{'#' * level} Enum `{enum.name}` {{ #{proto_anchor(name)} }}", "",
-            self.comment(file, path), "", "| Name | Number | Description |", "| --- | --- | --- |",
+            f"{'#' * level} Enum `{enum.name}` {{ #{proto_anchor(name)} }}",
+            "",
+            self.comment(file, path),
+            "",
+            "| Name | Number | Description |",
+            "| --- | --- | --- |",
         ]
         for index, value in enumerate(enum.value):
             lines.append(f"| `{value.name}` | {value.number} | {table_text(self.comment(file, path + (2, index)))} |")
@@ -232,7 +236,12 @@ class ProtoRenderer:
         if message.options.map_entry:
             return []
         name = f"{parent}.{message.name}".lstrip(".")
-        lines = [f"{'#' * level} Message `{message.name}` {{ #{proto_anchor(name)} }}", "", self.comment(file, path), ""]
+        lines = [
+            f"{'#' * level} Message `{message.name}` {{ #{proto_anchor(name)} }}",
+            "",
+            self.comment(file, path),
+            "",
+        ]
         if message.field:
             lines.extend(["| Field | Number | Type | Presence | Description |", "| --- | --- | --- | --- | --- |"])
             for index, field in enumerate(message.field):
@@ -257,8 +266,16 @@ class ProtoRenderer:
 
     def render(self, file, version: str) -> str:
         source_link = posixpath.relpath("proto/source/" + file.name, posixpath.dirname(proto_page(file.name)))
-        lines = [f"# {file.name}", "", f"Version: **{version}**", "", f"Package: `{file.package}`", "",
-                 f"[Download proto source]({source_link})", ""]
+        lines = [
+            f"# {file.name}",
+            "",
+            f"Version: **{version}**",
+            "",
+            f"Package: `{file.package}`",
+            "",
+            f"[Download proto source]({source_link})",
+            "",
+        ]
         for service_index, service in enumerate(file.service):
             name = f"{file.package}.{service.name}".lstrip(".")
             path = (6, service_index)
@@ -266,13 +283,22 @@ class ProtoRenderer:
             for index, method in enumerate(service.method):
                 input_type = ("stream " if method.client_streaming else "") + method.input_type.lstrip(".")
                 output_type = ("stream " if method.server_streaming else "") + method.output_type.lstrip(".")
-                lines.extend([
-                    f"### {method.name} {{ #{proto_anchor(name + '.' + method.name)} }}", "",
-                    self.comment(file, path + (2, index)), "", "```protobuf",
-                    f"rpc {method.name} ({input_type}) returns ({output_type});", "```", "",
-                    f"Request: {self.type_link(method.input_type, proto_page(file.name))}", "",
-                    f"Response: {self.type_link(method.output_type, proto_page(file.name))}", "",
-                ])
+                lines.extend(
+                    [
+                        f"### {method.name} {{ #{proto_anchor(name + '.' + method.name)} }}",
+                        "",
+                        self.comment(file, path + (2, index)),
+                        "",
+                        "```protobuf",
+                        f"rpc {method.name} ({input_type}) returns ({output_type});",
+                        "```",
+                        "",
+                        f"Request: {self.type_link(method.input_type, proto_page(file.name))}",
+                        "",
+                        f"Response: {self.type_link(method.output_type, proto_page(file.name))}",
+                        "",
+                    ]
+                )
         for index, message in enumerate(file.message_type):
             lines.extend(self.render_message(message, file.package, file, (4, index)))
         for index, enum in enumerate(file.enum_type):
@@ -287,8 +313,15 @@ def generate_proto_pages(proto_dir: Path, docs_dir: Path, version: str, protoc: 
         raise FileNotFoundError(f"No proto sources found in {proto_dir}")
     descriptor_path = docs_dir.parent / "proto-descriptor.pb"
     subprocess.run(
-        [protoc, f"--proto_path={proto_dir.resolve()}", f"--descriptor_set_out={descriptor_path.resolve()}",
-         "--include_imports", "--include_source_info", "--experimental_allow_proto3_optional", *sources],
+        [
+            protoc,
+            f"--proto_path={proto_dir.resolve()}",
+            f"--descriptor_set_out={descriptor_path.resolve()}",
+            "--include_imports",
+            "--include_source_info",
+            "--experimental_allow_proto3_optional",
+            *sources,
+        ],
         check=True,
     )
     descriptor_set = FileDescriptorSet().parse(descriptor_path.read_bytes())
@@ -435,7 +468,9 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
     nav_items = generate_reference_pages(src_dir, docs_dir)
     utils_src = utils_dir / "src"
     utils_nav = generate_reference_pages(utils_src, docs_dir, "zen_api_utils", include_modules=True)
-    proto_nav = generate_proto_pages(repo_root / "ZEN-API" / "protofiles" / f"proto_{version}", docs_dir, version, protoc)
+    proto_nav = generate_proto_pages(
+        repo_root / "ZEN-API" / "protofiles" / f"proto_{version}", docs_dir, version, protoc
+    )
     config = mkdocs_material_config(
         site_name=f"ZEN API {version}",
         site_url=f"https://zeiss-microscopy.github.io/OAD/{ZENAPI_PAGES_PATH}/{version}/",
@@ -501,8 +536,10 @@ def main() -> None:
         if not re.fullmatch(r"[0-9]{4}\.[0-9]{2}\.[0-9]+", version):
             parser.error(f"Invalid API version: {version!r}; expected YYYY.MM.PATCH")
         api_root = repo_root / "ZEN-API"
-        for required in (api_root / "python_packages" / f"zen_api-{version}" / "src" / "zen_api",
-                         api_root / "protofiles" / f"proto_{version}"):
+        for required in (
+            api_root / "python_packages" / f"zen_api-{version}" / "src" / "zen_api",
+            api_root / "protofiles" / f"proto_{version}",
+        ):
             if not required.is_dir():
                 parser.error(f"Required documentation input not found: {required}")
     if shutil.which(args.protoc) is None:
