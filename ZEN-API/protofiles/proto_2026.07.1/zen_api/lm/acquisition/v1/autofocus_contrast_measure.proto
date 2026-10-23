@@ -1,0 +1,19 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.acquisition.v1;
+
+// The contrast measures of the software autofocus contrast mode.
+enum AutofocusContrastMeasure {
+   // Default enum value.
+   AUTOFOCUS_CONTRAST_MEASURE_UNSPECIFIED = 0;
+   // The default contrast measure.
+   AUTOFOCUS_CONTRAST_MEASURE_DEFAULT = 1;
+   // The contrast measure to use in low-signal and calibration situations.
+   AUTOFOCUS_CONTRAST_MEASURE_LOW_SIGNAL = 2;
+}

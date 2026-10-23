@@ -1,0 +1,31 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.workflows.v3beta;
+
+// Enumerates possible job statuses.
+enum JobStatus {
+   // Default enum value.
+   JOB_STATUS_UNSPECIFIED = 0;
+   // Job template is not loaded.
+   JOB_STATUS_NOT_LOADED = 1;
+   // Job template is loaded.
+   JOB_STATUS_LOADED = 2;
+   // Job is running.
+   JOB_STATUS_RUNNING = 3;
+   // Finalizing job results after the job was completed successfully.
+   JOB_STATUS_FINALIZING = 4;
+   // Archiving job results after they were finalized.
+   JOB_STATUS_ARCHIVING = 5;
+   // Job was completed successfully.
+   JOB_STATUS_COMPLETED = 6;
+   // Job was aborted.
+   JOB_STATUS_ABORTED = 7;
+   // Job was canceled.
+   JOB_STATUS_CANCELED = 8;
+}

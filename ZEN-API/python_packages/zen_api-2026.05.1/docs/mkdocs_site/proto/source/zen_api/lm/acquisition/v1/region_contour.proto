@@ -1,0 +1,43 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.acquisition.v1;
+import "zen_api/lm/acquisition/v1/region_point.proto";
+import "zen_api/lm/acquisition/v1/region_rect.proto";
+
+// General data contract for all region contour types.
+message RegionContour {
+   oneof subtype {
+      RegionEllipse region_ellipse = 1;
+      RegionRectangle region_rectangle = 2;
+      RegionPolygon region_polygon = 3;
+   }
+}
+// Represents an elliptical region defined by a bounding rectangle.
+message RegionEllipse {
+   // The rectangle that defines the bounding box of the ellipse.
+   // The ellipse is fully contained within this rectangle.
+   // The ZenApi.LM.Acquisition.V1.RegionRect specifies the position and size of the bounding rectangle
+   // using four values: X (left), Y (top), Width, and Height.
+   // For example, a rectangle with X = 10, Y = 20, Width = 100, and Height = 50
+   // defines an ellipse centered at (60, 45) with a horizontal radius of 50 and a vertical radius of 25.
+   RegionRect bounding_box = 1;
+}
+// Represents a polygonal region defined by an ordered list of vertices.
+message RegionPolygon {
+   // The ordered list of ZenApi.LM.Acquisition.V1.RegionPoint instances that define the vertices of the polygon.
+   // Each point specifies an (X, Y) coordinate in the region's coordinate space.
+   // The polygon is formed by connecting each consecutive point in the list, and finally connecting the last point back to the first to close the shape.
+   repeated RegionPoint points = 1;
+}
+// Represents a rectangular region within the slide scan area.
+message RegionRectangle {
+   // The ZenApi.LM.Acquisition.V1.RegionRect that defines the position and size of the rectangular region
+   // within the slide scan area.
+   RegionRect rectangle = 1;
+}

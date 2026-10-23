@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_tileregion.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -15,23 +12,23 @@
 import asyncio
 import sys
 from pathlib import Path
+
 import numpy as np
-from zen_api_utils.misc import set_logging, initialize_zenapi
 
 # import the auto-generated python modules
 from zen_api.acquisition.v1beta import (
-    ExperimentServiceStub,
-    ExperimentServiceLoadRequest,
     ExperimentServiceCloneRequest,
+    ExperimentServiceLoadRequest,
     ExperimentServiceSaveRequest,
+    ExperimentServiceStub,
 )
-
 from zen_api.lm.acquisition.v1 import (
-    TilesServiceStub,
-    TilesServiceIsTilesExperimentRequest,
     TilesServiceAddRectangleTileRegionRequest,
     TilesServiceClearRequest,
+    TilesServiceIsTilesExperimentRequest,
+    TilesServiceStub,
 )
+from zen_api_utils.misc import initialize_zenapi, set_logging
 
 exp_folder = Path(r"f:\Documents\Carl Zeiss\ZEN\Documents\Experiment Setups")
 my_experiments = ["ZEN_API_TileRegion_Test"]  # , "ZEN_API_TileRegion_Test_notiles"]
@@ -44,6 +41,7 @@ config_path = script_dir / "config.ini"
 
 
 async def main(args):
+    del args
 
     # get the gRPC channel and the metadata
     channel, metadata = initialize_zenapi(config_path)

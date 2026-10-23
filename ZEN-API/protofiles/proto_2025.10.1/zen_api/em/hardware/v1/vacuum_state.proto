@@ -1,0 +1,22 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.hardware.v1;
+
+// Possible states of the vacuum system.
+// TODO enum states must be reviewed by application, maybe Christian Hendrich
+// what is really needed on customer side, keep it simple
+enum VacuumState {
+   // Default enum value.
+   VACUUM_STATE_UNSPECIFIED = 0;
+   // Vacuum is ready.
+   VACUUM_STATE_READY = 1;
+   // Vacuum is not ready.
+   // Maybe vented, pumping, venting, ...
+   VACUUM_STATE_NOT_READY = 2;
+}

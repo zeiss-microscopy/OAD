@@ -1,0 +1,21 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.hardware.v1;
+
+// Possible vacuum modes supported by our tools.
+enum VacuumMode {
+   // Default enum value.
+   VACUUM_MODE_UNSPECIFIED = 0;
+   // Standard vacuum mode is ZenApi.EM.Hardware.V1.VacuumMode.HighVacuum.
+   // Target chamber pressure can not be adjusted.
+   VACUUM_MODE_HIGH_VACUUM = 1;
+   // The optional ZenApi.EM.Hardware.V1.VacuumMode.VariablePressure mode allows to specify a
+   // target chamber pressure.
+   VACUUM_MODE_VARIABLE_PRESSURE = 2;
+}

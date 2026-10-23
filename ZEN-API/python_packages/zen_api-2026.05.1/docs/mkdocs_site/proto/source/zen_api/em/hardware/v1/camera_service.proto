@@ -1,0 +1,267 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.hardware.v1;
+import "zen_api/em/hardware/v1/acquisition_response_type.proto";
+import "zen_api/em/hardware/v1/camera_acquisition_settings.proto";
+import "zen_api/em/hardware/v1/camera_acquisition_status.proto";
+import "zen_api/em/hardware/v1/ccd_mode.proto";
+
+// The CameraServiceGetAcquisitionStatusRequest class.
+message CameraServiceGetAcquisitionStatusRequest {
+   // The camera ID.
+   string camera_id = 1;
+}
+// Response object for the get acquisition state.
+message CameraServiceGetAcquisitionStatusResponse {
+   // The acquisition status.
+   CameraAcquisitionStatus status = 1;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 2;
+}
+// The CameraServiceGetAvailableCamerasRequest class.
+message CameraServiceGetAvailableCamerasRequest {
+}
+// Response object representing a list of available cameras.
+message CameraServiceGetAvailableCamerasResponse {
+   // The available cameras on the system.
+   repeated string camera_names = 1;
+}
+// The CameraServiceGetBrightnessRequest class.
+message CameraServiceGetBrightnessRequest {
+   // The camera ID.
+   string camera_id = 1;
+}
+// Response object for the get brightness.
+message CameraServiceGetBrightnessResponse {
+   // The brightness.
+   double brightness = 1;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 2;
+}
+// The CameraServiceGetCcdModeRequest class.
+message CameraServiceGetCcdModeRequest {
+   // The camera ID.
+   string camera_id = 1;
+}
+// Response object for the get CCD mode.
+message CameraServiceGetCcdModeResponse {
+   // The CCD mode.
+   CcdMode mode = 1;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 2;
+}
+// The CameraServiceGetContrastRequest class.
+message CameraServiceGetContrastRequest {
+   // The camera ID.
+   string camera_id = 1;
+}
+// Response object for the get contrast.
+message CameraServiceGetContrastResponse {
+   // The contrast.
+   double contrast = 1;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 2;
+}
+// The CameraServiceRegisterOnAcquisitionStatusChangedRequest class.
+message CameraServiceRegisterOnAcquisitionStatusChangedRequest {
+   // The camera ID.
+   string camera_id = 1;
+}
+// Response object for the get acquisition state.
+message CameraServiceRegisterOnAcquisitionStatusChangedResponse {
+   // The acquisition status.
+   CameraAcquisitionStatus status = 1;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 2;
+}
+// The CameraServiceRegisterOnBrightnessChangedRequest class.
+message CameraServiceRegisterOnBrightnessChangedRequest {
+   // The camera ID.
+   string camera_id = 1;
+}
+// Response object for the get brightness.
+message CameraServiceRegisterOnBrightnessChangedResponse {
+   // The brightness.
+   double brightness = 1;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 2;
+}
+// The CameraServiceRegisterOnCcdModeChangedRequest class.
+message CameraServiceRegisterOnCcdModeChangedRequest {
+   // The camera ID.
+   string camera_id = 1;
+}
+// Response object for the get CCD mode.
+message CameraServiceRegisterOnCcdModeChangedResponse {
+   // The CCD mode.
+   CcdMode mode = 1;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 2;
+}
+// The CameraServiceRegisterOnContrastChangedRequest class.
+message CameraServiceRegisterOnContrastChangedRequest {
+   // The camera ID.
+   string camera_id = 1;
+}
+// Response object for the get contrast.
+message CameraServiceRegisterOnContrastChangedResponse {
+   // The contrast.
+   double contrast = 1;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 2;
+}
+// The CameraServiceSetBrightnessRequest class.
+message CameraServiceSetBrightnessRequest {
+   // The camera ID.
+   string camera_id = 1;
+   // The brightness to set[0..100]%.
+   double brightness = 2;
+}
+// Response object for the set brightness.
+message CameraServiceSetBrightnessResponse {
+   // The brightness.
+   double brightness = 1;
+   // A value indicating whether setting the brightness was successful.
+   bool success = 2;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 3;
+}
+// The CameraServiceSetCcdModeRequest class.
+message CameraServiceSetCcdModeRequest {
+   // The camera ID.
+   string camera_id = 1;
+   // The CCD mode to set.
+   CcdMode mode = 2;
+}
+// Response object for the set CCD mode.
+message CameraServiceSetCcdModeResponse {
+   // The CCD mode.
+   CcdMode mode = 1;
+   // A value indicating whether setting the CCD mode was successful.
+   bool success = 2;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 3;
+}
+// The CameraServiceSetContrastRequest class.
+message CameraServiceSetContrastRequest {
+   // The camera ID.
+   string camera_id = 1;
+   // The contrast to set[0..100]%.
+   double contrast = 2;
+}
+// Response object for the set contrast.
+message CameraServiceSetContrastResponse {
+   // The contrast.
+   double contrast = 1;
+   // A value indicating whether setting the contrast was successful.
+   bool success = 2;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 3;
+}
+// The CameraServiceStartLiveAcquisitionRequest class.
+message CameraServiceStartLiveAcquisitionRequest {
+   // The imaging settings used to acquire multiple frames.
+   CameraAcquisitionSettings settings = 1;
+}
+// Response object of the camera live image acquisition.
+message CameraServiceStartLiveAcquisitionResponse {
+   // A value indicating the type of response returned by the camera live image acquisition stream.
+   AcquisitionResponseType result_type = 1;
+   // The overall width of the image. This is only valid when the ResultType is FrameStart, otherwise it will be set to zero and not transmitted.
+   int32 width = 2;
+   // The overall height of the image. This is only valid when the ResultType is FrameStart, otherwise it will be set to zero and not transmitted.
+   int32 height = 3;
+   // The number of bytes per pixel. This is only valid when the ResultType is FrameStart, otherwise it will be set to zero and not transmitted.
+   uint32 bytes_per_pixel = 4;
+   // The total size of the image. This is only valid when the ResultType is FrameStart, otherwise it will be set to zero and not transmitted.
+   int32 total_image_size = 5;
+   // The data buffer of this part of the image. This may be less than the total image size, in which case the client should expect more data to follow.
+   bytes image_data = 6;
+}
+// The CameraServiceStartSingleAcquisitionRequest class.
+message CameraServiceStartSingleAcquisitionRequest {
+   // The imaging settings used to acquire a frame.
+   CameraAcquisitionSettings settings = 1;
+}
+// Response object of the camera single image acquisition.
+message CameraServiceStartSingleAcquisitionResponse {
+   // A value indicating the type of response returned by the camera live image acquisition stream.
+   AcquisitionResponseType result_type = 1;
+   // The overall width of the image. This is only valid when the ResultType is FrameStart, otherwise it will be set to zero and not transmitted.
+   int32 width = 2;
+   // The overall height of the image. This is only valid when the ResultType is FrameStart, otherwise it will be set to zero and not transmitted.
+   int32 height = 3;
+   // The number of bytes per pixel. This is only valid when the ResultType is FrameStart, otherwise it will be set to zero and not transmitted.
+   uint32 bytes_per_pixel = 4;
+   // The total size of the image. This is only valid when the ResultType is FrameStart, otherwise it will be set to zero and not transmitted.
+   int32 total_image_size = 5;
+   // The data buffer of this part of the image. This may be less than the total image size, in which case the client should expect more data to follow.
+   bytes image_data = 6;
+}
+// The CameraServiceStopLiveAcquisitionRequest class.
+message CameraServiceStopLiveAcquisitionRequest {
+   // The camera ID.
+   string camera_id = 1;
+}
+// Response object of the camera stop acquisition.
+message CameraServiceStopLiveAcquisitionResponse {
+   // A value indicating whether the task to acquire an image succeeded or not.
+   bool task_success = 1;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 2;
+}
+// The ICameraService interface.
+service CameraService {
+   // Gets the acquisition status for the specified camera.
+   rpc GetAcquisitionStatus (CameraServiceGetAcquisitionStatusRequest) returns (CameraServiceGetAcquisitionStatusResponse);
+   // Gets the available cameras/
+   rpc GetAvailableCameras (CameraServiceGetAvailableCamerasRequest) returns (CameraServiceGetAvailableCamerasResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the brightness for the specified camera.
+   rpc GetBrightness (CameraServiceGetBrightnessRequest) returns (CameraServiceGetBrightnessResponse);
+   // Gets the CCD mode for the specified camera.
+   rpc GetCcdMode (CameraServiceGetCcdModeRequest) returns (CameraServiceGetCcdModeResponse);
+   // Gets the contrast for the specified camera.
+   rpc GetContrast (CameraServiceGetContrastRequest) returns (CameraServiceGetContrastResponse);
+   // Registers a subscriber on acquisition status changes for the specified camera.
+   rpc RegisterOnAcquisitionStatusChanged (CameraServiceRegisterOnAcquisitionStatusChangedRequest) returns (stream CameraServiceRegisterOnAcquisitionStatusChangedResponse);
+   // Registers a subscriber on brightness changes for the specified camera.
+   rpc RegisterOnBrightnessChanged (CameraServiceRegisterOnBrightnessChangedRequest) returns (stream CameraServiceRegisterOnBrightnessChangedResponse);
+   // Registers a subscriber on CCD mode changes for the specified camera.
+   rpc RegisterOnCcdModeChanged (CameraServiceRegisterOnCcdModeChangedRequest) returns (stream CameraServiceRegisterOnCcdModeChangedResponse);
+   // Registers a subscriber on contrast changes for the specified camera.
+   rpc RegisterOnContrastChanged (CameraServiceRegisterOnContrastChangedRequest) returns (stream CameraServiceRegisterOnContrastChangedResponse);
+   // Sets the brightness for the specified camera.
+   rpc SetBrightness (CameraServiceSetBrightnessRequest) returns (CameraServiceSetBrightnessResponse);
+   // Sets the CCD mode for the specified camera.
+   rpc SetCcdMode (CameraServiceSetCcdModeRequest) returns (CameraServiceSetCcdModeResponse);
+   // Sets the contrast for the specified camera.
+   rpc SetContrast (CameraServiceSetContrastRequest) returns (CameraServiceSetContrastResponse);
+   // Starts a live acquisition with the given settings.
+   rpc StartLiveAcquisition (CameraServiceStartLiveAcquisitionRequest) returns (stream CameraServiceStartLiveAcquisitionResponse);
+   // Starts a single frame acquisition for the specified camera. The image is streamed to the same destination as live acquisition.
+   rpc StartSingleAcquisition (CameraServiceStartSingleAcquisitionRequest) returns (stream CameraServiceStartSingleAcquisitionResponse);
+   // Stops any ongoing live acquisition.
+   // Only has an effect if ZenApi.EM.Hardware.V1.ICameraApi.GetAcquisitionStatus(System.String) returns ZenApi.EM.Hardware.V1.AcquisitionStatus.LiveRunning.
+   rpc StopLiveAcquisition (CameraServiceStopLiveAcquisitionRequest) returns (CameraServiceStopLiveAcquisitionResponse);
+}

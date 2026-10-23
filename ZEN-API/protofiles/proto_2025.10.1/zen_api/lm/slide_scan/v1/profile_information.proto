@@ -1,0 +1,15 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.slide_scan.v1;
+
+// ProfileInformation contains information about the scan profile associated with a specific slide.
+message ProfileInformation {
+   // The profile name associated with the slides acquisition.
+   string profile_name = 1;
+}

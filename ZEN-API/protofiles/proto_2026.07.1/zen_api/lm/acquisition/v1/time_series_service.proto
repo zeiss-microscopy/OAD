@@ -1,0 +1,41 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.acquisition.v1;
+import "zen_api/lm/acquisition/v1/time_series_info.proto";
+
+// The TimeSeriesServiceGetTimeSeriesInfoRequest class.
+message TimeSeriesServiceGetTimeSeriesInfoRequest {
+   // The experiment Id.
+   string experiment_id = 1;
+}
+// Response object containing the value of Time Series info for the experiment.
+message TimeSeriesServiceGetTimeSeriesInfoResponse {
+   // The value of the Time Series info.
+   TimeSeriesInfo time_series = 1;
+}
+// Request object for setting the value of TimeSeriesInfo for the experiment.
+message TimeSeriesServiceSetTimeSeriesInfoRequest {
+   // The Experiment Id.
+   string experiment_id = 1;
+   // The value of the Time Series info.
+   TimeSeriesInfo time_series = 2;
+}
+// Empty response object upon setting the Time Series info for the experiment.
+message TimeSeriesServiceSetTimeSeriesInfoResponse {
+}
+// The ITimeSeriesService interface.
+service TimeSeriesService {
+   // Gets the information about Time Series of an experiment.
+   rpc GetTimeSeriesInfo (TimeSeriesServiceGetTimeSeriesInfoRequest) returns (TimeSeriesServiceGetTimeSeriesInfoResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Sets the information about Time Series of an experiment.
+   rpc SetTimeSeriesInfo (TimeSeriesServiceSetTimeSeriesInfoRequest) returns (TimeSeriesServiceSetTimeSeriesInfoResponse);
+}

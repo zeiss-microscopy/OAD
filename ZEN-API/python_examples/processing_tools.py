@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : processing_tools.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -12,37 +9,34 @@
 # as long as this copyright notice remains part of the code.
 #################################################################
 
-from typing import Tuple, Optional, List, Literal, Union
-from typing_extensions import Annotated
-from pydantic import Field, validate_arguments
-
-from skimage.filters import threshold_triangle, median, gaussian
-from skimage.measure import label, regionprops_table, find_contours
-from skimage.morphology import remove_small_objects, disk, ball, remove_small_holes
-from skimage.morphology import white_tophat, black_tophat
-from skimage import segmentation
-from skimage.filters import threshold_otsu
-from skimage.color import label2rgb
-from skimage.util import invert
-import numpy as np
-
-from zen_api_utils.misc import set_logging
-import pandas as pd
 import os
+from typing import Annotated, Any, Literal, Protocol, cast
+
+import numpy as np
+import pandas as pd
 from czitools.metadata_tools import czi_metadata as czimd
 from czitools.utils import misc
+from pydantic import Field, validate_call
 from pylibCZIrw import czi as pyczi
-from tqdm.contrib.itertools import product
 from shapely.geometry import Polygon
+from skimage import segmentation
+from skimage.filters import gaussian, median, threshold_otsu, threshold_triangle
+from skimage.measure import find_contours, label, regionprops_table
+from skimage.morphology import ball, black_tophat, disk, remove_small_holes, remove_small_objects, white_tophat
+from skimage.util import invert
+from tqdm.contrib.itertools import product
+from zen_api_utils.misc import set_logging
 
 # get the logger
 logger = set_logging()
 
-try:
-    from onnx_inference import OnnxInferencer
-except (ImportError, OSError):
-    logger.warning("ONNX Inferencer module not found. Semantic segmentation and regression methods will not work.")
-    OnnxInferencer = None
+
+class OnnxInferencer(Protocol):
+    def predict(self, x: list[np.ndarray], use_gpu: bool = False) -> list[np.ndarray]: ...
+
+
+def _dimension_size(value: int | None) -> int:
+    return value if value is not None else 1
 
 
 class ArrayProcessor:
@@ -74,11 +68,11 @@ class ArrayProcessor:
     apply_regression(inferencer: OnnxInferencer, use_gpu: bool = False) -> np.ndarray:
         Applies regression to the array using the given inferencer.
 
-    count_objects(min_size: int = 10, label_rgb: bool = True, bg_label: int = 0) -> Tuple[np.ndarray, int]:
+    count_objects(min_size: int = 10, label_rgb: bool = True, bg_label: int = 0) -> tuple[np.ndarray, int]:
         Counts the objects in the array that are larger than the given size and optionally labels them in RGB.
     """
 
-    def __init__(self, array):
+    def __init__(self, array: np.ndarray):
         """
         Parameters
         ----------
@@ -86,7 +80,7 @@ class ArrayProcessor:
             a 2D array to be processed
         """
         if isinstance(array, np.ndarray) and len(array.shape) == 2:
-            self.array = array
+            self.array: np.ndarray = array
         else:
             raise TypeError("Input should be a 2D array")
 
@@ -121,7 +115,7 @@ class ArrayProcessor:
         Raises:
         ValueError: If Footprint parameter is invalid.
         """
-        if isinstance(filter_size, int):
+        if filter_size >= 1:
             return median(self.array, footprint=disk(filter_size)).astype(self.array.dtype)
         else:
             raise ValueError("Filter Size parameter is invalid.")
@@ -166,7 +160,7 @@ class ArrayProcessor:
         Raises:
         ValueError: If threshold parameters are invalid.
         """
-        if isinstance(value, int) and value >= 0 and (isinstance(invert_result, bool)):
+        if value >= 0:
 
             # apply the threshold
             self.array = self.array >= value
@@ -182,7 +176,7 @@ class ArrayProcessor:
         self,
         inferencer: OnnxInferencer,
         class_index: int,
-        input_shape: List[int],
+        input_shape: list[int],
         use_gpu: bool = False,
     ) -> np.ndarray:
         """
@@ -206,9 +200,11 @@ class ArrayProcessor:
                 f"Array shape {self.array.shape[0]}x{self.array.shape[1]} does not match the model input shape {input_shape[0]}x{input_shape[1]}."
             )
 
-        if isinstance(inferencer, OnnxInferencer) and isinstance(class_index, int) and class_index > 0:
+        if class_index > 0:
 
             # rescale - use with arivisAI models
+            if not np.issubdtype(self.array.dtype, np.integer):
+                raise ValueError("Semantic segmentation expects an integer image array.")
             max_value = np.iinfo(self.array.dtype).max
             self.array = self.array / (max_value - 1)
 
@@ -225,7 +221,7 @@ class ArrayProcessor:
         else:
             raise ValueError("Parameters are invalid.")
 
-    def apply_regression(self, inferencer: OnnxInferencer, input_shape: List[int], use_gpu: bool = False) -> np.ndarray:
+    def apply_regression(self, inferencer: OnnxInferencer, input_shape: list[int], use_gpu: bool = False) -> np.ndarray:
         """
         Applies regression to the input array using the provided inferencer.
 
@@ -244,14 +240,8 @@ class ArrayProcessor:
         if self.array.shape[0] != input_shape[0] or self.array.shape[1] != input_shape[1]:
             raise ValueError("Input shape does not match the model input shape.")
 
-        if isinstance(inferencer, OnnxInferencer):
-
-            # run prediction
-            self.array = inferencer.predict([self.array[..., np.newaxis]], use_gpu=use_gpu)[0]
-
-            return self.array.astype(np.int16)
-        else:
-            raise ValueError("Onnx Inferencer Parameters are invalid.")
+        self.array = inferencer.predict([self.array[..., np.newaxis]], use_gpu=use_gpu)[0]
+        return self.array.astype(np.int16)
 
     def label_objects(
         self,
@@ -260,16 +250,16 @@ class ArrayProcessor:
         fill_holes: bool = True,
         max_holesize: int = 1,
         label_rgb: bool = True,
-        orig_image: Optional[np.ndarray] = None,
+        orig_image: np.ndarray | None = None,
         bg_label: int = 0,
         measure_params: bool = False,
-        measure_properties: Optional[Tuple[str]] = (
+        measure_properties: tuple[str, ...] | None = (
             "label",
             "area",
             "centroid",
             "bbox",
         ),
-    ) -> Tuple[np.ndarray, int, pd.DataFrame]:
+    ) -> tuple[np.ndarray, int, pd.DataFrame]:
         """
         Counts objects in the input array and returns labeled image with the count.
 
@@ -315,10 +305,13 @@ class ArrayProcessor:
             self.array = segmentation.clear_border(self.array, bgval=bg_label)
 
             # label the particles
-            self.array, num_label = label(self.array, background=bg_label, return_num=True, connectivity=2)
+            self.array, num_label = cast(
+                tuple[np.ndarray, int],
+                label(self.array, background=bg_label, return_num=True, connectivity=2),
+            )
 
             # measure the specified parameters store in dataframe
-            props = None
+            props = pd.DataFrame()
 
             if measure_params:
                 if orig_image is None:
@@ -340,6 +333,8 @@ class ArrayProcessor:
 
             # apply RGB labels
             if label_rgb:
+                from skimage.color import label2rgb
+
                 if orig_image is None:
                     self.array = label2rgb(self.array, image=None, bg_label=bg_label)
                 else:
@@ -349,6 +344,7 @@ class ArrayProcessor:
         else:
             raise ValueError("Parameters are invalid.")
 
+    @staticmethod
     def subtract_background(
         image: np.ndarray,
         elem: Literal["disk", "ball"],
@@ -390,15 +386,15 @@ class ArrayProcessor:
             # use 'ball' here to get a slightly smoother result at the cost of increased computing time
             if elem == "disk":
                 str_el = disk(radius)
-            if elem == "ball":
+            elif elem == "ball":
                 str_el = ball(radius)
 
             if light_bg:
                 img_subtracted = black_tophat(image, str_el)
-            if not light_bg:
+            else:
                 img_subtracted = white_tophat(image, str_el)
 
-            return img_subtracted
+            return np.asarray(img_subtracted)
 
         else:
             raise ValueError("Parameters is invalid.")
@@ -411,11 +407,11 @@ def bbox2stageXY(
     sizeX: int = 10,
     sizeY: int = 20,
     scale: float = 1.0,
-    xstart: int = 20,
-    ystart: int = 30,
-    bbox_width: int = 5,
-    bbox_height: int = 5,
-):
+    xstart: Any = 20,
+    ystart: Any = 30,
+    bbox_width: Any = 5,
+    bbox_height: Any = 5,
+) -> tuple[Any, Any]:
     """
     Calculate the center of the bounding box as StageXY coordinates [micron]
 
@@ -456,13 +452,18 @@ def xy2stageXY(
     sizeX: int = 10,
     sizeY: int = 20,
     scale: float = 1.0,
-    x: Union[int, float, List[Union[int, float]]] = [20.0],
-    y: Union[int, float, List[Union[int, float]]] = [30.0],
-):
-    # check if x and y are actually lists
-    if not isinstance(x, list):
+    x: float | list[float] | None = None,
+    y: float | list[float] | None = None,
+) -> tuple[np.ndarray, np.ndarray]:
+    # Preserve the historical default coordinates without mutable defaults.
+    if x is None:
+        x = [20.0]
+    elif not isinstance(x, list):
         x = [x]
-    if not isinstance(y, list):
+
+    if y is None:
+        y = [30.0]
+    elif not isinstance(y, list):
         y = [y]
 
     # calculate the width and height of the image in [micron]
@@ -474,24 +475,24 @@ def xy2stageXY(
     Y0_stageY = image_stageY - height / 2
 
     # calculate the coordinates of the bounding box as stage coordinates
-    x_stageX = X0_stageX + [i * scale for i in x]
-    y_stageY = Y0_stageY + [i * scale for i in y]
+    x_stageX = X0_stageX + np.asarray(x) * scale
+    y_stageY = Y0_stageY + np.asarray(y) * scale
 
     return x_stageX, y_stageY
 
 
-@validate_arguments
+@validate_call
 def segment_czi(
     filepath: str,
     savepath: str,
     chindex: Annotated[int, Field(strict=True, ge=0)] = 0,
     zoomlevel: Annotated[float, Field(strict=True, gt=0.1, le=1.0)] = 1.0,
-    filter_method: Literal[None, "none", "median", "gaussian"] = None,
+    filter_method: Literal["none", "median", "gaussian"] | None = None,
     filter_size: Annotated[int, Field(strict=True, ge=1)] = 3,
     min_objectsize: Annotated[int, Field(strict=True, ge=1)] = 1000,
     max_holesize: Annotated[int, Field(strict=True, ge=10)] = 100,
     add_polygons: bool = False,
-) -> Tuple[str, pd.DataFrame, str, pd.DataFrame]:
+) -> tuple[str, pd.DataFrame, str, pd.DataFrame]:
     """
     Segment a CZI file and save the segmented image, object properties, and CSV file.
 
@@ -513,6 +514,26 @@ def segment_czi(
 
     # get the metadata at once as one big class
     mdata = czimd.CziMetadata(filepath)
+    if (
+        mdata.image is None
+        or mdata.sample is None
+        or mdata.scale is None
+        or mdata.channelinfo is None
+        or mdata.filename is None
+    ):
+        raise ValueError("CZI metadata is incomplete")
+
+    image = mdata.image
+    sample = mdata.sample
+    scale_info = mdata.scale
+    channel_info = mdata.channelinfo
+    filename = mdata.filename
+    if image.SizeX is None or image.SizeY is None:
+        raise ValueError("CZI image dimensions are missing")
+
+    scale_x = scale_info.X if scale_info.X is not None else 1.0
+    scale_y = scale_info.Y if scale_info.Y is not None else 1.0
+    scale_z = scale_info.Z if scale_info.Z is not None else 1.0
 
     # define columns names for pandas dataframe
     cols = ["S", "T", "Z", "C", "Number"]
@@ -522,21 +543,19 @@ def segment_czi(
     max_objectsize = 1000000000
 
     # check if it makes sense
-    if max_holesize > min_objectsize:
-        min_objectsize = max_holesize
+    min_objectsize = max(min_objectsize, max_holesize)
 
     # check if dimensions are None (because they do not exist for that image)
-    size_c = misc.check_dimsize(mdata.image.SizeC, set2value=1)
-    size_z = misc.check_dimsize(mdata.image.SizeZ, set2value=1)
-    size_t = misc.check_dimsize(mdata.image.SizeT, set2value=1)
-    size_s = misc.check_dimsize(mdata.image.SizeS, set2value=1)
+    size_z = _dimension_size(image.SizeZ)
+    size_t = _dimension_size(image.SizeT)
+    size_s = _dimension_size(image.SizeS)
 
     # to make it more readable extract values from metadata dictionary
-    stageX = mdata.sample.scene_stageX[0]
-    stageY = mdata.sample.scene_stageY[0]
+    stageX = sample.scene_stageX[0]
+    stageY = sample.scene_stageY[0]
 
     # create the savename
-    name_seg = misc.get_fname_woext(mdata.filename)
+    name_seg = misc.get_fname_woext(filename)
     savepath_seg = os.path.join(savepath, name_seg) + "_seg.czi"
 
     # initialize empty dataframe
@@ -561,7 +580,7 @@ def segment_czi(
                 values = {"S": s, "T": t, "Z": z, "C": chindex, "Number": 0}
 
                 # read 2D plane in case there are (no) scenes
-                if mdata.image.SizeS is None:
+                if image.SizeS is None:
                     img2d = czidoc_r.read(plane={"T": t, "Z": z, "C": chindex}, zoom=zoomlevel)[..., 0]
                 else:
                     img2d = czidoc_r.read(plane={"T": t, "Z": z, "C": chindex}, zoom=zoomlevel, scene=s)[..., 0]
@@ -573,7 +592,7 @@ def segment_czi(
                     processed = img2d
 
                 if filter_method == "median":
-                    processed = ArrayProcessor(img2d).apply_median_filter(footprint=disk(filter_size))
+                    processed = ArrayProcessor(img2d).apply_median_filter(filter_size=filter_size)
                 if filter_method == "gaussian":
                     processed = ArrayProcessor(img2d).apply_gaussian_filter(sigma=filter_size)
 
@@ -581,7 +600,7 @@ def segment_czi(
                 processed = ArrayProcessor(processed).apply_triangle_threshold()
 
                 ap = ArrayProcessor(processed)
-                processed, num_objects, props = ap.label_objects(
+                processed, _, props = ap.label_objects(
                     max_size_remove=min_objectsize,
                     max_size=max_objectsize,
                     label_rgb=False,
@@ -593,10 +612,10 @@ def segment_czi(
 
                 # add well information for CZI metadata
                 try:
-                    props["WellId"] = mdata.sample.well_array_names[s]
-                    props["Well_ColId"] = mdata.sample.well_colID[s]
-                    props["Well_RowId"] = mdata.sample.well_rowID[s]
-                except (IndexError, KeyError) as e:
+                    props["WellId"] = sample.well_array_names[s]
+                    props["Well_ColId"] = sample.well_colID[s]
+                    props["Well_RowId"] = sample.well_rowID[s]
+                except (IndexError, KeyError):
                     logger.warning(f"No Well Information found for Scene: {s}")
                     props["WellId"] = s
                     props["Well_ColId"] = s
@@ -627,9 +646,9 @@ def segment_czi(
                         xpos, ypos = xy2stageXY(
                             image_stageX=stageX,
                             image_stageY=stageY,
-                            sizeX=mdata.image.SizeX,
-                            sizeY=mdata.image.SizeY,
-                            scale=mdata.scale.X,
+                            sizeX=image.SizeX,
+                            sizeY=image.SizeY,
+                            scale=scale_x,
                             x=results["polygon"][obj_id][1],
                             y=results["polygon"][obj_id][0],
                         )
@@ -649,20 +668,12 @@ def segment_czi(
                     scene=s,
                 )
 
-        # check if valid scaling exists
-        if mdata.scale.X is None:
-            mdata.scale.X = 1.0
-        if mdata.scale.Y is None:
-            mdata.scale.Y = 1.0
-        if mdata.scale.Y is None:
-            mdata.scale.Z = 1.0
-
         czidoc_w.write_metadata(
             document_name=savepath_seg,
-            channel_names={0: mdata.channelinfo.names[chindex] + "_seg"},
-            scale_x=mdata.scale.X * 10**-6 * (1 / zoomlevel),
-            scale_y=mdata.scale.Y * 10**-6 * (1 / zoomlevel),
-            scale_z=mdata.scale.Z * 10**-6,
+            channel_names={0: channel_info.names[chindex] + "_seg"},
+            scale_x=scale_x * 10**-6 * (1 / zoomlevel),
+            scale_y=scale_y * 10**-6 * (1 / zoomlevel),
+            scale_z=scale_z * 10**-6,
         )
 
         # rename columns in pandas data table
@@ -679,16 +690,16 @@ def segment_czi(
         # calculate the bbox width in height in [pixel] and [micron]
         results["bbox_width"] = results["xend"] - results["xstart"]
         results["bbox_height"] = results["yend"] - results["ystart"]
-        results["bbox_width_scaled"] = results["bbox_width"] * mdata.scale.X
-        results["bbox_height_scaled"] = results["bbox_height"] * mdata.scale.Y
+        results["bbox_width_scaled"] = results["bbox_width"] * scale_x
+        results["bbox_height_scaled"] = results["bbox_height"] * scale_y
 
         # calculate the bbox center StageXY
         results["bbox_center_stageX"], results["bbox_center_stageY"] = bbox2stageXY(
             image_stageX=stageX,
             image_stageY=stageY,
-            sizeX=mdata.image.SizeX,
-            sizeY=mdata.image.SizeY,
-            scale=mdata.scale.X,
+            sizeX=image.SizeX,
+            sizeY=image.SizeY,
+            scale=scale_x,
             xstart=results["xstart"],
             ystart=results["ystart"],
             bbox_width=results["bbox_width"],
@@ -698,7 +709,7 @@ def segment_czi(
     logger.info(f"Finished writing to Segmented CZI File: {savepath_seg}")
 
     # write the CSV data table
-    csvfile = misc.get_fname_woext(mdata.filename) + "_seg.csv"
+    csvfile = misc.get_fname_woext(filename) + "_seg.csv"
     savepath_csv = os.path.join(savepath, csvfile)
     logger.info(f"Write to CSV File: {savepath_csv}")
     results.to_csv(savepath_csv, sep=";", index=False)
@@ -706,7 +717,7 @@ def segment_czi(
     return (savepath_seg, results, savepath_csv, objects)
 
 
-def create_xypoints(segmented_image: np.ndarray) -> List[List]:
+def create_xypoints(segmented_image: np.ndarray) -> list[list[float]]:
     """
     Create XY points from a segmented image.
 

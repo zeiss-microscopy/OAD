@@ -5,13 +5,13 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # from Connection import Connection
-from zenapi_tools import initialize_zenapi, set_logging
-from public.zen_api.workflows.v3beta import WorkflowServiceStub
-from public.zen_api.workflows.v1beta import (
+from zen_api_utils.misc import initialize_zenapi, set_logging
+from zen_api.workflows.v3beta import WorkflowServiceStub
+from zen_api.workflows.v1beta import (
     JobResourcesServiceStub,
 )
 
-from zenapi_workflow_tools import monitor_status, run_job
+from zenapi_workflow_tools import run_job
 
 #########################
 #

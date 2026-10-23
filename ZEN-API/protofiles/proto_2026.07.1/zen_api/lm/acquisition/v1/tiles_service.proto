@@ -1,0 +1,111 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.acquisition.v1;
+import "google/protobuf/wrappers.proto";
+import "zen_api/common/v1/double_point.proto";
+import "zen_api/lm/acquisition/v1/position3d.proto";
+
+// The TilesServiceAddEllipseTileRegionRequest class.
+message TilesServiceAddEllipseTileRegionRequest {
+   // The experiment Id.
+   string experiment_id = 1;
+   // The center x position of the tile region to be added (unit: m).
+   .google.protobuf.DoubleValue center_x = 2;
+   // The center y position of the tile region to be added (unit: m).
+   .google.protobuf.DoubleValue center_y = 3;
+   // The width of the tile region to be added (unit: m).
+   .google.protobuf.DoubleValue width = 4;
+   // The height of the tile region to be added (unit: m).
+   .google.protobuf.DoubleValue height = 5;
+   // The z position of the tile region to be added (unit: m).
+   .google.protobuf.DoubleValue z = 6;
+}
+// The TilesServiceAddEllipseTileRegionResponse class.
+message TilesServiceAddEllipseTileRegionResponse {
+}
+// The TilesServiceAddPolygonTileRegionRequest class.
+message TilesServiceAddPolygonTileRegionRequest {
+   // The experiment Id.
+   string experiment_id = 1;
+   // The list of points which define the polygon.
+   // This list has to contain at least one point (unit: m).
+   repeated .zen_api.common.v1.DoublePoint polygon_points = 2;
+   // The z position of the tile region to be added (unit: m).
+   .google.protobuf.DoubleValue z = 3;
+}
+// The TilesServiceAddPolygonTileRegionResponse class.
+message TilesServiceAddPolygonTileRegionResponse {
+}
+// The TilesServiceAddPositionsRequest class.
+message TilesServiceAddPositionsRequest {
+   // The experiment Id.
+   string experiment_id = 1;
+   // The positions to be added.
+   repeated Position3d positions = 2;
+}
+// The TilesServiceAddPositionsResponse class.
+message TilesServiceAddPositionsResponse {
+}
+// The TilesServiceAddRectangleTileRegionRequest class.
+message TilesServiceAddRectangleTileRegionRequest {
+   // Experiment id.
+   string experiment_id = 1;
+   // The center x position of the tile region to be added (unit: m).
+   .google.protobuf.DoubleValue center_x = 2;
+   // The center y position of the tile region to be added (unit: m).
+   .google.protobuf.DoubleValue center_y = 3;
+   // The width of the tile region to be added (unit: m).
+   .google.protobuf.DoubleValue width = 4;
+   // The height of the tile region to be added (unit: m).
+   .google.protobuf.DoubleValue height = 5;
+   // The z position of the tile region to be added (unit: m).
+   .google.protobuf.DoubleValue z = 6;
+}
+// The TilesServiceAddRectangleTileRegionResponse class.
+message TilesServiceAddRectangleTileRegionResponse {
+}
+// The TilesServiceClearRequest class.
+message TilesServiceClearRequest {
+   // Experiment id.
+   string experiment_id = 1;
+}
+// The TilesServiceClearResponse class.
+message TilesServiceClearResponse {
+}
+// The TilesServiceIsTilesExperimentRequest class.
+message TilesServiceIsTilesExperimentRequest {
+   // Experiment id.
+   string experiment_id = 1;
+}
+// Response object representing the value of IsTiles for the experiment.
+message TilesServiceIsTilesExperimentResponse {
+   // A value indicating whether the experiment is a tiles experiment.
+   bool is_tiles_experiment = 1;
+}
+// The ITilesService interface.
+service TilesService {
+   // Adds an ellipse tile region with the specified position and size values to the
+   // acquisition block with the specified index in the specified experiment.
+   rpc AddEllipseTileRegion (TilesServiceAddEllipseTileRegionRequest) returns (TilesServiceAddEllipseTileRegionResponse);
+   // Adds a polygon tile region with the specified points list to the
+   // acquisition block with the specified index in the specified experiment.
+   rpc AddPolygonTileRegion (TilesServiceAddPolygonTileRegionRequest) returns (TilesServiceAddPolygonTileRegionResponse);
+   // Adds positions with the specified coordinates to the specified experiment.
+   rpc AddPositions (TilesServiceAddPositionsRequest) returns (TilesServiceAddPositionsResponse);
+   // Adds a rectangle tile region with the specified position and size values to the specified experiment.
+   rpc AddRectangleTileRegion (TilesServiceAddRectangleTileRegionRequest) returns (TilesServiceAddRectangleTileRegionResponse);
+   // Clears all tile regions and positions in the current acquisition block.
+   rpc Clear (TilesServiceClearRequest) returns (TilesServiceClearResponse);
+   // Determines whether the current experiment block in the specified experiment
+   // is a Tiles experiment. This means that the corresponding Tiles dimension is activated.
+   rpc IsTilesExperiment (TilesServiceIsTilesExperimentRequest) returns (TilesServiceIsTilesExperimentResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+}

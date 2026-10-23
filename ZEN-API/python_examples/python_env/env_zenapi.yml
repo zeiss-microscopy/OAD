@@ -50,8 +50,7 @@ dependencies:
       - ngff-zarr
       - ngff-zarr[dask-image]
       - ngff-zarr[validate]
-      - ome-writers
-      - ome-writers[acquire-zarr]
+      - ome-writers[acquire-zarr]>=0.3.2
       - ndv
 
 

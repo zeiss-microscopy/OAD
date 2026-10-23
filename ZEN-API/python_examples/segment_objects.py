@@ -1,32 +1,42 @@
-from czitools.metadata_tools import czi_metadata as czimd
-from czitools.utils import misc
-from pylibCZIrw import czi as pyczi
 import os
+from typing import Any, Literal, cast
+
+import matplotlib.pyplot as plt
 import numpy as np
-from skimage import measure, segmentation, morphology
-from skimage.filters import threshold_otsu, threshold_triangle, rank, median, gaussian
+import pandas as pd
+from czitools.metadata_tools import czi_metadata as czimd
+from pylibCZIrw import czi as pyczi
+from skimage import measure, morphology, segmentation
+from skimage.filters import gaussian, median, rank, threshold_otsu, threshold_triangle
 from skimage.morphology import (
-    white_tophat,
+    ball,
     black_tophat,
     disk,
-    ball,
+    white_tophat,
 )
-import pandas as pd
 from tqdm.contrib.itertools import product
-import matplotlib.pyplot as plt
+
+
+def _dimension_size(value: int | None) -> int:
+    return value if value is not None else 1
 
 
 def show_plot(img1: np.ndarray, img2: np.ndarray) -> None:
     # just for testing purposes
 
     # show the results
-    fig, ax = plt.subplots(nrows=1, ncols=2, figsize=(12, 6))
+    _, ax = plt.subplots(nrows=1, ncols=2, figsize=(12, 6))
     ax[0].imshow(img1, cmap="gray")
     ax[1].imshow(img2, cmap="gray")
     plt.show()
 
 
-def subtract_background(image, elem="disk", radius=50, light_bg=False):
+def subtract_background(
+    image: np.ndarray,
+    elem: Literal["disk", "ball"] = "disk",
+    radius: int = 50,
+    light_bg: bool = False,
+) -> np.ndarray:
     """Background subtraction using structure element.
     Slightly adapted from: https://forum.image.sc/t/background-subtraction-in-scikit-image/39118/4
 
@@ -44,19 +54,22 @@ def subtract_background(image, elem="disk", radius=50, light_bg=False):
     # use 'ball' here to get a slightly smoother result at the cost of increased computing time
     if elem == "disk":
         str_el = disk(radius)
-    if elem == "ball":
+    else:
         str_el = ball(radius)
 
     if light_bg:
         img_subtracted = black_tophat(image, str_el)
-    if not light_bg:
+    else:
         img_subtracted = white_tophat(image, str_el)
 
-    return img_subtracted
+    return np.asarray(img_subtracted)
 
 
 def autoThresholding(
-    image2d, method: str = "triangle", radius: int = 10, value: int = 50
+    image2d: np.ndarray,
+    method: Literal["global_otsu", "local_otsu", "value_based", "triangle"] = "triangle",
+    radius: int = 10,
+    value: int = 50,
 ) -> np.ndarray:
     """Autothreshold an 2D intensity image which is calculated using:
     binary = image2d >= thresh
@@ -78,13 +91,13 @@ def autoThresholding(
         thresh = threshold_otsu(image2d)
 
     # calculate local Otsu threshold
-    if method == "local_otsu":
+    elif method == "local_otsu":
         thresh = rank.otsu(image2d, disk(radius))
 
-    if method == "value_based":
+    elif method == "value_based":
         thresh = value
 
-    if method == "triangle":
+    else:
         thresh = threshold_triangle(image2d)
 
     binary = image2d >= thresh
@@ -93,16 +106,16 @@ def autoThresholding(
 
 
 def bbox2stageXY(
-    image_stageX=0,
-    image_stageY=0,
-    sizeX=10,
-    sizeY=20,
-    scale=1.0,
-    xstart=20,
-    ystart=30,
-    bbox_width=5,
-    bbox_height=5,
-):
+    image_stageX: float = 0,
+    image_stageY: float = 0,
+    sizeX: int = 10,
+    sizeY: int = 20,
+    scale: float = 1.0,
+    xstart: Any = 20,
+    ystart: Any = 30,
+    bbox_width: Any = 5,
+    bbox_height: Any = 5,
+) -> tuple[Any, Any]:
     """Calculate the center of the bounding box as StageXY coordinate [micron]
 
     :param image_stageX: image center stageX [micron], defaults to 0
@@ -147,7 +160,7 @@ def execute(
     separator: str = ";",
     filter_method: str = "none",
     filter_size: int = 3,
-    threshold_method: str = "triangle",
+    threshold_method: Literal["global_otsu", "local_otsu", "value_based", "triangle"] = "triangle",
     min_objectsize: int = 1000,
     max_holesize: int = 100,
 ):
@@ -183,13 +196,24 @@ def execute(
     # get the metadata from the czi file
     # get the metadata
     mdata = czimd.CziMetadata(filepath)
+    if mdata.image is None or mdata.sample is None or mdata.scale is None or mdata.channelinfo is None:
+        raise ValueError("CZI metadata is incomplete")
+
+    image = mdata.image
+    sample = mdata.sample
+    channel_info = mdata.channelinfo
+    size_x = image.SizeX
+    size_y = image.SizeY
+    if size_x is None or size_y is None:
+        raise ValueError("CZI image dimensions are missing")
+
+    scale_x = mdata.scale.X if mdata.scale.X is not None else 1.0
+    scale_y = mdata.scale.Y if mdata.scale.Y is not None else 1.0
+    scale_z = mdata.scale.Z if mdata.scale.Z is not None else 1.0
 
     # define columns names for dataframe
     cols = ["S", "T", "Z", "C", "Number"]
     objects = pd.DataFrame(columns=cols)
-
-    # optional display of "some" results - empty list = no display
-    show_image = [0]
 
     # scalefactor to read CZI
     sf = 1.0
@@ -205,14 +229,13 @@ def execute(
         min_objectsize = max_holesize
 
     # check if dimensions are None (because they do not exist for that image)
-    size_c = misc.check_dimsize(mdata.image.SizeC, set2value=1)
-    size_z = misc.check_dimsize(mdata.image.SizeZ, set2value=1)
-    size_t = misc.check_dimsize(mdata.image.SizeT, set2value=1)
-    size_s = misc.check_dimsize(mdata.image.SizeS, set2value=1)
+    size_z = _dimension_size(image.SizeZ)
+    size_t = _dimension_size(image.SizeT)
+    size_s = _dimension_size(image.SizeS)
 
     # to make it more readable extract values from metadata dictionary
-    stageX = mdata.sample.scene_stageX[0]
-    stageY = mdata.sample.scene_stageY[0]
+    stageX = sample.scene_stageX[0]
+    stageY = sample.scene_stageY[0]
 
     # create the savename
     savename_seg = filename.split(".")[0] + "_seg.czi"
@@ -234,32 +257,26 @@ def execute(
                 values = {"S": s, "T": t, "Z": z, "C": chindex, "Number": 0}
 
                 # read 2D plane in case there are (no) scenes
-                if mdata.image.SizeS is None:
-                    img2d = czidoc_r.read(
-                        plane={"T": t, "Z": z, "C": chindex}, zoom=sf
-                    )[..., 0]
+                if image.SizeS is None:
+                    img2d = czidoc_r.read(plane={"T": t, "Z": z, "C": chindex}, zoom=sf)[..., 0]
                 else:
-                    img2d = czidoc_r.read(
-                        plane={"T": t, "Z": z, "C": chindex}, zoom=sf, scene=s
-                    )[..., 0]
+                    img2d = czidoc_r.read(plane={"T": t, "Z": z, "C": chindex}, zoom=sf, scene=s)[..., 0]
 
                 # preprocessing - filter the image
                 if filter_method == "none" or filter_method == "None":
                     image2d_filtered = img2d
-                if filter_method == "median":
+                elif filter_method == "median":
                     image2d_filtered = median(img2d, footprint=disk(filter_size))
-                if filter_method == "gauss":
-                    image2d_filtered = gaussian(
-                        img2d, sigma=filter_size, mode="reflect"
-                    )
+                elif filter_method == "gauss":
+                    image2d_filtered = gaussian(img2d, sigma=filter_size, mode="reflect")
+                else:
+                    raise ValueError(f"Unknown filter method: {filter_method}")
 
                 # threshold image
                 mask = autoThresholding(image2d_filtered, method=threshold_method)
 
                 # Remove contiguous holes smaller than the specified size
-                mask = morphology.remove_small_holes(
-                    mask, area_threshold=max_holesize, connectivity=1
-                )
+                mask = morphology.remove_small_holes(mask, area_threshold=max_holesize, connectivity=1)
 
                 # remove small objects
                 mask = morphology.remove_small_objects(mask, min_size=min_objectsize)
@@ -268,29 +285,24 @@ def execute(
                 mask = segmentation.clear_border(mask, bgval=0)
 
                 # label the objects
-                mask = measure.label(mask)
+                mask = cast(np.ndarray, measure.label(mask))
 
                 # measure region properties
                 to_measure = ("label", "area", "centroid", "bbox")
 
                 # measure the specified parameters store in dataframe
                 props = pd.DataFrame(
-                    measure.regionprops_table(
-                        mask, intensity_image=img2d, properties=to_measure
-                    )
+                    measure.regionprops_table(mask, intensity_image=img2d, properties=to_measure)
                 ).set_index("label")
 
                 # filter objects by size
-                props = props[
-                    (props["area"] >= min_objectsize)
-                    & (props["area"] <= max_objectsize)
-                ]
+                props = props[(props["area"] >= min_objectsize) & (props["area"] <= max_objectsize)]
 
                 # add well information for CZI metadata
                 try:
-                    props["WellId"] = mdata.sample.well_array_names[s]
-                    props["Well_ColId"] = mdata.sample.well_colID[s]
-                    props["Well_RowId"] = mdata.sample.well_rowID[s]
+                    props["WellId"] = sample.well_array_names[s]
+                    props["Well_ColId"] = sample.well_colID[s]
+                    props["Well_RowId"] = sample.well_rowID[s]
                 except (IndexError, KeyError) as error:
                     # Output expected ImportErrors.
                     print("Key not found:", error)
@@ -309,9 +321,7 @@ def execute(
                 values["Number"] = props.shape[0]
 
                 # update dataframe containing the number of objects
-                objects = pd.concat(
-                    [objects, pd.DataFrame(values, index=[0])], ignore_index=True
-                )
+                objects = pd.concat([objects, pd.DataFrame(values, index=[0])], ignore_index=True)
                 results = pd.concat([results, props], ignore_index=True)
 
                 # add new axis for CZI writing and adapt pixel type
@@ -324,20 +334,12 @@ def execute(
                     scene=s,
                 )
 
-            # write scaling the the new czi and check if valid scaling exists
-        if mdata.scale.X is None:
-            mdata.scale.X = 1.0
-        if mdata.scale.Y is None:
-            mdata.scale.Y = 1.0
-        if mdata.scale.Y is None:
-            mdata.scale.Z = 1.0
-
         czidoc_w.write_metadata(
             document_name=savename_seg,
-            channel_names={0: mdata.channelinfo.names[chindex] + "_seg"},
-            scale_x=mdata.scale.X * 10**-6,
-            scale_y=mdata.scale.Y * 10**-6,
-            scale_z=mdata.scale.Z * 10**-6,
+            channel_names={0: channel_info.names[chindex] + "_seg"},
+            scale_x=scale_x * 10**-6,
+            scale_y=scale_y * 10**-6,
+            scale_z=scale_z * 10**-6,
         )
 
         # rename columns in pandas datatable
@@ -354,16 +356,16 @@ def execute(
         # calculate the bbox width in height in [pixel] and [micron]
         results["bbox_width"] = results["xend"] - results["xstart"]
         results["bbox_height"] = results["yend"] - results["ystart"]
-        results["bbox_width_scaled"] = results["bbox_width"] * mdata.scale.X
-        results["bbox_height_scaled"] = results["bbox_height"] * mdata.scale.Y
+        results["bbox_width_scaled"] = results["bbox_width"] * scale_x
+        results["bbox_height_scaled"] = results["bbox_height"] * scale_y
 
         # calculate the bbox center StageXY
         results["bbox_center_stageX"], results["bbox_center_stageY"] = bbox2stageXY(
             image_stageX=stageX,
             image_stageY=stageY,
-            sizeX=mdata.image.SizeX,
-            sizeY=mdata.image.SizeY,
-            scale=mdata.scale.X,
+            sizeX=size_x,
+            sizeY=size_y,
+            scale=scale_x,
             xstart=results["xstart"],
             ystart=results["ystart"],
             bbox_width=results["bbox_width"],
@@ -390,7 +392,7 @@ def execute(
 # test code locally
 if __name__ == "__main__":
 
-    filepath =r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\data\OverViewScan.czi"
+    filepath = r"F:\Github\ZEN_Python_CZI_Smart_Microscopy_Workshop\workshop\data\OverViewScan.czi"
 
     execute(
         filepath,

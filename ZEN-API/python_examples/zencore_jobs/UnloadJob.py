@@ -9,7 +9,7 @@ from zen_api.workflows.v3beta import (
     WorkflowServiceLoadJobTemplateRequest,
     WorkflowServiceUnloadJobTemplateRequest,
 )
-from zenapi_tools import initialize_zenapi, set_logging
+from zen_api_utils.misc import initialize_zenapi, set_logging
 from zenapi_workflow_tools import is_job_template_loaded
 
 
@@ -42,9 +42,7 @@ async def main():
     logger.info(f"Is job template loaded: {loaded}")
 
     # Load template to custom folder
-    logger.info(
-        f'Loading job template "{job_template_name}" with result path "{result_path}"'
-    )
+    logger.info(f'Loading job template "{job_template_name}" with result path "{result_path}"')
     request = WorkflowServiceLoadJobTemplateRequest(job_template_name, result_path)
     await workflow_service.load_job_template(request)
 

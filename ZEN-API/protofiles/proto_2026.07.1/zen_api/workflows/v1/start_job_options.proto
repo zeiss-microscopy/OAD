@@ -1,0 +1,18 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.workflows.v1;
+
+// Start Job options.
+message StartJobOptions {
+   // A value indicating a path for saving a Job results in the file system.
+   // -- If value is given than Job output will be copied to given path in filesystem and not uploaded to ZEN Archive.
+   // Have to be in the Windows-supported directory path format (local drive or network share).
+   // -- If value is null (or empty/whitespace) than Job output will be uploaded to ZEN Archive and not copied to anywhere.
+   string result_path = 1;
+}

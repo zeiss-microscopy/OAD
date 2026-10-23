@@ -1,0 +1,21 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.workflow.v1;
+
+// The EM region of interest settings.
+message EmRegionOfInterest {
+   // The X-coordinate of the region's position.
+   double position_x = 1;
+   // The Y-coordinate of the region's position.
+   double position_y = 2;
+   // The width of the region.
+   double width = 3;
+   // The height of the region.
+   double height = 4;
+}

@@ -1,0 +1,59 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.live_scan.v1;
+import "zen_api/lm/live_scan/v1/live_scan_service_configuration.proto";
+
+// The LiveScanServiceEjectTrayRequest class.
+message LiveScanServiceEjectTrayRequest {
+}
+// Empty response upon ejecting the tray.
+message LiveScanServiceEjectTrayResponse {
+   // The list of notifications.
+   repeated string notifications = 1;
+}
+// The LiveScanServiceGetConfigurationRequest class.
+message LiveScanServiceGetConfigurationRequest {
+}
+// Request for getting the configuration.
+message LiveScanServiceGetConfigurationResponse {
+   // Configuration.
+   LiveScanServiceConfiguration config = 1;
+}
+// The LiveScanServiceLoadTrayAndPrescanRequest class.
+message LiveScanServiceLoadTrayAndPrescanRequest {
+}
+// Empty response upon loading the tray.
+message LiveScanServiceLoadTrayAndPrescanResponse {
+   // The list of notifications.
+   repeated string notifications = 1;
+}
+// Request for setting the configuration.
+message LiveScanServiceSetConfigurationRequest {
+   // Configuration.
+   LiveScanServiceConfiguration config = 1;
+}
+// Empty response upon setting the configuration.
+message LiveScanServiceSetConfigurationResponse {
+   // The list of notifications.
+   repeated string notifications = 1;
+}
+// The ILiveScanService interface.
+service LiveScanService {
+   // Eject tray.
+   rpc EjectTray (LiveScanServiceEjectTrayRequest) returns (LiveScanServiceEjectTrayResponse);
+   // Get configuration.
+   rpc GetConfiguration (LiveScanServiceGetConfigurationRequest) returns (LiveScanServiceGetConfigurationResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Load tray and start prescan.
+   rpc LoadTrayAndPrescan (LiveScanServiceLoadTrayAndPrescanRequest) returns (LiveScanServiceLoadTrayAndPrescanResponse);
+   // Set configuration.
+   rpc SetConfiguration (LiveScanServiceSetConfigurationRequest) returns (LiveScanServiceSetConfigurationResponse);
+}

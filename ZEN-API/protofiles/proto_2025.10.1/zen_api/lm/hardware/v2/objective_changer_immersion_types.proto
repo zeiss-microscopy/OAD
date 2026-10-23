@@ -1,0 +1,25 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.hardware.v2;
+
+// Immersion types to match ObjectiveImmersionTypes
+enum ObjectiveChangerImmersionTypes {
+   // Unspecified
+   OBJECTIVE_CHANGER_IMMERSION_TYPES_UNSPECIFIED = 0;
+   // Air
+   OBJECTIVE_CHANGER_IMMERSION_TYPES_AIR = 1;
+   // Water
+   OBJECTIVE_CHANGER_IMMERSION_TYPES_WATER = 2;
+   // Oil
+   OBJECTIVE_CHANGER_IMMERSION_TYPES_OIL = 4;
+   // Glycerin
+   OBJECTIVE_CHANGER_IMMERSION_TYPES_GLYCERINE = 8;
+   // Silicone
+   OBJECTIVE_CHANGER_IMMERSION_TYPES_SILICONE = 16;
+}

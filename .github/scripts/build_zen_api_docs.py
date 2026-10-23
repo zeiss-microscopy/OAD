@@ -3,12 +3,18 @@
 from __future__ import annotations
 
 import argparse
+import html
+import posixpath
+import re
+import shutil
 import subprocess
 import sys
 import textwrap
-from pathlib import Path
+import tomllib
+from pathlib import Path, PurePosixPath
 
 import yaml
+from betterproto.lib.google.protobuf import FileDescriptorSet
 
 ZENAPI_PAGES_PATH = "zenapi"
 
@@ -96,8 +102,8 @@ def mkdocs_material_config(site_name: str, site_url: str, docs_dir: Path, site_d
     }
 
 
-def find_leaf_modules(src_dir: Path) -> list[str]:
-    zen_api_root = src_dir / "zen_api"
+def find_leaf_modules(src_dir: Path, package_name: str = "zen_api", *, include_modules: bool = False) -> list[str]:
+    zen_api_root = src_dir / package_name
     if not zen_api_root.is_dir():
         raise FileNotFoundError(f"ZEN API Python source directory not found: {zen_api_root}")
 
@@ -111,20 +117,30 @@ def find_leaf_modules(src_dir: Path) -> list[str]:
         if not has_child_packages:
             leaf_modules.append(".".join(package_dir.relative_to(src_dir).parts))
 
+    if include_modules:
+        leaf_modules.extend(
+            ".".join(module.relative_to(src_dir).with_suffix("").parts)
+            for module in sorted(zen_api_root.rglob("*.py"))
+            if module.name != "__init__.py"
+        )
+
     if not leaf_modules:
         raise RuntimeError(f"No leaf modules found in {zen_api_root}")
 
-    return leaf_modules
+    return sorted(set(leaf_modules))
 
 
-def generate_reference_pages(src_dir: Path, docs_dir: Path) -> list[dict]:
+def generate_reference_pages(
+    src_dir: Path, docs_dir: Path, package_name: str = "zen_api", *, include_modules: bool = False
+) -> list[dict]:
     domains: dict[str, list[tuple[str, str]]] = {}
 
-    for module in find_leaf_modules(src_dir):
+    prefix = "reference" if package_name == "zen_api" else f"reference/{package_name}"
+    for module in find_leaf_modules(src_dir, package_name, include_modules=include_modules):
         parts = module.split(".")
         domain = parts[1]
         label = ".".join(parts[2:]) if len(parts) > 2 else domain
-        md_path = "reference/" + "/".join(parts[1:]) + ".md"
+        md_path = prefix + "/" + "/".join(parts[1:]) + ".md"
         target_path = docs_dir / md_path
         target_path.parent.mkdir(parents=True, exist_ok=True)
         target_path.write_text(f"# {'.'.join(parts[1:])}\n\n::: {module}\n", encoding="utf-8")
@@ -140,6 +156,164 @@ def generate_reference_pages(src_dir: Path, docs_dir: Path) -> list[dict]:
             nav_items.append({display_name: [{label: path} for label, path in entries]})
 
     return nav_items
+
+
+def proto_page(name: str) -> str:
+    return "proto/" + PurePosixPath(name).with_suffix(".md").as_posix()
+
+
+def proto_anchor(name: str) -> str:
+    return "proto-" + name.lstrip(".").replace(".", "-")
+
+
+def table_text(text: str) -> str:
+    return html.escape(text).replace("|", "\\|").replace("\n", "<br>")
+
+
+class ProtoRenderer:
+    """Render compiled protocol definitions with comments and linked types."""
+
+    def __init__(self, files: dict) -> None:
+        self.symbols: dict[str, str] = {}
+        self.maps: dict = {}
+        self.comments: dict = {}
+        for name, descriptor in files.items():
+            self.comments[name] = {
+                tuple(location.path): "\n\n".join(
+                    value.strip() for value in (location.leading_comments, location.trailing_comments) if value.strip()
+                )
+                for location in descriptor.source_code_info.location
+            }
+            for message in descriptor.message_type:
+                self.index_message(message, descriptor.package, proto_page(name))
+            for symbol in [*descriptor.enum_type, *descriptor.service]:
+                self.symbols[f"{descriptor.package}.{symbol.name}".lstrip(".")] = proto_page(name)
+
+    def index_message(self, message, parent: str, page: str) -> None:
+        name = f"{parent}.{message.name}".lstrip(".")
+        if message.options.map_entry:
+            self.maps["." + name] = message
+            return
+        self.symbols[name] = page
+        for nested in message.nested_type:
+            self.index_message(nested, name, page)
+        for enum in message.enum_type:
+            self.symbols[f"{name}.{enum.name}"] = page
+
+    def comment(self, file, path: tuple) -> str:
+        return self.comments[file.name].get(path, "")
+
+    def type_link(self, name: str, page: str) -> str:
+        name = name.lstrip(".")
+        if name not in self.symbols:
+            return f"`{name}`"
+        target = posixpath.relpath(self.symbols[name], posixpath.dirname(page))
+        return f"[{name}]({target}#{proto_anchor(name)})"
+
+    def field_type(self, field, page: str) -> str:
+        if field.type_name in self.maps:
+            key, value = self.maps[field.type_name].field
+            return f"map&lt;{self.field_type(key, page)}, {self.field_type(value, page)}&gt;"
+        if field.type_name:
+            return self.type_link(field.type_name, page)
+        return f"`{field.type.name.removeprefix('TYPE_').lower()}`"
+
+    def render_enum(self, enum, parent: str, file, path: tuple, level: int) -> list[str]:
+        name = f"{parent}.{enum.name}".lstrip(".")
+        lines = [
+            f"{'#' * level} Enum `{enum.name}` {{ #{proto_anchor(name)} }}", "",
+            self.comment(file, path), "", "| Name | Number | Description |", "| --- | --- | --- |",
+        ]
+        for index, value in enumerate(enum.value):
+            lines.append(f"| `{value.name}` | {value.number} | {table_text(self.comment(file, path + (2, index)))} |")
+        return [*lines, ""]
+
+    def render_message(self, message, parent: str, file, path: tuple, level: int = 2) -> list[str]:
+        if message.options.map_entry:
+            return []
+        name = f"{parent}.{message.name}".lstrip(".")
+        lines = [f"{'#' * level} Message `{message.name}` {{ #{proto_anchor(name)} }}", "", self.comment(file, path), ""]
+        if message.field:
+            lines.extend(["| Field | Number | Type | Presence | Description |", "| --- | --- | --- | --- | --- |"])
+            for index, field in enumerate(message.field):
+                presence = "repeated" if int(field.label) == 3 else "required" if int(field.label) == 2 else "singular"
+                if field.proto3_optional:
+                    presence = "optional"
+                elif field.is_set("oneof_index"):
+                    presence = f"oneof `{message.oneof_decl[field.oneof_index].name}`"
+                description = self.comment(file, path + (2, index))
+                if field.default_value:
+                    description += f"\nDefault: {field.default_value}"
+                lines.append(
+                    f"| `{field.name}` | {field.number} | {self.field_type(field, proto_page(file.name))} | "
+                    f"{presence} | {table_text(description)} |"
+                )
+            lines.append("")
+        for index, enum in enumerate(message.enum_type):
+            lines.extend(self.render_enum(enum, name, file, path + (4, index), level + 1))
+        for index, nested in enumerate(message.nested_type):
+            lines.extend(self.render_message(nested, name, file, path + (3, index), level + 1))
+        return lines
+
+    def render(self, file, version: str) -> str:
+        source_link = posixpath.relpath("proto/source/" + file.name, posixpath.dirname(proto_page(file.name)))
+        lines = [f"# {file.name}", "", f"Version: **{version}**", "", f"Package: `{file.package}`", "",
+                 f"[Download proto source]({source_link})", ""]
+        for service_index, service in enumerate(file.service):
+            name = f"{file.package}.{service.name}".lstrip(".")
+            path = (6, service_index)
+            lines.extend([f"## Service `{service.name}` {{ #{proto_anchor(name)} }}", "", self.comment(file, path), ""])
+            for index, method in enumerate(service.method):
+                input_type = ("stream " if method.client_streaming else "") + method.input_type.lstrip(".")
+                output_type = ("stream " if method.server_streaming else "") + method.output_type.lstrip(".")
+                lines.extend([
+                    f"### {method.name} {{ #{proto_anchor(name + '.' + method.name)} }}", "",
+                    self.comment(file, path + (2, index)), "", "```protobuf",
+                    f"rpc {method.name} ({input_type}) returns ({output_type});", "```", "",
+                    f"Request: {self.type_link(method.input_type, proto_page(file.name))}", "",
+                    f"Response: {self.type_link(method.output_type, proto_page(file.name))}", "",
+                ])
+        for index, message in enumerate(file.message_type):
+            lines.extend(self.render_message(message, file.package, file, (4, index)))
+        for index, enum in enumerate(file.enum_type):
+            lines.extend(self.render_enum(enum, file.package, file, (5, index), 2))
+        return "\n".join(lines)
+
+
+def generate_proto_pages(proto_dir: Path, docs_dir: Path, version: str, protoc: str) -> list[dict]:
+    """Compile the selected source version and publish its reference and originals."""
+    sources = sorted(path.relative_to(proto_dir).as_posix() for path in proto_dir.rglob("*.proto"))
+    if not sources:
+        raise FileNotFoundError(f"No proto sources found in {proto_dir}")
+    descriptor_path = docs_dir.parent / "proto-descriptor.pb"
+    subprocess.run(
+        [protoc, f"--proto_path={proto_dir.resolve()}", f"--descriptor_set_out={descriptor_path.resolve()}",
+         "--include_imports", "--include_source_info", "--experimental_allow_proto3_optional", *sources],
+        check=True,
+    )
+    descriptor_set = FileDescriptorSet().parse(descriptor_path.read_bytes())
+    descriptors = {descriptor.name: descriptor for descriptor in descriptor_set.file}
+    files = {name: descriptors[name] for name in sources}
+    renderer = ProtoRenderer(files)
+    domains: dict[str, list[dict]] = {}
+    overview = ["# Protocol Buffer Reference", "", f"Protocol definitions for ZEN API **{version}**.", ""]
+    for name, descriptor in files.items():
+        page = proto_page(name)
+        destination = docs_dir / page
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_text(renderer.render(descriptor, version), encoding="utf-8")
+        source = docs_dir / "proto" / "source" / name
+        source.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(proto_dir / name, source)
+        parts = PurePosixPath(name).with_suffix("").parts
+        if parts[0] == "zen_api":
+            parts = parts[1:]
+        domains.setdefault(parts[0], []).append({".".join(parts[1:]) or parts[0]: page})
+        overview.append(f"- [{name}]({posixpath.relpath(page, 'proto')})")
+    (docs_dir / "proto" / "index.md").write_text("\n".join(overview) + "\n", encoding="utf-8")
+    return [{"Overview": "proto/index.md"}] + [
+        {DOMAIN_LABELS.get(domain, domain.title()): entries} for domain, entries in sorted(domains.items())
+    ]
 
 
 def write_yaml(path: Path, config: dict) -> None:
@@ -175,8 +349,8 @@ def build_landing_page(build_dir: Path, site_dir: Path, versions: list[str]) -> 
     run_mkdocs(config_path, strict=False)
 
 
-def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version: str) -> None:
-    package_dir = repo_root / "ZEN-API" / "python_package" / f"zen_api-{version}"
+def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version: str, protoc: str = "protoc") -> None:
+    package_dir = repo_root / "ZEN-API" / "python_packages" / f"zen_api-{version}"
     if not package_dir.is_dir():
         raise FileNotFoundError(f"Package directory not found: {package_dir}")
 
@@ -186,11 +360,30 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
     version_site_dir = site_dir / ZENAPI_PAGES_PATH / version
     docs_dir.mkdir(parents=True, exist_ok=True)
 
+    utils_dir = repo_root / "ZEN-API" / "zen_api_utils_package"
+    with (utils_dir / "pyproject.toml").open("rb") as metadata:
+        utils_project = tomllib.load(metadata)["project"]
+    with (package_dir / "pyproject.toml").open("rb") as metadata:
+        api_project = tomllib.load(metadata)["project"]
+    utils_version = utils_project["version"]
+    shutil.copytree(utils_dir / "mkdocs_docs", docs_dir / "guides" / "zen_api_utils", dirs_exist_ok=True)
+
     (docs_dir / "index.md").write_text(
         textwrap.dedent(f"""
             # ZEN API
 
             Python wrappers for the ZEN API, enabling programmatic control of ZEISS microscopy software via gRPC.
+
+            | Package | Documented version |
+            | --- | --- |
+            | `zen_api` | `{version}` |
+            | `zen_api_utils` | `{utils_version}` |
+
+            This site pairs the selected API sources with the utility sources from this repository checkout.
+            The packages are independently versioned.
+
+            See the [utilities guide](guides/zen_api_utils/index.md), Python API references,
+            and [protocol definitions](proto/index.md).
 
             ## Installation
 
@@ -198,11 +391,13 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
 
             ```bash
             pip install zen_api-{version}-py3-none-any.whl
+            pip install zen_api_utils-{utils_version}-py3-none-any.whl
             ```
 
             ## Requirements
 
-            - Python >= 3.10
+            - API Python requirement: `{api_project['requires-python']}`
+            - Utilities Python requirement: `{utils_project['requires-python']}`
             - betterproto == 2.0.0b7
 
             ## API Domains
@@ -238,6 +433,9 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
     )
 
     nav_items = generate_reference_pages(src_dir, docs_dir)
+    utils_src = utils_dir / "src"
+    utils_nav = generate_reference_pages(utils_src, docs_dir, "zen_api_utils", include_modules=True)
+    proto_nav = generate_proto_pages(repo_root / "ZEN-API" / "protofiles" / f"proto_{version}", docs_dir, version, protoc)
     config = mkdocs_material_config(
         site_name=f"ZEN API {version}",
         site_url=f"https://zeiss-microscopy.github.io/OAD/{ZENAPI_PAGES_PATH}/{version}/",
@@ -251,7 +449,7 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
             "mkdocstrings": {
                 "handlers": {
                     "python": {
-                        "paths": [str(src_dir.resolve())],
+                        "paths": [str(src_dir.resolve()), str(utils_src.resolve())],
                         "options": {
                             "docstring_style": "google",
                             "docstring_section_style": "list",
@@ -272,8 +470,14 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
             }
         },
     ]
-    config["extra"] = {"version": {"provider": "mike"}}
-    config["nav"] = [{"Home": "index.md"}, {"API Reference": nav_items}]
+    config["site_description"] = "ZEN API services, protocol definitions, and workflow utilities"
+    config["extra"] = {"documented_versions": {"zen_api": version, "zen_api_utils": utils_version}}
+    config["nav"] = [
+        {"Home": "index.md"},
+        {"Utilities Guide": "guides/zen_api_utils/index.md"},
+        {"Python API Reference": [{"zen_api": nav_items}, {"zen_api_utils": utils_nav}]},
+        {"Protocol Buffer Reference": proto_nav},
+    ]
 
     config_path = version_build_dir / "mkdocs.yml"
     write_yaml(config_path, config)
@@ -286,19 +490,27 @@ def main() -> None:
     parser.add_argument("--repo-root", type=Path, default=Path.cwd(), help="Repository root.")
     parser.add_argument("--build-dir", type=Path, default=Path("_zen_api_pages"), help="Temporary build directory.")
     parser.add_argument("--site-dir", type=Path, default=Path("site"), help="GitHub Pages output directory.")
+    parser.add_argument("--protoc", default="protoc", help="Protocol Buffers compiler executable.")
     args = parser.parse_args()
 
     repo_root = args.repo_root.resolve()
     build_dir = (repo_root / args.build_dir).resolve()
     site_dir = (repo_root / args.site_dir).resolve()
 
-    if build_dir.exists():
-        import shutil
+    for version in args.versions:
+        if not re.fullmatch(r"[0-9]{4}\.[0-9]{2}\.[0-9]+", version):
+            parser.error(f"Invalid API version: {version!r}; expected YYYY.MM.PATCH")
+        api_root = repo_root / "ZEN-API"
+        for required in (api_root / "python_packages" / f"zen_api-{version}" / "src" / "zen_api",
+                         api_root / "protofiles" / f"proto_{version}"):
+            if not required.is_dir():
+                parser.error(f"Required documentation input not found: {required}")
+    if shutil.which(args.protoc) is None:
+        parser.error(f"Protocol Buffers compiler not found: {args.protoc}")
 
+    if build_dir.exists():
         shutil.rmtree(build_dir)
     if site_dir.exists():
-        import shutil
-
         shutil.rmtree(site_dir)
 
     build_dir.mkdir(parents=True, exist_ok=True)
@@ -306,7 +518,7 @@ def main() -> None:
 
     build_landing_page(build_dir, site_dir, args.versions)
     for version in args.versions:
-        build_version_page(repo_root, build_dir, site_dir, version)
+        build_version_page(repo_root, build_dir, site_dir, version, args.protoc)
 
 
 if __name__ == "__main__":

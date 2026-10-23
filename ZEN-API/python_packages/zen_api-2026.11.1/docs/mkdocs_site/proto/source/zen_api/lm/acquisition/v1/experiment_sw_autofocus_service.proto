@@ -1,0 +1,135 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.acquisition.v1;
+import "google/protobuf/wrappers.proto";
+import "zen_api/lm/acquisition/v1/autofocus_contrast_measure.proto";
+import "zen_api/lm/acquisition/v1/autofocus_mode.proto";
+import "zen_api/lm/acquisition/v1/autofocus_sampling.proto";
+
+// The ExperimentSwAutofocusServiceExportRequest class.
+message ExperimentSwAutofocusServiceExportRequest {
+   // The experiment id.
+   string experiment_id = 1;
+}
+// Response object representing the values of xml string.
+message ExperimentSwAutofocusServiceExportResponse {
+   // A value of the xml string.
+   string xml_string = 1;
+}
+// The ExperimentSwAutofocusServiceFindAutoFocusRequest class.
+message ExperimentSwAutofocusServiceFindAutoFocusRequest {
+   // The experiment id.
+   string experiment_id = 1;
+   // The timeout in seconds.
+   .google.protobuf.DoubleValue timeout = 2;
+}
+// Response object representing the focus position.
+message ExperimentSwAutofocusServiceFindAutoFocusResponse {
+   // The focus position (unit: m).
+   double focus_position = 1;
+}
+// The ExperimentSwAutofocusServiceGetAutofocusParametersRequest class.
+message ExperimentSwAutofocusServiceGetAutofocusParametersRequest {
+   // The experiment id.
+   string experiment_id = 1;
+}
+// Response object representing the values of software autofocus parameters for the experiment.
+message ExperimentSwAutofocusServiceGetAutofocusParametersResponse {
+   // A value of the experiment id.
+   string experiment_id = 1;
+   // A value of autofocus mode.
+   AutofocusMode auto_focus_mode = 2;
+   // A value of sharpness measure for contrast mode.
+   AutofocusContrastMeasure contrast_measure = 3;
+   // A value of search strategy.
+   // Either "Smart", "Full", "FullNoChecks" or the name of an extension strategy.
+   string search_strategy = 4;
+   // A value of the predefined step size.
+   AutofocusSampling autofocus_sampling = 5;
+   // A value of the reflection mode offset (unit: m).
+   double offset = 6;
+   // A value indicating whether the acquisition ROI
+   // is used for the software autofocus.
+   bool use_acquisition_roi = 7;
+   // A name of the focus reference channel.
+   string reference_channel_name = 8;
+   // A value indicating whether the relative search range size is
+   // determined automatically.
+   bool relative_range_is_automatic = 9;
+   // A value of the relative search range of the Z drive (unit: m).
+   double relative_search_range = 10;
+   // A value of the lower search range limit of the Z drive (unit: m).
+   double lower_limit = 11;
+   // A value of the upper search range limit of the Z drive (unit: m).
+   double upper_limit = 12;
+}
+// The ExperimentSwAutofocusServiceImportRequest class.
+message ExperimentSwAutofocusServiceImportRequest {
+   // The experiment id.
+   string experiment_id = 1;
+   // Xml string to be imported.
+   string xml_string = 2;
+}
+// The ExperimentSwAutofocusServiceImportResponse class.
+message ExperimentSwAutofocusServiceImportResponse {
+}
+// The ExperimentSwAutofocusServiceSetAutofocusParametersRequest class.
+message ExperimentSwAutofocusServiceSetAutofocusParametersRequest {
+   // The experiment id.
+   string experiment_id = 1;
+   // The autofocus mode.
+   AutofocusMode autofocus_mode = 2;
+   // The sharpness measure for contrast mode.
+   AutofocusContrastMeasure contrast_measure = 3;
+   // The strategy, either "Smart", "Full", "FullNoChecks" or the name of an extension
+   // strategy, or null to leave unmodified. This parameter is case-insensitive.
+   string search_strategy = 4;
+   // The predefined step size, or null to leave unmodified.
+   AutofocusSampling autofocus_sampling = 5;
+   // The reflection mode offset (unit: m), or null to
+   // leave unmodified.
+   .google.protobuf.DoubleValue offset = 6;
+   // True if the acquisition ROI is used for the
+   // software autofocus; otherwise, false, or null to leave unmodified.
+   .google.protobuf.BoolValue use_acquisition_roi = 7;
+   // The case-insensitive name of the focus reference channel,
+   // or null to leave unmodified.
+   string reference_channel_name = 8;
+   // True if the relative search range size is
+   // determined automatically; otherwise, false, or null to leave unmodified.
+   .google.protobuf.BoolValue relative_range_is_automatic = 9;
+   // The relative search range in units of the Z drive (unit: m),
+   // or null to leave unmodified.
+   .google.protobuf.DoubleValue relative_search_range = 10;
+   // The lower search range limit in units of the Z drive (unit: m),
+   // or null to leave unmodified.
+   .google.protobuf.DoubleValue lower_limit = 11;
+   // The upper limit in units of the Z drive (unit: m),
+   // or null to leave unmodified.
+   .google.protobuf.DoubleValue upper_limit = 12;
+}
+// The ExperimentSwAutofocusServiceSetAutofocusParametersResponse class.
+message ExperimentSwAutofocusServiceSetAutofocusParametersResponse {
+}
+// The IExperimentSwAutofocusService interface.
+service ExperimentSwAutofocusService {
+   // Exports the software autofocus parameters to an xml string.
+   rpc Export (ExperimentSwAutofocusServiceExportRequest) returns (ExperimentSwAutofocusServiceExportResponse);
+   // Gets the the focus position.
+   rpc FindAutoFocus (ExperimentSwAutofocusServiceFindAutoFocusRequest) returns (ExperimentSwAutofocusServiceFindAutoFocusResponse);
+   // Gets the software autofocus parameters for the specified experiment.
+   rpc GetAutofocusParameters (ExperimentSwAutofocusServiceGetAutofocusParametersRequest) returns (ExperimentSwAutofocusServiceGetAutofocusParametersResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Imports the software autofocus parameters from an xml string.
+   rpc Import (ExperimentSwAutofocusServiceImportRequest) returns (ExperimentSwAutofocusServiceImportResponse);
+   // Sets the software autofocus parameters for the specified experiment.
+   rpc SetAutofocusParameters (ExperimentSwAutofocusServiceSetAutofocusParametersRequest) returns (ExperimentSwAutofocusServiceSetAutofocusParametersResponse);
+}

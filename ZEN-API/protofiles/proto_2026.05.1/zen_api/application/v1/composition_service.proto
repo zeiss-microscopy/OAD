@@ -1,0 +1,53 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.application.v1;
+
+// The CompositionServiceCreateModuleRequest class.
+message CompositionServiceCreateModuleRequest {
+   // The id of the module.
+   string module_id = 1;
+   // The display name of the module.
+   string display_name = 2;
+   // The description of the module.
+   string description = 3;
+   // The license string.
+   string license_string = 4;
+   // The minimum required feature version.
+   string minimum_required_version = 5;
+}
+// The CompositionServiceCreateModuleResponse class.
+message CompositionServiceCreateModuleResponse {
+}
+// The CompositionServiceIsModuleAvailableRequest class.
+message CompositionServiceIsModuleAvailableRequest {
+   // The module id.
+   string module_id = 1;
+}
+// Response object of the method for checking the availability state of a composition module.
+message IsModuleAvailableResponse {
+   // A value indicating whether the module is available or not.
+   bool is_available = 1;
+}
+// The ICompositionService interface.
+service CompositionService {
+   // Creates a module and adds it to the selected profile.
+   // With this method, a client can 'inject' a new module at runtime (e.g. via OAD script or ZEN API).
+   // After adding the module, it will appear as optional module of the selected profile just as any other module.
+   // The Module Manager can be used to verify this. After adding the module, the client can make use of the
+   // 'normal' license infrastructure to check the avaiability of the newly added module.
+   // Note:
+   // A module is available, if the module is licensed AND the user has enabled it (via the Module Manager).
+   // In case a module gets added via this method, the module is enabled by default.
+   rpc CreateModule (CompositionServiceCreateModuleRequest) returns (CompositionServiceCreateModuleResponse);
+   // Returns the availability state of the given module.
+   rpc IsModuleAvailable (CompositionServiceIsModuleAvailableRequest) returns (IsModuleAvailableResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+}

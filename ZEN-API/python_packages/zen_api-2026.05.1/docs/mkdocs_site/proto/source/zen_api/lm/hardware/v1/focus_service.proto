@@ -1,0 +1,92 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.hardware.v1;
+
+// The FocusServiceGetAccelerationRequest class.
+message FocusServiceGetAccelerationRequest {
+}
+// Acceleration of the focus in %.
+message FocusServiceGetAccelerationResponse {
+   // The acceleration in %.
+   double value = 1;
+}
+// The FocusServiceGetPositionRequest class.
+message FocusServiceGetPositionRequest {
+}
+// Position of the focus in µm.
+message FocusServiceGetPositionResponse {
+   // The position in µm.
+   double value = 1;
+}
+// The FocusServiceGetSpeedRequest class.
+message FocusServiceGetSpeedRequest {
+}
+// Speed of the focus in %.
+message FocusServiceGetSpeedResponse {
+   // The speed in %.
+   double value = 1;
+}
+// The FocusServiceMoveToRequest class.
+message FocusServiceMoveToRequest {
+   // New position in µm.
+   double value = 1;
+}
+// Describes the result of a Focus.MoveTo request.
+message FocusServiceMoveToResponse {
+   // A value indicating whether the position was changed.
+   bool position_changed = 1;
+}
+// The FocusServiceSetAccelerationRequest class.
+message FocusServiceSetAccelerationRequest {
+   // Acceleration in percent, i.e. values from range [0;100].
+   double acceleration = 1;
+}
+// The FocusServiceSetAccelerationResponse class.
+message FocusServiceSetAccelerationResponse {
+}
+// The FocusServiceSetSpeedRequest class.
+message FocusServiceSetSpeedRequest {
+   // Speed in percent, i.e. values from range [0;100].
+   double speed = 1;
+}
+// The FocusServiceSetSpeedResponse class.
+message FocusServiceSetSpeedResponse {
+}
+// The FocusServiceStopRequest class.
+message FocusServiceStopRequest {
+}
+// The FocusServiceStopResponse class.
+message FocusServiceStopResponse {
+}
+// The IFocusService interface.
+service FocusService {
+   // Gets the focus acceleration.
+   rpc GetAcceleration (FocusServiceGetAccelerationRequest) returns (FocusServiceGetAccelerationResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the focus position.
+   rpc GetPosition (FocusServiceGetPositionRequest) returns (FocusServiceGetPositionResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the focus speed.
+   rpc GetSpeed (FocusServiceGetSpeedRequest) returns (FocusServiceGetSpeedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Moves the focus to the given position in µm.
+   rpc MoveTo (FocusServiceMoveToRequest) returns (FocusServiceMoveToResponse);
+   // Sets the acceleration of the focus in percent.
+   rpc SetAcceleration (FocusServiceSetAccelerationRequest) returns (FocusServiceSetAccelerationResponse);
+   // Sets the speed of the focus in percent.
+   rpc SetSpeed (FocusServiceSetSpeedRequest) returns (FocusServiceSetSpeedResponse);
+   // Stops the focus if it is moving.
+   rpc Stop (FocusServiceStopRequest) returns (FocusServiceStopResponse);
+}

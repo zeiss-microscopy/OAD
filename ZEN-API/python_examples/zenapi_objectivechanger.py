@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_objectivechanger.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -13,29 +10,28 @@
 #################################################################
 
 import asyncio
-from pathlib import Path
 import sys
-
-# from typing import List
-from zen_api_utils.misc import set_logging, initialize_zenapi
-
-from zen_api_utils.objective import (
-    get_used_objective_positions,
-    get_objective_by_position,
-    get_used_optovar_positions,
-    get_optovar_by_position,
-)
+from pathlib import Path
 
 # import the auto-generated python modules
 from zen_api.lm.hardware.v2 import (
-    ObjectiveChangerServiceStub,
+    ObjectiveChangerServiceGetObjectivesRequest,
     ObjectiveChangerServiceGetPositionRequest,
     ObjectiveChangerServiceMoveToRequest,
-    ObjectiveChangerServiceGetObjectivesRequest,
-    OptovarServiceStub,
+    ObjectiveChangerServiceStub,
+    OptovarServiceGetOptovarsRequest,
     OptovarServiceGetPositionRequest,
     OptovarServiceMoveToRequest,
-    OptovarServiceGetOptovarsRequest,
+    OptovarServiceStub,
+)
+
+# from typing import List
+from zen_api_utils.misc import initialize_zenapi, set_logging
+from zen_api_utils.objective import (
+    get_objective_by_position,
+    get_optovar_by_position,
+    get_used_objective_positions,
+    get_used_optovar_positions,
 )
 
 # Get the directory where the current script is located
@@ -46,6 +42,7 @@ config_path = script_dir / "config.ini"
 
 
 async def main(args):
+    del args
 
     # get the gRPC channel and the metadata
     channel, metadata = initialize_zenapi(config_path)
@@ -76,18 +73,24 @@ async def main(args):
     # get the current objective position and name
     pos_obj = await objchanger_service.get_position(ObjectiveChangerServiceGetPositionRequest())
     current_objective = get_objective_by_position(objectives, pos_obj.value)
+    if current_objective is None:
+        raise RuntimeError(f"No objective configured at position {pos_obj.value}")
     logger.info(f"Current Objective: {current_objective.name} Position: {current_objective.position}")
     obj_initial_position = current_objective.position
 
     # move to a new objective position
     obj_new_position = 3
-    out = await objchanger_service.move_to(ObjectiveChangerServiceMoveToRequest(position_index=obj_new_position))
+    await objchanger_service.move_to(ObjectiveChangerServiceMoveToRequest(position_index=obj_new_position))
     current_objective = get_objective_by_position(objectives, obj_new_position)
+    if current_objective is None:
+        raise RuntimeError(f"No objective configured at position {obj_new_position}")
     logger.info(f"Current Objective: {current_objective.name} Position: {current_objective.position}")
 
     # move back to initial objective position
-    out = await objchanger_service.move_to(ObjectiveChangerServiceMoveToRequest(position_index=obj_initial_position))
+    await objchanger_service.move_to(ObjectiveChangerServiceMoveToRequest(position_index=obj_initial_position))
     current_objective = get_objective_by_position(objectives, obj_initial_position)
+    if current_objective is None:
+        raise RuntimeError(f"No objective configured at position {obj_initial_position}")
     logger.info(f"Current Objective: {current_objective.name} Position: {current_objective.position}")
 
     logger.info("------------------ Move Optovars -----------------------")
@@ -95,18 +98,24 @@ async def main(args):
     # get the current optovar position and name
     pos_optovar = await optovar_service.get_position(OptovarServiceGetPositionRequest())
     current_optovar = get_optovar_by_position(optovars, pos_optovar.value)
+    if current_optovar is None:
+        raise RuntimeError(f"No optovar configured at position {pos_optovar.value}")
     logger.info(f"Current Optovar: {current_optovar.name} Position: {current_optovar.position}")
     optovar_initial_position = current_optovar.position
 
     # move to a new optovar position
     opt_new_position = 1
-    out = await optovar_service.move_to(OptovarServiceMoveToRequest(position_index=opt_new_position))
+    await optovar_service.move_to(OptovarServiceMoveToRequest(position_index=opt_new_position))
     current_optovar = get_optovar_by_position(optovars, opt_new_position)
+    if current_optovar is None:
+        raise RuntimeError(f"No optovar configured at position {opt_new_position}")
     logger.info(f"Current Optovar: {current_optovar.name} Position: {current_optovar.position}")
 
     # move back to initial optovar position
-    out = await optovar_service.move_to(OptovarServiceMoveToRequest(position_index=optovar_initial_position))
+    await optovar_service.move_to(OptovarServiceMoveToRequest(position_index=optovar_initial_position))
     current_optovar = get_optovar_by_position(optovars, optovar_initial_position)
+    if current_optovar is None:
+        raise RuntimeError(f"No optovar configured at position {optovar_initial_position}")
     logger.info(f"Current Optovar: {current_optovar.name} Position: {current_optovar.position}")
 
     # close the channel

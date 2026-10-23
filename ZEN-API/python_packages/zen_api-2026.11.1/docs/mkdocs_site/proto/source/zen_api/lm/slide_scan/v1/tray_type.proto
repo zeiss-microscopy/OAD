@@ -1,0 +1,33 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.slide_scan.v1;
+
+// Enum defining the types of slide scanner trays.
+enum TrayType {
+   // Default value if status is not specified.
+   TRAY_TYPE_UNSPECIFIED = 0;
+   // No tray.
+   TRAY_TYPE_NONE = 1;
+   // Scan tray for 4 slides of size 1'x3'.
+   TRAY_TYPE_SCAN1X3 = 2;
+   // Scan tray for 2 slides of size 2'x3'.
+   TRAY_TYPE_SCAN2X3 = 3;
+   // Scan tray for 2 slides, one of size 1'x3', one of size 2'x3'.
+   TRAY_TYPE_SCAN1X3_2X3 = 4;
+   // Stage calibration slide holder tray.
+   TRAY_TYPE_CALIBRATION_STAGE = 5;
+   // Scan tray for 4 slides of size 1'x3', basic design.
+   TRAY_TYPE_SCAN1X3_BASIC = 6;
+   // Scan tray for 1 slide of size 4'x3' or a combination of slides of unknown size.
+   TRAY_TYPE_SCAN4X3 = 7;
+   // Arbitrary tray type to indicate the parking position. Is only available at parking position of the magazine changer.
+   TRAY_TYPE_PARKING = 152;
+   // Unknown type (tray is inserted but could not be determined).
+   TRAY_TYPE_UNKNOWN = 153;
+}

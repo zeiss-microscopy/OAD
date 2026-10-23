@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_changers.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # This script demonstrates how to interact with microscope hardware changers like
@@ -17,35 +14,34 @@
 #################################################################
 
 import asyncio
-from pathlib import Path
 import sys
+from pathlib import Path
 
-# from typing import List
-from zen_api_utils.misc import set_logging, initialize_zenapi
-
+# import the auto-generated python modules
+from zen_api.lm.hardware.v2 import (
+    FilterWheelServiceGetFiltersRequest,
+    FilterWheelServiceGetPositionRequest,
+    FilterWheelServiceStub,
+    ObjectiveChangerServiceGetObjectivesRequest,
+    ObjectiveChangerServiceGetPositionRequest,
+    ObjectiveChangerServiceStub,
+    OptovarServiceGetOptovarsRequest,
+    OptovarServiceGetPositionRequest,
+    OptovarServiceStub,
+    ReflectorChangerServiceGetPositionRequest,
+    ReflectorChangerServiceGetReflectorsRequest,
+    ReflectorChangerServiceStub,
+)
 from zen_api_utils.changers import (
+    get_filter_by_position,
     get_objective_by_position,
     get_optovar_by_position,
-    get_filter_by_position,
     get_reflector_by_position,
     move_changers_adv,
 )
 
-# import the auto-generated python modules
-from zen_api.lm.hardware.v2 import (
-    ObjectiveChangerServiceStub,
-    ObjectiveChangerServiceGetPositionRequest,
-    ObjectiveChangerServiceGetObjectivesRequest,
-    ReflectorChangerServiceStub,
-    ReflectorChangerServiceGetReflectorsRequest,
-    ReflectorChangerServiceGetPositionRequest,
-    FilterWheelServiceStub,
-    FilterWheelServiceGetPositionRequest,
-    FilterWheelServiceGetFiltersRequest,
-    OptovarServiceStub,
-    OptovarServiceGetPositionRequest,
-    OptovarServiceGetOptovarsRequest,
-)
+# from typing import List
+from zen_api_utils.misc import initialize_zenapi, set_logging
 
 # Get the directory where the current script is located
 script_dir = Path(__file__).parent
@@ -56,6 +52,7 @@ config_path = script_dir / "my_config.ini"
 
 
 async def main(args):
+    del args
 
     # get the gRPC channel and the metadata
     channel, metadata = initialize_zenapi(config_path)

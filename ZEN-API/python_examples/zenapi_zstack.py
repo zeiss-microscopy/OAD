@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_zstack.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -14,24 +11,22 @@
 
 import asyncio
 import sys
-import numpy as np
 from pathlib import Path
-from zen_api_utils.misc import set_logging, initialize_zenapi
-from zen_api_utils.experiment import show_zstack_info_LM, save_experiment, delete_czifile
+
+import numpy as np
 
 # import the auto-generated python modules
 from zen_api.acquisition.v1beta import (
-    ExperimentServiceStub,
-    ExperimentServiceLoadRequest,
     ExperimentServiceCloneRequest,
+    ExperimentServiceLoadRequest,
     ExperimentServiceRunExperimentRequest,
+    ExperimentServiceStub,
 )
-
 from zen_api.lm.acquisition.v1 import (
-    ZStackServiceStub,
     ZStackServiceGetZStackInfoRequest,
     ZStackServiceModifyZStackCenterRangeRequest,
     ZStackServiceModifyZStackFirstLastRequest,
+    ZStackServiceStub,
 )
 
 # import the auto-generated python modules
@@ -40,6 +35,8 @@ from zen_api.lm.hardware.v2 import (
     FocusServiceMoveToRequest,
     FocusServiceStub,
 )
+from zen_api_utils.experiment import delete_czifile, save_experiment, show_zstack_info_LM
+from zen_api_utils.misc import initialize_zenapi, set_logging
 
 # Get the directory where the current script is located
 script_dir = Path(__file__).parent
@@ -58,6 +55,7 @@ exp_folder = Path(r"f:\Documents\Carl Zeiss\ZEN\Documents\Experiment Setups")
 
 
 async def main(args):
+    del args
 
     # get the gRPC channel and the metadata
     channel, metadata = initialize_zenapi(config_path)

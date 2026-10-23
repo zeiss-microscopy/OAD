@@ -10,20 +10,19 @@ from zen_api.workflows.v3beta import (
     WorkflowServiceWaitJobRequest,
     WorkflowServiceLoadJobTemplateRequest,
 )
-from zenapi_tools import initialize_zenapi, set_logging
+from zen_api_utils.misc import initialize_zenapi, set_logging
 from zenapi_workflow_tools import (
     is_job_running,
     is_job_template_loaded,
     get_status,
     monitor_status,
 )
-from typing import Optional
 
 
 async def start_job(
     workflow_service: WorkflowServiceStub,
-    job_template_name: Optional[str] = None,
-    result_path: Optional[str] = None,
+    job_template_name: str,
+    result_path: str = "",
 ) -> None:
     # Initial status
     status = await get_status(workflow_service)
@@ -33,12 +32,10 @@ async def start_job(
     loaded = await is_job_template_loaded(workflow_service)
     logger.info(f"Is job template loaded: {loaded}")
 
-    if result_path is None:
+    if not result_path:
         logger.info(f"Loading job template: {job_template_name}")
     else:
-        logger.info(
-            f'Loading job template "{job_template_name}" with result path "{result_path}"'
-        )
+        logger.info(f'Loading job template "{job_template_name}" with result path "{result_path}"')
     request = WorkflowServiceLoadJobTemplateRequest(job_template_name, result_path)
     await workflow_service.load_job_template(request)
 

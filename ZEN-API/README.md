@@ -77,16 +77,17 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 
 ### Documentation
 
-| ZEN API Python Package | ZEN Versions | Documentation                                                         |
-| :--------------------: | :----------: | --------------------------------------------------------------------- |
-|   zen_api-2025.10.1    |     3.13     | [2025.10.1](https://zeiss-microscopy.github.io/OAD/zenapi/2025.10.1/) |
-|   zen_api-2026.05.1    |     3.14     | [2026.05.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.05.1/) |
+| ZEN API Python Package | ZEN Versions  | Documentation                                                         |
+| :--------------------: | :-----------: | --------------------------------------------------------------------- |
+|   zen_api-2025.10.1    |   ZEN 3.13    | [2025.10.1](https://zeiss-microscopy.github.io/OAD/zenapi/2025.10.1/) |
+|   zen_api-2026.05.1    |   ZEN 3.14    | [2026.05.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.05.1/) |
+|   zen_api-2026.07.1    | ZEN core 3.14 | [2026.07.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.07.1/) |
 
 Older documentations are available on request. In addition The documentation for ZEN API is availabe as HTML, MD and PDF documents.
 
 The `../docs`folder is a subfolder of the respective python package folder, aka it can be found here:
 
-- `../ZEN-API/python_package/zen_api-2025.10.1/docs/ZEN_API_Documentation_2026.05.1.pdf`
+- `../ZEN-API/python_package/zen_api-XXXX.YY.Z/docs/ZEN_API_Documentation_XXXX.YY.Z.pdf`
 
 ### ZEN API - Examples
 

@@ -1,0 +1,23 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.acquisition.v1;
+
+// Scales the depth of focus by predefined values given here.
+enum AutofocusSampling {
+   // Default enum value.
+   AUTOFOCUS_SAMPLING_UNSPECIFIED = 0;
+   // Do oversampling.
+   AUTOFOCUS_SAMPLING_FINE = 1;
+   // Do sampling according to depth of focus.
+   AUTOFOCUS_SAMPLING_DEFAULT = 2;
+   // Do under sampling.
+   AUTOFOCUS_SAMPLING_MEDIUM = 3;
+   // Coarser than medium.
+   AUTOFOCUS_SAMPLING_COARSE = 4;
+}

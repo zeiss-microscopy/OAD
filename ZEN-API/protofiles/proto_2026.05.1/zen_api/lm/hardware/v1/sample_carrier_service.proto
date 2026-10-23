@@ -1,0 +1,159 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.hardware.v1;
+import "zen_api/lm/hardware/v1/configured_container_info.proto";
+
+// The SampleCarrierServiceActivateContainerRangeRequest class.
+message SampleCarrierServiceActivateContainerRangeRequest {
+   // Experiment ID.
+   string experiment_id = 1;
+   // Name of the container where the range starts (e.g., "C3").
+   string start_container_name = 2;
+   // Name of the container where the range ends (e.g., "D8").
+   string end_container_name = 3;
+}
+// The SampleCarrierServiceActivateContainerRangeResponse class.
+message SampleCarrierServiceActivateContainerRangeResponse {
+}
+// The SampleCarrierServiceActivateContainerRequest class.
+message SampleCarrierServiceActivateContainerRequest {
+   // Experiment ID.
+   string experiment_id = 1;
+   // Name of the container (e.g., "B1").
+   string container_name = 2;
+}
+// The SampleCarrierServiceActivateContainerResponse class.
+message SampleCarrierServiceActivateContainerResponse {
+}
+// The SampleCarrierServiceActivateContainersRequest class.
+message SampleCarrierServiceActivateContainersRequest {
+   // Experiment ID.
+   string experiment_id = 1;
+   // Names of the containers (e.g., ["A1", "A2", "B7"]).
+   repeated string container_names = 2;
+}
+// The SampleCarrierServiceActivateContainersResponse class.
+message SampleCarrierServiceActivateContainersResponse {
+}
+// The SampleCarrierServiceDeactivateContainerRangeRequest class.
+message SampleCarrierServiceDeactivateContainerRangeRequest {
+   // Experiment ID.
+   string experiment_id = 1;
+   // Name of the container where the range starts (e.g., "C3").
+   string start_container_name = 2;
+   // Name of the container where the range ends (e.g., "D8").
+   string end_container_name = 3;
+}
+// The SampleCarrierServiceDeactivateContainerRangeResponse class.
+message SampleCarrierServiceDeactivateContainerRangeResponse {
+}
+// The SampleCarrierServiceDeactivateContainerRequest class.
+message SampleCarrierServiceDeactivateContainerRequest {
+   // Experiment ID.
+   string experiment_id = 1;
+   // Name of the container (e.g., "B1").
+   string container_name = 2;
+}
+// The SampleCarrierServiceDeactivateContainerResponse class.
+message SampleCarrierServiceDeactivateContainerResponse {
+}
+// The SampleCarrierServiceDeactivateContainersRequest class.
+message SampleCarrierServiceDeactivateContainersRequest {
+   // Experiment ID.
+   string experiment_id = 1;
+   // Names of the containers (e.g., ["A1", "A2", "B7"]).
+   repeated string container_names = 2;
+}
+// The SampleCarrierServiceDeactivateContainersResponse class.
+message SampleCarrierServiceDeactivateContainersResponse {
+}
+// The SampleCarrierServiceGetConfiguredContainersRequest class.
+message SampleCarrierServiceGetConfiguredContainersRequest {
+   // Experiment ID.
+   string experiment_id = 1;
+}
+// Contains the information about the configured containers in an experiment.
+message SampleCarrierServiceGetConfiguredContainersResponse {
+   // The information about the configured containers in an experiment.
+   repeated ConfiguredContainerInfo configured_containers = 1;
+}
+// The SampleCarrierServiceGetCurrentContainerRequest class.
+message SampleCarrierServiceGetCurrentContainerRequest {
+}
+// Contains the information in which container of the sample carrier the stage is positioned at.
+message SampleCarrierServiceGetCurrentContainerResponse {
+   // The row index of the container in the sample carrier (starts with index 0).
+   int32 row_index = 1;
+   // The column index of the container in the sample carrier (starts with index 0).
+   int32 column_index = 2;
+}
+// The SampleCarrierServiceGetInfoRequest class.
+message SampleCarrierServiceGetInfoRequest {
+}
+// Contains the sample carrier information.
+message SampleCarrierServiceGetInfoResponse {
+   // The number of rows in the sample carrier.
+   int32 rows = 1;
+   // The number of columns in the sample carrier.
+   int32 columns = 2;
+   // The name of the sample carrier.
+   string name = 3;
+   // The bottom material which is used for this sample carrier.
+   string material = 4;
+   // The bottom thickness of this sample carrier (in meters).
+   double thickness = 5;
+   // The skirt (i.e. bottom offset) of this sample carrier (in meters).
+   double skirt = 6;
+   // The refractive index of the bottom material of this sample carrier.
+   double refractive_index = 7;
+}
+// The SampleCarrierServiceMoveToContainerRequest class.
+message SampleCarrierServiceMoveToContainerRequest {
+   // The row index of the container (starts with index 0).
+   int32 row_index = 1;
+   // The column index of the container (starts with index 0).
+   int32 column_index = 2;
+}
+// The SampleCarrierServiceMoveToContainerResponse class.
+message SampleCarrierServiceMoveToContainerResponse {
+}
+// The ISampleCarrierService interface.
+service SampleCarrierService {
+   // Activates a tile region or position that is placed in the specified container.
+   rpc ActivateContainer (SampleCarrierServiceActivateContainerRequest) returns (SampleCarrierServiceActivateContainerResponse);
+   // Activates all tile regions and/or positions that are placed in the specified container range
+   // (e.g., "C3-D8").
+   rpc ActivateContainerRange (SampleCarrierServiceActivateContainerRangeRequest) returns (SampleCarrierServiceActivateContainerRangeResponse);
+   // Activates all tile regions and/or positions that are placed in the specified containers
+   // (e.g., ["A1", "A2", "B7"]).
+   rpc ActivateContainers (SampleCarrierServiceActivateContainersRequest) returns (SampleCarrierServiceActivateContainersResponse);
+   // Deactivates a tile region or position that is placed in the specified container.
+   rpc DeactivateContainer (SampleCarrierServiceDeactivateContainerRequest) returns (SampleCarrierServiceDeactivateContainerResponse);
+   // Deactivates all tile regions and/or positions that are placed in the specified container
+   // range (e.g., "C3-D8").
+   rpc DeactivateContainerRange (SampleCarrierServiceDeactivateContainerRangeRequest) returns (SampleCarrierServiceDeactivateContainerRangeResponse);
+   // Deactivates all tile regions and/or positions that are placed in the specified containers
+   // (e.g., ["A1", "A2", "B7"]).
+   rpc DeactivateContainers (SampleCarrierServiceDeactivateContainersRequest) returns (SampleCarrierServiceDeactivateContainersResponse);
+   // Gets the information about the configured containers in an experiment.
+   rpc GetConfiguredContainers (SampleCarrierServiceGetConfiguredContainersRequest) returns (SampleCarrierServiceGetConfiguredContainersResponse);
+   // Gets the information in which container of the sample carrier the stage is positioned at.
+   // Note that the stage might not be positioned exactly in the center of the container.
+   rpc GetCurrentContainer (SampleCarrierServiceGetCurrentContainerRequest) returns (SampleCarrierServiceGetCurrentContainerResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the information of the currently inserted sample carrier.
+   rpc GetInfo (SampleCarrierServiceGetInfoRequest) returns (SampleCarrierServiceGetInfoResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Move the stage to a sample holder container.
+   rpc MoveToContainer (SampleCarrierServiceMoveToContainerRequest) returns (SampleCarrierServiceMoveToContainerResponse);
+}

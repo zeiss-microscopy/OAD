@@ -1,0 +1,40 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.hardware.v1;
+
+// Possible beam operating states.
+enum BeamState {
+   // Default enum value.
+   BEAM_STATE_UNSPECIFIED = 0;
+   // Unknown indicates that this variable hasn't been assigned yet.
+   // This value should never occur. If you read this value, it's a bug.
+   BEAM_STATE_UNKNOWN = 1;
+   // There is an error with the Gun or EHT and the beam cannot be used.
+   BEAM_STATE_ERROR = 2;
+   // EHT is off.
+   // On FE-SEMs, the gun may be on, gun interfaces must be checked to discover gun state.
+   // On C-SEMs the EHT and gun are off, and there is no current on the filament.
+   BEAM_STATE_OFF = 3;
+   // The EHT (and gun for C-SEM) is turning on.
+   BEAM_STATE_TURNING_ON = 4;
+   // Gun is on.
+   // Filament (if it exists) has full current.
+   // EHT is on.
+   // The beam can be used.
+   BEAM_STATE_ON = 5;
+   // The beam is going into the standby state.
+   BEAM_STATE_GOING_TO_STANDBY = 6;
+   // Not all devices support this mode.
+   // This represents an intermediate state.
+   // The EVO and the FIB have standby states.
+   BEAM_STATE_STANDBY = 7;
+   // The EHT is ramping down.
+   // On C-SEM, the gun and filament may also be shutting down.
+   BEAM_STATE_TURNING_OFF = 8;
+}

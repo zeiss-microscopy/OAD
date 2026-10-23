@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_experiment_status.py
-# Author      : SRh, JSm
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -15,20 +12,19 @@
 import asyncio
 import sys
 from pathlib import Path
-from zen_api_utils.misc import set_logging, initialize_zenapi
-from pylibCZIrw import czi as pyczi
+
 from matplotlib import pyplot as plt
-import matplotlib.cm as cm
+from pylibCZIrw import czi as pyczi
 
 # import the auto-generated python modules
 from zen_api.acquisition.v1beta import (
-    ExperimentServiceStub,
-    ExperimentServiceLoadRequest,
     ExperimentServiceGetImageOutputPathRequest,
+    ExperimentServiceLoadRequest,
     ExperimentServiceRegisterOnStatusChangedRequest,
     ExperimentServiceStartExperimentRequest,
+    ExperimentServiceStub,
 )
-
+from zen_api_utils.misc import initialize_zenapi, set_logging
 
 czi_name = "test_czi"
 # exp_folder = Path(r"f:\Documents\Carl Zeiss\ZENCore\Documents\Experiment Setups")
@@ -45,7 +41,9 @@ script_dir = Path(__file__).parent
 # Build the path to config.ini relative to the script
 config_path = script_dir / "config.ini"
 
+
 async def main(args):
+    del args
     # get the gRPC channel and the metadata
     channel, metadata = initialize_zenapi(config_path)
 
@@ -128,8 +126,8 @@ async def main(args):
 
         # show the 2D image plane
         logger.info("Displaying CZI image data ...")
-        fig1, ax = plt.subplots(1, 1, figsize=(12, 8))
-        ax.imshow(img2d[..., 0], cmap=cm.inferno, vmin=100, vmax=5000)
+        _, ax = plt.subplots(1, 1, figsize=(12, 8))
+        ax.imshow(img2d[..., 0], cmap=plt.get_cmap("inferno"), vmin=100, vmax=5000)
         ax.set_title(f"{czi_fullpath}: S={s} T={t} C={c} Z={z}")
         plt.show()
 

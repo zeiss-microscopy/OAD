@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_workflow_tools.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -11,35 +8,30 @@
 # Permission is granted to use, modify and distribute this code,
 # as long as this copyright notice remains part of the code.
 #################################################################
-# import asyncio
-# import sys
-# import os
-from public.zen_api.workflows.v3beta import (
-    JobTemplateInfo,
-    WorkflowServiceStub,
-    WorkflowServiceGetAvailableJobTemplatesRequest,
-    WorkflowServiceIsJobTemplateLoadedRequest,
-    WorkflowServiceIsJobRunningRequest,
-    WorkflowServiceRunJobRequest,
-    JobStatus,
-    WorkflowServiceGetStatusRequest,
-    WorkflowServiceRegisterOnStatusChangedRequest,
-    WorkflowServiceLoadJobTemplateRequest,
-)
 
-from public.zen_api.workflows.v1beta import (
-    JobResourcesServiceStub,
-    JobResourcesServiceSetIntegerValueRequest,
-    JobResourcesServiceSetFloatValueRequest,
+from zen_api.workflows.v1beta import (
     JobResourcesServiceGetAvailableResourcesRequest,
     # JobResourcesServiceSetDoubleValueRequest,
     JobResourcesServiceSetBooleanValueRequest,
+    JobResourcesServiceSetFloatValueRequest,
+    JobResourcesServiceSetIntegerValueRequest,
     JobResourcesServiceSetStringValueRequest,
     # JobResourcesServiceGetLongValueRequest
+    JobResourcesServiceStub,
 )
-
-from zenapi_tools import set_logging
-from typing import List, Optional, Dict
+from zen_api.workflows.v3beta import (
+    JobStatus,
+    JobTemplateInfo,
+    WorkflowServiceGetAvailableJobTemplatesRequest,
+    WorkflowServiceGetStatusRequest,
+    WorkflowServiceIsJobRunningRequest,
+    WorkflowServiceIsJobTemplateLoadedRequest,
+    WorkflowServiceLoadJobTemplateRequest,
+    WorkflowServiceRegisterOnStatusChangedRequest,
+    WorkflowServiceRunJobRequest,
+    WorkflowServiceStub,
+)
+from zen_api_utils.misc import set_logging
 
 logger = set_logging()
 
@@ -62,7 +54,7 @@ def print_job_template(job_template: JobTemplateInfo) -> None:
 
 async def get_job_templates(
     workflow_service: WorkflowServiceStub, category="", subcategory=""
-) -> List[JobTemplateInfo]:
+) -> list[JobTemplateInfo]:
     """
     Retrieves the available job templates from the workflow service.
 
@@ -75,9 +67,7 @@ async def get_job_templates(
         List[JobTemplateInfo]: A list of available job templates.
     """
     response = await workflow_service.get_available_job_templates(
-        WorkflowServiceGetAvailableJobTemplatesRequest(
-            category=category, subcategory=subcategory
-        )
+        WorkflowServiceGetAvailableJobTemplatesRequest(category=category, subcategory=subcategory)
     )
     return response.job_templates
 
@@ -116,7 +106,7 @@ async def get_zen_api_job_templates(workflow_service: WorkflowServiceStub):
     print()
 
 
-async def get_resource_ids(job_resources_service: JobResourcesServiceStub) -> List[str]:
+async def get_resource_ids(job_resources_service: JobResourcesServiceStub) -> list[str]:
     """
     Retrieves the available resource IDs from the job resources service.
 
@@ -126,10 +116,8 @@ async def get_resource_ids(job_resources_service: JobResourcesServiceStub) -> Li
     Returns:
     - List[str]: A list of available resource IDs.
     """
-    response = await job_resources_service.get_available_resources(
-        JobResourcesServiceGetAvailableResourcesRequest()
-    )
-    return response.resource_ids
+    response = await job_resources_service.get_available_resources(JobResourcesServiceGetAvailableResourcesRequest())
+    return response.resources
 
 
 async def is_job_template_loaded(workflow_service: WorkflowServiceStub) -> bool:
@@ -186,9 +174,7 @@ async def monitor_status(workflow_service: WorkflowServiceStub) -> None:
         None
     """
     request = WorkflowServiceRegisterOnStatusChangedRequest()
-    async for response in workflow_service.register_on_status_changed(
-        request, timeout=10
-    ):
+    async for response in workflow_service.register_on_status_changed(request, timeout=10):
         logger.info(f"--> Status changed to: {response.job_status}")
 
         if response.job_status == JobStatus.NOT_LOADED:
@@ -198,9 +184,9 @@ async def monitor_status(workflow_service: WorkflowServiceStub) -> None:
 async def run_job(
     workflow_service: WorkflowServiceStub,
     job_template_name: str,
-    job_resources_service: Optional[JobResourcesServiceStub] = None,
-    parameters: Optional[Dict] = None,
-    result_path: Optional[str] = None,
+    job_resources_service: JobResourcesServiceStub | None = None,
+    parameters: dict | None = None,
+    result_path: str | None = None,
     verbose: bool = False,
 ) -> None:
     """
@@ -230,51 +216,44 @@ async def run_job(
     if result_path is None:
         logger.info(f"Loading job template: {job_template_name}")
     else:
-        logger.info(
-            f'Loading job template "{job_template_name}" with result path "{result_path}"'
-        )
-    request = WorkflowServiceLoadJobTemplateRequest(job_template_name, result_path)
+        logger.info(f'Loading job template "{job_template_name}" with result path "{result_path}"')
+    request = WorkflowServiceLoadJobTemplateRequest(job_template_name, result_path or "")
     await workflow_service.load_job_template(request)
 
-    # show the resource_ids of the current job
-    resources_ids = await get_job_resource_ids(job_resources_service)
+    resources_ids: list[str] = []
+    if job_resources_service is not None:
+        resources_ids = await get_job_resource_ids(job_resources_service)
 
     for id in resources_ids:
         logger.info(f"ResourceId found: {id}")
 
     # modify job parameters
     if parameters is not None:
+        if job_resources_service is None:
+            raise ValueError("job_resources_service is required when parameters are provided")
 
         for k, v in parameters.items():
 
             if k in resources_ids:
 
-                if isinstance(v, int):
+                if isinstance(v, bool):
 
-                    request = JobResourcesServiceSetIntegerValueRequest(
-                        resource_id=k, value=v
-                    )
+                    request = JobResourcesServiceSetBooleanValueRequest(resource_id=k, value=v)
+                    await job_resources_service.set_boolean_value(request)
+
+                elif isinstance(v, int):
+
+                    request = JobResourcesServiceSetIntegerValueRequest(resource_id=k, value=v)
                     await job_resources_service.set_integer_value(request)
 
                 elif isinstance(v, float):
 
-                    request = JobResourcesServiceSetFloatValueRequest(
-                        resource_id=k, value=v
-                    )
+                    request = JobResourcesServiceSetFloatValueRequest(resource_id=k, value=v)
                     await job_resources_service.set_float_value(request)
-
-                elif isinstance(v, bool):
-
-                    request = JobResourcesServiceSetBooleanValueRequest(
-                        resource_id=k, value=v
-                    )
-                    await job_resources_service.set_boolean_value(request)
 
                 elif isinstance(v, str):
 
-                    request = JobResourcesServiceSetStringValueRequest(
-                        resource_id=k, value=v
-                    )
+                    request = JobResourcesServiceSetStringValueRequest(resource_id=k, value=v)
                     await job_resources_service.set_string_value(request)
 
                 else:
@@ -310,8 +289,8 @@ async def run_job(
 
 
 async def get_job_resource_ids(
-    job_resources_service: JobResourcesServiceGetAvailableResourcesRequest,
-) -> List[str]:
+    job_resources_service: JobResourcesServiceStub,
+) -> list[str]:
     """
     Retrieves the resource IDs of the current job.
     Parameters:
@@ -321,8 +300,6 @@ async def get_job_resource_ids(
     """
 
     # show the resource_ids of the current job
-    resources = await job_resources_service.get_available_resources(
-        JobResourcesServiceGetAvailableResourcesRequest()
-    )
+    resources = await job_resources_service.get_available_resources(JobResourcesServiceGetAvailableResourcesRequest())
 
     return resources.resources

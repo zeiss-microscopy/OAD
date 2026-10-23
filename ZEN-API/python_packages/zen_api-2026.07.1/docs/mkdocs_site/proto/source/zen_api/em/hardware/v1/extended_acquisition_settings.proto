@@ -1,0 +1,47 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.hardware.v1;
+
+// Request object to set the simple acquisition settings.
+message ExtendedAcquisitionSettings {
+   // The detector to use.
+   // Null will take the detector from the previous acquisition.
+   string detector_name = 1;
+   // The image width in pixels.
+   int32 width = 2;
+   // The image height in pixels.
+   int32 height = 3;
+   // The dwell time in seconds.
+   // The closest dwell time to the selected one will be chosen.
+   double dwell_time = 4;
+   // The number of frames to average.
+   // 1 means no averaging.
+   int32 frame_averages = 5;
+   // The number of lines to average.
+   // 1 means no averaging.
+   int32 line_averages = 6;
+   // The relative size of the scan field in x direction
+   // proportional to the full field of view, where the FOV equals 1.
+   // Range (0, 1].
+   double scan_size_x = 7;
+   // The relative size of the scan field in y direction
+   // proportional to the full field of view, where the FOV equals 1.
+   // Range (0, 1].
+   double scan_size_y = 8;
+   // The relative position of the scan field in x direction
+   // proportional to the full field of view, where the optical axis is at (0,0)
+   // and the FOV ranges from -0.5 to 0.5.
+   // Range (-0.5, 0.5).
+   double scan_center_x = 9;
+   // The relative position of the scan field in y direction
+   // proportional to the full field of view, where the optical axis is at (0,0)
+   // and the FOV ranges from -0.5 to 0.5.
+   // Range (-0.5, 0.5).
+   double scan_center_y = 10;
+}

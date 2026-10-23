@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_tracks.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -15,25 +12,22 @@
 import asyncio
 import sys
 from pathlib import Path
-from zen_api_utils.misc import set_logging, initialize_zenapi
-from zen_api_utils.experiment import show_track_info_LM
 
 # import the auto-generated python modules
 from zen_api.acquisition.v1beta import (
-    ExperimentServiceStub,
-    ExperimentServiceLoadRequest,
     ExperimentServiceCloneRequest,
+    ExperimentServiceLoadRequest,
     ExperimentServiceSaveRequest,
+    ExperimentServiceStub,
 )
-
 from zen_api.lm.acquisition.v1 import (
-    TrackServiceGetTrackInfoRequest,
-    TrackServiceActivateTrackRequest,
-    TrackServiceDeactivateTrackRequest,
-    TrackServiceActivateChannelRequest,
     TrackServiceDeactivateChannelRequest,
+    TrackServiceDeactivateTrackRequest,
+    TrackServiceGetTrackInfoRequest,
     TrackServiceStub,
 )
+from zen_api_utils.experiment import show_track_info_LM
+from zen_api_utils.misc import initialize_zenapi, set_logging
 
 # Get the directory where the current script is located
 script_dir = Path(__file__).parent
@@ -48,6 +42,7 @@ exp_folder = Path(r"f:\Documents\Carl Zeiss\ZEN\Documents\Experiment Setups")
 
 
 async def main(args):
+    del args
 
     # get the gRPC channel and the metadata
     channel, metadata = initialize_zenapi(config_path)
@@ -65,7 +60,7 @@ async def main(args):
     track_info = await track_service.get_track_info(TrackServiceGetTrackInfoRequest(experiment_id=my_exp.experiment_id))
 
     # show the track parameters
-    tracks = show_track_info_LM(track_info)
+    show_track_info_LM(track_info)
 
     # clone the experiment
     logger.info("Cloning Experiment ...")
@@ -100,7 +95,7 @@ async def main(args):
     )
 
     # show the track parameters
-    tracks = show_track_info_LM(track_info)
+    show_track_info_LM(track_info)
 
     # close the channel
     channel.close()
