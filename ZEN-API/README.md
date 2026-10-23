@@ -37,6 +37,11 @@ The `../docs`folder is a subfolder of the respective python package folder, aka 
 
 ### ZEN API - Examples
 
+The repository contains a fex experimental python examples showing how to use ZEN API within python scripts. Feel free tu use them **at your own risk**.
+
+> [!IMPORTANT]
+> Not all Python examples work with every version of ZEN and ZEN API. Check the documentation for your specific versions before running an example.
+
 ZEN running an acquisition while the PixelStream is processed by a python client. For the code can be found at: [zenapi_streaming.py](./python_examples/zenapi_streaming.py)
 
 ![ZEN API - Online Processing](./images/zenapi_online_process.gif)
