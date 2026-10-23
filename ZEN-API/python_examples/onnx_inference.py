@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : onnx_inference.py
-# Author      : sebi06, Team Enchilada
 #
 # Disclaimer: This code is purely experimental. Feel free to
 # use it at your own risk.
@@ -13,9 +10,8 @@
 # as long as this copyright notice remains part of the code.
 #################################################################
 
-import torch
-from typing import Tuple, Optional, List, cast
 from types import TracebackType
+from typing import Any, cast
 
 import numpy as np
 import onnxruntime as rt
@@ -24,7 +20,7 @@ import onnxruntime as rt
 class ManagedOnnxSession:
     """Context manager for ONNX models."""
 
-    def __init__(self, model_path: str, providers: Optional[List[str]] = None) -> None:
+    def __init__(self, model_path: str, providers: list[Any] | None = None) -> None:
         """Creates an instance of the context manager.
 
         Arguments:
@@ -39,8 +35,14 @@ class ManagedOnnxSession:
         self._session = rt.InferenceSession(self._model_path, providers=self.providers)
         return self._session
 
-    def __exit__(self, exc_type: BaseException, exc_val: BaseException, exc_tb: TracebackType) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_val: BaseException | None,
+        exc_tb: TracebackType | None,
+    ) -> None:
         """Deletes the ONNX inference session."""
+        del exc_type, exc_val, exc_tb
         del self._session
 
 
@@ -56,7 +58,7 @@ class OnnxInferencer:
         super().__init__()
         self._model_path = model_path
 
-    def predict(self, x: List[np.ndarray], use_gpu: bool = False) -> List[np.ndarray]:
+    def predict(self, x: list[np.ndarray], use_gpu: bool = False) -> list[np.ndarray]:
         """Evaluates the underlying model with the given input _data.
 
         Arguments:
@@ -84,13 +86,13 @@ class OnnxInferencer:
             # ONNX can only handle float32
             batch_elem = batch_elem.astype(np.float32)
             input_dict = {input_name: batch_elem}
-            result = sess.run([output_name], input_dict)[0]
+            result = cast(np.ndarray, sess.run([output_name], input_dict)[0])
 
             if len(result) != 1:
                 raise AssertionError("The batch size has changed during ANN model execution")
             return result[0]
 
-        def _predict_batch(_x: List[np.ndarray], use_gpu: bool = True) -> List[np.ndarray]:
+        def _predict_batch(_x: list[np.ndarray], use_gpu: bool = True) -> list[np.ndarray]:
             """Run prediction on a batch of images.
 
             Arguments:
@@ -129,7 +131,7 @@ class OnnxInferencer:
 
         return _predict_batch(x, use_gpu=use_gpu)
 
-    def get_input_shape(self) -> Tuple[int, int, int, int]:
+    def get_input_shape(self) -> tuple[int, int, int, int]:
         """Determines the input shape expected by the loaded model.
 
         Using CPUExecutionProvider straight from the first run to not try-except for CUDAExecutionProvider - fast op.
@@ -143,11 +145,11 @@ class OnnxInferencer:
                 raise ValueError(
                     f"The input shape of the model must have four dimensions. Found dimensions: {input_shape}"
                 )
-            return cast(Tuple[int, int, int, int], input_shape)
+            return cast(tuple[int, int, int, int], input_shape)
 
     def get_output_shape(
         self,
-    ) -> Tuple[Optional[int], Optional[int], Optional[int], Optional[int]]:
+    ) -> tuple[int | None, int | None, int | None, int | None]:
         """Determines the output shape of the loaded model.
 
         Using CPUExecutionProvider straight from the first run to not try-except for CUDAExecutionProvider - fast op.
@@ -162,6 +164,6 @@ class OnnxInferencer:
                     f"The output shape of the model must have four dimensions. Found dimensions: {output_shape}"
                 )
             return cast(
-                Tuple[Optional[int], Optional[int], Optional[int], Optional[int]],
+                tuple[int | None, int | None, int | None, int | None],
                 output_shape,
             )

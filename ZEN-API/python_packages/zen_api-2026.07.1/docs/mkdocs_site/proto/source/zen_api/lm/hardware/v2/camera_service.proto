@@ -1,0 +1,56 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.hardware.v2;
+import "zen_api/lm/hardware/v2/get_camera_data.proto";
+import "zen_api/lm/hardware/v2/set_camera_data.proto";
+
+// The CameraServiceConfigureCameraRequest class.
+message CameraServiceConfigureCameraRequest {
+   // New configuration data.
+   SetCameraData data = 1;
+}
+// Describes the result of a configure camera request.
+message CameraServiceConfigureCameraResponse {
+}
+// A list of available cameras.
+message CameraServiceGetAllCamerasResponse {
+   // The cameras.
+   repeated GetCameraData cameras = 1;
+}
+// The CameraServiceGetCameraRequest class.
+message CameraServiceGetCameraRequest {
+   // Id of the camera.
+   string id = 1;
+}
+// Position index of the camera.
+message CameraServiceGetCameraResponse {
+   // The position index.
+   GetCameraData camera = 1;
+}
+// The CameraServiceGetCamerasRequest class.
+message CameraServiceGetCamerasRequest {
+}
+// The ICameraService interface.
+service CameraService {
+   // Configures a camera based on the given data.
+   rpc ConfigureCamera (CameraServiceConfigureCameraRequest) returns (CameraServiceConfigureCameraResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the camera by id.
+   rpc GetCamera (CameraServiceGetCameraRequest) returns (CameraServiceGetCameraResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the cameras.
+   rpc GetCameras (CameraServiceGetCamerasRequest) returns (CameraServiceGetAllCamerasResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+}

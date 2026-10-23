@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_stage_unified.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # Description : Demonstrates stage movement using advanced stage APIs
@@ -14,23 +11,24 @@
 #################################################################
 
 import asyncio
-import numpy as np
-from pathlib import Path
 import sys
-from zen_api_utils.misc import set_logging, initialize_zenapi
+from pathlib import Path
+
+import numpy as np
+
+# Import auto-generated ZEN API modules for stage control
+from zen_api.hardware.v1 import (
+    AxisIdentifier,
+    StageAxis,
+    StageServiceGetStagePositionRequest,
+    StageServiceMoveToRequest,
+    StageServiceStub,
+)
+from zen_api_utils.misc import initialize_zenapi, set_logging
 
 # Import custom stage helper functions
 from zen_api_utils.stage import (
     AxisPositions,
-)
-
-# Import auto-generated ZEN API modules for stage control
-from zen_api.hardware.v1 import (
-    StageServiceMoveToRequest,
-    StageAxis,
-    StageServiceGetStagePositionRequest,
-    StageServiceStub,
-    AxisIdentifier,
 )
 
 # Configuration file path for ZEN API connection
@@ -42,6 +40,7 @@ config_path = script_dir / "config.ini"
 
 
 async def main(args):
+    del args
     """
     Main function demonstrating stage movement operations.
     Shows usage of unified stage APIs for position control.

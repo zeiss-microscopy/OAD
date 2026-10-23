@@ -1,0 +1,93 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.hardware.v1;
+
+// The IlluminationServiceGetIlluminationIRRequest class.
+message IlluminationServiceGetIlluminationIRRequest {
+}
+// Response object for the illuminator get illumination IR.
+message IlluminationServiceGetIlluminationIRResponse {
+   // The illumination IR.
+   double illumination_ir = 1;
+}
+// The IlluminationServiceGetIlluminationWhiteRequest class.
+message IlluminationServiceGetIlluminationWhiteRequest {
+}
+// Response object for the illuminator get illumination white.
+message IlluminationServiceGetIlluminationWhiteResponse {
+   // The illumination white.
+   double illumination_white = 1;
+}
+// The IlluminationServiceRegisterOnIlluminationIRChangedRequest class.
+message IlluminationServiceRegisterOnIlluminationIRChangedRequest {
+}
+// Response object for register on illumination IR changed.
+message IlluminationServiceRegisterOnIlluminationIRChangedResponse {
+   // The illumination IR.
+   double illumination_ir = 1;
+}
+// The IlluminationServiceRegisterOnIlluminationWhiteChangedRequest class.
+message IlluminationServiceRegisterOnIlluminationWhiteChangedRequest {
+}
+// Response object for register on illumination white changed.
+message IlluminationServiceRegisterOnIlluminationWhiteChangedResponse {
+   // The illumination white.
+   double illumination_white = 1;
+}
+// The IlluminationServiceSetIlluminationIRRequest class.
+message IlluminationServiceSetIlluminationIRRequest {
+   // The illumination IR value to set [0..100]%.
+   double illumination_ir = 1;
+}
+// Response object for the illuminator set illumination IR.
+message IlluminationServiceSetIlluminationIRResponse {
+   // The illumination IR.
+   double illumination_ir = 1;
+   // A value indicating whether setting the brightness was successful.
+   bool success = 2;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 3;
+}
+// The IlluminationServiceSetIlluminationWhiteRequest class.
+message IlluminationServiceSetIlluminationWhiteRequest {
+   // The illumination white value to set [0..100]%.
+   double illumination_white = 1;
+}
+// Response object for the illuminator set illumination white.
+message IlluminationServiceSetIlluminationWhiteResponse {
+   // The illumination white.
+   double illumination_white = 1;
+   // A value indicating whether setting the brightness was successful.
+   bool success = 2;
+   // A string message for display to the customer in failure case. This is only for display purpose and the message may change.
+   // Empty string on success.
+   string message = 3;
+}
+// The IIlluminationService interface.
+service IlluminationService {
+   // Gets the illumination IR value. Returns the current illumination IR value [0..100]%.
+   rpc GetIlluminationIR (IlluminationServiceGetIlluminationIRRequest) returns (IlluminationServiceGetIlluminationIRResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the illumination white value. Returns the current illumination white value [0..100]%.
+   rpc GetIlluminationWhite (IlluminationServiceGetIlluminationWhiteRequest) returns (IlluminationServiceGetIlluminationWhiteResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Registers a subscriber on illumination IR changes. returns the current illumination IR value [0..100]%.
+   rpc RegisterOnIlluminationIRChanged (IlluminationServiceRegisterOnIlluminationIRChangedRequest) returns (stream IlluminationServiceRegisterOnIlluminationIRChangedResponse);
+   // Registers a subscriber on illumination white changes. Returns the current illumination white value [0..100]%.
+   rpc RegisterOnIlluminationWhiteChanged (IlluminationServiceRegisterOnIlluminationWhiteChangedRequest) returns (stream IlluminationServiceRegisterOnIlluminationWhiteChangedResponse);
+   // Sets the illumination IR value. Returns the current illumination IR value [0..100]%.
+   rpc SetIlluminationIR (IlluminationServiceSetIlluminationIRRequest) returns (IlluminationServiceSetIlluminationIRResponse);
+   // Sets the illumination white value. Returns the current illumination white value [0..100]%.
+   rpc SetIlluminationWhite (IlluminationServiceSetIlluminationWhiteRequest) returns (IlluminationServiceSetIlluminationWhiteResponse);
+}

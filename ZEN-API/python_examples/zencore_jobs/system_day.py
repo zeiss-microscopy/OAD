@@ -4,12 +4,12 @@ import asyncio
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from public.zen_api.workflows.v3beta import (
+from zen_api.workflows.v3beta import (
     WorkflowServiceStub,
     WorkflowServiceGetAvailableJobTemplatesRequest,
 )
 
-from zenapi_tools import initialize_zenapi
+from zen_api_utils.misc import initialize_zenapi
 
 
 async def main():

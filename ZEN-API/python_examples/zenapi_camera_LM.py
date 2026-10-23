@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_camera_LM.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # Copyright(c) 2025 Carl Zeiss AG, Germany. All Rights Reserved.
@@ -12,17 +9,17 @@
 #################################################################
 
 import asyncio
-from pathlib import Path
 import sys
 from dataclasses import asdict
+from pathlib import Path
 from pprint import pprint
-from zen_api_utils.misc import set_logging, initialize_zenapi
-from zen_api_utils.cameras import get_camera_info_LM, get_cameras_info_LM
 
 # Import auto-generated ZEN API modules for stage control
 from zen_api.lm.hardware.v2 import (
     CameraServiceStub,  # Camera service interface
 )
+from zen_api_utils.cameras import get_camera_info_LM, get_cameras_info_LM
+from zen_api_utils.misc import initialize_zenapi, set_logging
 
 # Configuration file path for ZEN API connection
 # Get the directory where the current script is located
@@ -33,6 +30,7 @@ config_path = script_dir / "config.ini"
 
 
 async def main(args):
+    del args
 
     # Establish gRPC connection to ZEN API
     channel, metadata = initialize_zenapi(config_path)

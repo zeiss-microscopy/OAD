@@ -1,0 +1,19 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.slide_scan.v1;
+
+// SlidePositionInformation holds information about an AxioScan slide position.
+message SlidePositionInformation {
+   // The slide position on the frame - range [1, 4]. The maximum value depending on frame type.
+   int32 slide_on_frame_position = 1;
+   // The position of the tray inside the Axioscan magazine in the range of [1, 26].
+   int32 tray_position = 2;
+   // The image name for the slide.
+   string image_name = 3;
+}

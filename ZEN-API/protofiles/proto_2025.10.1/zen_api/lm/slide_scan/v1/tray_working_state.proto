@@ -1,0 +1,25 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.slide_scan.v1;
+
+// Enum defining the types of slide scanner trays working state.
+enum TrayWorkingState {
+   // Default value if status is not specified.
+   TRAY_WORKING_STATE_UNSPECIFIED = 0;
+   // The tray is not scanned.
+   TRAY_WORKING_STATE_NOT_SCANNED = 1;
+   // The tray was pre scanned.
+   TRAY_WORKING_STATE_PRESCANNED = 2;
+   // The tray was successfully scanned.
+   TRAY_WORKING_STATE_SCANNED = 3;
+   // There occurred an error while scanning or pre scanning the tray.
+   TRAY_WORKING_STATE_ERROR = 4;
+   // There is no tray available at this position.
+   TRAY_WORKING_STATE_NOT_AVAILABLE = 5;
+}

@@ -1,0 +1,36 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.hardware.v1;
+
+// The MicroscopeServiceGetStateRequest class.
+message MicroscopeServiceGetStateRequest {
+}
+// The state of the microscope.
+message MicroscopeServiceGetStateResponse {
+   // A value indicating whether the microscope is initialized.
+   bool is_initialized = 1;
+}
+// The MicroscopeServiceStartInitializationRequest class.
+message MicroscopeServiceStartInitializationRequest {
+}
+// The result of the operation.
+message MicroscopeServiceStartInitializationResponse {
+   // A value indicating whether the initialization was started successfully.
+   bool started_successfully = 1;
+}
+// The IMicroscopeService interface.
+service MicroscopeService {
+   // Gets the microscope state.
+   rpc GetState (MicroscopeServiceGetStateRequest) returns (MicroscopeServiceGetStateResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Starts the initialization of the microscope.
+   rpc StartInitialization (MicroscopeServiceStartInitializationRequest) returns (MicroscopeServiceStartInitializationResponse);
+}

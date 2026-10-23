@@ -1,0 +1,436 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.hardware.v1;
+import "google/protobuf/wrappers.proto";
+import "zen_api/em/hardware/v1/beam_state.proto";
+
+// The ElectronColumnServiceGetActualVoltageRequest class.
+message ElectronColumnServiceGetActualVoltageRequest {
+}
+// Response object representing the eht/voltage.
+message ElectronColumnServiceGetActualVoltageResponse {
+   // The eht/voltage in volts.
+   double voltage = 1;
+}
+// The ElectronColumnServiceGetBeamShiftRequest class.
+message ElectronColumnServiceGetBeamShiftRequest {
+}
+// Response object describing the beam shift values.
+message ElectronColumnServiceGetBeamShiftResponse {
+   // The x beam shift in meters.
+   double shift_x = 1;
+   // The y beam shift in meters.
+   double shift_y = 2;
+}
+// The ElectronColumnServiceGetBeamStateRequest class.
+message ElectronColumnServiceGetBeamStateRequest {
+}
+// BeamState enum wrapper.
+message ElectronColumnServiceGetBeamStateResponse {
+   // The beam state.
+   BeamState state = 1;
+   // A value indicating whether the task to change beam state succeeded or not.
+   bool task_success = 2;
+}
+// The ElectronColumnServiceGetFocusLimitsRequest class.
+message ElectronColumnServiceGetFocusLimitsRequest {
+}
+// Response object representing the column focus.
+message ElectronColumnServiceGetFocusLimitsResponse {
+   // The minimum focus in meters.
+   double focus_min = 1;
+   // The maximum focus in meters.
+   double focus_max = 2;
+}
+// The ElectronColumnServiceGetFocusRequest class.
+message ElectronColumnServiceGetFocusRequest {
+}
+// Response object representing the column focus.
+message ElectronColumnServiceGetFocusResponse {
+   // The focus in meters.
+   double focus = 1;
+}
+// The ElectronColumnServiceGetFovRequest class.
+message ElectronColumnServiceGetFovRequest {
+}
+// Response object representing the field of view expansion.
+message ElectronColumnServiceGetFovResponse {
+   // The fov expansion in meters.
+   double fov = 1;
+}
+// The ElectronColumnServiceGetFovRotationRequest class.
+message ElectronColumnServiceGetFovRotationRequest {
+}
+// Response object representing the field of view rotation.
+message ElectronColumnServiceGetFovRotationResponse {
+   // The field of view rotation in radians.
+   double rotation = 1;
+}
+// The ElectronColumnServiceGetProbeCurrentRequest class.
+message ElectronColumnServiceGetProbeCurrentRequest {
+}
+// Response object representing the probe current.
+message ElectronColumnServiceGetProbeCurrentResponse {
+   // The probe current value in Amps.
+   double probe_current = 1;
+}
+// The ElectronColumnServiceGetSemiAngleRequest class.
+message ElectronColumnServiceGetSemiAngleRequest {
+}
+// Response object describing the semi angle value.
+message ElectronColumnServiceGetSemiAngleResponse {
+   // The semi angle in radians.
+   double angle = 1;
+}
+// The ElectronColumnServiceGetSpotSizeRequest class.
+message ElectronColumnServiceGetSpotSizeRequest {
+}
+// Response object representing the spot size.
+message ElectronColumnServiceGetSpotSizeResponse {
+   // The spot size in meters.
+   double spot_size = 1;
+}
+// The ElectronColumnServiceGetStigmatorRequest class.
+message ElectronColumnServiceGetStigmatorRequest {
+}
+// Response object representing the stigmator value of the electron column.
+message ElectronColumnServiceGetStigmatorResponse {
+   // The stigmator x in percent [0,1].
+   double stigmator_x = 1;
+   // The stigmator y in percent [0,1].
+   double stigmator_y = 2;
+}
+// The ElectronColumnServiceGetTargetVoltageRequest class.
+message ElectronColumnServiceGetTargetVoltageRequest {
+}
+// Response object representing the eht/voltage.
+message ElectronColumnServiceGetTargetVoltageResponse {
+   // The eht/voltage in volts.
+   double voltage = 1;
+}
+// The ElectronColumnServiceGoToStandbyRequest class.
+message ElectronColumnServiceGoToStandbyRequest {
+}
+// BeamState enum wrapper.
+message ElectronColumnServiceGoToStandbyResponse {
+   // The beam state.
+   BeamState state = 1;
+   // A value indicating whether the task to change beam state succeeded or not.
+   bool task_success = 2;
+}
+// The ElectronColumnServiceRegisterOnBeamShiftChangedRequest class.
+message ElectronColumnServiceRegisterOnBeamShiftChangedRequest {
+}
+// Response object describing the beam shift values.
+message ElectronColumnServiceRegisterOnBeamShiftChangedResponse {
+   // The x beam shift in meters.
+   double shift_x = 1;
+   // The y beam shift in meters.
+   double shift_y = 2;
+}
+// The ElectronColumnServiceRegisterOnBeamStateChangedRequest class.
+message ElectronColumnServiceRegisterOnBeamStateChangedRequest {
+}
+// BeamState enum wrapper.
+message ElectronColumnServiceRegisterOnBeamStateChangedResponse {
+   // The beam state.
+   BeamState state = 1;
+   // A value indicating whether the task to change beam state succeeded or not.
+   bool task_success = 2;
+}
+// The ElectronColumnServiceRegisterOnFocusChangedRequest class.
+message ElectronColumnServiceRegisterOnFocusChangedRequest {
+}
+// Response object representing the column focus.
+message ElectronColumnServiceRegisterOnFocusChangedResponse {
+   // The focus in meters.
+   double focus = 1;
+}
+// The ElectronColumnServiceRegisterOnFovChangedRequest class.
+message ElectronColumnServiceRegisterOnFovChangedRequest {
+}
+// Response object representing the field of view expansion.
+message ElectronColumnServiceRegisterOnFovChangedResponse {
+   // The fov expansion in meters.
+   double fov = 1;
+}
+// The ElectronColumnServiceRegisterOnFovRotationChangedRequest class.
+message ElectronColumnServiceRegisterOnFovRotationChangedRequest {
+}
+// Response object representing the field of view rotation.
+message ElectronColumnServiceRegisterOnFovRotationChangedResponse {
+   // The field of view rotation in radians.
+   double rotation = 1;
+}
+// The ElectronColumnServiceRegisterOnProbeCurrentChangedRequest class.
+message ElectronColumnServiceRegisterOnProbeCurrentChangedRequest {
+}
+// Response object representing the probe current.
+message ElectronColumnServiceRegisterOnProbeCurrentChangedResponse {
+   // The probe current value in Amps.
+   double probe_current = 1;
+}
+// The ElectronColumnServiceRegisterOnSemiAngleChangedRequest class.
+message ElectronColumnServiceRegisterOnSemiAngleChangedRequest {
+}
+// Response object describing the semi angle values.
+message ElectronColumnServiceRegisterOnSemiAngleChangedResponse {
+   // The semi angle in radians.
+   double angle = 1;
+}
+// The ElectronColumnServiceRegisterOnSpotSizeChangedRequest class.
+message ElectronColumnServiceRegisterOnSpotSizeChangedRequest {
+}
+// Response object representing the spot size.
+message ElectronColumnServiceRegisterOnSpotSizeChangedResponse {
+   // The spot size in meters.
+   double spot_size = 1;
+}
+// The ElectronColumnServiceRegisterOnStigmatorChangedRequest class.
+message ElectronColumnServiceRegisterOnStigmatorChangedRequest {
+}
+// Response object representing stigmator changes of the electron column.
+message ElectronColumnServiceRegisterOnStigmatorChangedResponse {
+   // The stigmator x in percent [0,1].
+   double stigmator_x = 1;
+   // The stigmator y in percent [0,1].
+   double stigmator_y = 2;
+}
+// The ElectronColumnServiceRegisterOnVoltageChangedRequest class.
+message ElectronColumnServiceRegisterOnVoltageChangedRequest {
+}
+// Response object representing the eht/voltage.
+message ElectronColumnServiceRegisterOnVoltageChangedResponse {
+   // The eht/voltage in volts.
+   double voltage = 1;
+}
+// The ElectronColumnServiceSetBeamShiftRequest class.
+message ElectronColumnServiceSetBeamShiftRequest {
+   // The new beam shift x in meters. null if it should not be changed.
+   .google.protobuf.DoubleValue xshift = 1;
+   // The new beam shift y in meters. null if it should not be changed.
+   .google.protobuf.DoubleValue yshift = 2;
+}
+// Response object describing the beam shift values.
+message ElectronColumnServiceSetBeamShiftResponse {
+   // The x beam shift in meters.
+   double shift_x = 1;
+   // The y beam shift in meters.
+   double shift_y = 2;
+}
+// The ElectronColumnServiceSetFocusRequest class.
+message ElectronColumnServiceSetFocusRequest {
+   // The new focus in meters.
+   double focus = 1;
+}
+// Response object representing the column focus.
+message ElectronColumnServiceSetFocusResponse {
+   // The focus in meters.
+   double focus = 1;
+}
+// The ElectronColumnServiceSetFovRequest class.
+message ElectronColumnServiceSetFovRequest {
+   // The size of the new FOV in meters.
+   double fov = 1;
+}
+// Response object representing the field of view expansion.
+message ElectronColumnServiceSetFovResponse {
+   // The fov expansion in meters.
+   double fov = 1;
+}
+// The ElectronColumnServiceSetFovRotationRequest class.
+message ElectronColumnServiceSetFovRotationRequest {
+   // The rotation in radians, clockwise.
+   double fov_rotation = 1;
+}
+// Response object representing the field of view rotation.
+message ElectronColumnServiceSetFovRotationResponse {
+   // The field of view rotation in radians.
+   double rotation = 1;
+}
+// The ElectronColumnServiceSetStigmatorRequest class.
+message ElectronColumnServiceSetStigmatorRequest {
+   // The stigmator x value in percent [0, 1] or null if is not supposed to change.
+   .google.protobuf.DoubleValue stigmator_x = 1;
+   // The stigmator y value in percent [0, 1] or null if is not supposed to change.
+   .google.protobuf.DoubleValue stigmator_y = 2;
+}
+// Response object representing the stigmator set value.
+message ElectronColumnServiceSetStigmatorResponse {
+   // The stigmator x in percent [0,1].
+   double stigmator_x = 1;
+   // The stigmator y in percent [0,1].
+   double stigmator_y = 2;
+}
+// The ElectronColumnServiceSetVoltageRequest class.
+message ElectronColumnServiceSetVoltageRequest {
+   // The new eht/voltage in volts.
+   double voltage = 1;
+}
+// Response object representing the eht/voltage.
+message ElectronColumnServiceSetVoltageResponse {
+   // The eht/voltage in volts.
+   double voltage = 1;
+}
+// The ElectronColumnServiceTurnOffRequest class.
+message ElectronColumnServiceTurnOffRequest {
+}
+// BeamState enum wrapper.
+message ElectronColumnServiceTurnOffResponse {
+   // The beam state.
+   BeamState state = 1;
+   // A value indicating whether the task to change beam state succeeded or not.
+   bool task_success = 2;
+}
+// The ElectronColumnServiceTurnOnRequest class.
+message ElectronColumnServiceTurnOnRequest {
+}
+// BeamState enum wrapper.
+message ElectronColumnServiceTurnOnResponse {
+   // The beam state.
+   BeamState state = 1;
+   // A value indicating whether the task to change beam state succeeded or not.
+   bool task_success = 2;
+}
+// The IElectronColumnService interface.
+service ElectronColumnService {
+   // Retrieves the current eht/voltage.
+   rpc GetActualVoltage (ElectronColumnServiceGetActualVoltageRequest) returns (ElectronColumnServiceGetActualVoltageResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the current beam shift in meters.
+   rpc GetBeamShift (ElectronColumnServiceGetBeamShiftRequest) returns (ElectronColumnServiceGetBeamShiftResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Retrieves the current beam working state.
+   rpc GetBeamState (ElectronColumnServiceGetBeamStateRequest) returns (ElectronColumnServiceGetBeamStateResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the current focus (working distance) in meters.
+   rpc GetFocus (ElectronColumnServiceGetFocusRequest) returns (ElectronColumnServiceGetFocusResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the limits of the current focus (working distance) in meters.
+   rpc GetFocusLimits (ElectronColumnServiceGetFocusLimitsRequest) returns (ElectronColumnServiceGetFocusLimitsResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Retrieves the current Field Of View.
+   rpc GetFov (ElectronColumnServiceGetFovRequest) returns (ElectronColumnServiceGetFovResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the rotation of the Field Of View.
+   rpc GetFovRotation (ElectronColumnServiceGetFovRotationRequest) returns (ElectronColumnServiceGetFovRotationResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Get the probe current.
+   rpc GetProbeCurrent (ElectronColumnServiceGetProbeCurrentRequest) returns (ElectronColumnServiceGetProbeCurrentResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the current semi angle in radians.
+   rpc GetSemiAngle (ElectronColumnServiceGetSemiAngleRequest) returns (ElectronColumnServiceGetSemiAngleResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the spot size in meters.
+   rpc GetSpotSize (ElectronColumnServiceGetSpotSizeRequest) returns (ElectronColumnServiceGetSpotSizeResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the current stigmator x and y values in percent [0, 1].
+   rpc GetStigmator (ElectronColumnServiceGetStigmatorRequest) returns (ElectronColumnServiceGetStigmatorResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Retrieves the target eht/voltage.
+   rpc GetTargetVoltage (ElectronColumnServiceGetTargetVoltageRequest) returns (ElectronColumnServiceGetTargetVoltageResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Bring the column into standby mode.
+   // This call triggers the column to go into standby mode. Emission will still be on.
+   rpc GoToStandby (ElectronColumnServiceGoToStandbyRequest) returns (ElectronColumnServiceGoToStandbyResponse);
+   // Register on column beam shift changed events.
+   rpc RegisterOnBeamShiftChanged (ElectronColumnServiceRegisterOnBeamShiftChangedRequest) returns (stream ElectronColumnServiceRegisterOnBeamShiftChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Register on beam state changed events.
+   rpc RegisterOnBeamStateChanged (ElectronColumnServiceRegisterOnBeamStateChangedRequest) returns (stream ElectronColumnServiceRegisterOnBeamStateChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Register on column focus (working distance) changed events.
+   rpc RegisterOnFocusChanged (ElectronColumnServiceRegisterOnFocusChangedRequest) returns (stream ElectronColumnServiceRegisterOnFocusChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Register on column FOV changed events.
+   rpc RegisterOnFovChanged (ElectronColumnServiceRegisterOnFovChangedRequest) returns (stream ElectronColumnServiceRegisterOnFovChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Register on FOV rotation changed events.
+   rpc RegisterOnFovRotationChanged (ElectronColumnServiceRegisterOnFovRotationChangedRequest) returns (stream ElectronColumnServiceRegisterOnFovRotationChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Register on column probe current changed events.
+   rpc RegisterOnProbeCurrentChanged (ElectronColumnServiceRegisterOnProbeCurrentChangedRequest) returns (stream ElectronColumnServiceRegisterOnProbeCurrentChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Register on column semi angle changed events.
+   rpc RegisterOnSemiAngleChanged (ElectronColumnServiceRegisterOnSemiAngleChangedRequest) returns (stream ElectronColumnServiceRegisterOnSemiAngleChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Register on beam spot size changed events.
+   rpc RegisterOnSpotSizeChanged (ElectronColumnServiceRegisterOnSpotSizeChangedRequest) returns (stream ElectronColumnServiceRegisterOnSpotSizeChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Register on stigmator x and y changed events.
+   rpc RegisterOnStigmatorChanged (ElectronColumnServiceRegisterOnStigmatorChangedRequest) returns (stream ElectronColumnServiceRegisterOnStigmatorChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Register on column (current/actual) eht/voltage changed events.
+   rpc RegisterOnVoltageChanged (ElectronColumnServiceRegisterOnVoltageChangedRequest) returns (stream ElectronColumnServiceRegisterOnVoltageChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Set the beam shift of this column.
+   // Values can be null if they should not be updated.
+   rpc SetBeamShift (ElectronColumnServiceSetBeamShiftRequest) returns (ElectronColumnServiceSetBeamShiftResponse);
+   // Applies a new focus (working distance) to the column.
+   rpc SetFocus (ElectronColumnServiceSetFocusRequest) returns (ElectronColumnServiceSetFocusResponse);
+   // Applies a new FOV.
+   rpc SetFov (ElectronColumnServiceSetFovRequest) returns (ElectronColumnServiceSetFovResponse);
+   // Rotates the Field Of View.
+   // If scan rotation is not enabled, it would be enabled.
+   rpc SetFovRotation (ElectronColumnServiceSetFovRotationRequest) returns (ElectronColumnServiceSetFovRotationResponse);
+   // Applies a new stigmator x and / or y value to the column.
+   rpc SetStigmator (ElectronColumnServiceSetStigmatorRequest) returns (ElectronColumnServiceSetStigmatorResponse);
+   // Applies a new target eht/voltage to the column.
+   rpc SetVoltage (ElectronColumnServiceSetVoltageRequest) returns (ElectronColumnServiceSetVoltageResponse);
+   // Turns the column off.
+   // This call initiates ramping down of emission and brings the column into off state.
+   rpc TurnOff (ElectronColumnServiceTurnOffRequest) returns (ElectronColumnServiceTurnOffResponse);
+   // Bring the column into working mode.
+   // This call initiates ramping of emission and brings the column into working condition.
+   rpc TurnOn (ElectronColumnServiceTurnOnRequest) returns (ElectronColumnServiceTurnOnResponse);
+}

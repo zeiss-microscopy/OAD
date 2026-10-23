@@ -1,0 +1,20 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.acquisition.v1beta;
+import "google/protobuf/wrappers.proto";
+
+// Defines the stage position of the acquired frame.
+message FrameStagePosition {
+   // The stage position in X direction (unit: m).
+   .google.protobuf.DoubleValue x = 1;
+   // The stage position in Y direction (unit: m).
+   .google.protobuf.DoubleValue y = 2;
+   // The stage position in Z direction (unit: m).
+   .google.protobuf.DoubleValue z = 3;
+}

@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_experiment_methods.py
-# Author      : SRh, JSm
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # The script demos the usage of the ZEN-API for Experiments. In order to
@@ -16,39 +13,37 @@
 #################################################################
 
 import asyncio
-from pylibCZIrw import czi as pyczi
-from matplotlib import pyplot as plt
-import matplotlib.cm as cm
-from typing import Dict, Union
-from pathlib import Path
 import time
-from zen_api_utils.misc import set_logging, initialize_zenapi
+from pathlib import Path
+
+from matplotlib import pyplot as plt
+from pylibCZIrw import czi as pyczi
 
 # import the auto-generated python modules
 from zen_api.acquisition.v1beta import (
-    ExperimentServiceStub,
-    ExperimentServiceLoadRequest,
-    ExperimentServiceGetImageOutputPathRequest,
-    ExperimentServiceGetAvailableExperimentsRequest,
     ExperimentServiceCloneRequest,
-    ExperimentServiceSaveRequest,
-    ExperimentServiceExportRequest,
-    ExperimentServiceImportRequest,
     ExperimentServiceDeleteRequest,
+    ExperimentServiceExportRequest,
+    ExperimentServiceGetAvailableExperimentsRequest,
+    ExperimentServiceGetImageOutputPathRequest,
+    ExperimentServiceGetStatusRequest,
+    ExperimentServiceImportRequest,
+    ExperimentServiceLoadRequest,
+    ExperimentServiceRunExperimentRequest,
     ExperimentServiceRunSnapRequest,
+    ExperimentServiceSaveRequest,
+    ExperimentServiceStartContinuousRequest,
     ExperimentServiceStartLiveRequest,
     ExperimentServiceStopRequest,
-    ExperimentServiceStartContinuousRequest,
-    ExperimentServiceRunExperimentRequest,
-    ExperimentServiceGetStatusRequest,
+    ExperimentServiceStub,
 )
-
+from zen_api_utils.misc import initialize_zenapi, set_logging
 
 # define some global variables
 # exp_folder = Path(r"f:\Documents\Carl Zeiss\ZENCore\Documents\Experiment Setups")
 exp_folder = Path(r"f:\Documents\Carl Zeiss\ZEN\Documents\Experiment Setups")
-my_experiment = "ZEN_API_Test_w96_1024x1024_CH=2"
-exp_cloned_name = "ZEN_API_Test_w96_1024x1024_CH=2_cloned"
+my_experiment = "00_ZEN_API_Streaming_Test"
+exp_cloned_name = "00_ZEN_API_Streaming_Test_cloned"
 # image_folder = Path(r"f:\AppData_TEMP\Temp\Zeiss\ZENCore\SavingPath\temp")
 image_folder = Path(r"f:\Zen_Output\temp")
 czi_name = "zenapi_myimage"
@@ -59,10 +54,11 @@ open_czi = True
 script_dir = Path(__file__).parent
 
 # Build the path to config.ini relative to the script
-config_path = script_dir / "config.ini"
+config_path = script_dir / "my_config.ini"
+
 
 # this is the main test script
-async def check_experiment_api(experiment_name: str, configfile: str = "config.ini") -> Dict[str, Union[str, Path]]:
+async def check_experiment_api(experiment_name: str, configfile: str | Path = "my_config.ini") -> dict[str, str | Path]:
     """
     Tries to run all available experiments methods for ZEN-API.
 
@@ -226,6 +222,6 @@ if __name__ == "__main__":
         # show the 2D image plane
         logger.info("Displaying CZI image data ...")
         fig1, ax = plt.subplots(1, 1, figsize=(12, 8))
-        ax.imshow(img2d[..., 0], cmap=cm.inferno, vmin=100, vmax=5000)
+        ax.imshow(img2d[..., 0], cmap=plt.get_cmap("inferno"), vmin=100, vmax=5000)
         ax.set_title(f"{results['exp_result_path']}: S={s} T={t} C={c} Z={z}")
         plt.show()

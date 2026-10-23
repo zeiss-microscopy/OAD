@@ -1,0 +1,66 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.hardware.v1;
+
+// The SampleCarrierServiceGetCurrentContainerRequest class.
+message SampleCarrierServiceGetCurrentContainerRequest {
+}
+// Contains the information in which container of the sample carrier the stage is positioned at.
+message SampleCarrierServiceGetCurrentContainerResponse {
+   // The row index of the container in the sample carrier (starts with index 0).
+   int32 row_index = 1;
+   // The column index of the container in the sample carrier (starts with index 0).
+   int32 column_index = 2;
+}
+// The SampleCarrierServiceGetInfoRequest class.
+message SampleCarrierServiceGetInfoRequest {
+}
+// Contains the sample carrier information.
+message SampleCarrierServiceGetInfoResponse {
+   // The number of rows in the sample carrier.
+   int32 rows = 1;
+   // The number of columns in the sample carrier.
+   int32 columns = 2;
+   // The name of the sample carrier.
+   string name = 3;
+   // The bottom material which is used for this sample carrier.
+   string material = 4;
+   // The bottom thickness of this sample carrier (in meters).
+   double thickness = 5;
+   // The skirt (i.e. bottom offset) of this sample carrier (in meters).
+   double skirt = 6;
+   // The refractive index of the bottom material of this sample carrier.
+   double refractive_index = 7;
+}
+// The SampleCarrierServiceMoveToContainerRequest class.
+message SampleCarrierServiceMoveToContainerRequest {
+   // The row index of the container (starts with index 0).
+   int32 row_index = 1;
+   // The column index of the container (starts with index 0).
+   int32 column_index = 2;
+}
+// The SampleCarrierServiceMoveToContainerResponse class.
+message SampleCarrierServiceMoveToContainerResponse {
+}
+// The ISampleCarrierService interface.
+service SampleCarrierService {
+   // Gets the information in which container of the sample carrier the stage is positioned at.
+   // Note that the stage might not be positioned exactly in the center of the container.
+   rpc GetCurrentContainer (SampleCarrierServiceGetCurrentContainerRequest) returns (SampleCarrierServiceGetCurrentContainerResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the information of the currently inserted sample carrier.
+   rpc GetInfo (SampleCarrierServiceGetInfoRequest) returns (SampleCarrierServiceGetInfoResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Move the stage to a sample holder container.
+   rpc MoveToContainer (SampleCarrierServiceMoveToContainerRequest) returns (SampleCarrierServiceMoveToContainerResponse);
+}

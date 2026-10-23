@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_swaf.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -15,32 +12,32 @@
 import asyncio
 import sys
 from pathlib import Path
-from zen_api_utils.misc import set_logging, initialize_zenapi
-from zen_api_utils.experiment import show_swaf_info_LM, save_experiment
+
 from grpclib import GRPCError
 
 # import the auto-generated python modules
 from zen_api.acquisition.v1beta import (
-    ExperimentServiceStub,
-    ExperimentServiceLoadRequest,
     ExperimentServiceCloneRequest,
+    ExperimentServiceLoadRequest,
+    ExperimentServiceStub,
 )
-
 from zen_api.lm.acquisition.v1 import (
-    ExperimentSwAutofocusServiceStub,
+    AutofocusContrastMeasure,
+    AutofocusMode,
+    AutofocusSampling,
+    ExperimentSwAutofocusServiceFindAutoFocusRequest,
     ExperimentSwAutofocusServiceGetAutofocusParametersRequest,
     ExperimentSwAutofocusServiceSetAutofocusParametersRequest,
-    ExperimentSwAutofocusServiceFindAutoFocusRequest,
-    AutofocusMode,
-    AutofocusContrastMeasure,
-    AutofocusSampling,
+    ExperimentSwAutofocusServiceStub,
 )
 
 # import the auto-generated python modules
 from zen_api.lm.hardware.v2 import (
-    StageServiceGetPositionRequest,
+    FocusServiceGetPositionRequest,
     FocusServiceStub,
 )
+from zen_api_utils.experiment import save_experiment, show_swaf_info_LM
+from zen_api_utils.misc import initialize_zenapi, set_logging
 
 # Get the directory where the current script is located
 script_dir = Path(__file__).parent
@@ -55,6 +52,7 @@ exp_folder = Path(r"f:\Documents\Carl Zeiss\ZEN\Documents\Experiment Setups")
 
 
 async def main(args):
+    del args
 
     # get the gRPC channel and the metadata
     channel, metadata = initialize_zenapi(config_path)
@@ -113,7 +111,7 @@ async def main(args):
     show_swaf_info_LM(swaf_info)
 
     # get Z-Position
-    posZ_before = await focus_service.get_position(StageServiceGetPositionRequest())
+    posZ_before = await focus_service.get_position(FocusServiceGetPositionRequest())
     logger.info(f"Z-Drive Position before SWAF [micron]: {posZ_before.value*1e6:.3f}")
 
     # run modified SWAF

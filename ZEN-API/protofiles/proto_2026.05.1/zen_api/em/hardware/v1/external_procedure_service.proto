@@ -1,0 +1,104 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.hardware.v1;
+import "zen_api/em/hardware/v1/command_id.proto";
+
+// The ExternalProcedureServiceRegisterExternalProcedureRequest class.
+message ExternalProcedureServiceRegisterExternalProcedureRequest {
+}
+// transfer object definition used to send commands to external procedures
+message ExternalProcedureServiceRegisterExternalProcedureResponse {
+   // An array of string parameters, may be empty
+   repeated string parameters = 1;
+   // The System.Guid of the external procedure the command is for, needs to be filtered by external procedures, as all procedures use the same channel to listen for commands
+   string id = 2; // default value could not be applied: 00000000-0000-0000-0000-000000000000
+   // The ZenApi.EM.Hardware.V1.ExternalProcedureServiceRegisterExternalProcedureResponse.CommandId telling the external procedure what to do
+   CommandId command_id = 3;
+}
+// The ExternalProcedureServiceReportCommandFailureRequest class.
+message ExternalProcedureServiceReportCommandFailureRequest {
+   // the System.Guid of a given running script a command has been send to.
+   string id = 1; // default value could not be applied: 00000000-0000-0000-0000-000000000000
+   // the ZenApi.EM.Hardware.V1.CommandId of a given command.
+   CommandId command_id = 2;
+}
+// The ExternalProcedureServiceReportCommandFailureResponse class.
+message ExternalProcedureServiceReportCommandFailureResponse {
+}
+// The ExternalProcedureServiceReportCommandSuccessRequest class.
+message ExternalProcedureServiceReportCommandSuccessRequest {
+   // the System.Guid of a given running script a command has been send to.
+   string id = 1; // default value could not be applied: 00000000-0000-0000-0000-000000000000
+   // the ZenApi.EM.Hardware.V1.CommandId of a given command.
+   CommandId command_id = 2;
+}
+// The ExternalProcedureServiceReportCommandSuccessResponse class.
+message ExternalProcedureServiceReportCommandSuccessResponse {
+}
+// The ExternalProcedureServiceReportInitializationErrorRequest class.
+message ExternalProcedureServiceReportInitializationErrorRequest {
+   // the id as System.Guid of the external procedure.
+   string id = 1; // default value could not be applied: 00000000-0000-0000-0000-000000000000
+   // a System.String error message.
+   string error_message = 2;
+}
+// The ExternalProcedureServiceReportInitializationErrorResponse class.
+message ExternalProcedureServiceReportInitializationErrorResponse {
+}
+// The ExternalProcedureServiceReportProgressRequest class.
+message ExternalProcedureServiceReportProgressRequest {
+   // the id as System.Guid of the external procedure.
+   string id = 1; // default value could not be applied: 00000000-0000-0000-0000-000000000000
+   // The progress to be reported i the range [0, 1]. Alternatively, -1 for undetermined progress.
+   double progress = 2;
+}
+// The ExternalProcedureServiceReportProgressResponse class.
+message ExternalProcedureServiceReportProgressResponse {
+}
+// The ExternalProcedureServiceReportReadyRequest class.
+message ExternalProcedureServiceReportReadyRequest {
+   // the id as System.Guid of the external procedure.
+   string id = 1; // default value could not be applied: 00000000-0000-0000-0000-000000000000
+   // a nullable System.String to report an error during the execution of the last run.
+   string error_message = 2;
+}
+// The ExternalProcedureServiceReportReadyResponse class.
+message ExternalProcedureServiceReportReadyResponse {
+}
+// The ExternalProcedureServiceReportStatusRequest class.
+message ExternalProcedureServiceReportStatusRequest {
+   // the id as System.Guid of the external procedure.
+   string id = 1; // default value could not be applied: 00000000-0000-0000-0000-000000000000
+   // the System.String to be reported.
+   string message = 2;
+}
+// The ExternalProcedureServiceReportStatusResponse class.
+message ExternalProcedureServiceReportStatusResponse {
+}
+// The IExternalProcedureService interface.
+service ExternalProcedureService {
+   // Registers the caller to get notified about ZenApi.EM.Hardware.V1.ExternalProcedureServiceRegisterExternalProcedureResponse's
+   // (for all external procedures; filtering must be done by the caller).
+   rpc RegisterExternalProcedure (ExternalProcedureServiceRegisterExternalProcedureRequest) returns (stream ExternalProcedureServiceRegisterExternalProcedureResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Reports the failure of execution of the given ZenApi.EM.Hardware.V1.ExternalProcedureServiceRegisterExternalProcedureResponse.
+   rpc ReportCommandFailure (ExternalProcedureServiceReportCommandFailureRequest) returns (ExternalProcedureServiceReportCommandFailureResponse);
+   // Reports the successful execution of the given ZenApi.EM.Hardware.V1.ExternalProcedureServiceRegisterExternalProcedureResponse.
+   rpc ReportCommandSuccess (ExternalProcedureServiceReportCommandSuccessRequest) returns (ExternalProcedureServiceReportCommandSuccessResponse);
+   // Reports an error that has occurred during the initialization of an external procedure, leads to error state.
+   rpc ReportInitializationError (ExternalProcedureServiceReportInitializationErrorRequest) returns (ExternalProcedureServiceReportInitializationErrorResponse);
+   // reports the progress of the external procedure with the given id.
+   rpc ReportProgress (ExternalProcedureServiceReportProgressRequest) returns (ExternalProcedureServiceReportProgressResponse);
+   // Reports, that the external procedure with the given id is ready to be executed.
+   rpc ReportReady (ExternalProcedureServiceReportReadyRequest) returns (ExternalProcedureServiceReportReadyResponse);
+   // reports a status message to zen.
+   rpc ReportStatus (ExternalProcedureServiceReportStatusRequest) returns (ExternalProcedureServiceReportStatusResponse);
+}

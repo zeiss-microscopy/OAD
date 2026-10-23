@@ -1,0 +1,29 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.hardware.v1;
+
+// Request object to set the simple acquisition settings.
+message AcquisitionSettings {
+   // The detector to use.
+   // Null will take the detector from the previous acquisition.
+   string detector_name = 1;
+   // The image width in pixels.
+   int32 width = 2;
+   // The image height in pixels.
+   int32 height = 3;
+   // The dwell time in seconds.
+   // The closest dwell time to the selected one will be chosen.
+   double dwell_time = 4;
+   // The number of frames to average.
+   // 1 means no averaging.
+   int32 frame_averages = 5;
+   // The number of lines to average.
+   // 1 means no averaging.
+   int32 line_averages = 6;
+}

@@ -1,11 +1,9 @@
-from pylibCZIrw import czi as pyczi
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
 import numpy as np
-from pathlib import Path
 from processing_tools import segment_czi
-from shapely.geometry import Polygon
+from pylibCZIrw import czi as pyczi
 from shapely.affinity import scale
+from shapely.geometry import Polygon
 
 # downscale CZI upon reading
 sf = 0.2
@@ -40,9 +38,10 @@ with pyczi.open_czi(str(savename_seg)) as czidoc:
 
 # show the 2D image plane
 fig1, ax = plt.subplots(3, 1, figsize=(12, 12))
-ax[0].imshow(img_seg[..., 0], cmap=cm.inferno, vmin=img_seg.min(), vmax=img_seg.max())
-ax[1].imshow(img_sc[..., 0], cmap=cm.inferno, vmin=img_sc.min(), vmax=img_sc.max())
-ax[2].imshow(img[..., 0], cmap=cm.inferno, vmin=img.min(), vmax=img.max())
+inferno = plt.get_cmap("inferno")
+ax[0].imshow(img_seg[..., 0], cmap=inferno, vmin=img_seg.min(), vmax=img_seg.max())
+ax[1].imshow(img_sc[..., 0], cmap=inferno, vmin=img_sc.min(), vmax=img_sc.max())
+ax[2].imshow(img[..., 0], cmap=inferno, vmin=img.min(), vmax=img.max())
 
 
 for tr_id in range(results.shape[0]):
@@ -55,9 +54,7 @@ for tr_id in range(results.shape[0]):
     ax[1].plot(xpos, ypos, "w--", lw=2, alpha=1.0)
 
     # get list of xy coordinates
-    xy_coordinates = list(
-        zip(results["polygon"][tr_id][1], results["polygon"][tr_id][0])
-    )
+    xy_coordinates = list(zip(results["polygon"][tr_id][1], results["polygon"][tr_id][0]))
     # Create the polygon
     polygon = Polygon(xy_coordinates)
 

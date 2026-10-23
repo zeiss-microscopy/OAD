@@ -1,0 +1,24 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.hardware.v1;
+
+// Acquisition states.
+enum AcquisitionStatus {
+   // Default enum value.
+   ACQUISITION_STATUS_UNSPECIFIED = 0;
+   // No acquisition task is running, available for next acquisition.
+   ACQUISITION_STATUS_IDLE = 1;
+   // Acquisition hardware is occupied by another task.
+   // No acquisition possible at the moment.
+   ACQUISITION_STATUS_BUSY = 2;
+   // Live acquisition is currently running.
+   ACQUISITION_STATUS_LIVE_RUNNING = 3;
+   // Acquisition task is currently running.
+   ACQUISITION_STATUS_ACQUISITION_RUNNING = 4;
+}

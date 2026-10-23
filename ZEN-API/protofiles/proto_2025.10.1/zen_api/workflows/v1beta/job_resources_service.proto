@@ -1,0 +1,314 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.workflows.v1beta;
+
+// The JobResourcesServiceGetAvailableResourcesRequest class.
+message JobResourcesServiceGetAvailableResourcesRequest {
+}
+// Response containing the list of all available resource workflow parameters.
+message JobResourcesServiceGetAvailableResourcesResponse {
+   // The list of all available resource workflow parameters.
+   repeated string resources = 1;
+}
+// The JobResourcesServiceGetBooleanValueRequest class.
+message JobResourcesServiceGetBooleanValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+}
+// Response containing the resource's value.
+message JobResourcesServiceGetBooleanValueResponse {
+   // The resource's value.
+   bool value = 1;
+}
+// The JobResourcesServiceGetDateTimeValueRequest class.
+message JobResourcesServiceGetDateTimeValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+}
+// Response containing the resource's value.
+message JobResourcesServiceGetDateTimeValueResponse {
+   // The resource's date and time string value in ISO 8601 format.
+   string value = 1;
+}
+// The JobResourcesServiceGetDateValueRequest class.
+message JobResourcesServiceGetDateValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+}
+// Response containing the resource's value.
+message JobResourcesServiceGetDateValueResponse {
+   // The resource's date string value in ISO 8601 format.
+   string value = 1;
+}
+// The JobResourcesServiceGetDoubleValueRequest class.
+message JobResourcesServiceGetDoubleValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+}
+// Response containing the resource's value.
+message JobResourcesServiceGetDoubleValueResponse {
+   // The resource's value.
+   double value = 1;
+}
+// The JobResourcesServiceGetFloatValueRequest class.
+message JobResourcesServiceGetFloatValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+}
+// Response containing the resource's value.
+message JobResourcesServiceGetFloatValueResponse {
+   // The resource's value.
+   float value = 1;
+}
+// The JobResourcesServiceGetIntegerValueRequest class.
+message JobResourcesServiceGetIntegerValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+}
+// Response containing the resource's value.
+message JobResourcesServiceGetIntegerValueResponse {
+   // The resource's value.
+   int32 value = 1;
+}
+// The JobResourcesServiceGetLongValueRequest class.
+message JobResourcesServiceGetLongValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+}
+// Response containing the resource's value.
+message JobResourcesServiceGetLongValueResponse {
+   // The resource's value.
+   int64 value = 1;
+}
+// The JobResourcesServiceGetStringValueRequest class.
+message JobResourcesServiceGetStringValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+}
+// Response containing the resource's value.
+message JobResourcesServiceGetStringValueResponse {
+   // The resource's value.
+   string value = 1;
+}
+// The JobResourcesServiceGetTimeValueRequest class.
+message JobResourcesServiceGetTimeValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+}
+// Response containing the resource's value.
+message JobResourcesServiceGetTimeValueResponse {
+   // The resource's time string value in ISO 8601 format.
+   string value = 1;
+}
+// The JobResourcesServiceHasResourceRequest class.
+message JobResourcesServiceHasResourceRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+}
+// Response containing information if the current job has a resource with the specified ID.
+message JobResourcesServiceHasResourceResponse {
+   // A value indicating whether the current job has a resource with the specified ID.
+   bool has_resource = 1;
+}
+// The JobResourcesServiceIsJobLoadedRequest class.
+message JobResourcesServiceIsJobLoadedRequest {
+}
+// Response containing information if a job is loaded.
+message JobResourcesServiceIsJobLoadedResponse {
+   // A value indicating whether a job is loaded.
+   bool is_job_loaded = 1;
+}
+// The JobResourcesServiceSetBooleanValueRequest class.
+message JobResourcesServiceSetBooleanValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+   // The resource's value.
+   bool value = 2;
+}
+// The JobResourcesServiceSetBooleanValueResponse class.
+message JobResourcesServiceSetBooleanValueResponse {
+}
+// The JobResourcesServiceSetDateTimeValueRequest class.
+message JobResourcesServiceSetDateTimeValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+   // The resource's value.
+   string value = 2;
+}
+// The JobResourcesServiceSetDateTimeValueResponse class.
+message JobResourcesServiceSetDateTimeValueResponse {
+}
+// The JobResourcesServiceSetDateValueRequest class.
+message JobResourcesServiceSetDateValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+   // The resource's value.
+   string value = 2;
+}
+// The JobResourcesServiceSetDateValueResponse class.
+message JobResourcesServiceSetDateValueResponse {
+}
+// The JobResourcesServiceSetDoubleValueRequest class.
+message JobResourcesServiceSetDoubleValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+   // The resource's value.
+   double value = 2;
+}
+// The JobResourcesServiceSetDoubleValueResponse class.
+message JobResourcesServiceSetDoubleValueResponse {
+}
+// The JobResourcesServiceSetFloatValueRequest class.
+message JobResourcesServiceSetFloatValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+   // The resource's value.
+   float value = 2;
+}
+// The JobResourcesServiceSetFloatValueResponse class.
+message JobResourcesServiceSetFloatValueResponse {
+}
+// The JobResourcesServiceSetIntegerValueRequest class.
+message JobResourcesServiceSetIntegerValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+   // The resource's value.
+   int32 value = 2;
+}
+// The JobResourcesServiceSetIntegerValueResponse class.
+message JobResourcesServiceSetIntegerValueResponse {
+}
+// The JobResourcesServiceSetLongValueRequest class.
+message JobResourcesServiceSetLongValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+   // The resource's value.
+   int64 value = 2;
+}
+// The JobResourcesServiceSetLongValueResponse class.
+message JobResourcesServiceSetLongValueResponse {
+}
+// The JobResourcesServiceSetStringValueRequest class.
+message JobResourcesServiceSetStringValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+   // The resource's value.
+   string value = 2;
+}
+// The JobResourcesServiceSetStringValueResponse class.
+message JobResourcesServiceSetStringValueResponse {
+}
+// The JobResourcesServiceSetTimeValueRequest class.
+message JobResourcesServiceSetTimeValueRequest {
+   // The ID of the resource.
+   string resource_id = 1;
+   // The resource's value.
+   string value = 2;
+}
+// The JobResourcesServiceSetTimeValueResponse class.
+message JobResourcesServiceSetTimeValueResponse {
+}
+// The IJobResourcesService interface.
+service JobResourcesService {
+   // Retrieves a list of all available resource workflow parameters.
+   rpc GetAvailableResources (JobResourcesServiceGetAvailableResourcesRequest) returns (JobResourcesServiceGetAvailableResourcesResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the value of the resource with the specified ID from the current job as a boolean
+   // value.
+   rpc GetBooleanValue (JobResourcesServiceGetBooleanValueRequest) returns (JobResourcesServiceGetBooleanValueResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the value of the resource with the specified ID from the current job as a date and time
+   // string value in ISO 8601 format.
+   rpc GetDateTimeValue (JobResourcesServiceGetDateTimeValueRequest) returns (JobResourcesServiceGetDateTimeValueResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the value of the resource with the specified ID from the current job as a date string
+   // value in ISO 8601 format.
+   rpc GetDateValue (JobResourcesServiceGetDateValueRequest) returns (JobResourcesServiceGetDateValueResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the value of the resource with the specified ID from the current job as a double
+   // precision floating point value.
+   rpc GetDoubleValue (JobResourcesServiceGetDoubleValueRequest) returns (JobResourcesServiceGetDoubleValueResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the value of the resource with the specified ID from the current job as a single
+   // precision floating point value.
+   rpc GetFloatValue (JobResourcesServiceGetFloatValueRequest) returns (JobResourcesServiceGetFloatValueResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the value of the resource with the specified ID from the current job as an integer
+   // value.
+   rpc GetIntegerValue (JobResourcesServiceGetIntegerValueRequest) returns (JobResourcesServiceGetIntegerValueResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the value of the resource with the specified ID from the current job as a long integer
+   // value.
+   rpc GetLongValue (JobResourcesServiceGetLongValueRequest) returns (JobResourcesServiceGetLongValueResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the value of the resource with the specified ID from the current job as a string value.
+   rpc GetStringValue (JobResourcesServiceGetStringValueRequest) returns (JobResourcesServiceGetStringValueResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the value of the resource with the specified ID from the current job as a time string
+   // value in ISO 8601 format.
+   rpc GetTimeValue (JobResourcesServiceGetTimeValueRequest) returns (JobResourcesServiceGetTimeValueResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Checks if the current job has a resource with the specified ID.
+   rpc HasResource (JobResourcesServiceHasResourceRequest) returns (JobResourcesServiceHasResourceResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Checks if a job is loaded.
+   rpc IsJobLoaded (JobResourcesServiceIsJobLoadedRequest) returns (JobResourcesServiceIsJobLoadedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Sets the value of the resource with the specified ID in the current job as a boolean value
+   // or creates the resource if it doesn't exist.
+   rpc SetBooleanValue (JobResourcesServiceSetBooleanValueRequest) returns (JobResourcesServiceSetBooleanValueResponse);
+   // Sets the value of the resource with the specified ID in the current job as a date and time
+   // string value in ISO 8601 format or creates the resource if it doesn't exist.
+   rpc SetDateTimeValue (JobResourcesServiceSetDateTimeValueRequest) returns (JobResourcesServiceSetDateTimeValueResponse);
+   // Sets the value of the resource with the specified ID in the current job as a date string
+   // value in ISO 8601 format or creates the resource if it doesn't exist.
+   rpc SetDateValue (JobResourcesServiceSetDateValueRequest) returns (JobResourcesServiceSetDateValueResponse);
+   // Sets the value of the resource with the specified ID in the current job as a double
+   // precision floating point value or creates the resource if it doesn't exist.
+   rpc SetDoubleValue (JobResourcesServiceSetDoubleValueRequest) returns (JobResourcesServiceSetDoubleValueResponse);
+   // Sets the value of the resource with the specified ID in the current job as a single
+   // precision floating point value or creates the resource if it doesn't exist.
+   rpc SetFloatValue (JobResourcesServiceSetFloatValueRequest) returns (JobResourcesServiceSetFloatValueResponse);
+   // Sets the value of the resource with the specified ID in the current job as an integer value
+   // or creates the resource if it doesn't exist.
+   rpc SetIntegerValue (JobResourcesServiceSetIntegerValueRequest) returns (JobResourcesServiceSetIntegerValueResponse);
+   // Sets the value of the resource with the specified ID in the current job as a long integer
+   // value or creates the resource if it doesn't exist.
+   rpc SetLongValue (JobResourcesServiceSetLongValueRequest) returns (JobResourcesServiceSetLongValueResponse);
+   // Sets the value of the resource with the specified ID in the current job as a string value or
+   // creates the resource if it doesn't exist.
+   rpc SetStringValue (JobResourcesServiceSetStringValueRequest) returns (JobResourcesServiceSetStringValueResponse);
+   // Sets the value of the resource with the specified ID in the current job as a time string
+   // value in ISO 8601 format or creates the resource if it doesn't exist.
+   rpc SetTimeValue (JobResourcesServiceSetTimeValueRequest) returns (JobResourcesServiceSetTimeValueResponse);
+}

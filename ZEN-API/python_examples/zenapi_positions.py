@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_positions.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -15,23 +12,22 @@
 import asyncio
 import sys
 from pathlib import Path
-from zen_api_utils.misc import set_logging, initialize_zenapi
-from zen_api_utils.experiment import save_experiment
 
 # import the auto-generated python modules
 from zen_api.acquisition.v1beta import (
-    ExperimentServiceStub,
-    ExperimentServiceLoadRequest,
     ExperimentServiceCloneRequest,
+    ExperimentServiceLoadRequest,
+    ExperimentServiceStub,
 )
-
 from zen_api.lm.acquisition.v1 import (
-    TilesServiceStub,
-    TilesServiceIsTilesExperimentRequest,
-    TilesServiceClearRequest,
-    TilesServiceAddPositionsRequest,
     Position3D,
+    TilesServiceAddPositionsRequest,
+    TilesServiceClearRequest,
+    TilesServiceIsTilesExperimentRequest,
+    TilesServiceStub,
 )
+from zen_api_utils.experiment import save_experiment
+from zen_api_utils.misc import initialize_zenapi, set_logging
 
 # Get the directory where the current script is located
 script_dir = Path(__file__).parent
@@ -59,6 +55,7 @@ for p in poslist:
 
 
 async def main(args):
+    del args
 
     # get the gRPC channel and the metadata
     channel, metadata = initialize_zenapi(config_path)

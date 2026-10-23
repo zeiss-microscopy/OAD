@@ -1,0 +1,346 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.workflow.v1;
+import "zen_api/em/hardware/v1/beam_state.proto";
+import "zen_api/em/workflow/v1/eds_spectrum_acquisition_settings.proto";
+import "zen_api/em/workflow/v1/em_region_of_interest.proto";
+import "zen_api/em/workflow/v1/vacuum_parameter.proto";
+import "zen_api/hardware/v1/stage_axis.proto";
+
+// The CreateWorkflowServiceAddAbsoluteTiltingActionRequest class.
+message CreateWorkflowServiceAddAbsoluteTiltingActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The angle in degrees to which the tilting should occur. Defaults to 0 if not specified.
+   double tilt_angle = 2;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddAbsoluteTiltingActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddAcquireNavCamImageActionRequest class.
+message CreateWorkflowServiceAddAcquireNavCamImageActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // An ZenApi.EM.Workflow.V1.EmRegionOfInterest object specifying the region of interest for the NavCam image acquisition.
+   EmRegionOfInterest em_region_of_interest = 2;
+   // The name of the file where the acquired NavCam image will be saved.
+   string file_name = 3;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddAcquireNavCamImageActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddAcquireStoreImageActionRequest class.
+message CreateWorkflowServiceAddAcquireStoreImageActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // An ZenApi.EM.Workflow.V1.EmRegionOfInterest object specifying the region of interest for the image acquisition.
+   EmRegionOfInterest em_region_of_interest = 2;
+   // A unique key identifier for the image to be stored.
+   string image_key = 3;
+   // An optional name for the position associated with the image acquisition. Default is an empty string.
+   string position_name = 4;
+   // An optional X-coordinate offset for the image acquisition. Default is System.Double.NaN.
+   double xoffset = 5;
+   // An optional Y-coordinate offset for the image acquisition. Default is System.Double.NaN.
+   double yoffset = 6;
+   // An optional file name for storing the acquired image. Default is an empty string.
+   string file_name = 7;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddAcquireStoreImageActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddChangeBeamStateActionRequest class.
+message CreateWorkflowServiceAddChangeBeamStateActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The desired state of the beam, specified as a ZenApi.EM.Hardware.V1.BeamState enumeration.
+   .zen_api.em.hardware.v1.BeamState desired_state = 2;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddChangeBeamStateActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddChangeCurrentActionRequest class.
+message CreateWorkflowServiceAddChangeCurrentActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The target current level to which the current should be adjusted.
+   double target_current = 2;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddChangeCurrentActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddChangeEhtActionRequest class.
+message CreateWorkflowServiceAddChangeEhtActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The target voltage level to which the EHT should be changed.
+   double target_voltage = 2;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddChangeEhtActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddEdsAcquisitionSettingsParameterActionRequest class.
+message CreateWorkflowServiceAddEdsAcquisitionSettingsParameterActionRequest {
+   // The unique identifier of the workflow to which the EDS acquisition settings action will be appended.
+   string workflow_id = 1;
+   // The EDS acquisition settings to be applied, provided as an ZenApi.EM.Workflow.V1.EdsSpectrumAcquisitionSettings interface.
+   EdsSpectrumAcquisitionSettings acquisition_settings = 2;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddEdsAcquisitionSettingsParameterActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddFocusAndFovActionRequest class.
+message CreateWorkflowServiceAddFocusAndFovActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The focus value to be set.
+   double focus = 2;
+   // The field of view value to be set.
+   double fov = 3;
+   // A boolean indicating whether the setting is for a SEM (true) or not (false).
+   bool is_sem = 4;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddFocusAndFovActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddGoToStoredPositionActionRequest class.
+message CreateWorkflowServiceAddGoToStoredPositionActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // Id of the stage position stored.
+   int32 id = 2;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddGoToStoredPositionActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddInitializeActionRequest class.
+message CreateWorkflowServiceAddInitializeActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddInitializeActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddMoveStageRelativeActionRequest class.
+message CreateWorkflowServiceAddMoveStageRelativeActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The stage axis that should move.
+   // The position is in meters.
+   repeated .zen_api.hardware.v1.StageAxis axis_to_move = 2;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddMoveStageRelativeActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddPositionControlledTiltActionRequest class.
+message CreateWorkflowServiceAddPositionControlledTiltActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The starting angle in degrees for the tilt action.
+   double start_angle = 2;
+   // The target angle in degrees the tilt action aims to reach.
+   double target_angle = 3;
+   // The size of the large step in degrees for tilting.
+   double large_step = 4;
+   // The size of the small step in degrees for finer tilting adjustments.
+   double small_step = 5;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddPositionControlledTiltActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddRestoreFibProbeActionRequest class.
+message CreateWorkflowServiceAddRestoreFibProbeActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The name of the storage location from which the FIB probe state will be restored.
+   string fib_probe_storage_name = 2;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddRestoreFibProbeActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddSetFibProbeActionRequest class.
+message CreateWorkflowServiceAddSetFibProbeActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The name of the FIB probe to be set.
+   string probe_name = 2;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddSetFibProbeActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddSetFibWithValuesActionRequest class.
+message CreateWorkflowServiceAddSetFibWithValuesActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The voltage value to set for the FIB.
+   string voltage = 2;
+   // The current value to set for the FIB.
+   string current = 3;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddSetFibWithValuesActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddSetVacuumParameterActionRequest class.
+message CreateWorkflowServiceAddSetVacuumParameterActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The vacuum parameter to be set, specified as a ZenApi.EM.Workflow.V1.VacuumParameter enumeration.
+   VacuumParameter vacuum_parameter = 2;
+   // The value to which the specified vacuum parameter should be set.
+   double value = 3;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddSetVacuumParameterActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddSpotParameterActionRequest class.
+message CreateWorkflowServiceAddSpotParameterActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The identifier of the spot to be configured.
+   string spot_id = 2;
+   // The X-coordinate of the beam position for the spot.
+   double position_x = 3;
+   // The Y-coordinate of the beam position for the spot.
+   double position_y = 4;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddSpotParameterActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddStoreFibProbeActionRequest class.
+message CreateWorkflowServiceAddStoreFibProbeActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The name for the storage location of the FIB probe state.
+   string fib_probe_storage_name = 2;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddStoreFibProbeActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddTouchAlarmGeneratorActionRequest class.
+message CreateWorkflowServiceAddTouchAlarmGeneratorActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // A boolean indicating whether to disable (true) or enable (false) the touch alarm.
+   bool disable_alarm = 2;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddTouchAlarmGeneratorActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The CreateWorkflowServiceAddVacuumCommandActionRequest class.
+message CreateWorkflowServiceAddVacuumCommandActionRequest {
+   // Identifier of the workflow to which action should be added.
+   string workflow_id = 1;
+   // The vacuum command to be sent.
+   string command = 2;
+}
+// ActionResponse response.
+message CreateWorkflowServiceAddVacuumCommandActionResponse {
+   // The action id which was created.
+   string action_id = 1;
+}
+// The ICreateWorkflowService interface.
+service CreateWorkflowService {
+   // Creates an absolute tilting action.
+   rpc AddAbsoluteTiltingAction (CreateWorkflowServiceAddAbsoluteTiltingActionRequest) returns (CreateWorkflowServiceAddAbsoluteTiltingActionResponse);
+   // Creates an action to acquire a navigation camera image for a specified region of interest in an automated engine workflow.
+   // This method generates an action for capturing a NavCam image based on the provided EM region of interest and appends it to an existing workflow.
+   rpc AddAcquireNavCamImageAction (CreateWorkflowServiceAddAcquireNavCamImageActionRequest) returns (CreateWorkflowServiceAddAcquireNavCamImageActionResponse);
+   // Creates an action to acquire and store an image based on a specified region of interest in an automated engine workflow.
+   // This method generates an action for capturing and storing an image, including optional position and offset parameters, and appends it to an existing workflow.
+   rpc AddAcquireStoreImageAction (CreateWorkflowServiceAddAcquireStoreImageActionRequest) returns (CreateWorkflowServiceAddAcquireStoreImageActionResponse);
+   // Creates an action to change the beam state in an automated engine workflow.
+   // This method generates a beam state change action based on the desired state and appends it to an existing workflow.
+   rpc AddChangeBeamStateAction (CreateWorkflowServiceAddChangeBeamStateActionRequest) returns (CreateWorkflowServiceAddChangeBeamStateActionResponse);
+   // Creates an action to change the current level in an automated engine workflow.
+   // This method generates a current change action based on the specified target current and appends it to an existing workflow.
+   rpc AddChangeCurrentAction (CreateWorkflowServiceAddChangeCurrentActionRequest) returns (CreateWorkflowServiceAddChangeCurrentActionResponse);
+   // Creates an action to change the EHT voltage in an automated engine workflow.
+   // This method generates an EHT voltage change action and appends it to an existing workflow.
+   rpc AddChangeEhtAction (CreateWorkflowServiceAddChangeEhtActionRequest) returns (CreateWorkflowServiceAddChangeEhtActionResponse);
+   // Creates an action to set Energy-Dispersive X-ray Spectroscopy (EDS) acquisition settings in an automated engine workflow.
+   // This method generates an action for configuring EDS acquisition settings and appends it to an existing workflow.
+   rpc AddEdsAcquisitionSettingsParameterAction (CreateWorkflowServiceAddEdsAcquisitionSettingsParameterActionRequest) returns (CreateWorkflowServiceAddEdsAcquisitionSettingsParameterActionResponse);
+   // Creates an action to adjust the focus and field of view (FOV) in an automated engine workflow.
+   // This method generates an action for setting focus and FOV values, and appends it to an existing workflow.
+   rpc AddFocusAndFovAction (CreateWorkflowServiceAddFocusAndFovActionRequest) returns (CreateWorkflowServiceAddFocusAndFovActionResponse);
+   // Adds an action that moves the stage to a stored point.
+   rpc AddGoToStoredPositionAction (CreateWorkflowServiceAddGoToStoredPositionActionRequest) returns (CreateWorkflowServiceAddGoToStoredPositionActionResponse);
+   // Add action that initializes the stage.
+   rpc AddInitializeAction (CreateWorkflowServiceAddInitializeActionRequest) returns (CreateWorkflowServiceAddInitializeActionResponse);
+   // Add Move Stage Relative action to the specified workflow. The action will
+   // be added at the last position of the specified workflow.
+   // When specified workflow is not present, it will be automatically created.
+   rpc AddMoveStageRelativeAction (CreateWorkflowServiceAddMoveStageRelativeActionRequest) returns (CreateWorkflowServiceAddMoveStageRelativeActionResponse);
+   // Creates a position-controlled tilt action as part of an automated engine workflow.
+   // This method generates an action based on specified tilt angles and step sizes,
+   // and appends it to a given workflow. When specified workflow is not present, it will be automatically created.
+   rpc AddPositionControlledTiltAction (CreateWorkflowServiceAddPositionControlledTiltActionRequest) returns (CreateWorkflowServiceAddPositionControlledTiltActionResponse);
+   // Creates an action to restore the FIB probe to a previously stored state in an automated engine workflow.
+   // This method generates an action for restoring the FIB probe configuration from a named storage and appends it to an existing workflow.
+   rpc AddRestoreFibProbeAction (CreateWorkflowServiceAddRestoreFibProbeActionRequest) returns (CreateWorkflowServiceAddRestoreFibProbeActionResponse);
+   // Creates an action to set a specific FIB probe in an automated engine workflow.
+   // This method generates an action to configure the FIB system to use a specified probe and appends it to an existing workflow.
+   rpc AddSetFibProbeAction (CreateWorkflowServiceAddSetFibProbeActionRequest) returns (CreateWorkflowServiceAddSetFibProbeActionResponse);
+   // Creates an action to set the FIB with specified voltage and current values in an automated engine workflow.
+   // This method generates an action for setting the FIB parameters and appends it to an existing workflow.
+   rpc AddSetFibWithValuesAction (CreateWorkflowServiceAddSetFibWithValuesActionRequest) returns (CreateWorkflowServiceAddSetFibWithValuesActionResponse);
+   // Creates an action to set a specific vacuum parameter in an automated engine workflow.
+   // This method generates an action to adjust a vacuum parameter to a specified value and appends it to an existing workflow.
+   rpc AddSetVacuumParameterAction (CreateWorkflowServiceAddSetVacuumParameterActionRequest) returns (CreateWorkflowServiceAddSetVacuumParameterActionResponse);
+   // Creates an action to set parameters for a specific spot in an automated engine workflow.
+   // This method generates an action to configure a beam spot with a given ID and beam position, using specified X and Y coordinates, and appends it to an existing workflow.
+   rpc AddSpotParameterAction (CreateWorkflowServiceAddSpotParameterActionRequest) returns (CreateWorkflowServiceAddSpotParameterActionResponse);
+   // Creates an action to store the current state of the FIB probe in an automated engine workflow.
+   // This method generates an action for storing the FIB probe configuration and appends it to an existing workflow.
+   rpc AddStoreFibProbeAction (CreateWorkflowServiceAddStoreFibProbeActionRequest) returns (CreateWorkflowServiceAddStoreFibProbeActionResponse);
+   // Creates an action to enable or disable the touch alarm in an automated engine workflow.
+   // This method generates an action for toggling the touch alarm state and appends it to an existing workflow.
+   rpc AddTouchAlarmGeneratorAction (CreateWorkflowServiceAddTouchAlarmGeneratorActionRequest) returns (CreateWorkflowServiceAddTouchAlarmGeneratorActionResponse);
+   // Creates an action to send a vacuum command in an automated engine workflow.
+   // This method generates an action for sending a specified vacuum command and appends it to an existing workflow.
+   rpc AddVacuumCommandAction (CreateWorkflowServiceAddVacuumCommandActionRequest) returns (CreateWorkflowServiceAddVacuumCommandActionResponse);
+}

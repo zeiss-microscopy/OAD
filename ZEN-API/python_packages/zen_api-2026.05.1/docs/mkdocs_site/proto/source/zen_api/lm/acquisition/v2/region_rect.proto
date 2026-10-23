@@ -1,0 +1,21 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.acquisition.v2;
+
+// Represents a rectangular region defined by its left (X), top (Y) coordinates, width, and height.
+message RegionRect {
+   // The left coordinate of the rectangle.
+   double x = 1;
+   // The top coordinate of the rectangle.
+   double y = 2;
+   // The width of the rectangle.
+   double width = 3;
+   // The height of the rectangle.
+   double height = 4;
+}

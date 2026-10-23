@@ -1,0 +1,37 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.hardware.v2;
+import "zen_api/common/v1/double_frame.proto";
+import "zen_api/common/v1/double_size.proto";
+
+// Describes a camera.
+message GetCameraData {
+   // The Name.
+   string name = 1;
+   // The Id.
+   string id = 2;
+   // A value indicating whether the camera is preset.
+   bool is_preset = 3;
+   // The ExposureTime.
+   double exposure_time = 4;
+   // The MinExposureTime.
+   double min_exposure_time = 5;
+   // The MaxExposureTime.
+   double max_exposure_time = 6;
+   // The Binning.
+   int32 binning = 7;
+   // The BinningDescription.
+   string binning_description = 8;
+   // The AvailableBinnings.
+   repeated string available_binnings = 9;
+   // The Frame.
+   .zen_api.common.v1.DoubleFrame frame = 10;
+   // The MaxFrameWidth.
+   .zen_api.common.v1.DoubleSize max_frame_size = 11;
+}

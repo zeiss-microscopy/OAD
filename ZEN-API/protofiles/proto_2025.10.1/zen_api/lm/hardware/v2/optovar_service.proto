@@ -1,0 +1,53 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.hardware.v2;
+import "zen_api/lm/hardware/v2/optovar_data.proto";
+
+// The OptovarServiceGetOptovarsRequest class.
+message OptovarServiceGetOptovarsRequest {
+}
+// A list of available optovars.
+message OptovarServiceGetOptovarsResponse {
+   // The optovars.
+   repeated OptovarData optovars = 1;
+}
+// The OptovarServiceGetPositionRequest class.
+message OptovarServiceGetPositionRequest {
+}
+// Position index of the optovar.
+message OptovarServiceGetPositionResponse {
+   // The position index.
+   int32 value = 1;
+}
+// The OptovarServiceMoveToRequest class.
+message OptovarServiceMoveToRequest {
+   // New position index.
+   int32 position_index = 1;
+}
+// Describes the result of a Optovar.MoveTo request.
+message OptovarServiceMoveToResponse {
+}
+// The IOptovarService interface.
+service OptovarService {
+   // Gets the optovars.
+   rpc GetOptovars (OptovarServiceGetOptovarsRequest) returns (OptovarServiceGetOptovarsResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the optovar position.
+   rpc GetPosition (OptovarServiceGetPositionRequest) returns (OptovarServiceGetPositionResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Moves the optovar to the given position index.
+   rpc MoveTo (OptovarServiceMoveToRequest) returns (OptovarServiceMoveToResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+}

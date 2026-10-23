@@ -1,0 +1,25 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.slide_scan.v1;
+import "google/protobuf/wrappers.proto";
+
+// Data container for overriding options of a scan profile.
+message ScanProfileOptionsOverride {
+   // A value indicating whether the prescan preview should be made or only a preview with the preview cam.
+   // If set to perform a prescan, the prescan will be done according to existing settings in the scan profile
+   // without modifications (resp. default settings will be used).
+   .google.protobuf.BoolValue make_prescan_preview = 1;
+   // A value indicating whether the segmentation mode shall be manual.
+   // If not set or set to false, the segmentation will be performed as defined in the scan profile.
+   .google.protobuf.BoolValue use_manual_segmentation = 2;
+   // A value indicating whether the label detection shall be disabled.
+   // If set to true, the barcode and ocr recognition will be disabled.
+   // If not set or set to false, the label detection will be performed as defined in the scan profile.
+   .google.protobuf.BoolValue disable_label_detection = 3;
+}

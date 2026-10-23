@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_guidedacq.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -13,48 +10,55 @@
 #################################################################
 
 import asyncio
-import numpy as np
-from pathlib import Path
-from zen_api_utils.misc import initialize_zenapi, set_logging
-from zen_api_utils.tiles_positions import TileRegionRectangle, TileRegionPolygon, TileRegionEllipse
-import zen_api_utils.zen_tcpip_commands as zen_tcpip_commands
-from zen_api_utils.zen_tcpip import ZenCommands
-from processing_tools import segment_czi
-from czitools.utils import planetable
-from tqdm import trange
-from datetime import datetime
 import shutil
-from typing import Union
-from matplotlib import pyplot as plt
-from pylibCZIrw import czi as pyczi
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Literal, cast
+
+import numpy as np
 import pandas as pd
+from czitools.utils import planetable
+from matplotlib import pyplot as plt
+from processing_tools import segment_czi
+from pylibCZIrw import czi as pyczi
+from tqdm import trange
+from zen_api.acquisition.v1beta import (
+    ExperimentServiceCloneRequest,
+    ExperimentServiceGetImageOutputPathRequest,
+    ExperimentServiceLoadRequest,
+    ExperimentServiceRunExperimentRequest,
+    ExperimentServiceSaveRequest,
+    ExperimentServiceStub,
+)
 
 # import the auto-generated python modules for ZEN API
 from zen_api.common.v1 import DoublePoint
-from zen_api.acquisition.v1beta import (
-    ExperimentServiceStub,
-    ExperimentServiceLoadRequest,
-    ExperimentServiceCloneRequest,
-    ExperimentServiceRunExperimentRequest,
-    ExperimentServiceGetImageOutputPathRequest,
-    ExperimentServiceSaveRequest,
-)
-
 from zen_api.lm.acquisition.v1 import (
-    TilesServiceStub,
-    TilesServiceIsTilesExperimentRequest,
-    TilesServiceAddRectangleTileRegionRequest,
-    TilesServiceAddPolygonTileRegionRequest,
     TilesServiceAddEllipseTileRegionRequest,
+    TilesServiceAddPolygonTileRegionRequest,
+    TilesServiceAddRectangleTileRegionRequest,
     TilesServiceClearRequest,
+    TilesServiceIsTilesExperimentRequest,
+    TilesServiceStub,
 )
+from zen_api_utils import zen_tcpip_commands
+from zen_api_utils.misc import initialize_zenapi, set_logging
+from zen_api_utils.tiles_positions import TileRegionEllipse, TileRegionPolygon, TileRegionRectangle
+from zen_api_utils.zen_tcpip import ZenCommands
+
+RegionType = Literal["polygon", "rectangle", "ellipse"]
+
+
+def _result_float(results: pd.DataFrame, row: int, column: str) -> float:
+    """Read a numeric segmentation result as a Python float."""
+    return float(cast(float, results.loc[row, column]))
 
 
 async def gca_run_detailscan(
     experiment: str,
     exp_service: ExperimentServiceStub,
     tile_service: TilesServiceStub,
-    tileregion: Union[TileRegionRectangle, TileRegionPolygon, TileRegionEllipse],
+    tileregion: TileRegionRectangle | TileRegionPolygon | TileRegionEllipse,
     output_name: str = "zenapi_detail",
     verbose: bool = False,  # for testing purposes
 ):
@@ -103,7 +107,7 @@ async def gca_run_detailscan(
         await tile_service.add_polygon_tile_region(
             TilesServiceAddPolygonTileRegionRequest(
                 experiment_id=my_exp_cloned.experiment_id,
-                polygon_points=tileregion.polygon,
+                polygon_points=tileregion.polygon or [],
                 z=tileregion.zvalue,
             )
         )
@@ -190,22 +194,22 @@ async def gca_run_overviewscan(
 
 
 def show_segmentation(
-    savename_seg: Union[Path, str],
+    savename_seg: Path | str,
     results: pd.DataFrame,
     channel: int = 0,
     export: bool = False,
-) -> Union[str, Path, None]:
+) -> str | Path | None:
     """
     Displays a 2D image plane from a CZI file and overlays segmentation results.
 
     Args:
-        savename_seg (Union[Path, str]): Path to the CZI file to be opened.
+        savename_seg (Path | str): Path to the CZI file to be opened.
         results (pd.DataFrame): DataFrame containing segmentation results with polygon coordinates.
         channel (int, optional): The channel to read from the CZI file. Default is 0.
         export (bool, optional): If True, saves the displayed image as a PNG file. Default is False.
 
     Returns:
-        Union[str, None]: The path to the saved PNG file if export is True, otherwise None.
+        str | Path | None: The path to the saved PNG file if export is True, otherwise None.
     """
     with pyczi.open_czi(str(savename_seg)) as czidoc:
         # read a 2d image plane
@@ -237,7 +241,10 @@ def show_segmentation(
     return None
 
 
-async def main():
+async def main(
+    region_type: RegionType = "polygon",
+    open_detail: bool = False,
+) -> None:
 
     # OVERVIEW SCAN
     overview_exp = "00000_Overview_15x8_DAPI_5X"
@@ -262,8 +269,6 @@ async def main():
 
     # Build the path to config.ini relative to the script
     config_path = script_dir / "config.ini"
-    open_detail = False
-    region_type = "polygon"
     show_segresults = True
     verbose = False  # save the cloned experiments to disk to check later and create additional logging
 
@@ -277,13 +282,13 @@ async def main():
         my_commands.execute()
 
     # Get the current date and time
-    now = datetime.now()
+    now = datetime.now(timezone.utc)
 
     # Format the date and time as a string
     timestamp_folder = now.strftime("%Y-%m-%d_%H-%M-%S")
 
     # read the planetable to derive a Z-value for the TileRegion modification
-    pt, savepath = planetable.get_planetable(
+    pt, _ = planetable.get_planetable(
         filepath_overview, save_table=False, planes={"time": 0, "channel": 0, "zplane": 0}
     )
 
@@ -308,7 +313,7 @@ async def main():
     # create general save path
     save_path = Path(zen_savefolder.image_output_path) / timestamp_folder
 
-    savepath_seg, results, savepath_csv, objects = segment_czi(
+    _, results, _, objects = segment_czi(
         str(filepath_overview),
         str(save_path),
         chindex=0,
@@ -368,10 +373,10 @@ async def main():
             tr.id = tr_id
 
             # update values in [m]
-            tr.center_x = float(results.loc[tr_id, "bbox_center_stageX"]) * 1e-6  # type: ignore
-            tr.center_y = float(results.loc[tr_id, "bbox_center_stageY"]) * 1e-6  # type: ignore
-            tr.width = float(results.loc[tr_id, "bbox_width_scaled"]) * 1e-6  # type: ignore
-            tr.height = float(results.loc[tr_id, "bbox_height_scaled"]) * 1e-6  # type: ignore
+            tr.center_x = _result_float(results, tr_id, "bbox_center_stageX") * 1e-6
+            tr.center_y = _result_float(results, tr_id, "bbox_center_stageY") * 1e-6
+            tr.width = _result_float(results, tr_id, "bbox_width_scaled") * 1e-6
+            tr.height = _result_float(results, tr_id, "bbox_height_scaled") * 1e-6
             tr.zvalue = zvalue_image * 1e-6
             if verbose:
                 logger.info(f"XY Center TileRegion Rectangle: {tr.center_x}, {tr.center_y}")
@@ -382,10 +387,10 @@ async def main():
             tr = TileRegionEllipse()
             tr.id = tr_id
             # update values in [m]
-            tr.center_x = float(results.loc[tr_id, "bbox_center_stageX"]) * 1e-6  # type: ignore
-            tr.center_y = float(results.loc[tr_id, "bbox_center_stageY"]) * 1e-6  # type: ignore
-            tr.x_diameter = float(results.loc[tr_id, "bbox_width_scaled"]) * 1e-6  # type: ignore
-            tr.y_diameter = float(results.loc[tr_id, "bbox_height_scaled"]) * 1e-6  # type: ignore
+            tr.center_x = _result_float(results, tr_id, "bbox_center_stageX") * 1e-6
+            tr.center_y = _result_float(results, tr_id, "bbox_center_stageY") * 1e-6
+            tr.x_diameter = _result_float(results, tr_id, "bbox_width_scaled") * 1e-6
+            tr.y_diameter = _result_float(results, tr_id, "bbox_height_scaled") * 1e-6
             tr.zvalue = zvalue_image * 1e-6
             if verbose:
                 logger.info(f"XY Center TileRegion Ellipse: {tr.center_x}, {tr.center_y}")

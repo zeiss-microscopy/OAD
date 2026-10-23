@@ -1,0 +1,59 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.acquisition.v1;
+
+// The DefiniteFocusServiceFindSurfaceRequest class.
+message DefiniteFocusServiceFindSurfaceRequest {
+}
+// Response for FindSurface.
+message DefiniteFocusServiceFindSurfaceResponse {
+   // The Z position.
+   double zposition = 1;
+}
+// The DefiniteFocusServiceLockFocusRequest class.
+message DefiniteFocusServiceLockFocusRequest {
+   // Timeout in seconds.
+   int32 timeout = 1;
+}
+// Response for LockFocus.
+message DefiniteFocusServiceLockFocusResponse {
+}
+// The DefiniteFocusServiceRecallFocusRequest class.
+message DefiniteFocusServiceRecallFocusRequest {
+}
+// Response for RecallFocus.
+message DefiniteFocusServiceRecallFocusResponse {
+   // The Z position.
+   double zposition = 1;
+}
+// The DefiniteFocusServiceStoreFocusRequest class.
+message DefiniteFocusServiceStoreFocusRequest {
+}
+// Response for StoreFocus.
+message DefiniteFocusServiceStoreFocusResponse {
+}
+// The DefiniteFocusServiceUnlockFocusRequest class.
+message DefiniteFocusServiceUnlockFocusRequest {
+}
+// Response for UnlockFocus.
+message DefiniteFocusServiceUnlockFocusResponse {
+}
+// The IDefiniteFocusService interface.
+service DefiniteFocusService {
+   // Finds the surface of the probe.
+   rpc FindSurface (DefiniteFocusServiceFindSurfaceRequest) returns (DefiniteFocusServiceFindSurfaceResponse);
+   // Locks the focus.
+   rpc LockFocus (DefiniteFocusServiceLockFocusRequest) returns (DefiniteFocusServiceLockFocusResponse);
+   // Recall the focus for the component.
+   rpc RecallFocus (DefiniteFocusServiceRecallFocusRequest) returns (DefiniteFocusServiceRecallFocusResponse);
+   // Stores the focus for the component.
+   rpc StoreFocus (DefiniteFocusServiceStoreFocusRequest) returns (DefiniteFocusServiceStoreFocusResponse);
+   // Unlocks the focus.
+   rpc UnlockFocus (DefiniteFocusServiceUnlockFocusRequest) returns (DefiniteFocusServiceUnlockFocusResponse);
+}

@@ -1,0 +1,187 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.slide_scan.v1;
+import "zen_api/lm/slide_scan/v1/channel_settings.proto";
+import "zen_api/lm/slide_scan/v1/information_base.proto";
+import "zen_api/lm/slide_scan/v1/region_definition.proto";
+import "zen_api/lm/slide_scan/v1/response_code.proto";
+import "zen_api/lm/slide_scan/v1/response_type.proto";
+import "zen_api/lm/slide_scan/v1/scan_profile_options_override.proto";
+import "zen_api/lm/slide_scan/v1/slide_position_information.proto";
+import "zen_api/lm/slide_scan/v1/tray_information.proto";
+
+// A general response for all asynchronous requests that do not return any results or data.
+message GeneralResponse {
+   // The type of resonse message.
+   ResponseType type = 1;
+   // The code of resonse message.
+   ResponseCode code = 2;
+   // A description.
+   // Explanation text, for developers only.
+   string description = 3;
+   // A message suitable to be shown in user interfaces,
+   // will be translated by Api.
+   string user_message = 4;
+}
+// Describes the input parameters for retrieving the configured channels.
+message SlideScanServiceGetChannelSettingsRequest {
+   // The path of the specified scan profile.
+   string scan_profile_path = 1;
+}
+// Lists the configured channel settings in the specified scan profile.
+message SlideScanServiceGetChannelSettingsResponse {
+   // The configured channel settings.
+   repeated ChannelSettings channel_setting_list = 1;
+}
+// Describes the input parameters for a call to retrieve the magazine state.
+message SlideScanServiceGetMagazineStateRequest {
+}
+// Lists the populated slides of each tray.
+message SlideScanServiceGetMagazineStateResponse {
+   // The loaded slides per tray.
+   repeated TrayInformation trays = 1;
+}
+// Describes the input parameters for a call to retrieve the storage folder for slide scans.
+message SlideScanServiceGetStorageFolderRequest {
+}
+// Describes the result for a call to retrieve the storage folder for slide scans.
+message SlideScanServiceGetStorageFolderResponse {
+   // The storage folder path.
+   string path = 1;
+}
+// Describes the input parameters for a call to observe the events and progress
+// that happen either during acquisition or while the microscope is idling.
+message SlideScanServiceObserveRequest {
+}
+// Describes the output parameters for a call to observe the events, progress
+// and additional information like warnings and errors of a running scan profile acquisition.
+// The response might be a stream of different information types (e.g. Progress, Error, Hardware State, ...).
+message SlideScanServiceObserveResponse {
+   // The flexible, variable information.
+   InformationBase information = 1;
+}
+// Describes the input parameters for resetting the state of specified slides to new.
+message SlideScanServiceResetSlideStatesRequest {
+   // The position of the slide list to be reset.
+   repeated SlidePositionInformation slide_position_list = 1;
+}
+// Describes the output parameters for resetting the state of specified slides.
+message SlideScanServiceResetSlideStatesResponse {
+   // A general response about the success/error state of the request.
+   GeneralResponse response = 1;
+}
+// Describes the input parameters for setting the storage folder for slide scans.
+message SlideScanServiceSetStorageFolderRequest {
+   // The path to the storage folder where slide scans should be stored.
+   string path = 1;
+}
+// Describes the result for a call to set the storage folder.
+message SlideScanServiceSetStorageFolderResponse {
+   // A general response to inform about the requests success/error state.
+   GeneralResponse response = 1;
+}
+// Describes the input parameters for the preview start.
+message SlideScanServiceStartScanPreviewRequest {
+   // The name of the scan profile that should be started.
+   string scan_profile_name = 1;
+   // The list of tray/slides to be processed.
+   repeated SlidePositionInformation slide_position_list = 2;
+   // Optional overrides for scan profile options.
+   ScanProfileOptionsOverride scan_profile_options_override = 3;
+}
+// Response of starting a preview in the slide scan service.
+message SlideScanServiceStartScanPreviewResponse {
+   // A general response to inform about the requests success/error state.
+   GeneralResponse response = 1;
+}
+// Describes the input parameters for the scan profile start.
+message SlideScanServiceStartScanProfileRequest {
+   // The name of the scan profile that should be started.
+   string scan_profile_name = 1;
+   // The list of tray/slides to be processed.
+   repeated SlidePositionInformation slide_position_list = 2;
+   // The list of changed channel settings.
+   repeated ChannelSettings channel_settings = 3;
+   // The list of region contour definition.
+   repeated RegionDefinition region_definitions = 4;
+   // Optional overrides for scan profile options.
+   ScanProfileOptionsOverride scan_profile_options_override = 5;
+}
+// Describes the output parameters for a call to start the scan profile.
+message SlideScanServiceStartScanProfileResponse {
+   // A general response to inform about the requests success/error state.
+   GeneralResponse response = 1;
+}
+// Represents a request to stop the preview in the SlideScan service.
+message SlideScanServiceStopScanPreviewRequest {
+}
+// Represents the response for stopping the preview in the slide scan service.
+message SlideScanServiceStopScanPreviewResponse {
+   // A general response to inform about the requests success/error state.
+   GeneralResponse response = 1;
+}
+// Describes the input parameters for stopping the scan profile.
+message SlideScanServiceStopScanProfileRequest {
+}
+// Describes the output parameters for a call to stop the scan profile.
+message SlideScanServiceStopScanProfileResponse {
+   // A general response to inform about the requests success/error state.
+   GeneralResponse response = 1;
+}
+// Describes the input parameters for unmark slides.
+message SlideScanServiceUnmarkSlidesRequest {
+   // The position of the slide list to be unmarked.
+   repeated SlidePositionInformation slide_position_list = 1;
+}
+// Describes the output parameters for a call to unmark slides.
+message SlideScanServiceUnmarkSlidesResponse {
+   // A general response to inform about the requests success/error state.
+   GeneralResponse response = 1;
+}
+// The ISlideScanService interface.
+service SlideScanService {
+   // Gets a list of configured channel settings of a scan profile.
+   rpc GetChannelSettings (SlideScanServiceGetChannelSettingsRequest) returns (SlideScanServiceGetChannelSettingsResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the magazine state.
+   rpc GetMagazineState (SlideScanServiceGetMagazineStateRequest) returns (SlideScanServiceGetMagazineStateResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the current storage folder for images.
+   rpc GetStorageFolder (SlideScanServiceGetStorageFolderRequest) returns (SlideScanServiceGetStorageFolderResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Monitors anything that happens within ZEN or the microscope.
+   // The main purpose is to observe the scan profile acquisition progress.
+   rpc Observe (SlideScanServiceObserveRequest) returns (stream SlideScanServiceObserveResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Resets the specified slides to new.
+   rpc ResetSlideStates (SlideScanServiceResetSlideStatesRequest) returns (SlideScanServiceResetSlideStatesResponse);
+   // Sets the storage folder for images.
+   rpc SetStorageFolder (SlideScanServiceSetStorageFolderRequest) returns (SlideScanServiceSetStorageFolderResponse);
+   // Starts the preview with the specified input.
+   rpc StartScanPreview (SlideScanServiceStartScanPreviewRequest) returns (SlideScanServiceStartScanPreviewResponse);
+   // Starts the scan profile with the specified input.
+   rpc StartScanProfile (SlideScanServiceStartScanProfileRequest) returns (SlideScanServiceStartScanProfileResponse);
+   // Stops the preview execution.
+   rpc StopScanPreview (SlideScanServiceStopScanPreviewRequest) returns (SlideScanServiceStopScanPreviewResponse);
+   // Stops the scan profile execution.
+   rpc StopScanProfile (SlideScanServiceStopScanProfileRequest) returns (SlideScanServiceStopScanProfileResponse);
+   // Unmark the specified slides.
+   // In the case of empty slide list, unmark all slides.
+   // If in the list of slides to be unselected, a slide is currently being previewed or scanned,
+   // the command is denied with an error message explaining the reason.
+   rpc UnmarkSlides (SlideScanServiceUnmarkSlidesRequest) returns (SlideScanServiceUnmarkSlidesResponse);
+}

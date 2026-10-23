@@ -1,0 +1,53 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.hardware.v2;
+import "zen_api/lm/hardware/v2/filter_data.proto";
+
+// The FilterWheelServiceGetFiltersRequest class.
+message FilterWheelServiceGetFiltersRequest {
+}
+// A list of available filters.
+message FilterWheelServiceGetFiltersResponse {
+   // The filters.
+   repeated FilterData filters = 1;
+}
+// The FilterWheelServiceGetPositionRequest class.
+message FilterWheelServiceGetPositionRequest {
+}
+// Position index of the filter wheel.
+message FilterWheelServiceGetPositionResponse {
+   // The position index.
+   int32 value = 1;
+}
+// The FilterWheelServiceMoveToRequest class.
+message FilterWheelServiceMoveToRequest {
+   // New position index.
+   int32 position_index = 1;
+}
+// Describes the result of a filter wheel MoveTo request.
+message FilterWheelServiceMoveToResponse {
+}
+// The IFilterWheelService interface.
+service FilterWheelService {
+   // Gets the filters.
+   rpc GetFilters (FilterWheelServiceGetFiltersRequest) returns (FilterWheelServiceGetFiltersResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the filter wheel position, starting at 1.
+   rpc GetPosition (FilterWheelServiceGetPositionRequest) returns (FilterWheelServiceGetPositionResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Moves the filter wheel to the given position index.
+   rpc MoveTo (FilterWheelServiceMoveToRequest) returns (FilterWheelServiceMoveToResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+}

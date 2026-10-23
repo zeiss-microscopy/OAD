@@ -1,0 +1,27 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.acquisition.v1;
+
+// Extended time units to match TimeUnitExtended enum.
+enum TimeSeriesServiceTimeUnitExtended {
+   // Unspecified.
+   TIME_SERIES_SERVICE_TIME_UNIT_EXTENDED_UNSPECIFIED = 0;
+   // Cycles is the count of time points.
+   TIME_SERIES_SERVICE_TIME_UNIT_EXTENDED_CYCLES = 1;
+   // Time unit milliseconds.
+   TIME_SERIES_SERVICE_TIME_UNIT_EXTENDED_MS = 2;
+   // Time unit seconds.
+   TIME_SERIES_SERVICE_TIME_UNIT_EXTENDED_S = 3;
+   // Time unit minutes.
+   TIME_SERIES_SERVICE_TIME_UNIT_EXTENDED_MIN = 4;
+   // Time unit hours.
+   TIME_SERIES_SERVICE_TIME_UNIT_EXTENDED_H = 5;
+   // Time unit days.
+   TIME_SERIES_SERVICE_TIME_UNIT_EXTENDED_DAYS = 6;
+}

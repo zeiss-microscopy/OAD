@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_zdrive.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -17,14 +14,13 @@ import sys
 import time
 from pathlib import Path
 
-from zen_api_utils.misc import set_logging, initialize_zenapi
-
 # import the auto-generated python modules
 from zen_api.lm.hardware.v2 import (
     FocusServiceGetPositionRequest,
     FocusServiceMoveToRequest,
     FocusServiceStub,
 )
+from zen_api_utils.misc import initialize_zenapi, set_logging
 
 # Get the directory where the current script is located
 script_dir = Path(__file__).parent
@@ -36,6 +32,7 @@ delta_z = 500 * 1e-6  # move Z-drive by this value in micron
 
 
 async def main(args):
+    del args
 
     # get the gRPC channel and the metadata
     channel, metadata = initialize_zenapi(config_path)

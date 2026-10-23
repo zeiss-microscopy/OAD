@@ -10,7 +10,7 @@ from zen_api.workflows.v3beta import (
     WorkflowServiceStopJobRequest,
     WorkflowServiceLoadJobTemplateRequest,
 )
-from zenapi_tools import initialize_zenapi, set_logging
+from zen_api_utils.misc import initialize_zenapi, set_logging
 from zenapi_workflow_tools import (
     is_job_running,
     is_job_template_loaded,
@@ -19,9 +19,7 @@ from zenapi_workflow_tools import (
 )
 
 
-async def run_job(
-    workflow_service: WorkflowServiceStub, job_template_name: str
-) -> None:
+async def run_job(workflow_service: WorkflowServiceStub, job_template_name: str) -> None:
     # Initial status
     status = await get_status(workflow_service)
     logger.info(f"Initial status: {status}")

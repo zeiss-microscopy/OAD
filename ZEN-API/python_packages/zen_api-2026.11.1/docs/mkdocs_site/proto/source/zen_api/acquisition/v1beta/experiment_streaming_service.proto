@@ -1,0 +1,95 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.acquisition.v1beta;
+import "google/protobuf/wrappers.proto";
+import "zen_api/acquisition/v1beta/frame_data.proto";
+
+// The ExperimentStreamingServiceGetNextFrameAllExperimentsRequest class.
+message ExperimentStreamingServiceGetNextFrameAllExperimentsRequest {
+   // The channel index.
+   .google.protobuf.Int32Value channel_index = 1;
+}
+// Response object of the method for getting the next frame of all experiments.
+message ExperimentStreamingServiceGetNextFrameAllExperimentsResponse {
+   // The experiment's frame data.
+   FrameData frame_data = 1;
+}
+// The ExperimentStreamingServiceGetNextFrameRequest class.
+message ExperimentStreamingServiceGetNextFrameRequest {
+   // ID of the experiment.
+   string experiment_id = 1;
+   // The channel index.
+   .google.protobuf.Int32Value channel_index = 2;
+}
+// Response object of the method for getting the next frame of an experiment.
+message ExperimentStreamingServiceGetNextFrameResponse {
+   // The experiment's frame data.
+   FrameData frame_data = 1;
+}
+// The ExperimentStreamingServiceMonitorAllExperimentsRequest class.
+message ExperimentStreamingServiceMonitorAllExperimentsRequest {
+   // Optional parameter for filtering by specific channel. If the channel index is provided,
+   // then only that channel will be monitored, but if the channel index is not provided, then
+   // all channels will be monitored.
+   .google.protobuf.Int32Value channel_index = 1;
+   // Value indicating whether the streamed frame data contains raw frames as received from
+   // the acquisition (when set), which can be either full or partial frames (e.g., in general
+   // LM cameras produce full frames and LSM and EM detectors produce partial frames/lines).
+   // Otherwise (when not set) the streamed frame data contains only full frames, which means
+   // that in the case of partial frames/lines, they would be assembled into full frames.
+   bool enable_raw_data = 2;
+}
+// Response object of the method for monitoring all experiments.
+message ExperimentStreamingServiceMonitorAllExperimentsResponse {
+   // The experiment's frame data.
+   FrameData frame_data = 1;
+}
+// The ExperimentStreamingServiceMonitorExperimentRequest class.
+message ExperimentStreamingServiceMonitorExperimentRequest {
+   // ID of the experiment to monitor.
+   string experiment_id = 1;
+   // Optional parameter for filtering by specific channel. If the channel index is provided,
+   // then only that channel will be monitored, but if the channel index is not provided, then
+   // all channels will be monitored.
+   .google.protobuf.Int32Value channel_index = 2;
+   // Value indicating whether the streamed frame data contains raw frames as received from
+   // the acquisition (when set), which can be either full or partial frames (e.g., in general
+   // LM cameras produce full frames and LSM and EM detectors produce partial frames/lines).
+   // Otherwise (when not set) the streamed frame data contains only full frames, which means
+   // that in the case of partial frames/lines, they would be assembled into full frames.
+   bool enable_raw_data = 3;
+}
+// Response object of the method for monitoring an experiment.
+message ExperimentStreamingServiceMonitorExperimentResponse {
+   // The experiment's frame data.
+   FrameData frame_data = 1;
+}
+// The IExperimentStreamingService interface.
+service ExperimentStreamingService {
+   // Gets the next frame that is acquired from the specified running experiment.
+   rpc GetNextFrame (ExperimentStreamingServiceGetNextFrameRequest) returns (ExperimentStreamingServiceGetNextFrameResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the next frame that is acquired from the currently running experiment.
+   rpc GetNextFrameAllExperiments (ExperimentStreamingServiceGetNextFrameAllExperimentsRequest) returns (ExperimentStreamingServiceGetNextFrameAllExperimentsResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Starts monitoring all experiments.
+   rpc MonitorAllExperiments (ExperimentStreamingServiceMonitorAllExperimentsRequest) returns (stream ExperimentStreamingServiceMonitorAllExperimentsResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Starts monitoring the specified experiment.
+   rpc MonitorExperiment (ExperimentStreamingServiceMonitorExperimentRequest) returns (stream ExperimentStreamingServiceMonitorExperimentResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+}

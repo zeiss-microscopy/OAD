@@ -4,9 +4,9 @@ import os
 
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from zenapi_tools import initialize_zenapi, set_logging
+from zen_api_utils.misc import initialize_zenapi, set_logging
 from zenapi_workflow_tools import get_all_job_templates, get_zen_api_job_templates
-from public.zen_api.workflows.v3beta import WorkflowServiceStub
+from zen_api.workflows.v3beta import WorkflowServiceStub
 
 
 async def main():

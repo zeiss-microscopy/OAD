@@ -1,0 +1,18 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.hardware.v1;
+import "zen_api/hardware/v1/axis_identifier.proto";
+
+// Abstract representation of an arbitrary axis.
+message StageAxis {
+   // The axis identifier.
+   AxisIdentifier axis = 1;
+   // The position of the axis in meters or radians.
+   double position = 2;
+}

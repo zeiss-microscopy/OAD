@@ -1,0 +1,19 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.hardware.v1;
+
+// Indicates the type of response returned by the camera live image acquisition stream.
+enum AcquisitionResponseType {
+   // Unspecified type.
+   ACQUISITION_RESPONSE_TYPE_UNSPECIFIED = 0;
+   // The response is the first data buffer of a new frame. The response will include the image meta-data.
+   ACQUISITION_RESPONSE_TYPE_FRAME_START = 1;
+   // The response is a continuation of the previous frame. The response will not include the image meta-data.
+   ACQUISITION_RESPONSE_TYPE_FRAME_CONTINUATION = 2;
+}

@@ -1,0 +1,19 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.lls.acquisition.v1beta;
+import "zen_api/lm/lls/acquisition/v1beta/channel_service_exposure_time_track_info.proto";
+import "zen_api/lm/lls/acquisition/v1beta/channel_service_synced_all_tracks.proto";
+
+// Information about exposure times.
+message ChannelServiceExposureTimeInfo {
+   // The applicable synchronization mode for tracks in multi-track acquisition scenarios.
+   ChannelServiceSyncedAllTracks synced_all_tracks = 1;
+   // The exposure time of all tracks.
+   repeated ChannelServiceExposureTimeTrackInfo exposure_times = 2;
+}

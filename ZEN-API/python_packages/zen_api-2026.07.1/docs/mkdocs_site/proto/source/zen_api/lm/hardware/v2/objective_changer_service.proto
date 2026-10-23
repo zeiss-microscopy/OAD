@@ -1,0 +1,53 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.hardware.v2;
+import "zen_api/lm/hardware/v2/objective_data.proto";
+
+// The ObjectiveChangerServiceGetObjectivesRequest class.
+message ObjectiveChangerServiceGetObjectivesRequest {
+}
+// A list of available objectives.
+message ObjectiveChangerServiceGetObjectivesResponse {
+   // The objectives.
+   repeated ObjectiveData objectives = 1;
+}
+// The ObjectiveChangerServiceGetPositionRequest class.
+message ObjectiveChangerServiceGetPositionRequest {
+}
+// Position index of the objective.
+message ObjectiveChangerServiceGetPositionResponse {
+   // The position index.
+   int32 value = 1;
+}
+// The ObjectiveChangerServiceMoveToRequest class.
+message ObjectiveChangerServiceMoveToRequest {
+   // New position index.
+   int32 position_index = 1;
+}
+// Describes the result of a ObjectiveChanger.MoveTo request.
+message ObjectiveChangerServiceMoveToResponse {
+}
+// The IObjectiveChangerService interface.
+service ObjectiveChangerService {
+   // Gets the objectives
+   rpc GetObjectives (ObjectiveChangerServiceGetObjectivesRequest) returns (ObjectiveChangerServiceGetObjectivesResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the objective position.
+   rpc GetPosition (ObjectiveChangerServiceGetPositionRequest) returns (ObjectiveChangerServiceGetPositionResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Moves the objective to the given position index.
+   rpc MoveTo (ObjectiveChangerServiceMoveToRequest) returns (ObjectiveChangerServiceMoveToResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+}

@@ -1,0 +1,105 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.hardware.v2;
+import "google/protobuf/wrappers.proto";
+
+// The StageServiceGetAccelerationRequest class.
+message StageServiceGetAccelerationRequest {
+}
+// Acceleration of the stage.
+message StageServiceGetAccelerationResponse {
+   // The X component of the acceleration in %.
+   double x = 1;
+   // The Y component of the acceleration in %.
+   double y = 2;
+}
+// The StageServiceGetPositionRequest class.
+message StageServiceGetPositionRequest {
+}
+// Position of the stage.
+message StageServiceGetPositionResponse {
+   // The X component of the position in meters.
+   double x = 1;
+   // The Y component of the position in meters.
+   double y = 2;
+}
+// The StageServiceGetSpeedRequest class.
+message StageServiceGetSpeedRequest {
+}
+// Speed of the stage.
+message StageServiceGetSpeedResponse {
+   // The X component of the speed in %.
+   double x = 1;
+   // The Y component of the speed in %.
+   double y = 2;
+}
+// The StageServiceMoveToRequest class.
+message StageServiceMoveToRequest {
+   // Target position x in meters. Leave out if x position should not be changed.
+   .google.protobuf.DoubleValue x = 1;
+   // Target position y in meters. Leave out if y position should not be changed.
+   .google.protobuf.DoubleValue y = 2;
+}
+// Describes the result of a Stage.MoveTo request.
+message StageServiceMoveToResponse {
+   // A value indicating whether the position was changed.
+   bool position_changed = 1;
+}
+// The StageServiceSetAccelerationRequest class.
+message StageServiceSetAccelerationRequest {
+   // Acceleration in x direction in percent, i.e. values from range [0;100].
+   .google.protobuf.DoubleValue acceleration_x = 1;
+   // Acceleration in y direction in percent, i.e. values from range [0;100].
+   .google.protobuf.DoubleValue acceleration_y = 2;
+}
+// The StageServiceSetAccelerationResponse class.
+message StageServiceSetAccelerationResponse {
+}
+// The StageServiceSetSpeedRequest class.
+message StageServiceSetSpeedRequest {
+   // Speed in x direction in percent, i.e. values from range [0;100].
+   .google.protobuf.DoubleValue speed_x = 1;
+   // Speed in y direction in percent, i.e. values from range [0;100].
+   .google.protobuf.DoubleValue speed_y = 2;
+}
+// The StageServiceSetSpeedResponse class.
+message StageServiceSetSpeedResponse {
+}
+// The StageServiceStopRequest class.
+message StageServiceStopRequest {
+}
+// The StageServiceStopResponse class.
+message StageServiceStopResponse {
+}
+// The IStageService interface.
+service StageService {
+   // Gets the acceleration of the stage.
+   rpc GetAcceleration (StageServiceGetAccelerationRequest) returns (StageServiceGetAccelerationResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the current stage position.
+   rpc GetPosition (StageServiceGetPositionRequest) returns (StageServiceGetPositionResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the speed of the stage.
+   rpc GetSpeed (StageServiceGetSpeedRequest) returns (StageServiceGetSpeedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Moves the stage to the given position. Is a value for a dimension is no supplied, the position in that dimension it is kept as is.
+   rpc MoveTo (StageServiceMoveToRequest) returns (StageServiceMoveToResponse);
+   // Sets the acceleration of the stage in percent.
+   rpc SetAcceleration (StageServiceSetAccelerationRequest) returns (StageServiceSetAccelerationResponse);
+   // Sets the speed of the stage in percent.
+   rpc SetSpeed (StageServiceSetSpeedRequest) returns (StageServiceSetSpeedResponse);
+   // Stops the stage if it is moving.
+   rpc Stop (StageServiceStopRequest) returns (StageServiceStopResponse);
+}

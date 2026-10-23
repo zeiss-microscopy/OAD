@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : zenapi_definite_focus_find.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -13,10 +10,15 @@
 #################################################################
 
 import asyncio
-from pathlib import Path
 import sys
+from pathlib import Path
 
-from zen_api_utils.misc import set_logging, initialize_zenapi
+from zen_api.lm.acquisition.v1 import (
+    DefiniteFocusServiceFindSurfaceRequest,
+    DefiniteFocusServiceRecallFocusRequest,
+    DefiniteFocusServiceStoreFocusRequest,
+    DefiniteFocusServiceStub,
+)
 
 # import the auto-generated python modules
 from zen_api.lm.hardware.v2 import (
@@ -24,13 +26,7 @@ from zen_api.lm.hardware.v2 import (
     FocusServiceMoveToRequest,
     FocusServiceStub,
 )
-
-from zen_api.lm.acquisition.v1 import (
-    DefiniteFocusServiceStub,
-    DefiniteFocusServiceFindSurfaceRequest,
-    DefiniteFocusServiceStoreFocusRequest,
-    DefiniteFocusServiceRecallFocusRequest,
-)
+from zen_api_utils.misc import initialize_zenapi, set_logging
 
 # Get the directory where the current script is located
 script_dir = Path(__file__).parent
@@ -40,6 +36,7 @@ config_path = script_dir / "config.ini"
 
 
 async def main(args):
+    del args
 
     # get the gRPC channel and the metadata
     channel, metadata = initialize_zenapi(config_path)

@@ -1,0 +1,138 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.workflows.v3beta;
+import "zen_api/workflows/v3beta/job_status.proto";
+import "zen_api/workflows/v3beta/job_template_info.proto";
+
+// The WorkflowServiceGetAvailableJobTemplatesRequest class.
+message WorkflowServiceGetAvailableJobTemplatesRequest {
+   // Optional filter for job templates. If category is provided then only job templates that are
+   // in the specified category will be listed.
+   string category = 1;
+   // Optional filter for job templates. If subcategory is provided then only job templates that
+   // are in the specified subcategory will be listed.
+   string subcategory = 2;
+}
+// Represents a list of all available job templates.
+message WorkflowServiceGetAvailableJobTemplatesResponse {
+   // The available job templates.
+   repeated JobTemplateInfo job_templates = 1;
+}
+// The WorkflowServiceGetStatusRequest class.
+message WorkflowServiceGetStatusRequest {
+}
+// Response containing the job status.
+message WorkflowServiceGetStatusResponse {
+   // The job status.
+   JobStatus job_status = 1;
+}
+// The WorkflowServiceIsJobRunningRequest class.
+message WorkflowServiceIsJobRunningRequest {
+}
+// Response object representing the return value of IsJobRunning() method of the
+// Workflow service.
+message WorkflowServiceIsJobRunningResponse {
+   // A value indicating whether the loaded job is currently running.
+   bool is_job_running = 1;
+}
+// The WorkflowServiceIsJobTemplateLoadedRequest class.
+message WorkflowServiceIsJobTemplateLoadedRequest {
+}
+// Response object representing the return value of IsJobTemplateLoaded() method of the
+// Workflow service.
+message WorkflowServiceIsJobTemplateLoadedResponse {
+   // A value indicating whether a job template is loaded.
+   bool is_job_template_loaded = 1;
+}
+// The WorkflowServiceLoadJobTemplateRequest class.
+message WorkflowServiceLoadJobTemplateRequest {
+   // The name of the job template.
+   string job_template_name = 1;
+   // Optional parameter for storing the result outside of ZEN archive. If provided the job result
+   // will be stored in the selected location and will not be uploaded to the archive.
+   string result_path = 2;
+}
+// The WorkflowServiceLoadJobTemplateResponse class.
+message WorkflowServiceLoadJobTemplateResponse {
+}
+// The WorkflowServiceRegisterOnStatusChangedRequest class.
+message WorkflowServiceRegisterOnStatusChangedRequest {
+}
+// Response containing the job status.
+message WorkflowServiceRegisterOnStatusChangedResponse {
+   // The job status.
+   JobStatus job_status = 1;
+}
+// The WorkflowServiceRunJobRequest class.
+message WorkflowServiceRunJobRequest {
+}
+// Response object representing the return value of RunJob() method of the Workflow service.
+message WorkflowServiceRunJobResponse {
+}
+// The WorkflowServiceStartJobRequest class.
+message WorkflowServiceStartJobRequest {
+}
+// The WorkflowServiceStartJobResponse class.
+message WorkflowServiceStartJobResponse {
+}
+// The WorkflowServiceStopJobRequest class.
+message WorkflowServiceStopJobRequest {
+}
+// Response object representing the return value of StopJob() method of the Workflow service.
+message WorkflowServiceStopJobResponse {
+}
+// The WorkflowServiceUnloadJobTemplateRequest class.
+message WorkflowServiceUnloadJobTemplateRequest {
+}
+// The WorkflowServiceUnloadJobTemplateResponse class.
+message WorkflowServiceUnloadJobTemplateResponse {
+}
+// The WorkflowServiceWaitJobRequest class.
+message WorkflowServiceWaitJobRequest {
+}
+// Response object representing the return value of WaitJob() method of the Workflow service.
+message WorkflowServiceWaitJobResponse {
+}
+// The IWorkflowService interface.
+service WorkflowService {
+   // Retrieves a list of all available job templates.
+   rpc GetAvailableJobTemplates (WorkflowServiceGetAvailableJobTemplatesRequest) returns (WorkflowServiceGetAvailableJobTemplatesResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the job status.
+   rpc GetStatus (WorkflowServiceGetStatusRequest) returns (WorkflowServiceGetStatusResponse);
+   // Checks if the loaded job is currently running.
+   rpc IsJobRunning (WorkflowServiceIsJobRunningRequest) returns (WorkflowServiceIsJobRunningResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Checks if a job template is loaded.
+   rpc IsJobTemplateLoaded (WorkflowServiceIsJobTemplateLoadedRequest) returns (WorkflowServiceIsJobTemplateLoadedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Loads a job template and prepares it for execution.
+   rpc LoadJobTemplate (WorkflowServiceLoadJobTemplateRequest) returns (WorkflowServiceLoadJobTemplateResponse);
+   // Register on job status changed events.
+   rpc RegisterOnStatusChanged (WorkflowServiceRegisterOnStatusChangedRequest) returns (stream WorkflowServiceRegisterOnStatusChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Runs the loaded job template to completion.
+   rpc RunJob (WorkflowServiceRunJobRequest) returns (WorkflowServiceRunJobResponse);
+   // Starts the loaded job template but it doesn't wait for it to complete.
+   rpc StartJob (WorkflowServiceStartJobRequest) returns (WorkflowServiceStartJobResponse);
+   // Stops the currently running job and waits for it to complete.
+   rpc StopJob (WorkflowServiceStopJobRequest) returns (WorkflowServiceStopJobResponse);
+   // Unloads the loaded job template.
+   rpc UnloadJobTemplate (WorkflowServiceUnloadJobTemplateRequest) returns (WorkflowServiceUnloadJobTemplateResponse);
+   // Waits for currently running job to complete.
+   rpc WaitJob (WorkflowServiceWaitJobRequest) returns (WorkflowServiceWaitJobResponse);
+}

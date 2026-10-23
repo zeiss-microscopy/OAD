@@ -1,6 +1,5 @@
 #################################################################
 # File        : zenapi_sample__well_activation.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # Copyright(c) 2025 Carl Zeiss AG, Germany. All Rights Reserved.
@@ -12,33 +11,33 @@
 import asyncio
 import sys
 from pathlib import Path  # Correct import for file system paths
-from grpclib.exceptions import GRPCError
-from zen_api_utils.misc import set_logging, initialize_zenapi
-from zen_api_utils.experiment import delete_czifile
-from zen_api_utils.sample_carrier import WellPlate
-import zen_api_utils.zen_tcpip_commands as zen_tcpip_commands
-from zen_api_utils.zen_tcpip import ZenCommands
 
-from zen_api.lm.hardware.v1 import (
-    SampleCarrierServiceGetConfiguredContainersRequest,
-    SampleCarrierServiceGetInfoRequest,
-    SampleCarrierServiceStub,
-    SampleCarrierServiceActivateContainerRequest,
-    SampleCarrierServiceDeactivateContainersRequest,
-)
+from grpclib.exceptions import GRPCError
 
 # import the auto-generated python modules
 from zen_api.acquisition.v1beta import (
-    ExperimentServiceStub,
-    ExperimentServiceLoadRequest,
-    ExperimentServiceGetImageOutputPathRequest,
     ExperimentServiceCloneRequest,
-    ExperimentServiceSaveRequest,
     ExperimentServiceDeleteRequest,
+    ExperimentServiceExportRequest,
+    ExperimentServiceGetImageOutputPathRequest,
+    ExperimentServiceLoadRequest,
     ExperimentServiceRunExperimentRequest,
+    ExperimentServiceSaveRequest,
+    ExperimentServiceStub,
 )
-
-from zen_api_utils.experiment import get_configured_containernames
+from zen_api.lm.hardware.v1 import (
+    SampleCarrierServiceActivateContainersRequest,
+    SampleCarrierServiceDeactivateContainersRequest,
+    SampleCarrierServiceGetConfiguredContainersRequest,
+    SampleCarrierServiceGetInfoRequest,
+    SampleCarrierServiceStub,
+)
+from zen_api_utils import zen_tcpip_commands
+from zen_api_utils.experiment import delete_czifile, get_configured_containernames
+from zen_api_utils.extract_czexp_plan import extract_plan_xml
+from zen_api_utils.misc import initialize_zenapi, set_logging
+from zen_api_utils.sample_carrier import WellPlate
+from zen_api_utils.zen_tcpip import ZenCommands
 
 # Get the directory where the current script is located
 script_dir = Path(__file__).parent
@@ -46,14 +45,15 @@ script_dir = Path(__file__).parent
 # Build the path to config.ini relative to the script
 # config_path = script_dir / "config.ini"
 config_path = script_dir / "my_config.ini"
-expname = "ZEN_API_Well_Activation"  # has active container B4, B5, C4, C5 with 4 positions each well
-exp_cloned_name = "ZEN_API_Well_Activation_Cloned"
-czi_name = "zenapi_well_activation"
+expname: str = "ZEN_API_Well_Activation2"
+exp_cloned_name: str = expname + "_Cloned"
+czi_name: str = "zenapi_well_activation"
 output_folder = r"f:\Zen_Output\temp"
 overwrite = True
 
 
 async def main(args):
+    del args
 
     # get the gRPC channel and the metadata
     channel, metadata = initialize_zenapi(config_path)
@@ -62,7 +62,7 @@ async def main(args):
     sample_carrier_service = SampleCarrierServiceStub(channel=channel, metadata=metadata)
     exp_service = ExperimentServiceStub(channel=channel, metadata=metadata)
     sample_carrier_info = await sample_carrier_service.get_info(SampleCarrierServiceGetInfoRequest())
-    plate = WellPlate(sample_carrier_info.rows, sample_carrier_info.columns)
+    WellPlate(sample_carrier_info.rows, sample_carrier_info.columns)
 
     # show output path for images
     save_path = await exp_service.get_image_output_path(ExperimentServiceGetImageOutputPathRequest())
@@ -73,6 +73,27 @@ async def main(args):
         # load experiment by its name without the *.czexp extension
         exp = await exp_service.load(ExperimentServiceLoadRequest(experiment_name=expname))
         logger.info(f"ExperimentName: {expname} Reference Id: {exp.experiment_id}")
+
+        # export the loaded experiment and extract its acquisition plan
+        exp_xml = await exp_service.export(ExperimentServiceExportRequest(experiment_id=exp.experiment_id))
+        plan = extract_plan_xml(exp_xml.xml, expname)
+        for block in plan["acquisition_blocks"]:
+            logger.info(f"Acquisition Block {block['block_index']} Dimensions: {block['dimensions']}")
+            logger.info(f"Channels: {[channel['name'] for channel in block['channels']]}")
+            logger.info(
+                f"Wells: {block['well_count']}, Positions: {block['position_count']}, "
+                f"Planned CZI files: {block['planned_czi_count']}"
+            )
+            for position in block["positions"]:
+                logger.info(
+                    f"Position: {position['position_name']} Well: {position['well_id']} "
+                    f"Stage: {position['stage_position']}"
+                )
+            for output in block["planned_outputs"]:
+                logger.info(
+                    f"Planned output: {output['suggested_filename']} "
+                    f"Dimensions: {output['dimensions']} Wells: {output['well_ids']}"
+                )
 
         # clone the experiment
         try:
@@ -88,6 +109,15 @@ async def main(args):
         configured_containers = await sample_carrier_service.get_configured_containers(
             SampleCarrierServiceGetConfiguredContainersRequest(experiment_id=exp_cloned.experiment_id)
         )
+
+        # check if there any configure containers or if ths list is empty
+        if not configured_containers.configured_containers:
+            logger.warning("No configured containers found.")
+
+            # stop script run
+            channel.close()
+            return
+
         for container in configured_containers.configured_containers:
             logger.info(f"Configured Container: {container.container_name}, is_activated {container.is_activated}")
 
@@ -99,6 +129,7 @@ async def main(args):
 
         try:
             # deactivate all configured wells
+            logger.info(f"Deactivating all configured containers: {configured_containers_ids}")
             await sample_carrier_service.deactivate_containers(
                 SampleCarrierServiceDeactivateContainersRequest(
                     experiment_id=exp_cloned.experiment_id, container_names=configured_containers_ids
@@ -115,18 +146,23 @@ async def main(args):
             logger.info(f"Configured Container: {container.container_name}, is_activated {container.is_activated}")
 
         try:
+
+            # create a list of containers to be activated
+            containers_to_activate = [
+                configured_containers.configured_containers[0].container_name,
+                configured_containers.configured_containers[1].container_name,
+            ]
+
             # do some modifications of the experiment
-            await sample_carrier_service.activate_container(
-                SampleCarrierServiceActivateContainerRequest(
+            await sample_carrier_service.activate_containers(
+                SampleCarrierServiceActivateContainersRequest(
                     experiment_id=exp_cloned.experiment_id,
-                    container_name=configured_containers.configured_containers[0].container_name,
+                    container_names=containers_to_activate,
                 )
             )
-            logger.info(f"Activated Container: {configured_containers.configured_containers[0].container_name}")
+            logger.info(f"Activated Container: {containers_to_activate}")
         except Exception as e:
-            logger.error(
-                f"Error activating container {configured_containers.configured_containers[0].container_name}: {e}"
-            )
+            logger.error(f"Error activating container {containers_to_activate}: {e}")
 
         # save the cloned experiment using a defined name without the *.czexp extension
         logger.info("Saving Cloned Experiment ...")

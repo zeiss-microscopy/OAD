@@ -1,0 +1,174 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.workflow.v1;
+import "zen_api/em/workflow/v1/workflow_state.proto";
+
+// The RunWorkflowServiceBreakRequest class.
+message RunWorkflowServiceBreakRequest {
+   // List of elements, that shall be skipped.
+   string break_elements = 1;
+}
+// The RunWorkflowServiceBreakResponse class.
+message RunWorkflowServiceBreakResponse {
+}
+// The RunWorkflowServiceDefineAndRunCompleteWorkflowRequest class.
+message RunWorkflowServiceDefineAndRunCompleteWorkflowRequest {
+   // Complete and consistent definition of the workflow which should be executed.
+   string workflow_definition = 1;
+}
+// Response object of the RunWorkflow method.
+message RunWorkflowServiceDefineAndRunCompleteWorkflowResponse {
+   // A value indicating whether the task to run workflow succeeded or not.
+   bool task_success = 1;
+}
+// The RunWorkflowServiceGetWorkflowByIdRequest class.
+message RunWorkflowServiceGetWorkflowByIdRequest {
+   // Identifier of the workflow which should be returned.
+   string workflow_id = 1;
+}
+// Response object of the GetWorkflow method.
+message RunWorkflowServiceGetWorkflowByIdResponse {
+   // A value with workflow xml.
+   string workflow = 1;
+}
+// The RunWorkflowServiceGetWorkflowStateRequest class.
+message RunWorkflowServiceGetWorkflowStateRequest {
+}
+// Response object of the RunWorkflowApi.
+message RunWorkflowServiceGetWorkflowStateResponse {
+   // A Workflow state value.
+   WorkflowState workflow_state = 1;
+}
+// The RunWorkflowServiceNextRequest class.
+message RunWorkflowServiceNextRequest {
+}
+// The RunWorkflowServiceNextResponse class.
+message RunWorkflowServiceNextResponse {
+}
+// The RunWorkflowServicePauseRequest class.
+message RunWorkflowServicePauseRequest {
+}
+// The RunWorkflowServicePauseResponse class.
+message RunWorkflowServicePauseResponse {
+}
+// The RunWorkflowServiceRegisterOnActionExecutionIdChangedRequest class.
+message RunWorkflowServiceRegisterOnActionExecutionIdChangedRequest {
+}
+// ActionExecutionId response.
+message RunWorkflowServiceRegisterOnActionExecutionIdChangedResponse {
+   // The action id which is curently executed.
+   string action_id = 1;
+}
+// The RunWorkflowServiceRegisterOnWorkflowStateChangedRequest class.
+message RunWorkflowServiceRegisterOnWorkflowStateChangedRequest {
+}
+// Response object of the RunWorkflowApi.
+message RunWorkflowServiceRegisterOnWorkflowStateChangedResponse {
+   // A Workflow state value.
+   WorkflowState workflow_state = 1;
+}
+// The RunWorkflowServiceResumeRequest class.
+message RunWorkflowServiceResumeRequest {
+}
+// The RunWorkflowServiceResumeResponse class.
+message RunWorkflowServiceResumeResponse {
+}
+// The RunWorkflowServiceRunWorkflowRequest class.
+message RunWorkflowServiceRunWorkflowRequest {
+   // Identifier of the workflow which should be executed.
+   string workflow_id = 1;
+}
+// Response object of the RunWorkflow method.
+message RunWorkflowServiceRunWorkflowResponse {
+   // A value indicating whether the task to run workflow succeeded or not.
+   bool task_success = 1;
+}
+// The RunWorkflowServiceSetNormalModeRequest class.
+message RunWorkflowServiceSetNormalModeRequest {
+}
+// The RunWorkflowServiceSetNormalModeResponse class.
+message RunWorkflowServiceSetNormalModeResponse {
+}
+// The RunWorkflowServiceSetStepModeRequest class.
+message RunWorkflowServiceSetStepModeRequest {
+}
+// The RunWorkflowServiceSetStepModeResponse class.
+message RunWorkflowServiceSetStepModeResponse {
+}
+// The RunWorkflowServiceStartRequest class.
+message RunWorkflowServiceStartRequest {
+}
+// The RunWorkflowServiceStartResponse class.
+message RunWorkflowServiceStartResponse {
+}
+// The RunWorkflowServiceStepRequest class.
+message RunWorkflowServiceStepRequest {
+}
+// The RunWorkflowServiceStepResponse class.
+message RunWorkflowServiceStepResponse {
+}
+// The RunWorkflowServiceStopEmergencyRequest class.
+message RunWorkflowServiceStopEmergencyRequest {
+}
+// The RunWorkflowServiceStopEmergencyResponse class.
+message RunWorkflowServiceStopEmergencyResponse {
+}
+// The RunWorkflowServiceStopRequest class.
+message RunWorkflowServiceStopRequest {
+}
+// The RunWorkflowServiceStopResponse class.
+message RunWorkflowServiceStopResponse {
+}
+// The IRunWorkflowService interface.
+service RunWorkflowService {
+   // Execution of Break command.
+   rpc Break (RunWorkflowServiceBreakRequest) returns (RunWorkflowServiceBreakResponse);
+   // Trigger a run of the complete workflow.
+   rpc DefineAndRunCompleteWorkflow (RunWorkflowServiceDefineAndRunCompleteWorkflowRequest) returns (RunWorkflowServiceDefineAndRunCompleteWorkflowResponse);
+   // Retrieves the workflow by the given id. If workflow is not yet defined an Empty.String will be returned.
+   rpc GetWorkflowById (RunWorkflowServiceGetWorkflowByIdRequest) returns (RunWorkflowServiceGetWorkflowByIdResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets Workflow State.
+   rpc GetWorkflowState (RunWorkflowServiceGetWorkflowStateRequest) returns (RunWorkflowServiceGetWorkflowStateResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Execution of Next command.
+   rpc Next (RunWorkflowServiceNextRequest) returns (RunWorkflowServiceNextResponse);
+   // Trigger pauses the currently running workflow.
+   rpc Pause (RunWorkflowServicePauseRequest) returns (RunWorkflowServicePauseResponse);
+   // Notification about change of the currently executed action id.
+   rpc RegisterOnActionExecutionIdChanged (RunWorkflowServiceRegisterOnActionExecutionIdChangedRequest) returns (stream RunWorkflowServiceRegisterOnActionExecutionIdChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Notification about change of the Workflow state.
+   rpc RegisterOnWorkflowStateChanged (RunWorkflowServiceRegisterOnWorkflowStateChangedRequest) returns (stream RunWorkflowServiceRegisterOnWorkflowStateChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Trigger resumes the currently paused workflow.
+   rpc Resume (RunWorkflowServiceResumeRequest) returns (RunWorkflowServiceResumeResponse);
+   // Trigger a run of the specified workflow.
+   rpc RunWorkflow (RunWorkflowServiceRunWorkflowRequest) returns (RunWorkflowServiceRunWorkflowResponse);
+   // Execution of set normal / step mode command.
+   rpc SetNormalMode (RunWorkflowServiceSetNormalModeRequest) returns (RunWorkflowServiceSetNormalModeResponse);
+   // Execution of set normal / step mode command.
+   rpc SetStepMode (RunWorkflowServiceSetStepModeRequest) returns (RunWorkflowServiceSetStepModeResponse);
+   // Trigger starts the stopped workflow.
+   rpc Start (RunWorkflowServiceStartRequest) returns (RunWorkflowServiceStartResponse);
+   // Execution of Step command in step mode.
+   rpc Step (RunWorkflowServiceStepRequest) returns (RunWorkflowServiceStepResponse);
+   // Trigger stops the currently running workflow. The workflow not necessary was started from API.
+   rpc Stop (RunWorkflowServiceStopRequest) returns (RunWorkflowServiceStopResponse);
+   // Trigger stops emergency.
+   rpc StopEmergency (RunWorkflowServiceStopEmergencyRequest) returns (RunWorkflowServiceStopEmergencyResponse);
+}

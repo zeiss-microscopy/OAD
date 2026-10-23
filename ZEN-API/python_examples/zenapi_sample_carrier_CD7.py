@@ -1,6 +1,5 @@
 #################################################################
 # File        : zenapi_sample_carrier_CD7.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -13,19 +12,19 @@
 #################################################################
 
 import asyncio
-from pathlib import Path
 import sys
 import time
-from grpclib.exceptions import GRPCError
-from zen_api_utils.misc import set_logging, initialize_zenapi
-from zen_api_utils.sample_carrier import WellPlate
+from pathlib import Path
 
+from grpclib.exceptions import GRPCError
 from zen_api.lm.hardware.v1 import (
-    SampleCarrierServiceStub,
-    SampleCarrierServiceMoveToContainerRequest,
-    SampleCarrierServiceGetInfoRequest,
     SampleCarrierServiceGetCurrentContainerRequest,
+    SampleCarrierServiceGetInfoRequest,
+    SampleCarrierServiceMoveToContainerRequest,
+    SampleCarrierServiceStub,
 )
+from zen_api_utils.misc import initialize_zenapi, set_logging
+from zen_api_utils.sample_carrier import WellPlate
 
 # Get the directory where the current script is located
 script_dir = Path(__file__).parent
@@ -37,6 +36,7 @@ expname = "ZEN_API_Test_w96_1024x1024_CH=2"
 
 
 async def main(args):
+    del args
 
     # get the gRPC channel and the metadata
     channel, metadata = initialize_zenapi(config_path)

@@ -1,7 +1,6 @@
+from matplotlib import pyplot as plt
 from processing_tools import segment_czi
 from pylibCZIrw import czi as pyczi
-from matplotlib import pyplot as plt
-import matplotlib.cm as cm
 from zen_api_utils.misc import set_logging
 
 logger = set_logging()
@@ -30,7 +29,7 @@ if open_czi:
 
     # show the 2D image plane
     fig1, ax = plt.subplots(1, 1, figsize=(12, 8))
-    ax.imshow(img2d[..., 0], cmap=cm.inferno, vmin=img2d.min(), vmax=img2d.max())
+    ax.imshow(img2d[..., 0], cmap=plt.get_cmap("inferno"), vmin=img2d.min(), vmax=img2d.max())
 
     for tr_id in range(results.shape[0]):
 

@@ -1,0 +1,41 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.slide_scan.v1;
+
+// Enum defining the states of slide scanner slot LEDs.
+enum TraySlotState {
+   // Default value if status is not specified.
+   TRAY_SLOT_STATE_UNSPECIFIED = 0;
+   // Slot swiveled out for assembling.
+   TRAY_SLOT_STATE_SLOT_OPEN_SYSTEM_PAUSED = 1;
+   // Slot swiveled out for assembling but Tray is on stage.
+   TRAY_SLOT_STATE_SLOT_OPEN_TRAY_LOADED = 2;
+   // Slot swiveled in with tray containing unprocessed slides.
+   TRAY_SLOT_STATE_SLOT_CLOSED_TRAY_NOT_PROCESSED = 3;
+   // Slot swiveled in with tray containing processed slides.
+   TRAY_SLOT_STATE_SLOT_CLOSED_TRAY_PROCESSED = 4;
+   // Slot swiveled in with tray but an processing error was occurred.
+   TRAY_SLOT_STATE_SLOT_CLOSED_PROCESS_ERROR = 5;
+   // Slot swiveled in with tray containing pre-scanned slides.
+   TRAY_SLOT_STATE_SLOT_CLOSED_TRAY_PRESCANNED = 6;
+   // Slot swiveled in and tray is on stage.
+   TRAY_SLOT_STATE_SLOT_CLOSED_TRAY_LOADED = 7;
+   // Slot swiveled in without tray.
+   TRAY_SLOT_STATE_SLOT_CLOSED_NO_TRAY = 8;
+   // Slot swiveled in with tray  and a tray on the stage (Error case).
+   TRAY_SLOT_STATE_SLOT_CLOSED_TRAY_IN_SYSTEM_AND_SLOT = 9;
+   // Slot swiveled in with an unknown tray type.
+   TRAY_SLOT_STATE_SLOT_CLOSED_UNKNOWN_TRAY = 10;
+   // Slot swiveled in with an empty tray.
+   TRAY_SLOT_STATE_SLOT_CLOSED_NO_SLIDES = 11;
+   // Slot swiveled in with tray containing processed slides.
+   TRAY_SLOT_STATE_SLOT_CLOSED_TRAY_PARTLY_PROCESSED_WITH_ERRORS = 12;
+   // Unknown type (tray is inserted but could not be determined).
+   TRAY_SLOT_STATE_UNKNOWN = 255;
+}

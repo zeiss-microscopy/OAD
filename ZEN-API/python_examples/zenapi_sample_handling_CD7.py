@@ -1,6 +1,5 @@
 #################################################################
 # File        : zenapi_handling_CD7.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 #
@@ -13,9 +12,9 @@
 #################################################################
 
 import asyncio
-from pathlib import Path
 import sys
-from zen_api_utils.misc import set_logging, initialize_zenapi
+import time
+from pathlib import Path
 
 from zen_api.lm.live_scan.v1 import (
     LiveScanServiceEjectTrayRequest,
@@ -24,8 +23,7 @@ from zen_api.lm.live_scan.v1 import (
     LiveScanServiceSetConfigurationRequest,
     LiveScanServiceStub,
 )
-
-import time
+from zen_api_utils.misc import initialize_zenapi, set_logging
 
 # Get the directory where the current script is located
 script_dir = Path(__file__).parent
@@ -40,6 +38,7 @@ carrier_template = "Multichamber 96.czsht"  # Sample holder template for the car
 
 
 async def main(args):
+    del args
 
     # get the gRPC channel and the metadata
     channel, metadata = initialize_zenapi(config_path)
@@ -62,9 +61,18 @@ async def main(args):
     logger.info(f"LiveScanConfig - Automatic Carrier Calibration: {lsc.config.automatic_live_scan_calibration}")
 
     # modify parameters for the sample loading process
-    lsc.config.sample_holder_template = carrier_template
+    lsc.config.sample_holder_template = carrier_template  # Set the sample holder template for the carrier
+    # lsc.config.live_scan_detection = True
     lsc.config.refractive_index = 1.234
     lsc.config.create_carrier_overview = False
+    lsc.config.read_barcodes = False
+    lsc.config.use_left_barcode = False
+    lsc.config.use_right_barcode = False
+    lsc.config.measure_bottom_thickness = False
+    lsc.config.automatic_live_scan_calibration = False
+    lsc.config.determine_bottom_material = False
+
+    # apply the modified configuration to the live scan service
     await lsc_service.set_configuration(LiveScanServiceSetConfigurationRequest(config=lsc.config))
     logger.info(f"LiveScanConfig - Refractive Index: {lsc.config.refractive_index}")
 
@@ -82,7 +90,7 @@ async def main(args):
 
     logger.info("Sample carrier loaded and prescan completed.")
 
-    time.sleep(3)  # wait a bit before ejecting the tray
+    time.sleep(2)  # wait a bit before ejecting the tray
 
     if eject:
         await lsc_service.eject_tray(LiveScanServiceEjectTrayRequest())

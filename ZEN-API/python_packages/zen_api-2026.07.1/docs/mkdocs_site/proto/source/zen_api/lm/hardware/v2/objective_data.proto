@@ -1,0 +1,24 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.hardware.v2;
+import "zen_api/lm/hardware/v2/objective_changer_immersion_types.proto";
+
+// Describes an objective.
+message ObjectiveData {
+   // The name.
+   string name = 1;
+   // The Numerical Apperture.
+   double na = 2;
+   // The immersion type.
+   ObjectiveChangerImmersionTypes immersion_type = 3;
+   // The magnification.
+   double magnification = 4;
+   // The position index.
+   int32 position = 5;
+}
