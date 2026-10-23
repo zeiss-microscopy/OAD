@@ -1,57 +1,3 @@
-- [ZEN API](#zen-api)
-  - [General Overview](#general-overview)
-  - [Supported ZEN and ZEN core Versions](#supported-zen-and-zen-core-versions)
-    - [Documentation](#documentation)
-    - [ZEN API - Examples](#zen-api---examples)
-    - [ZEN API and Internal Scripting](#zen-api-and-internal-scripting)
-  - [Key Features](#key-features)
-    - [ZEN Interfaces - ZEN API](#zen-interfaces---zen-api)
-    - [ZEN API - gRPC](#zen-api---grpc)
-      - [Flow: From C# Interfaces to Python Files](#flow-from-c-interfaces-to-python-files)
-        - [1. ZEN API Interfaces in .NET](#1-zen-api-interfaces-in-net)
-        - [2. Generating `.proto` Files](#2-generating-proto-files)
-        - [3. Compiling `.proto` Files with gRPC](#3-compiling-proto-files-with-grpc)
-        - [4. Creating Python Files](#4-creating-python-files)
-  - [Installation of ZEN API Gateway](#installation-of-zen-api-gateway)
-    - [What is the ZEN API gateway?](#what-is-the-zen-api-gateway)
-  - [Configuration](#configuration)
-    - [Application configuration](#application-configuration)
-    - [Application options](#application-options)
-    - [Authentication options](#authentication-options)
-    - [Command-line options](#command-line-options)
-    - [TLS \& Certificates](#tls--certificates)
-  - [Control Management](#control-management)
-    - [Controlling and Monitoring APIs](#controlling-and-monitoring-apis)
-    - [API Mode](#api-mode)
-    - [Unsupervised API Mode](#unsupervised-api-mode)
-      - [ZEN Core](#zen-core)
-      - [ZEN](#zen)
-    - [API Control Management](#api-control-management)
-      - [Global API Control Token](#global-api-control-token)
-  - [Activation of ZEN API inside software](#activation-of-zen-api-inside-software)
-  - [Troubleshooting](#troubleshooting)
-    - [Service Unavailable](#service-unavailable)
-    - [Reset Certificates](#reset-certificates)
-    - [Common Issues](#common-issues)
-      - [Server startup](#server-startup)
-        - [Invalid port](#invalid-port)
-        - [Used port](#used-port)
-        - [Blocked port](#blocked-port)
-        - [Invalid host name / IP address](#invalid-host-name--ip-address)
-      - [Invoking API methods](#invoking-api-methods)
-        - [Missing control token](#missing-control-token)
-        - [Cannot run controlling methods](#cannot-run-controlling-methods)
-        - [SSL issue on client side](#ssl-issue-on-client-side)
-  - [Glossary](#glossary)
-  - [Python Examples](#python-examples)
-    - [Python Environment](#python-environment)
-      - [Prerequisites](#prerequisites)
-      - [Experimental python package](#experimental-python-package)
-      - [Python Scripts](#python-scripts)
-    - [Configuration File](#configuration-file)
-    - [Python - Outlook](#python---outlook)
-  - [DISCLAIMER](#disclaimer)
-
 # ZEN API
 
 ## General Overview
@@ -83,7 +29,7 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 |   zen_api-2026.05.1    |   ZEN 3.14    | [2026.05.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.05.1/) |
 |   zen_api-2026.07.1    | ZEN core 3.14 | [2026.07.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.07.1/) |
 
-Older documentations are available on request. In addition The documentation for ZEN API is availabe as HTML, MD and PDF documents.
+In addition The documentation for ZEN API is availabe as HTML, MD and PDF documents.
 
 The `../docs`folder is a subfolder of the respective python package folder, aka it can be found here:
 
