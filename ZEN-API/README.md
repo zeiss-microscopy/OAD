@@ -23,12 +23,12 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 
 ### Documentation
 
-| ZEN API Python Package |  ZEN Versions | Documentation                                                         |
+| ZEN API Python Package | ZEN Versions  | Documentation                                                         |
 | :--------------------: | :-----------: | --------------------------------------------------------------------- |
-|   zen_api-2025.10.1    |    ZEN 3.13   | [Archived package](./python_packages/zen_api-2025.10.1/)              |
-|    zen_api-2026.5.1    |    ZEN 3.14   | [2026.5.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.5.1/)   |
+|   zen_api-2025.10.1    |   ZEN 3.13    | [Archived package](./python_packages/zen_api-2025.10.1/)              |
+|    zen_api-2026.5.1    |   ZEN 3.14    | [2026.5.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.5.1/)   |
 |    zen_api-2026.7.1    | ZEN core 3.14 | [2026.7.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.7.1/)   |
-|   zen_api-2026.11.1    |    ZEN 3.15   | [2026.11.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.11.1/) |
+|   zen_api-2026.11.1    |   ZEN 3.15    | [2026.11.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.11.1/) |
 
 The combined documentation workflow defaults to API `2026.11.1`, `2026.7.1`, and `2026.5.1`,
 paired with the independently versioned `zen_api_utils` package in `zen_api_utils/`.
