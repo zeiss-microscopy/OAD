@@ -23,11 +23,34 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 
 ### Documentation
 
-| ZEN API Python Package | ZEN Versions  | Documentation                                                         |
-| :--------------------: | :-----------: | --------------------------------------------------------------------- |
-|   zen_api-2025.10.1    |   ZEN 3.13    | [2025.10.1](https://zeiss-microscopy.github.io/OAD/zenapi/2025.10.1/) |
-|   zen_api-2026.05.1    |   ZEN 3.14    | [2026.05.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.05.1/) |
-|   zen_api-2026.07.1    | ZEN core 3.14 | [2026.07.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.07.1/) |
+| ZEN API Python Package | ZEN Versions  | Documentation                                                       |
+| :--------------------: | :-----------: | ------------------------------------------------------------------- |
+|   zen_api-2025.10.1    |   ZEN 3.13    | [Archived package](./python_packages/zen_api-2025.10.1/)            |
+|    zen_api-2026.5.1    |   ZEN 3.14    | [2026.5.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.5.1/) |
+|    zen_api-2026.7.1    | ZEN core 3.14 | [2026.7.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.7.1/) |
+
+The combined documentation workflow defaults to API `2026.7.1` and `2026.5.1`,
+paired with the independently versioned `zen_api_utils` package in `zen_api_utils/`.
+It builds the utility wheel and source distribution once per workflow run, then
+tests that same utility wheel against each selected API wheel on Python 3.12
+through 3.15 before publishing. Selected versions must use unpadded `YYYY.M.PATCH` names,
+have matching package and proto inputs, and satisfy the utility's declared API
+dependency range. The historical `2025.10.1` package is outside that range and
+is not included in the combined site.
+
+Both release controls are opt-in when manually running the documentation workflow:
+`publish_releases` uploads API distributions, while `publish_utils_release` uploads
+the tested utility distributions under `zen-api-utils-v<utility-version>` (for
+example, `zen-api-utils-v0.1.0`). The utility version comes from its own
+`pyproject.toml`, independently of the selected API versions. Both controls
+default to false; successful runs still retain distributions as workflow artifacts
+without publishing releases. Release publication requires successful compatibility
+tests and documentation deployment. This workflow publishes GitHub Releases,
+not PyPI packages.
+
+Existing API releases are retained: canonical API versions `2026.5.1` and
+`2026.7.1` reuse their historical `v2026.05.1` and `v2026.07.1` tags rather than
+creating duplicate releases. Other API versions use `v<canonical-version>` tags.
 
 In addition The documentation for ZEN API is availabe as HTML, MD and PDF documents.
 

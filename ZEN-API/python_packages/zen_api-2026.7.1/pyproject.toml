@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "zen_api"
-version = "2026.07.1"
+version = "2026.7.1"
 dependencies = [
   "betterproto==2.0.0b7",
 ]
