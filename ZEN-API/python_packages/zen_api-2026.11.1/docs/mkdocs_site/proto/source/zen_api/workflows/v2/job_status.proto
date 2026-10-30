@@ -1,0 +1,28 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.workflows.v2;
+
+// Runtime status of the Job.
+enum JobStatus {
+   // Default value if status is not specified.
+   JOB_STATUS_UNSPECIFIED = 0;
+   // Job is currently executed by the workflow runner.
+   JOB_STATUS_RUNNING = 1;
+   // Job execution is paused (not supported for now and reserved only for future purposes
+   // for saving numeration sequence).
+   JOB_STATUS_PAUSED = 2;
+   // Job execution is successfully completed.
+   JOB_STATUS_COMPLETED = 3;
+   // Job execution was failed.
+   JOB_STATUS_FAILED = 4;
+   // Job execution was interrupted (cancelled).
+   JOB_STATUS_CANCELLED = 5;
+   // Job is created but still not started and waiting for beginning of execution.
+   JOB_STATUS_PENDING = 6;
+}

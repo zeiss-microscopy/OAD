@@ -1,0 +1,257 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.hardware.v1;
+import "zen_api/em/hardware/v1/vacuum_mode.proto";
+import "zen_api/em/hardware/v1/vacuum_state.proto";
+import "zen_api/em/hardware/v1/valve_state.proto";
+import "zen_api/em/hardware/v1/valve.proto";
+
+// The VacuumServiceCloseValveRequest class.
+message VacuumServiceCloseValveRequest {
+   // The valve identifier of the valve to close.
+   Valve valve = 1;
+}
+// Response object of ZenApi.EM.Hardware.V1.IVacuumApi.CloseValve(ZenApi.EM.Hardware.V1.Valve,System.Threading.CancellationToken) method.
+message VacuumServiceCloseValveResponse {
+   // A value indicating whether the task to close a valve succeeded or not.
+   bool task_success = 1;
+}
+// The VacuumServiceGetAvailableVacuumModesRequest class.
+message VacuumServiceGetAvailableVacuumModesRequest {
+}
+// AvailableVacuumModes enum collection response.
+message VacuumServiceGetAvailableVacuumModesResponse {
+   repeated VacuumMode available_modes = 1 [packed = false];
+}
+// The VacuumServiceGetAvailableValvesRequest class.
+message VacuumServiceGetAvailableValvesRequest {
+}
+// AvailableValves enum collection response.
+message VacuumServiceGetAvailableValvesResponse {
+   repeated Valve available_valves = 1 [packed = false];
+}
+// The VacuumServiceGetChamberPressureRequest class.
+message VacuumServiceGetChamberPressureRequest {
+}
+// Response to represent the chamber pressure.
+message VacuumServiceGetChamberPressureResponse {
+   // The chamber pressure in [pascal].
+   double pressure = 1;
+}
+// The VacuumServiceGetTargetChamberPressureRequest class.
+message VacuumServiceGetTargetChamberPressureRequest {
+}
+// Response to represent the chamber pressure.
+message VacuumServiceGetTargetChamberPressureResponse {
+   // The chamber pressure in [pascal].
+   double pressure = 1;
+}
+// The VacuumServiceGetVacuumModeRequest class.
+message VacuumServiceGetVacuumModeRequest {
+}
+// VacuumMode enum response.
+message VacuumServiceGetVacuumModeResponse {
+   // The vacuum mode.
+   VacuumMode mode = 1;
+}
+// The VacuumServiceGetVacuumStateRequest class.
+message VacuumServiceGetVacuumStateRequest {
+}
+// VacuumState enum response.
+message VacuumServiceGetVacuumStateResponse {
+   // The vacuum state.
+   VacuumState state = 1;
+}
+// The VacuumServiceGetValveStateRequest class.
+message VacuumServiceGetValveStateRequest {
+   // The valve to get the status of.
+   Valve valve = 1;
+}
+// ValveState enum response.
+message VacuumServiceGetValveStateResponse {
+   // The valve identifier.
+   Valve valve = 1;
+   // The valves state.
+   ValveState state = 2;
+}
+// The VacuumServiceOpenValveRequest class.
+message VacuumServiceOpenValveRequest {
+   // The valve identifier of the valve to open.
+   Valve valve = 1;
+}
+// Response object of ZenApi.EM.Hardware.V1.IVacuumApi.OpenValve(ZenApi.EM.Hardware.V1.Valve,System.Threading.CancellationToken) method.
+message VacuumServiceOpenValveResponse {
+   // A value indicating whether the task to open a valve succeeded or not.
+   bool task_success = 1;
+}
+// The VacuumServicePumpRequest class.
+message VacuumServicePumpRequest {
+}
+// Response object of the ZenApi.EM.Hardware.V1.IVacuumApi.Pump(System.Threading.CancellationToken) method.
+message VacuumServicePumpResponse {
+   // A value indicating whether the task to pump the chamber succeeded or not.
+   bool task_success = 1;
+}
+// The VacuumServiceRegisterOnChamberPressureChangedRequest class.
+message VacuumServiceRegisterOnChamberPressureChangedRequest {
+}
+// Response to represent the chamber pressure.
+message VacuumServiceRegisterOnChamberPressureChangedResponse {
+   // The chamber pressure in [pascal].
+   double pressure = 1;
+}
+// The VacuumServiceRegisterOnTargetChamberPressureChangedRequest class.
+message VacuumServiceRegisterOnTargetChamberPressureChangedRequest {
+}
+// Response to represent the chamber pressure.
+message VacuumServiceRegisterOnTargetChamberPressureChangedResponse {
+   // The chamber pressure in [pascal].
+   double pressure = 1;
+}
+// The VacuumServiceRegisterOnVacuumModeChangedRequest class.
+message VacuumServiceRegisterOnVacuumModeChangedRequest {
+}
+// VacuumMode enum response.
+message VacuumServiceRegisterOnVacuumModeChangedResponse {
+   // The vacuum mode.
+   VacuumMode mode = 1;
+}
+// The VacuumServiceRegisterOnVacuumStateChangedRequest class.
+message VacuumServiceRegisterOnVacuumStateChangedRequest {
+}
+// VacuumState enum response.
+message VacuumServiceRegisterOnVacuumStateChangedResponse {
+   // The vacuum state.
+   VacuumState state = 1;
+}
+// The VacuumServiceRegisterOnValveStateChangedRequest class.
+message VacuumServiceRegisterOnValveStateChangedRequest {
+}
+// ValveState enum response.
+message VacuumServiceRegisterOnValveStateChangedResponse {
+   // The valve identifier.
+   Valve valve = 1;
+   // The valves state.
+   ValveState state = 2;
+}
+// The VacuumServiceSetTargetChamberPressureRequest class.
+message VacuumServiceSetTargetChamberPressureRequest {
+   // The target chamber pressure if in ZenApi.EM.Hardware.V1.VacuumMode.VariablePressure mode in [pascal].
+   double target_pressure = 1;
+}
+// Response object of the ZenApi.EM.Hardware.V1.IVacuumApi.SetTargetChamberPressure(System.Double,System.Threading.CancellationToken) method.
+message VacuumServiceSetTargetChamberPressureResponse {
+   // A value indicating whether the task to set the chamber pressure succeeded or not.
+   bool task_success = 1;
+}
+// The VacuumServiceSetVacuumModeRequest class.
+message VacuumServiceSetVacuumModeRequest {
+   // The ZenApi.EM.Hardware.V1.VacuumMode to apply.
+   VacuumMode mode = 1;
+}
+// Response object of the ZenApi.EM.Hardware.V1.IVacuumApi.SetVacuumMode(ZenApi.EM.Hardware.V1.VacuumMode,System.Threading.CancellationToken) method.
+message VacuumServiceSetVacuumModeResponse {
+   // A value indicating whether the task to set the vacuum mode succeeded or not.
+   bool task_success = 1;
+}
+// The VacuumServiceVentRequest class.
+message VacuumServiceVentRequest {
+}
+// Response object of ZenApi.EM.Hardware.V1.IVacuumApi.Vent(System.Threading.CancellationToken) method.
+message VacuumServiceVentResponse {
+   // A value indicating whether the task to vent the chamber succeeded or not.
+   bool task_success = 1;
+}
+// The IVacuumService interface.
+service VacuumService {
+   // Closes a valve on the system.
+   rpc CloseValve (VacuumServiceCloseValveRequest) returns (VacuumServiceCloseValveResponse);
+   // Retrieves a collection of available vacuum modes, like HV and VP.
+   // Available modes depend on the tool configuration and don't change during runtime.
+   // Note: TargetChamberPressure functionality is only working for VP mode.
+   rpc GetAvailableVacuumModes (VacuumServiceGetAvailableVacuumModesRequest) returns (VacuumServiceGetAvailableVacuumModesResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Retrieves all available valves of the system that can be controlled.
+   // Possible values are listed in ZenApi.EM.Hardware.V1.Valve enumeration.
+   rpc GetAvailableValves (VacuumServiceGetAvailableValvesRequest) returns (VacuumServiceGetAvailableValvesResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Retrieves the current chamber pressure in [pascal].
+   rpc GetChamberPressure (VacuumServiceGetChamberPressureRequest) returns (VacuumServiceGetChamberPressureResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Retrieves the target chamber pressure for ZenApi.EM.Hardware.V1.VacuumMode.VariablePressure mode.
+   // Unspecified return value on non VP configurations.
+   rpc GetTargetChamberPressure (VacuumServiceGetTargetChamberPressureRequest) returns (VacuumServiceGetTargetChamberPressureResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Retrieves the currently active Vacuum Mode.
+   rpc GetVacuumMode (VacuumServiceGetVacuumModeRequest) returns (VacuumServiceGetVacuumModeResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Retrieves the current vacuum state.
+   rpc GetVacuumState (VacuumServiceGetVacuumStateRequest) returns (VacuumServiceGetVacuumStateResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Retrieves the current state of a valve.
+   // Only states of available valves are defined.
+   // See ZenApi.EM.Hardware.V1.IVacuumApi.GetAvailableValves.
+   rpc GetValveState (VacuumServiceGetValveStateRequest) returns (VacuumServiceGetValveStateResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Opens a valve on the system.
+   rpc OpenValve (VacuumServiceOpenValveRequest) returns (VacuumServiceOpenValveResponse);
+   // Starts the pumping process to evacuate the chamber and install a stable vacuum.
+   rpc Pump (VacuumServicePumpRequest) returns (VacuumServicePumpResponse);
+   // Notifications on chamber pressure. Events are fired every time the current chamber pressure changes.
+   rpc RegisterOnChamberPressureChanged (VacuumServiceRegisterOnChamberPressureChangedRequest) returns (stream VacuumServiceRegisterOnChamberPressureChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Notifications about changes to the target chamber pressure value.
+   // Only enabled on systems supporting ZenApi.EM.Hardware.V1.VacuumMode.VariablePressure mode.
+   rpc RegisterOnTargetChamberPressureChanged (VacuumServiceRegisterOnTargetChamberPressureChangedRequest) returns (stream VacuumServiceRegisterOnTargetChamberPressureChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Notification about changes of the active vacuum mode.
+   // See ZenApi.EM.Hardware.V1.VacuumMode.
+   rpc RegisterOnVacuumModeChanged (VacuumServiceRegisterOnVacuumModeChangedRequest) returns (stream VacuumServiceRegisterOnVacuumModeChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Notification about changes of the vacuum system state.
+   // See ZenApi.EM.Hardware.V1.VacuumState.
+   rpc RegisterOnVacuumStateChanged (VacuumServiceRegisterOnVacuumStateChangedRequest) returns (stream VacuumServiceRegisterOnVacuumStateChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Notifications about any valves state changes.
+   rpc RegisterOnValveStateChanged (VacuumServiceRegisterOnValveStateChangedRequest) returns (stream VacuumServiceRegisterOnValveStateChangedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Sets and if in ZenApi.EM.Hardware.V1.VacuumMode.VariablePressure also applies a new
+   // chamber pressure.
+   rpc SetTargetChamberPressure (VacuumServiceSetTargetChamberPressureRequest) returns (VacuumServiceSetTargetChamberPressureResponse);
+   // Sets the active vacuum mode.
+   // No op if the vacuum mode does not change, otherwise
+   // the process to switch to the other vacuum mode is initiated.
+   rpc SetVacuumMode (VacuumServiceSetVacuumModeRequest) returns (VacuumServiceSetVacuumModeResponse);
+   // Starts the venting process to vent the chamber and allow the chamber door to be opened.
+   rpc Vent (VacuumServiceVentRequest) returns (VacuumServiceVentResponse);
+}

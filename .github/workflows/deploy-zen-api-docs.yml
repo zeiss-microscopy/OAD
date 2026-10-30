@@ -14,7 +14,7 @@ name: Deploy ZEN API docs and build packages
             versions:
                 description: Space-separated ZEN API package versions to publish
                 required: true
-                default: "2026.7.1 2026.5.1"
+                default: "2026.11.1 2026.7.1 2026.5.1"
                 type: string
             publish_releases:
                 description: Attach API distributions to versioned GitHub Releases
@@ -33,7 +33,7 @@ permissions:
     id-token: write
 
 env:
-    DOC_VERSIONS: ${{ inputs.versions || '2026.7.1 2026.5.1' }}
+    DOC_VERSIONS: ${{ inputs.versions || '2026.11.1 2026.7.1 2026.5.1' }}
 
 concurrency:
     group: github-pages

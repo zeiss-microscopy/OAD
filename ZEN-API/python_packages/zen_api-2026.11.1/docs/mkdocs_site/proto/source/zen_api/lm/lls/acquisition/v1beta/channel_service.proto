@@ -1,0 +1,94 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.lls.acquisition.v1beta;
+import "google/protobuf/wrappers.proto";
+import "zen_api/lm/lls/acquisition/v1beta/channel_service_exposure_time_info.proto";
+import "zen_api/lm/lls/acquisition/v1beta/channel_service_laser_line_info.proto";
+
+// The ChannelServiceDisableLaserLineRequest class.
+message ChannelServiceDisableLaserLineRequest {
+   // The id that references the experiment.
+   string experiment_id = 1;
+   // The track index 0-based.
+   int32 track_index = 2;
+   // The laser line id. Can be obtained from GetLaserLineInfos.
+   string laser_line_id = 3;
+}
+// The response for the DisableLaserLine operation.
+message ChannelServiceDisableLaserLineResponse {
+   // The laser line info returned by the operation.
+   ChannelServiceLaserLineInfo laser_line_info = 1;
+}
+// The ChannelServiceEnableLaserLineRequest class.
+message ChannelServiceEnableLaserLineRequest {
+   // The id that references the experiment.
+   string experiment_id = 1;
+   // The track index 0-based.
+   int32 track_index = 2;
+   // The laser line id. Can be obtained from GetLaserLineInfos.
+   string laser_line_id = 3;
+   // The intensity as value [0, 1]. Can be omitted to leave the current value unchanged.
+   .google.protobuf.DoubleValue intensity = 4;
+}
+// The response for the EnableLaserLine operation.
+message ChannelServiceEnableLaserLineResponse {
+   // The laser line info returned by the operation.
+   ChannelServiceLaserLineInfo laser_line_info = 1;
+}
+// The ChannelServiceGetExposureTimesRequest class.
+message ChannelServiceGetExposureTimesRequest {
+   // The id that references the experiment.
+   string experiment_id = 1;
+}
+// The response for the GetExposureTime operation.
+message ChannelServiceGetExposureTimesResponse {
+   // The exposure time info returned by the operation.
+   ChannelServiceExposureTimeInfo exposure_time_info = 1;
+}
+// The ChannelServiceGetLaserLineInfosRequest class.
+message ChannelServiceGetLaserLineInfosRequest {
+   // The id that references the experiment.
+   string experiment_id = 1;
+   // The track index 0-based.
+   int32 track_index = 2;
+}
+// The response for the GetLaserLineInfos operation.
+message ChannelServiceGetLaserLineInfosResponse {
+   // The laser line infos returned by the operation.
+   repeated ChannelServiceLaserLineInfo laser_line_infos = 1;
+}
+// The ChannelServiceSetExposureTimeRequest class.
+message ChannelServiceSetExposureTimeRequest {
+   // The id that references the experiment.
+   string experiment_id = 1;
+   // The track index 0-based.
+   int32 track_index = 2;
+   // The exposure time in milliseconds.
+   double exposure_time = 3;
+}
+// The response for the SetExposureTime operation.
+message ChannelServiceSetExposureTimeResponse {
+   // The exposure time info returned by the operation.
+   ChannelServiceExposureTimeInfo exposure_time_info = 1;
+}
+// The IChannelService interface.
+service ChannelService {
+   // Disables the laser line for the requested track.
+   rpc DisableLaserLine (ChannelServiceDisableLaserLineRequest) returns (ChannelServiceDisableLaserLineResponse);
+   // Enables the laser line for the requested track.
+   rpc EnableLaserLine (ChannelServiceEnableLaserLineRequest) returns (ChannelServiceEnableLaserLineResponse);
+   // Gets the exposure times.
+   rpc GetExposureTimes (ChannelServiceGetExposureTimesRequest) returns (ChannelServiceGetExposureTimesResponse);
+   // Gets the track settings for all available laser lines.
+   rpc GetLaserLineInfos (ChannelServiceGetLaserLineInfosRequest) returns (ChannelServiceGetLaserLineInfosResponse);
+   // Sets the exposure time.
+   // Sets the exposure time for the requested track, when "Full sample scan per track" is selected.
+   // Otherwise, the exposure time is set for all tracks.
+   rpc SetExposureTime (ChannelServiceSetExposureTimeRequest) returns (ChannelServiceSetExposureTimeResponse);
+}

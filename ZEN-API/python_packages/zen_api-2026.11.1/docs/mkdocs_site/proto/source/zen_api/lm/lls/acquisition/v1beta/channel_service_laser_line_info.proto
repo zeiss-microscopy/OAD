@@ -1,0 +1,27 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.lls.acquisition.v1beta;
+
+// Information about a laser line in a track.
+message ChannelServiceLaserLineInfo {
+   // The laser line id.
+   string laser_line_id = 1;
+   // The laser line wavelength in nanometers.
+   double wavelength = 2;
+   // A value indicating whether the laser line is enabled.
+   bool is_enabled = 3;
+   // The intensity of the laser line as value [0, 1].
+   double intensity = 4;
+   // The minimum intensity of the laser line as value [0, 1].
+   double minimum_intensity = 5;
+   // The maximum intensity of the laser line as value [0, 1].
+   double maximum_intensity = 6;
+   // A value indicating whether the intensity can be changed.
+   bool can_change_intensity = 7;
+}

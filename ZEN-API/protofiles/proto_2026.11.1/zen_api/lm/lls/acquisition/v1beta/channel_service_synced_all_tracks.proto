@@ -1,0 +1,19 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.lls.acquisition.v1beta;
+
+// Specifies the synchronization mode for tracks in multi-track acquisition scenarios.
+enum ChannelServiceSyncedAllTracks {
+   // Protobuf requires this default.
+   CHANNEL_SERVICE_SYNCED_ALL_TRACKS_UNSPECIFIED = 0;
+   // Tracks are not synchronized.
+   CHANNEL_SERVICE_SYNCED_ALL_TRACKS_NONE = 1;
+   // Tracks are synchronized for fast track switch with "All tracks per slice" dimension ordering.
+   CHANNEL_SERVICE_SYNCED_ALL_TRACKS_ALL_TRACKS_PER_SLICE = 2;
+}

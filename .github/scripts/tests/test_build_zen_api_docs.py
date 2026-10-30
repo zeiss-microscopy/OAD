@@ -10,6 +10,7 @@ from pathlib import Path
 
 import pytest
 import yaml
+from packaging.version import Version
 
 
 @pytest.fixture
@@ -264,14 +265,29 @@ def test_workflow_defaults_match_supported_bundled_sources(builder):
     workflow = repo_root / ".github/workflows/deploy-zen-api-docs.yml"
     config = yaml.safe_load(workflow.read_text(encoding="utf-8"))
     defaults = config["on"]["workflow_dispatch"]["inputs"]["versions"]["default"]
-    assert defaults == "2026.7.1 2026.5.1"
+    assert defaults == "2026.11.1 2026.7.1 2026.5.1"
     assert defaults in config["env"]["DOC_VERSIONS"]
     readme = (repo_root / "ZEN-API/README.md").read_text(encoding="utf-8")
     for version in defaults.split():
         api_project, utils_project = builder.validate_version(repo_root, version)
         assert api_project["version"] == version
+        assert api_project["requires-python"] == ">=3.12,<3.16"
         assert utils_project["version"] == "0.1.0"
         assert f"https://zeiss-microscopy.github.io/OAD/zenapi/{version}/" in readme
+
+
+@pytest.mark.parametrize(
+    ("relative", "prefix"),
+    [("python_packages", "zen_api-"), ("protofiles", "proto_")],
+)
+def test_bundled_version_folders_use_canonical_names(relative, prefix):
+    """Never reintroduce zero-padded release directories during a merge."""
+    root = Path(__file__).resolve().parents[3] / "ZEN-API" / relative
+    directories = [directory for directory in root.glob(f"{prefix}*") if directory.is_dir()]
+    assert directories
+    for directory in directories:
+        version = directory.name.removeprefix(prefix)
+        assert str(Version(version)) == version, f"Noncanonical version directory: {directory}"
 
 
 def test_workflow_version_matrix_uses_actual_package_metadata(sources):

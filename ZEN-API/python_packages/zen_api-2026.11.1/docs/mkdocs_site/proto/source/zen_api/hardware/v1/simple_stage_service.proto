@@ -1,0 +1,105 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.hardware.v1;
+import "google/protobuf/wrappers.proto";
+
+// The SimpleStageServiceGetAccelerationRequest class.
+message SimpleStageServiceGetAccelerationRequest {
+}
+// Acceleration of the stage.
+message SimpleStageServiceGetAccelerationResponse {
+   // The X component of the acceleration in %.
+   double x = 1;
+   // The Y component of the acceleration in %.
+   double y = 2;
+}
+// The SimpleStageServiceGetPositionRequest class.
+message SimpleStageServiceGetPositionRequest {
+}
+// Position of the stage.
+message SimpleStageServiceGetPositionResponse {
+   // The X component of the position in meters.
+   double x = 1;
+   // The Y component of the position in meters.
+   double y = 2;
+}
+// The SimpleStageServiceGetSpeedRequest class.
+message SimpleStageServiceGetSpeedRequest {
+}
+// Speed of the stage.
+message SimpleStageServiceGetSpeedResponse {
+   // The X component of the speed in %.
+   double x = 1;
+   // The Y component of the speed in %.
+   double y = 2;
+}
+// The SimpleStageServiceMoveToRequest class.
+message SimpleStageServiceMoveToRequest {
+   // Target position x in meters. Leave out if x position should not be changed.
+   .google.protobuf.DoubleValue x = 1;
+   // Target position y in meters. Leave out if y position should not be changed.
+   .google.protobuf.DoubleValue y = 2;
+}
+// Describes the result of a Stage.MoveTo request.
+message SimpleStageServiceMoveToResponse {
+   // A value indicating whether the position was changed.
+   bool position_changed = 1;
+}
+// The SimpleStageServiceSetAccelerationRequest class.
+message SimpleStageServiceSetAccelerationRequest {
+   // Acceleration in x direction in percent, i.e. values from range [0;100].
+   .google.protobuf.DoubleValue acceleration_x = 1;
+   // Acceleration in y direction in percent, i.e. values from range [0;100].
+   .google.protobuf.DoubleValue acceleration_y = 2;
+}
+// The SimpleStageServiceSetAccelerationResponse class.
+message SimpleStageServiceSetAccelerationResponse {
+}
+// The SimpleStageServiceSetSpeedRequest class.
+message SimpleStageServiceSetSpeedRequest {
+   // Speed in x direction in percent, i.e. values from range [0;100].
+   .google.protobuf.DoubleValue speed_x = 1;
+   // Speed in y direction in percent, i.e. values from range [0;100].
+   .google.protobuf.DoubleValue speed_y = 2;
+}
+// The SimpleStageServiceSetSpeedResponse class.
+message SimpleStageServiceSetSpeedResponse {
+}
+// The SimpleStageServiceStopRequest class.
+message SimpleStageServiceStopRequest {
+}
+// The SimpleStageServiceStopResponse class.
+message SimpleStageServiceStopResponse {
+}
+// The ISimpleStageService interface.
+service SimpleStageService {
+   // Gets the acceleration of the stage.
+   rpc GetAcceleration (SimpleStageServiceGetAccelerationRequest) returns (SimpleStageServiceGetAccelerationResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the current stage position.
+   rpc GetPosition (SimpleStageServiceGetPositionRequest) returns (SimpleStageServiceGetPositionResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Gets the speed of the stage.
+   rpc GetSpeed (SimpleStageServiceGetSpeedRequest) returns (SimpleStageServiceGetSpeedResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Moves the stage to the given position. Is a value for a dimension is no supplied, the position in that dimension it is kept as is.
+   rpc MoveTo (SimpleStageServiceMoveToRequest) returns (SimpleStageServiceMoveToResponse);
+   // Sets the acceleration of the stage in percent.
+   rpc SetAcceleration (SimpleStageServiceSetAccelerationRequest) returns (SimpleStageServiceSetAccelerationResponse);
+   // Sets the speed of the stage in percent.
+   rpc SetSpeed (SimpleStageServiceSetSpeedRequest) returns (SimpleStageServiceSetSpeedResponse);
+   // Stops the stage if it is moving.
+   rpc Stop (SimpleStageServiceStopRequest) returns (SimpleStageServiceStopResponse);
+}

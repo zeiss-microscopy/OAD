@@ -1,0 +1,23 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.em.hardware.v1;
+
+// The CCD mode enumeration.
+enum CcdMode {
+   // Default enum value.
+   CCD_MODE_UNSPECIFIED = 0;
+   // Illumination is off.
+   CCD_MODE_OFF = 1;
+   // Illumination mode is determined based on detector selection.
+   CCD_MODE_AUTO = 2;
+   // Illumination is Infra-red, producing greyscale images.
+   CCD_MODE_GREYSCALE = 3;
+   // Illumination is White light, producing color images.
+   CCD_MODE_COLOR = 4;
+}

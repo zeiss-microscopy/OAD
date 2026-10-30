@@ -1,0 +1,89 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.acquisition.v1;
+import "google/protobuf/wrappers.proto";
+
+// The ZStackServiceGetZStackInfoRequest class.
+message ZStackServiceGetZStackInfoRequest {
+   // The experiment Id.
+   string experiment_id = 1;
+}
+// Response object representing the value of GetZStackInfo for the experiment.
+message ZStackServiceGetZStackInfoResponse {
+   // The value of the interval between 2 slices (unit: m).
+   double interval = 1;
+   // The position of the first slice in Z-stack (unit: m).
+   double first_slice = 2;
+   // The position of the last slice in Z-stack (unit: m).
+   double last_slice = 3;
+   // The distance between the first and last slice (unit: m).
+   double range = 5;
+   // The number of slices.
+   int32 num_slices = 6;
+   // A value indicating whether the Z-stack is in center mode.
+   bool is_center_mode = 7;
+   // The value of the offset which is applied to the whole Z-stack.
+   double offset = 8;
+}
+// The ZStackServiceIsZStackExperimentRequest class.
+message ZStackServiceIsZStackExperimentRequest {
+   // The experiment Id.
+   string experiment_id = 1;
+}
+// Response object representing the value of IsZStackExperiment for the experiment.
+message ZStackServiceIsZStackExperimentResponse {
+   // A value indicating whether the experiment is a Z-Stack experiment.
+   bool is_zstack_experiment = 1;
+}
+// The ZStackServiceModifyZStackCenterRangeRequest class.
+message ZStackServiceModifyZStackCenterRangeRequest {
+   // The experiment Id.
+   string experiment_id = 1;
+   // The center position between the first and last slice (unit: m).
+   .google.protobuf.DoubleValue center = 2;
+   // The interval between 2 slices (unit: m).
+   .google.protobuf.DoubleValue interval = 3;
+   // Distance between the first and last slice (unit: m).
+   .google.protobuf.DoubleValue range = 4;
+}
+// The ZStackServiceModifyZStackCenterRangeResponse class.
+message ZStackServiceModifyZStackCenterRangeResponse {
+}
+// The ZStackServiceModifyZStackFirstLastRequest class.
+message ZStackServiceModifyZStackFirstLastRequest {
+   // The experiment Id.
+   string experiment_id = 1;
+   // Position of the first slice in Z-stack (unit: m).
+   .google.protobuf.DoubleValue first = 2;
+   // Position of the last slice in Z-stack (unit: m).
+   .google.protobuf.DoubleValue last = 3;
+   // The interval between 2 slices (unit: m).
+   .google.protobuf.DoubleValue interval = 4;
+}
+// The ZStackServiceModifyZStackFirstLastResponse class.
+message ZStackServiceModifyZStackFirstLastResponse {
+}
+// The IZStackService interface.
+service ZStackService {
+   // Gets the information about a Z-stack.
+   rpc GetZStackInfo (ZStackServiceGetZStackInfoRequest) returns (ZStackServiceGetZStackInfoResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Determines whether the current experiment block in the specified experiment
+   // is a Z-stack experiment. This means that the corresponding Z-stack setup dimension is activated.
+   rpc IsZStackExperiment (ZStackServiceIsZStackExperimentRequest) returns (ZStackServiceIsZStackExperimentResponse)
+   {
+      option idempotency_level = NO_SIDE_EFFECTS;
+   }
+   // Modifies the dimensions of the Z-stack inside the experiment.
+   rpc ModifyZStackCenterRange (ZStackServiceModifyZStackCenterRangeRequest) returns (ZStackServiceModifyZStackCenterRangeResponse);
+   // Modifies the dimensions of the Z-stack inside the experiment.
+   rpc ModifyZStackFirstLast (ZStackServiceModifyZStackFirstLastRequest) returns (ZStackServiceModifyZStackFirstLastResponse);
+}

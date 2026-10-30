@@ -1,0 +1,22 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.hardware.v2;
+import "zen_api/common/v1/double_frame.proto";
+
+// Describes the info needed to set a camera.
+message SetCameraData {
+   // The Id.
+   string id = 1;
+   // The ExposureTime.
+   double exposure_time = 2;
+   // The Binning.
+   int32 binning = 3;
+   // The Frame.
+   .zen_api.common.v1.DoubleFrame frame = 10;
+}

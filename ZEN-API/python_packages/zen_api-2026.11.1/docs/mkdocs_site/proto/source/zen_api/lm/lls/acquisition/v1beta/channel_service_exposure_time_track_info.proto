@@ -1,0 +1,23 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.lls.acquisition.v1beta;
+
+// Information about exposure time of one track.
+message ChannelServiceExposureTimeTrackInfo {
+   // The track index.
+   int32 track_index = 1;
+   // A value indicating whether the track is activated.
+   bool is_activated = 2;
+   // The exposure time in milliseconds.
+   double exposure_time = 3;
+   // The minimum exposure time in milliseconds.
+   double minimum_exposure_time = 4;
+   // The maximum exposure time in milliseconds.
+   double maximum_exposure_time = 5;
+}
