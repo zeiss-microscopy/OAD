@@ -1,0 +1,19 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.common.v1;
+import "zen_api/common/v1/point3_d.proto";
+import "zen_api/common/v1/size3_d.proto";
+
+// Represents a 3D region with center coordinates.
+message Region3D {
+   // The center position of the region.
+   Point3D center = 1;
+   // The extent of the region.
+   Size3D size = 2;
+}

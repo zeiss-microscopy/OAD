@@ -1,0 +1,51 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.lm.lls.acquisition.v1beta;
+
+// The ExperimentServiceGetSampleScanIntervalRequest class.
+message ExperimentServiceGetSampleScanIntervalRequest {
+   // The id that references the experiment.
+   string experiment_id = 1;
+}
+// The response for the GetInterval operation.
+message ExperimentServiceGetSampleScanIntervalResponse {
+   // The interval of the experiment in m.
+   double interval = 1;
+}
+// The ExperimentServiceSetOptimalSampleScanIntervalRequest class.
+message ExperimentServiceSetOptimalSampleScanIntervalRequest {
+   // The id that references the experiment.
+   string experiment_id = 1;
+}
+// The response for the SetOptimalInterval operation.
+message ExperimentServiceSetOptimalSampleScanIntervalResponse {
+   // The interval of the experiment in m.
+   double interval = 1;
+}
+// The ExperimentServiceSetSampleScanIntervalRequest class.
+message ExperimentServiceSetSampleScanIntervalRequest {
+   // The id that references the experiment.
+   string experiment_id = 1;
+   // The interval in m.
+   double interval = 2;
+}
+// The response for the SetInterval operation.
+message ExperimentServiceSetSampleScanIntervalResponse {
+   // The interval of the experiment in m.
+   double interval = 1;
+}
+// The IExperimentService interface.
+service ExperimentService {
+   // Gets the interval for the given experiment in m.
+   rpc GetSampleScanInterval (ExperimentServiceGetSampleScanIntervalRequest) returns (ExperimentServiceGetSampleScanIntervalResponse);
+   // Sets the optimal interval for the given experiment.
+   rpc SetOptimalSampleScanInterval (ExperimentServiceSetOptimalSampleScanIntervalRequest) returns (ExperimentServiceSetOptimalSampleScanIntervalResponse);
+   // Sets the sample scan interval for the given experiment.
+   rpc SetSampleScanInterval (ExperimentServiceSetSampleScanIntervalRequest) returns (ExperimentServiceSetSampleScanIntervalResponse);
+}

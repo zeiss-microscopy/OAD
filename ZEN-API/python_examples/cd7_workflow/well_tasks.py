@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : well_tasks.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # One async function per acquisition step executed at every well.
@@ -17,43 +14,42 @@
 
 import asyncio
 import shutil
-from datetime import datetime
+from collections.abc import Sequence
+from datetime import datetime, timezone
 from pathlib import Path
 
-from grpclib.exceptions import GRPCError
-
-# zen_api_utils
-from zen_api_utils.misc import set_logging
-from zen_api_utils.sample_carrier import WellPlate
-
-# gRPC service stubs and request types — hardware
-from zen_api.lm.hardware.v1 import (
-    SampleCarrierServiceStub,
-    SampleCarrierServiceMoveToContainerRequest,
-)
-from zen_api.lm.hardware.v2 import (
-    FocusServiceStub,
-    FocusServiceGetPositionRequest,
-    FocusServiceMoveToRequest,
-    ObjectiveChangerServiceStub,
-    ObjectiveChangerServiceMoveToRequest,
+from zen_api.acquisition.v1beta import (
+    ExperimentServiceCloneRequest,
+    ExperimentServiceGetImageOutputPathRequest,
+    ExperimentServiceRunExperimentRequest,
+    ExperimentServiceStub,
 )
 
 # gRPC service stubs and request types — acquisition
 from zen_api.lm.acquisition.v1 import (
-    DefiniteFocusServiceStub,
     DefiniteFocusServiceFindSurfaceRequest,
-    ExperimentSwAutofocusServiceStub,
+    DefiniteFocusServiceStub,
     ExperimentSwAutofocusServiceFindAutoFocusRequest,
-    ZStackServiceStub,
+    ExperimentSwAutofocusServiceStub,
     ZStackServiceModifyZStackCenterRangeRequest,
+    ZStackServiceStub,
 )
-from zen_api.acquisition.v1beta import (
-    ExperimentServiceStub,
-    ExperimentServiceCloneRequest,
-    ExperimentServiceRunExperimentRequest,
-    ExperimentServiceGetImageOutputPathRequest,
+
+# gRPC service stubs and request types — hardware
+from zen_api.lm.hardware.v1 import (
+    SampleCarrierServiceMoveToContainerRequest,
+    SampleCarrierServiceStub,
 )
+from zen_api.lm.hardware.v2 import (
+    FocusServiceGetPositionRequest,
+    FocusServiceStub,
+    ObjectiveChangerServiceMoveToRequest,
+    ObjectiveChangerServiceStub,
+)
+
+# zen_api_utils
+from zen_api_utils.misc import set_logging
+from zen_api_utils.sample_carrier import WellPlate
 
 logger = set_logging()
 
@@ -61,6 +57,77 @@ logger = set_logging()
 # ---------------------------------------------------------------------------
 # Stage / sample carrier
 # ---------------------------------------------------------------------------
+
+
+def optimize_well_order(plate: WellPlate, wells: Sequence[str]) -> list[str]:
+    """
+    Reduce stage travel with a deterministic nearest-neighbor heuristic.
+
+    The first configured well is kept as the starting point. From there, the
+    function repeatedly chooses the unvisited well with the smallest squared
+    row/column distance from the current well::
+
+        distance_squared = (next_row - row) ** 2 + (next_col - col) ** 2
+
+    Squared distance gives the same ordering as Euclidean distance while
+    avoiding an unnecessary square-root calculation. If two wells are equally
+    distant, their original positions in *wells* break the tie. The result is
+    therefore stable and reproducible.
+
+    This greedy method reduces unnecessary travel for scattered worklists, but
+    it does not guarantee the globally shortest possible route. It also treats
+    row and column spacing as equal; use physical stage coordinates instead if
+    the plate geometry requires a more accurate distance model.
+
+    Args:
+        plate: Plate used to validate labels and convert them to zero-based
+            ``(row, column)`` coordinates.
+        wells: Well labels in user-configured order. Duplicate labels are
+            retained and treated as separate work items.
+
+    Returns:
+        A new list containing every input well exactly once per occurrence.
+        The input sequence is not modified.
+
+    Raises:
+        ValueError: If any label is invalid or outside the plate layout.
+
+    Complexity:
+        Time is :math:`O(n^2)` and additional space is :math:`O(n)`, which is
+        appropriate for typical microplate worklists.
+    """
+    if len(wells) < 2:
+        # Always return a new list so callers can safely modify the result even
+        # when the input is already a list.
+        return list(wells)
+
+    # Store the original index for deterministic tie-breaking. Expanding the
+    # coordinate tuple produces records shaped as:
+    # (original_index, well_id, row, column).
+    indexed_wells = [
+        (original_index, well_id, *plate.well_to_index(well_id)) for original_index, well_id in enumerate(wells)
+    ]
+
+    # The user controls the initial stage destination; optimization begins only
+    # after that first well has been selected.
+    ordered = [indexed_wells.pop(0)]
+
+    while indexed_wells:
+        _, _, current_row, current_col = ordered[-1]
+
+        # min() compares tuple elements from left to right: distance first,
+        # then original input index when distances are equal.
+        next_index = min(
+            range(len(indexed_wells)),
+            key=lambda index: (
+                (indexed_wells[index][2] - current_row) ** 2 + (indexed_wells[index][3] - current_col) ** 2,
+                indexed_wells[index][0],
+            ),
+        )
+        ordered.append(indexed_wells.pop(next_index))
+
+    # Strip the bookkeeping fields before returning the optimized worklist.
+    return [well_id for _, well_id, _, _ in ordered]
 
 
 async def move_to_well(
@@ -78,6 +145,8 @@ async def move_to_well(
         well_id: Well label, e.g. ``"B3"``.
         settle_s: Optional pause after the move to let vibrations decay.
     """
+    # The helper translates a human-readable label (for example B3) into the
+    # zero-based row and column expected by the sample-carrier service.
     row, col = plate.well_to_index(well_id)
     logger.info(f"Moving to well {well_id}  (row={row}, col={col})")
     await sample_carrier_service.move_to_container(SampleCarrierServiceMoveToContainerRequest(row, col))
@@ -92,10 +161,12 @@ async def move_to_well(
 
 async def find_surface(
     definite_focus_service: DefiniteFocusServiceStub,
-    focus_service: FocusServiceStub,
 ) -> float:
     """
     Run Definite Focus *Find Surface* and return the resulting Z position.
+
+    Args:
+        definite_focus_service: gRPC stub for the Definite Focus service.
 
     Returns:
         Z position in **metres** as reported by the focus drive after the
@@ -105,6 +176,8 @@ async def find_surface(
         GRPCError: If the hardware call fails.
     """
     logger.info("Running Definite Focus — Find Surface ...")
+    # The response already contains the detected position in metres; no
+    # additional focus-drive query is needed here.
     df_response = await definite_focus_service.find_surface(DefiniteFocusServiceFindSurfaceRequest())
     z_surface_m = df_response.zposition
     logger.info(f"Surface found at Z = {z_surface_m * 1e6:.3f} µm")
@@ -128,7 +201,7 @@ async def switch_objective(
         position: 1-based changer position to move to.
     """
     logger.info(f"Switching objective to changer position {position} ...")
-    await objchanger_service.move_to(ObjectiveChangerServiceMoveToRequest(position=position))
+    await objchanger_service.move_to(ObjectiveChangerServiceMoveToRequest(position_index=position))
 
 
 # ---------------------------------------------------------------------------
@@ -167,7 +240,8 @@ async def run_swaf(
             timeout=timeout_s,
         )
     )
-    # Read back the actual Z position from the drive (consistent metres unit)
+    # SWAF moves the focus drive but does not return the final position. Read
+    # the drive after the search to obtain the actual Z coordinate in metres.
     z_response = await focus_service.get_position(FocusServiceGetPositionRequest())
     z_focus_m = z_response.value
     logger.info(f"SWAF found focus at Z = {z_focus_m * 1e6:.3f} µm")
@@ -175,49 +249,54 @@ async def run_swaf(
 
 
 # ---------------------------------------------------------------------------
-# Acquisition experiment — clone + modify z-stack
+# Acquisition experiment — reusable clone + per-well z-stack update
 # ---------------------------------------------------------------------------
 
 
-async def prepare_zstack_experiment(
+async def clone_acquisition_experiment(
     exp_service: ExperimentServiceStub,
-    zstack_service: ZStackServiceStub,
     base_experiment_id: str,
-    z_center_m: float,
-    z_range_m: float,
-    z_interval_m: float,
 ) -> str:
-    """
-    Clone *base_experiment_id* and update its z-stack center to *z_center_m*.
-
-    The clone is kept in memory only (never saved to disk) so the ZEN
-    experiment folder is not polluted with per-well files.
+    """Clone the loaded acquisition template once for per-well modifications.
 
     Args:
         exp_service: gRPC stub for the experiment service.
+        base_experiment_id: ID of the loaded acquisition template.
+
+    Returns:
+        ID of the reusable acquisition clone.
+    """
+    logger.info("Cloning acquisition experiment for reusable Z-stack updates ...")
+    clone_response = await exp_service.clone(ExperimentServiceCloneRequest(experiment_id=base_experiment_id))
+    return clone_response.experiment_id
+
+
+async def update_zstack_experiment(
+    zstack_service: ZStackServiceStub,
+    experiment_id: str,
+    z_center_m: float,
+    z_range_m: float,
+    z_interval_m: float,
+) -> None:
+    """
+    Update the reusable acquisition clone's Z-stack for the current well.
+
+    Args:
         zstack_service: gRPC stub for the z-stack service.
-        base_experiment_id: ``experiment_id`` of the template experiment.
+        experiment_id: ``experiment_id`` of the reusable clone.
         z_center_m: New z-stack center in **metres** (typically from SWAF).
         z_range_m: Total z-stack range in **metres**.
         z_interval_m: Slice-to-slice interval in **metres**.
-
-    Returns:
-        ``experiment_id`` of the cloned, modified experiment — pass this to
-        :func:`run_acquisition`.
     """
-    logger.info(f"Cloning experiment and setting z-stack center to {z_center_m * 1e6:.3f} µm ...")
-    clone_response = await exp_service.clone(ExperimentServiceCloneRequest(experiment_id=base_experiment_id))
-    well_exp_id = clone_response.experiment_id
-
+    logger.info(f"Setting reusable experiment Z-stack center to {z_center_m * 1e6:.3f} µm ...")
     await zstack_service.modify_z_stack_center_range(
         ZStackServiceModifyZStackCenterRangeRequest(
-            experiment_id=well_exp_id,
+            experiment_id=experiment_id,
             center=z_center_m,
             interval=z_interval_m,
             range=z_range_m,
         )
     )
-    return well_exp_id
 
 
 # ---------------------------------------------------------------------------
@@ -225,10 +304,24 @@ async def prepare_zstack_experiment(
 # ---------------------------------------------------------------------------
 
 
+async def get_image_output_folder(exp_service: ExperimentServiceStub) -> Path:
+    """Query ZEN's image output folder once for reuse by every acquisition.
+
+    Args:
+        exp_service: gRPC stub for the experiment service.
+
+    Returns:
+        Image output directory configured in ZEN.
+    """
+    response = await exp_service.get_image_output_path(ExperimentServiceGetImageOutputPathRequest())
+    return Path(response.image_output_path)
+
+
 async def run_acquisition(
     exp_service: ExperimentServiceStub,
     experiment_id: str,
     well_id: str,
+    zen_output_folder: Path,
     timestamp_format: str = "%Y%m%d_%H%M%S",
     output_folder: Path | None = None,
 ) -> Path:
@@ -249,6 +342,7 @@ async def run_acquisition(
         exp_service: gRPC stub for the experiment service.
         experiment_id: ``experiment_id`` of the (cloned) experiment to run.
         well_id: Well label used as the filename prefix (e.g. ``"A1"``).
+        zen_output_folder: Cached image output folder reported by ZEN.
         timestamp_format: :func:`datetime.strftime` format string for the
             timestamp suffix.
         output_folder: Optional destination folder.  When ``None`` the file
@@ -257,14 +351,10 @@ async def run_acquisition(
     Returns:
         :class:`~pathlib.Path` pointing to the final CZI file location.
     """
-    timestamp = datetime.now().strftime(timestamp_format)
+    timestamp = datetime.now(timezone.utc).strftime(timestamp_format)
     output_name = f"{well_id}_{timestamp}"
 
-    # Retrieve ZEN's image output directory
-    path_response = await exp_service.get_image_output_path(ExperimentServiceGetImageOutputPathRequest())
-    zen_folder = Path(path_response.image_output_path)
-
-    logger.info(f"Acquiring well {well_id} → {zen_folder / output_name}.czi ...")
+    logger.info(f"Acquiring well {well_id} → {zen_output_folder / output_name}.czi ...")
     await exp_service.run_experiment(
         ExperimentServiceRunExperimentRequest(
             experiment_id=experiment_id,
@@ -272,14 +362,15 @@ async def run_acquisition(
         )
     )
 
-    czi_path = zen_folder / f"{output_name}.czi"
+    czi_path = zen_output_folder / f"{output_name}.czi"
     logger.info(f"Acquisition complete: {czi_path}")
 
-    # Optionally move the file to a caller-defined output folder
-    if output_folder is not None and output_folder != zen_folder:
+    # Grouping files after acquisition keeps all data from one plate run in a
+    # dedicated folder without changing ZEN's global output configuration.
+    if output_folder is not None and output_folder != zen_output_folder:
         output_folder.mkdir(parents=True, exist_ok=True)
         dest = output_folder / czi_path.name
-        shutil.move(str(czi_path), dest)
+        await asyncio.to_thread(shutil.move, str(czi_path), dest)
         logger.info(f"Moved to: {dest}")
         czi_path = dest
 

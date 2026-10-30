@@ -15,6 +15,7 @@ from pathlib import Path, PurePosixPath
 
 import yaml
 from betterproto.lib.google.protobuf import FileDescriptorSet
+from packaging.requirements import Requirement
 
 ZENAPI_PAGES_PATH = "zenapi"
 
@@ -382,10 +383,53 @@ def build_landing_page(build_dir: Path, site_dir: Path, versions: list[str]) -> 
     run_mkdocs(config_path, strict=False)
 
 
+def validate_version(repo_root: Path, version: str) -> tuple[dict, dict]:
+    """Validate documentation inputs and the independently versioned API/utility pair.
+
+    Raises:
+        ValueError: Version syntax, package identity, or API compatibility is invalid.
+        OSError: Required metadata or documentation sources are missing.
+    """
+    pattern = r"[0-9]{4}\.(?:[1-9]|1[0-2])\.(?:0|[1-9][0-9]*)(?:\.dev(?:0|[1-9][0-9]*))?"
+    if not re.fullmatch(pattern, version):
+        raise ValueError(f"Invalid API version: {version!r}; expected unpadded YYYY.M.PATCH, optionally .devN")
+
+    api_root = repo_root / "ZEN-API"
+    package_dir = api_root / "python_packages" / f"zen_api-{version}"
+    utils_dir = api_root / "zen_api_utils"
+    for required in (
+        package_dir / "src" / "zen_api",
+        api_root / "protofiles" / f"proto_{version}",
+        utils_dir / "src" / "zen_api_utils",
+        utils_dir / "mkdocs_docs",
+    ):
+        if not required.is_dir():
+            raise FileNotFoundError(f"Required documentation input not found: {required}")
+    with (package_dir / "pyproject.toml").open("rb") as metadata:
+        api_project = tomllib.load(metadata)["project"]
+    with (utils_dir / "pyproject.toml").open("rb") as metadata:
+        utils_project = tomllib.load(metadata)["project"]
+    if api_project["name"] != "zen_api" or api_project["version"] != version:
+        raise ValueError(f"Package metadata does not match selected API version: {version}")
+    if utils_project["name"] != "zen_api_utils":
+        raise ValueError("Utility package metadata must declare zen_api_utils")
+    requirements = [Requirement(dependency) for dependency in utils_project.get("dependencies", [])]
+    api_requirements = [
+        requirement for requirement in requirements if requirement.name.replace("_", "-").lower() == "zen-api"
+    ]
+    if not api_requirements or any(not requirement.specifier for requirement in api_requirements):
+        raise ValueError("zen_api_utils must declare its supported zen_api version range")
+    if any(not requirement.specifier.contains(version, prereleases=True) for requirement in api_requirements):
+        supported = ", ".join(str(requirement.specifier) for requirement in api_requirements)
+        raise ValueError(
+            f"API {version} is outside zen_api_utils {utils_project['version']} supported range: {supported}"
+        )
+    return api_project, utils_project
+
+
 def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version: str, protoc: str = "protoc") -> None:
+    api_project, utils_project = validate_version(repo_root, version)
     package_dir = repo_root / "ZEN-API" / "python_packages" / f"zen_api-{version}"
-    if not package_dir.is_dir():
-        raise FileNotFoundError(f"Package directory not found: {package_dir}")
 
     src_dir = package_dir / "src"
     version_build_dir = build_dir / version
@@ -393,11 +437,7 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
     version_site_dir = site_dir / ZENAPI_PAGES_PATH / version
     docs_dir.mkdir(parents=True, exist_ok=True)
 
-    utils_dir = repo_root / "ZEN-API" / "zen_api_utils_package"
-    with (utils_dir / "pyproject.toml").open("rb") as metadata:
-        utils_project = tomllib.load(metadata)["project"]
-    with (package_dir / "pyproject.toml").open("rb") as metadata:
-        api_project = tomllib.load(metadata)["project"]
+    utils_dir = repo_root / "ZEN-API" / "zen_api_utils"
     utils_version = utils_project["version"]
     shutil.copytree(utils_dir / "mkdocs_docs", docs_dir / "guides" / "zen_api_utils", dirs_exist_ok=True)
 
@@ -532,16 +572,12 @@ def main() -> None:
     build_dir = (repo_root / args.build_dir).resolve()
     site_dir = (repo_root / args.site_dir).resolve()
 
-    for version in args.versions:
-        if not re.fullmatch(r"[0-9]{4}\.[0-9]{2}\.[0-9]+", version):
-            parser.error(f"Invalid API version: {version!r}; expected YYYY.MM.PATCH")
-        api_root = repo_root / "ZEN-API"
-        for required in (
-            api_root / "python_packages" / f"zen_api-{version}" / "src" / "zen_api",
-            api_root / "protofiles" / f"proto_{version}",
-        ):
-            if not required.is_dir():
-                parser.error(f"Required documentation input not found: {required}")
+    versions = list(dict.fromkeys(args.versions))
+    try:
+        for version in versions:
+            validate_version(repo_root, version)
+    except (OSError, ValueError, KeyError) as exc:
+        parser.error(str(exc))
     if shutil.which(args.protoc) is None:
         parser.error(f"Protocol Buffers compiler not found: {args.protoc}")
 
@@ -553,8 +589,8 @@ def main() -> None:
     build_dir.mkdir(parents=True, exist_ok=True)
     site_dir.mkdir(parents=True, exist_ok=True)
 
-    build_landing_page(build_dir, site_dir, args.versions)
-    for version in args.versions:
+    build_landing_page(build_dir, site_dir, versions)
+    for version in versions:
         build_version_page(repo_root, build_dir, site_dir, version, args.protoc)
 
 

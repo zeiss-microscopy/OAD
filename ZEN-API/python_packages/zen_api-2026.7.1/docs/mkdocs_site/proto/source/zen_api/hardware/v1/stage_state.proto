@@ -1,0 +1,28 @@
+// ###############################################################
+// Copyright(c) Carl Zeiss AG, Germany. All Rights Reserved.
+//
+// Permission is granted to use and distribute this code,
+// as long as this copyright notice remains part of the code.
+// ###############################################################
+
+syntax = "proto3";
+package zen_api.hardware.v1;
+
+// Stage state for ZenApi.
+enum StageState {
+   // Default enum value.
+   STAGE_STATE_UNSPECIFIED = 0;
+   // Should not occur in a well configured system.
+   STAGE_STATE_UNKNOWN = 1;
+   // The stage cannot perform any task. Software restart and/or
+   // physical intervention is required.
+   STAGE_STATE_ERROR = 2;
+   // The state is functioning normally and can be used.
+   STAGE_STATE_NORMAL = 3;
+   // The stage is in the process of reinitializing one or more axes, should not be used, and will
+   // ignore value sets and commands other than stop.
+   STAGE_STATE_INITIALIZING = 4;
+   // The stage will respond to motion commands, but positions may be reported erroneously,
+   // and the stage should be initialized before further use.
+   STAGE_STATE_INITIALIZATION_NEEDED = 5;
+}
