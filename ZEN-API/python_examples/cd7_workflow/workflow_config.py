@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
-# File        : config.py
-# Author      : SRh
+# File        : workflow_config.py
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # All user-tunable parameters for the CD7 per-well acquisition
@@ -15,15 +12,15 @@
 # as long as this copyright notice remains part of the code.
 #################################################################
 
+from datetime import datetime, timezone
 from pathlib import Path
-from datetime import datetime
 
 # ---------------------------------------------------------------------------
 # ZEN-API connection
 # ---------------------------------------------------------------------------
 
-# Path to the gRPC config file (absolute, or relative to cd7_workflow.py)
-CONFIG_FILE: str = r"F:\GitHub\OAD\ZEN-API\python_examples\my_config.ini"
+# Absolute paths are used directly. Relative paths start at python_examples.
+CONFIG_FILE: str = r"F:\GitHub\ZEN_API\python_examples\my_config.ini"
 
 # ---------------------------------------------------------------------------
 # Wells to visit (well IDs in Excel-style notation, e.g. "A1", "H12")
@@ -31,11 +28,15 @@ CONFIG_FILE: str = r"F:\GitHub\OAD\ZEN-API\python_examples\my_config.ini"
 
 WELLS: list[str] = ["A1", "A2", "A3", "B1", "B2", "C5", "D6", "H12"]
 
+# Reorder WELLS with a nearest-neighbor heuristic to reduce stage travel.
+# The first configured well remains the starting point.
+OPTIMIZE_WELL_ORDER: bool = True
+
 # ---------------------------------------------------------------------------
 # Experiment names (without the .czexp extension)
 # ---------------------------------------------------------------------------
 
-# Experiment used for Software Autofocus (SWAF) — typically a fast single-channel snap
+# SWAF (software autofocus) normally uses a fast, single-channel experiment.
 RUN_SWAF: bool = False
 SWAF_EXPERIMENT: str = "ZEN_API_CD7_Workflow"
 
@@ -55,11 +56,14 @@ CHANGE_TO_ACQ_OBJECTIVE: bool = False
 OBJECTIVE_POS_ACQ: int = 4
 
 # ---------------------------------------------------------------------------
-# Z-stack parameters applied per well (in metres)
+# Per-well Z-stack updates
 # ---------------------------------------------------------------------------
 
-# Total z-stack range
-MODIFY_ZSTACK: bool = False
+# When enabled, the workflow clones ACQ_EXPERIMENT once and updates that
+# reusable clone's Z-stack center for each well. This requires RUN_SWAF = True.
+MODIFY_ZSTACK: bool = True
+ZSTACK_RANGE_M: float = 20.0 * 1e-6
+ZSTACK_INTERVAL_M: float = 3.0 * 1e-6
 
 # ---------------------------------------------------------------------------
 # Output
@@ -69,16 +73,20 @@ MODIFY_ZSTACK: bool = False
 # e.g. "A1_20260225_143022"
 FILENAME_TIMESTAMP_FORMAT: str = "%Y%m%d_%H%M%S"
 
-# Folder where ZEN saves CZI files
-# Must match the "Image output path" configured in ZEN.
+# Keep CZI files in ZEN's configured image output folder and write the result
+# CSV there as well. This is fastest because the run API cannot select another
+# output directory and no post-acquisition file move is required.
+USE_ZEN_OUTPUT_FOLDER_DIRECTLY: bool = False
+
+# Destination root used only when USE_ZEN_OUTPUT_FOLDER_DIRECTLY is False.
 IMAGE_FOLDER: Path = Path(r"f:\Zen_Output\cd7_workflow")
 EXPERIMENT_SUBFOLDER: Path = (
-    IMAGE_FOLDER / f"Experiment_{datetime.now().strftime(FILENAME_TIMESTAMP_FORMAT)}"
-)  # Subfolder per experiment (can be empty)
+    IMAGE_FOLDER / f"Experiment_{datetime.now(timezone.utc).strftime(FILENAME_TIMESTAMP_FORMAT)}"
+)  # Created on demand when the first CZI or result CSV is written.
 
 
 # ---------------------------------------------------------------------------
-# Image analysis (ZEN Workflow job queue)
+# Local image analysis queue
 # ---------------------------------------------------------------------------
 
 RUN_IMAGE_ANALYSIS: bool = True
@@ -100,5 +108,5 @@ FILE_SETTLE_S: float = 3.0
 # Short pause between stage moves to let the system settle (seconds)
 MOVE_SETTLE_S: float = 0.5
 
-# Timeout passed to find_auto_focus() (seconds)
+# Timeout sent to the ZEN software-autofocus operation (seconds)
 SWAF_TIMEOUT_S: int = 15

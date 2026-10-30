@@ -1,24 +1,23 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : cd7_workflow.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
 # CellDiscoverer 7 — per-well acquisition + parallel image analysis workflow.
 #
-# Workflow per well:
+# Optional steps are controlled in workflow_config.py. A fully enabled well
+# follows this sequence:
 #   1. Move to well (SampleCarrier)
 #   2. Find surface (Definite Focus)
 #   3. Switch to SWAF objective
 #   4. Run SWAF → best-focus Z
 #   5. Switch to acquisition objective
-#   6. Clone acquisition experiment, set z-stack center to Z from SWAF
+#   6. Update the reusable acquisition clone's Z-stack center from SWAF
 #   7. Run acquisition → save CZI as <well_id>_<timestamp>.czi
-#   8. Fire-and-forget: wait for file to be written, then submit to analysis queue
+#   8. Schedule file-readiness polling and continue with the next well
 #
-# The analysis worker consumes the queue independently so analysis of well N
-# overlaps with the acquisition of well N+1.
+# File polling and queue consumption run as background asyncio tasks. This lets
+# analysis of well N overlap microscope operations for well N+1; blocking image
+# processing runs in a worker thread. See README.md.
 #
 # Usage:
 #   Activate your Python environment (e.g. conda activate smartmic), then:
@@ -32,58 +31,62 @@
 
 import asyncio
 import sys
+from datetime import datetime, timezone
 from pathlib import Path
-from datetime import datetime
 
 import pandas as pd
 from tqdm import tqdm
 
 # ---------------------------------------------------------------------------
 # Make the parent directory (python_examples) importable so that
-# zen_api_utils and zen_api packages are found when running this script
-# from inside the cd7_workflow subfolder.
+# processing_tools is found when running from the cd7_workflow subfolder.
+# zen_api_utils and zen_api must be installed in the active environment.
 # ---------------------------------------------------------------------------
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from grpclib.exceptions import GRPCError
-
-# Local modules
+# Import the tutorial modules only after python_examples is on sys.path.
 import workflow_config as cfg
+from analysis_queue import analysis_worker, enqueue_when_ready
+from grpclib.exceptions import GRPCError
 from well_tasks import (
-    move_to_well,
+    clone_acquisition_experiment,
     find_surface,
-    switch_objective,
-    run_swaf,
-    prepare_zstack_experiment,
+    get_image_output_folder,
+    move_to_well,
+    optimize_well_order,
     run_acquisition,
+    run_swaf,
+    switch_objective,
+    update_zstack_experiment,
 )
-from analysis_queue import enqueue_when_ready, analysis_worker
-
-# zen_api_utils helpers
-from zen_api_utils.misc import set_logging, initialize_zenapi
-from zen_api_utils.sample_carrier import WellPlate
-
-# Hardware service stubs
-from zen_api.lm.hardware.v1 import (
-    SampleCarrierServiceStub,
-    SampleCarrierServiceGetInfoRequest,
-)
-from zen_api.lm.hardware.v2 import (
-    FocusServiceStub,
-    ObjectiveChangerServiceStub,
+from zen_api.acquisition.v1beta import (
+    ExperimentServiceLoadRequest,
+    ExperimentServiceStub,
 )
 
 # Acquisition service stubs
 from zen_api.lm.acquisition.v1 import (
     DefiniteFocusServiceStub,
     ExperimentSwAutofocusServiceStub,
+    ZStackServiceGetZStackInfoRequest,
     ZStackServiceStub,
 )
-from zen_api.acquisition.v1beta import (
-    ExperimentServiceStub,
-    ExperimentServiceLoadRequest,
+
+# Hardware service stubs
+from zen_api.lm.hardware.v1 import (
+    SampleCarrierServiceGetInfoRequest,
+    SampleCarrierServiceStub,
+)
+from zen_api.lm.hardware.v2 import (
+    FocusServiceStub,
+    FocusServiceGetPositionRequest,
+    ObjectiveChangerServiceStub,
 )
 
+# zen_api_utils helpers
+from zen_api_utils.misc import initialize_zenapi, set_logging
+from zen_api_utils.experiment import show_zstack_info_LM
+from zen_api_utils.sample_carrier import WellPlate
 
 # ---------------------------------------------------------------------------
 # Main
@@ -91,9 +94,13 @@ from zen_api.acquisition.v1beta import (
 
 
 async def main() -> None:
+    """Run the configured plate acquisition and collect image-analysis results."""
+
     # -----------------------------------------------------------------------
-    # 1. Connect
+    # Connect to ZEN
     # -----------------------------------------------------------------------
+    # CONFIG_FILE may be absolute. pathlib keeps an absolute right-hand path
+    # unchanged; a relative value is resolved below python_examples.
     config_path = Path(__file__).parent.parent / cfg.CONFIG_FILE
     channel, metadata = initialize_zenapi(config_path)
 
@@ -103,7 +110,8 @@ async def main() -> None:
 
     try:
         # -------------------------------------------------------------------
-        # Instantiate all services
+        # Create lightweight clients for the ZEN services used by this example.
+        # Every stub shares the same gRPC channel and authentication metadata.
         # -------------------------------------------------------------------
         sample_carrier_service = SampleCarrierServiceStub(channel=channel, metadata=metadata)
         focus_service = FocusServiceStub(channel=channel, metadata=metadata)
@@ -114,21 +122,29 @@ async def main() -> None:
         exp_service = ExperimentServiceStub(channel=channel, metadata=metadata)
 
         # -------------------------------------------------------------------
-        # Discover plate layout from the hardware
+        # Discover the plate layout from the hardware instead of assuming a
+        # fixed format such as 96 or 384 wells.
         # -------------------------------------------------------------------
         info = await sample_carrier_service.get_info(SampleCarrierServiceGetInfoRequest())
         logger.info(f"Sample carrier: {info.name}  " f"({info.rows} rows × {info.columns} columns)")
         plate = WellPlate(info.rows, info.columns)
 
-        # Validate all requested wells before starting any movement
+        # Validate the complete worklist before the first hardware movement.
         invalid = [w for w in cfg.WELLS if w not in plate]
         if invalid:
             raise ValueError(
                 f"The following wells are outside the plate layout " f"({info.rows}×{info.columns}): {invalid}"
             )
 
+        # if cfg.MODIFY_ZSTACK and not cfg.RUN_SWAF:
+        #     raise ValueError("MODIFY_ZSTACK requires RUN_SWAF so each well has a focus position")
+
+        well_ids = optimize_well_order(plate, cfg.WELLS) if cfg.OPTIMIZE_WELL_ORDER else list(cfg.WELLS)
+        if well_ids != cfg.WELLS:
+            logger.info(f"Optimized well order: {' → '.join(well_ids)}")
+
         # -------------------------------------------------------------------
-        # Pre-load experiments once (avoids repeated disk I/O per well)
+        # Experiment IDs can be reused, so load each template only once.
         # -------------------------------------------------------------------
         if cfg.RUN_SWAF:
             logger.info(f"Loading SWAF experiment: '{cfg.SWAF_EXPERIMENT}' ...")
@@ -137,19 +153,38 @@ async def main() -> None:
         logger.info(f"Loading acquisition experiment: '{cfg.ACQ_EXPERIMENT}' ...")
         acq_exp = await exp_service.load(ExperimentServiceLoadRequest(experiment_name=cfg.ACQ_EXPERIMENT))
 
+        # Cache ZEN's global output folder instead of querying it for every well.
+        zen_output_folder = await get_image_output_folder(exp_service)
+        if cfg.USE_ZEN_OUTPUT_FOLDER_DIRECTLY:
+            run_output_folder = zen_output_folder
+            acquisition_move_folder = None
+            logger.info(f"Using ZEN output folder directly: {run_output_folder}")
+        else:
+            run_output_folder = cfg.EXPERIMENT_SUBFOLDER
+            acquisition_move_folder = run_output_folder
+            logger.info(f"Completed CZI files will be moved to: {run_output_folder}")
+
+        # A mutable clone is created once, then its Z-stack center is updated
+        # before each sequential acquisition.
+        acquisition_experiment_id = acq_exp.experiment_id
+        if cfg.MODIFY_ZSTACK:
+            acquisition_experiment_id = await clone_acquisition_experiment(
+                exp_service,
+                acq_exp.experiment_id,
+            )
+
         # -------------------------------------------------------------------
-        # Start background analysis worker
+        # Start the producer/consumer analysis pipeline
         # -------------------------------------------------------------------
         analysis_queue: asyncio.Queue[Path] = asyncio.Queue()
 
-        # Shared list — analysis_worker appends one dict per (well, z-plane).
-        # Safe without a lock because asyncio is single-threaded.
-        analysis_results: list[dict] = []
+        # The worker appends one dictionary per (well, Z-plane). No lock is
+        # needed because these asyncio tasks share one event-loop thread.
+        analysis_results: list[dict[str, str | int]] = []
 
-        # Progress bar for image analysis — total is set to the number of
-        # wells; each completed analysis job advances it by 1.
+        # Each completed or failed CZI analysis advances this bar once.
         analysis_pbar = tqdm(
-            total=len(cfg.WELLS),
+            total=len(well_ids),
             desc="Image analysis",
             unit="well",
             position=1,
@@ -169,10 +204,10 @@ async def main() -> None:
         # -------------------------------------------------------------------
         # Per-well acquisition loop
         # -------------------------------------------------------------------
-        enqueue_tasks = []
+        enqueue_tasks: list[asyncio.Task[None]] = []
 
         for well_id in tqdm(
-            cfg.WELLS,
+            well_ids,
             desc="Acquisition    ",
             unit="well",
             position=0,
@@ -183,7 +218,7 @@ async def main() -> None:
             logger.info(f"Well: {well_id}")
             logger.info("-" * 60)
 
-            # Move to well
+            # Microscope operations for one well are intentionally sequential.
             await move_to_well(
                 sample_carrier_service,
                 plate,
@@ -191,21 +226,24 @@ async def main() -> None:
                 settle_s=cfg.MOVE_SETTLE_S,
             )
 
-            # 6b. Find surface with Definite Focus
+            # Surface detection and SWAF are optional, but they provide the
+            # focus position required when MODIFY_ZSTACK is enabled.
             if cfg.RUN_SWAF:
                 try:
-                    z_surface = await find_surface(definite_focus_service, focus_service)
+                    z_surface = await find_surface(definite_focus_service)
                 except GRPCError as exc:
                     logger.error(f"[{well_id}] Definite Focus failed: {exc.message}. " "Skipping well.")
                     continue
 
                 logger.info(f"[{well_id}] Surface Z = {z_surface * 1e6:.3f} µm")
 
-                # 6c. Switch to SWAF objective (low magnification)
+                # A lower-magnification objective can make autofocus faster and
+                # more robust. Leave the current objective unchanged if disabled.
                 if cfg.CHANGE_TO_SWAF_OBJECTIVE:
                     await switch_objective(objchanger_service, cfg.OBJECTIVE_POS_SWAF)
 
-                # Run SWAF
+                # If SWAF cannot find focus, the detected surface is still a
+                # useful fallback for centering the acquisition Z-stack.
                 try:
                     z_focus = await run_swaf(
                         swaf_service,
@@ -217,44 +255,54 @@ async def main() -> None:
                     logger.error(f"[{well_id}] SWAF failed: {exc.message}. " "Using surface Z as fallback.")
                     z_focus = z_surface
 
-                logger.info(f"[{well_id}] Focus  Z = {z_focus * 1e6:.3f} µm")
+            if not cfg.RUN_SWAF:
+                # use the current z-position as fallback for the focus when SWAF is not run
+                z_focus_response = await focus_service.get_position(FocusServiceGetPositionRequest())
+                z_focus = z_focus_response.value
+
+            logger.info(f"[{well_id}] Focus  Z = {z_focus * 1e6:.3f} µm")
 
             if cfg.CHANGE_TO_ACQ_OBJECTIVE:
-                # Switch to acquisition objective (high magnification)
+                # Restore the objective intended for the actual image acquisition.
                 await switch_objective(objchanger_service, cfg.OBJECTIVE_POS_ACQ)
 
             if cfg.MODIFY_ZSTACK:
-                # Clone acquisition experiment, update z-stack center to SWAF focus
-                well_exp_id = await prepare_zstack_experiment(
-                    exp_service=exp_service,
+                # Reuse one clone and change only its center for this well.
+                await update_zstack_experiment(
                     zstack_service=zstack_service,
-                    base_experiment_id=acq_exp.experiment_id,
+                    experiment_id=acquisition_experiment_id,
                     z_center_m=z_focus,
-                    z_range_m=100.0 * 1e-6,
-                    z_interval_m=3.0 * 1e-6,
+                    z_range_m=cfg.ZSTACK_RANGE_M,
+                    z_interval_m=cfg.ZSTACK_INTERVAL_M,
                 )
-            else:
-                well_exp_id = acq_exp.experiment_id
 
-            # Run acquisition — CZI filename: <well>_<timestamp>.czi
-            # ZEN saves to its own output path; the file is then moved to
-            # cfg.EXPERIMENT_SUBFOLDER (one timestamped folder per run).
+                # show update Z-Stack parameters for debugging
+                # get the information about the stack
+                zstack_info = await zstack_service.get_z_stack_info(
+                    ZStackServiceGetZStackInfoRequest(experiment_id=acquisition_experiment_id)
+                )
+
+                show_zstack_info_LM(zstack_info)
+
+            # ZEN first writes <well>_<timestamp>.czi to its configured output
+            # path. run_acquisition moves it only when a destination is set.
             try:
                 czi_path = await run_acquisition(
                     exp_service=exp_service,
-                    experiment_id=well_exp_id,
+                    experiment_id=acquisition_experiment_id,
                     well_id=well_id,
+                    zen_output_folder=zen_output_folder,
                     timestamp_format=cfg.FILENAME_TIMESTAMP_FORMAT,
-                    output_folder=cfg.EXPERIMENT_SUBFOLDER,
+                    output_folder=acquisition_move_folder,
                 )
             except GRPCError as exc:
                 logger.error(f"[{well_id}] Acquisition failed: {exc.message}. Skipping.")
                 continue
 
             if cfg.RUN_IMAGE_ANALYSIS:
-                # Submit file to analysis queue as soon as it is fully written.
-                # create_task() returns immediately — the acquisition loop
-                # continues to the next well while this waits in the background.
+                # Scheduling, rather than awaiting, keeps file-readiness polling
+                # off the sequential microscope path. The loop can start moving
+                # to the next well while this task prepares the previous CZI.
                 task = asyncio.create_task(
                     enqueue_when_ready(
                         queue=analysis_queue,
@@ -266,20 +314,23 @@ async def main() -> None:
                 enqueue_tasks.append(task)
 
         # -------------------------------------------------------------------
-        # Wait for all CZI files to be enqueued …
+        # The producer phase ends only after every successful CZI is ready and
+        # has been placed on the queue.
         # -------------------------------------------------------------------
         logger.info("All wells acquired. Waiting for remaining files to be enqueued ...")
         await asyncio.gather(*enqueue_tasks, return_exceptions=True)
 
         # -------------------------------------------------------------------
-        # Wait for all analysis jobs to finish.
+        # queue.join() pairs with task_done() in analysis_worker and therefore
+        # waits for processing, not merely for the queue to become empty.
         # -------------------------------------------------------------------
         logger.info("All files enqueued. Waiting for analysis jobs to complete ...")
         await analysis_queue.join()
         analysis_pbar.close()
         logger.info("All analysis jobs completed.")
 
-        # Stop the worker cleanly
+        # The worker is intentionally persistent, so cancel it once no more
+        # queue items can arrive.
         worker_task.cancel()
         try:
             await worker_task
@@ -292,12 +343,12 @@ async def main() -> None:
         if cfg.RUN_IMAGE_ANALYSIS and analysis_results:
             df = pd.DataFrame(analysis_results)
 
-            # Sort for readability: well → z-plane
+            # Stable ordering makes the CSV easy to scan and compare between runs.
             df.sort_values(["well_id", "z_plane"], inplace=True)
 
-            ts = datetime.now().strftime(cfg.FILENAME_TIMESTAMP_FORMAT)
-            csv_path = cfg.EXPERIMENT_SUBFOLDER / f"analysis_results_{ts}.csv"
-            cfg.EXPERIMENT_SUBFOLDER.mkdir(parents=True, exist_ok=True)
+            ts = datetime.now(timezone.utc).strftime(cfg.FILENAME_TIMESTAMP_FORMAT)
+            csv_path = run_output_folder / f"analysis_results_{ts}.csv"
+            run_output_folder.mkdir(parents=True, exist_ok=True)
             df.to_csv(csv_path, index=False)
             logger.info(f"Results exported to: {csv_path}")
             logger.info(f"\n{df.to_string(index=False)}")

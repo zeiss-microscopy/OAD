@@ -1,0 +1,68 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "zen_api_utils"
+version = "0.1.0"
+description = "Reusable headless helpers for the ZEN API"
+readme = "README.md"
+requires-python = ">=3.12,<3.16"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Topic :: Scientific/Engineering",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
+    "Operating System :: Unix",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: MacOS",
+]
+license = {file = "LICENSE"}
+authors = [
+    {name = "Sebastian Rhode", email = "sebastian.rhode@zeiss.com"}
+]
+dependencies = [
+    "numpy>=1.24",
+    "grpclib>=0.4",
+    "loguru>=0.7",
+    "pydantic>=2.0",
+    "zen_api>=2026.5.1,<=2026.11.1",
+]
+
+[project.optional-dependencies]
+omezarr = [
+    "ome-writers",
+    "zarr>=3",
+    "ngff-zarr",
+]
+benchmark = [
+    "matplotlib",
+]
+dev = [
+    "pytest>=8",
+]
+all = [
+    "ome-writers",
+    "zarr>=3",
+    "ngff-zarr",
+    "matplotlib",
+    "pytest>=8",
+]
+
+[project.urls]
+#Repository = "https://github.com/zeiss-microscopy/zen_api"
+
+[project.scripts]
+zenapi-stream2omezarr = "zen_api_utils.streaming.pipeline:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/zen_api_utils"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]

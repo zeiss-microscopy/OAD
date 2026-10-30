@@ -1,23 +1,24 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : analysis_queue.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
-# Decouples image analysis from acquisition via an asyncio.Queue.
+# Decouples image analysis from microscope control via an asyncio.Queue.
 #
 # Design:
-#   ┌─────────────────────────┐        asyncio.Queue[Path]
-#   │  Acquisition loop       │  ──────────────────────────►  analysis_worker
-#   │  (per well)             │    enqueue_when_ready(path)       │
-#   │                         │    • polls file existence         │  run_job(path)
-#   │  run_acquisition()  ──► │    • waits for stable file size   │  (ZEN Workflow)
-#   │                         │    • then puts path on queue      │
-#   └─────────────────────────┘                                   │
-#   main loop continues                                           ▼
-#   to next well while                                    queue.task_done()
-#   analysis runs in background
+#   Acquisition loop                 Background pipeline
+#   ----------------                 -------------------
+#   run_acquisition()
+#          |
+#          +-- create_task() ------> wait_for_file_ready()
+#          |                          queue.put(czi_path)
+#          |                                  |
+#   continue with next well             analysis_worker()
+#                                             |
+#                                      queue.task_done()
+#
+# File polling yields through asyncio.sleep(), and run_analysis() dispatches its
+# CPU-bound work to a thread. Microscope control therefore remains responsive while
+# the previous CZI is analyzed.
 #
 # Copyright(c) 2025 Carl Zeiss AG, Germany. All Rights Reserved.
 #
@@ -27,16 +28,11 @@
 
 import asyncio
 from pathlib import Path
-from typing import Optional
+from typing import NoReturn
 
-# import pandas as pd
-from tqdm import tqdm
-
-from zen_api_utils.misc import set_logging
 from image_analysis import run_analysis
-
-# from zen_api.workflows.v3beta import WorkflowServiceStub
-# from zen_api.workflows.v1beta import JobResourcesServiceStub
+from tqdm import tqdm
+from zen_api_utils.misc import set_logging
 
 logger = set_logging()
 
@@ -52,11 +48,12 @@ async def wait_for_file_ready(
     file_settle_s: float = 3.0,
 ) -> None:
     """
-    Block (asynchronously) until *czi_path* exists **and** its size has been
+    Wait asynchronously until *czi_path* exists **and** its size has been
     stable for at least *file_settle_s* seconds.
 
-    This approach works reliably for both local and mapped network drives
-    without requiring any OS-level file-watcher dependency.
+    A stable file size is used as a portable indication that writing has
+    finished. This works on local and mapped network drives without an
+    OS-specific file watcher.
 
     Args:
         czi_path: Path to the CZI file that ZEN is writing.
@@ -66,15 +63,15 @@ async def wait_for_file_ready(
     """
     logger.info(f"Waiting for file to appear: {czi_path}")
 
-    # Phase 1 — wait for the file to be created
+    # Acquisition may return before a network share exposes the new file.
     while not czi_path.exists():
         await asyncio.sleep(poll_interval_s)
 
     logger.info(f"File detected, waiting for write to complete: {czi_path}")
 
-    # Phase 2 — wait for the file size to stabilise
+    # Seeing the file is not enough: ZEN may still be appending image data.
     last_size: int = -1
-    stable_since: Optional[float] = None
+    stable_since: float | None = None
     loop = asyncio.get_event_loop()
 
     while True:
@@ -91,7 +88,7 @@ async def wait_for_file_ready(
             if stable_since is None:
                 stable_since = now
             elif (now - stable_since) >= file_settle_s:
-                break  # Size unchanged for long enough → file is ready
+                break  # Size unchanged for long enough: the file is ready.
         else:
             # File is still growing
             stable_since = None
@@ -109,7 +106,7 @@ async def wait_for_file_ready(
 
 
 async def enqueue_when_ready(
-    queue: asyncio.Queue,
+    queue: asyncio.Queue[Path],
     czi_path: Path,
     poll_interval_s: float = 1.0,
     file_settle_s: float = 3.0,
@@ -137,12 +134,12 @@ async def enqueue_when_ready(
 
 
 async def analysis_worker(
-    queue: asyncio.Queue,
-    results: list[dict],
-    pbar: "tqdm | None" = None,
+    queue: asyncio.Queue[Path],
+    results: list[dict[str, str | int]],
+    pbar: "tqdm[NoReturn] | None" = None,
 ) -> None:
     """
-    Persistent background worker that consumes CZI paths from *queue*,
+    Continuously consume CZI paths from *queue*,
     runs image analysis for each one, and appends per-plane result rows
     to the shared *results* list.
 
@@ -152,7 +149,7 @@ async def analysis_worker(
         - ``czi_file``     : CZI filename (stem only, no extension)
         - ``z_plane``      : 0-based z-plane index
         - ``object_count`` : number of segmented objects on that plane
-        - ``status``       : ``"ok"`` or ``"error"``
+        - ``status``       : ``"ok"`` or ``"error: <message>"``
 
     Args:
         queue: Shared :class:`asyncio.Queue` populated by
@@ -169,12 +166,15 @@ async def analysis_worker(
     while True:
         czi_path: Path = await queue.get()
 
-        # Extract well_id from filename: "A1_20260225_143022.czi" → "A1"
+        # Remove the final date and time fields:
+        # "A1_20260225_143022.czi" -> "A1". Joining the preceding fields also
+        # supports well identifiers that contain underscores.
         stem_parts = czi_path.stem.split("_")
         well_id = "_".join(stem_parts[:-2]) if len(stem_parts) > 2 else czi_path.stem
 
-        # here the actual image analysis happens
         try:
+            # One queue item represents one CZI; run_analysis returns one count
+            # for every Z-plane in that file.
             counts: list[int] = await run_analysis(
                 czi_path,
                 measure_properties=("label", "area", "centroid", "bbox"),
@@ -193,12 +193,13 @@ async def analysis_worker(
                 )
 
         except asyncio.CancelledError:
-            queue.task_done()
+            # Do not convert shutdown into an analysis-error row. The finally
+            # block still balances the queue item before cancellation propagates.
             raise
 
-        except Exception as exc:
+        except (IndexError, OSError, RuntimeError, TypeError, ValueError) as exc:
             logger.error(f"Analysis worker FAILED for {czi_path.name}: {exc}")
-            # Still record a row so every well appears in the output table
+            # Preserve failed wells in the CSV instead of silently dropping them.
             results.append(
                 {
                     "well_id": well_id,
@@ -210,6 +211,8 @@ async def analysis_worker(
             )
 
         finally:
+            # queue.join() in the orchestrator can return only after every item
+            # retrieved with queue.get() has a matching task_done() call.
             queue.task_done()
             if pbar is not None:
                 pbar.update(1)

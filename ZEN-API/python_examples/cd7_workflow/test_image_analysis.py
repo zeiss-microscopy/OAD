@@ -1,11 +1,8 @@
-# -*- coding: utf-8 -*-
-
 #################################################################
 # File        : test_image_analysis.py
-# Author      : SRh
 # Institution : Carl Zeiss Microscopy GmbH
 #
-# Minimal test script for run_analysis().
+# Minimal hardware-independent smoke test for run_analysis().
 # Runs the analysis on a local CZI file and prints the per-plane
 # object counts and a brief summary to the console.
 #
@@ -23,20 +20,22 @@ import sys
 from pathlib import Path
 
 # ---------------------------------------------------------------------------
-# Make zen_api_utils / processing_tools importable when running from this
-# subfolder (cd7_workflow).
+# Make processing_tools importable when running from this subfolder.
 # ---------------------------------------------------------------------------
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from image_analysis import run_analysis
 
 # ---------------------------------------------------------------------------
-# Test file
+# Sample data
 # ---------------------------------------------------------------------------
-CZI_FILE = Path(r"F:\GitHub\OAD\ZEN-API\python_examples\cd7_workflow\Z=7.czi")
+# Change this path to analyze another CZI without running the microscope
+# acquisition workflow.
+CZI_FILE = Path(__file__).resolve().with_name("Z=7.czi")
 
 
 async def main() -> None:
+    """Analyze the bundled CZI and print per-plane counts and a summary."""
     print(f"CZI file : {CZI_FILE}")
     print(f"Exists   : {CZI_FILE.exists()}")
 
@@ -44,12 +43,14 @@ async def main() -> None:
         print("ERROR: CZI file not found — aborting.")
         return
 
+    # run_analysis is async so this test uses the same call pattern as the
+    # background worker, while avoiding any ZEN API connection or movement.
     print("\nRunning analysis ...")
     counts = await run_analysis(CZI_FILE)
 
     print("\n--- Results ---")
-    for z, n in enumerate(counts):
-        print(f"  Z-plane {z:>3d} : {n:>6d} objects")
+    for z_plane, count in enumerate(counts):
+        print(f"  Z-plane {z_plane:>3d} : {count:>6d} objects")
 
     print("\n--- Summary ---")
     print(f"  Z-planes analysed : {len(counts)}")
