@@ -307,6 +307,10 @@ def test_workflow_publishes_separate_docs_and_retains_utility_snapshots():
     }
     pages = next(step for step in steps if step.get("uses", "").startswith("actions/upload-pages-artifact@"))
     assert pages["with"]["path"] == "site"
+    artifact_name = "github-pages-${{ github.run_id }}-${{ github.run_attempt }}"
+    assert pages["with"]["name"] == artifact_name
+    deployment = next(step for step in steps if step.get("uses", "").startswith("actions/deploy-pages@"))
+    assert deployment["with"]["artifact_name"] == artifact_name
     history = next(step for step in steps if step.get("uses", "").startswith("peaceiris/actions-gh-pages@"))
     assert history["with"]["publish_branch"] == "zen-api-utils-docs-history"
     assert history["with"]["publish_dir"] == "site/zen_api_utils"

@@ -265,10 +265,13 @@ jobs:
             - name: Upload GitHub Pages artifact
               uses: actions/upload-pages-artifact@v4
               with:
+                  name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
                   path: site
             - name: Deploy to GitHub Pages
               id: deployment
               uses: actions/deploy-pages@v5
+              with:
+                  artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
             - name: Retain utility snapshots for subsequent Pages deployments
               uses: peaceiris/actions-gh-pages@v4
               with:
