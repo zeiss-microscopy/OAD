@@ -504,7 +504,12 @@ def generate_pyramids(
         else None
     )
 
-    for image_path in image_paths:
+    logger.info(
+        "Generating %s pyramid level(s) for %s image(s) ...",
+        pyramid_levels,
+        len(image_paths),
+    )
+    for image_index, image_path in enumerate(image_paths, start=1):
         existing = nz.from_ngff_zarr(image_path, validate=True)
         base_image = existing.images[0]
         if not {"y", "x"}.issubset(base_image.dims):
@@ -525,6 +530,7 @@ def generate_pyramids(
         for level, dataset in enumerate(multiscales.metadata.datasets):
             dataset.path = str(level)
 
+        # start_level=1 reuses level 0; sharding applies only to new levels.
         nz.to_ome_zarr(
             image_path,
             multiscales,
@@ -533,3 +539,10 @@ def generate_pyramids(
             start_level=1,
             chunks_per_shard=chunks_per_shard,
         )
+        logger.info(
+            "Pyramid image %s/%s complete: %s",
+            image_index,
+            len(image_paths),
+            image_path,
+        )
+    logger.info("OME-Zarr pyramid generation completed: %s", zarr_path)

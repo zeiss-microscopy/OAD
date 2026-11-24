@@ -3,6 +3,14 @@
 Reusable, headless helpers for applications built on the generated `zen_api`
 protobuf and gRPC package.
 
+## Documentation Versions
+
+This site's version dropdown selects `zen_api_utils` releases independently of
+the [ZEN API documentation](https://zeiss-microscopy.github.io/OAD/).
+The **Documented Version** page identifies the current utility snapshot.
+Install an API version within the utility package's declared dependency range;
+the two package version numbers do not need to match.
+
 ## Contents
 
 The API reference includes connection and logging helpers, experiment and

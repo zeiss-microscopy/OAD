@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<MultiImageDocument version="1.0">
+  <Grouping>
+  </Grouping>
+  <Documents>
+    <Document WellId="A1" Row="1" Col="1" Field="1">hcs-Scene-1-P1-A01.czi</Document>
+    <Document WellId="A1" Row="1" Col="1" Field="2">hcs-Scene-2-P2-A01.czi</Document>
+    <Document WellId="A1" Row="1" Col="1" Field="3">hcs-Scene-3-P3-A01.czi</Document>
+    <Document WellId="A1" Row="1" Col="1" Field="4">hcs-Scene-4-P4-A01.czi</Document>
+    <Document WellId="B1" Row="2" Col="1" Field="1">hcs-Scene-5-P1-B01.czi</Document>
+    <Document WellId="B1" Row="2" Col="1" Field="2">hcs-Scene-6-P2-B01.czi</Document>
+    <Document WellId="B1" Row="2" Col="1" Field="3">hcs-Scene-7-P3-B01.czi</Document>
+    <Document WellId="B1" Row="2" Col="1" Field="4">hcs-Scene-8-P4-B01.czi</Document>
+  </Documents>
+</MultiImageDocument>

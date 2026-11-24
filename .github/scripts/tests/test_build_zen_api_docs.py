@@ -1,4 +1,4 @@
-"""Regression checks for combined ZEN API documentation and CI artifacts."""
+"""Regression checks for independently versioned ZEN API documentation and artifacts."""
 
 import importlib.util
 import json
@@ -67,23 +67,101 @@ def sources(tmp_path):
     return tmp_path
 
 
-def test_combined_navigation_and_versions(builder, sources, monkeypatch):
-    """Keep API URLs while adding utility references and exact source versions."""
+def test_separate_navigation_and_versions(builder, sources, monkeypatch):
+    """Keep API URLs and give utilities their own reference and version selector."""
     configs = []
     monkeypatch.setattr(builder, "run_mkdocs", lambda path, **kwargs: configs.append(path))
     monkeypatch.setattr(builder, "generate_proto_pages", lambda *args: [{"Overview": "proto/index.md"}])
     builder.build_version_page(sources, sources / "build", sources / "site", "2026.7.1")
+    builder.build_utility_page(sources, sources / "build", sources / "site")
     config = yaml.safe_load(configs[0].read_text(encoding="utf-8"))
     docs = Path(config["docs_dir"])
-    assert config["extra"]["documented_versions"] == {"zen_api": "2026.7.1", "zen_api_utils": "0.1.0"}
+    assert config["extra"]["documented_versions"] == {"zen_api": "2026.7.1"}
+    assert config["extra"]["version"]["provider"] == "mike"
     assert (docs / "reference/common/v1.md").is_file()
-    assert "::: zen_api_utils.misc" in (docs / "reference/zen_api_utils/misc.md").read_text(encoding="utf-8")
-    assert (docs / "guides/zen_api_utils/index.md").is_file()
+    assert not (docs / "reference/zen_api_utils").exists()
+    assert not (docs / "guides/zen_api_utils").exists()
+    assert {"Utilities Documentation": "https://zeiss-microscopy.github.io/OAD/zen_api_utils/"} in config["nav"]
     assert config["nav"][-1] == {"Protocol Buffer Reference": [{"Overview": "proto/index.md"}]}
     handler = config["plugins"][-1]["mkdocstrings"]["handlers"]["python"]
-    assert len(handler["paths"]) == 2
+    assert len(handler["paths"]) == 1
     assert config["strict"] is True
     assert ">=3.12,<3.16" in (docs / "index.md").read_text(encoding="utf-8")
+    utility_config = yaml.safe_load(configs[1].read_text(encoding="utf-8"))
+    utility_docs = Path(utility_config["docs_dir"])
+    assert utility_config["site_url"] == "https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.1.0/"
+    assert Path(utility_config["site_dir"]) == sources / "site/zen_api_utils/0.1.0"
+    assert utility_config["extra"]["documented_versions"] == {"zen_api_utils": "0.1.0"}
+    assert utility_config["extra"]["version"]["provider"] == "mike"
+    assert "::: zen_api_utils.misc" in (utility_docs / "reference/zen_api_utils/misc.md").read_text(encoding="utf-8")
+    assert not (utility_docs / "proto").exists()
+    assert {"ZEN API Documentation": "https://zeiss-microscopy.github.io/OAD/"} in utility_config["nav"]
+
+
+def test_build_keeps_utility_history_and_separate_selectors(builder, sources, monkeypatch):
+    """A full Pages deployment must not erase previously published utility versions."""
+    previous = sources / "previous-utilities"
+    (previous / "0.0.9").mkdir(parents=True)
+    (previous / "0.0.9/index.html").write_text("Historical utilities", encoding="utf-8")
+    (previous / "0.1.0").mkdir()
+    (previous / "0.1.0/index.html").write_text("Previous current snapshot", encoding="utf-8")
+    (previous / "versions.json").write_text(
+        json.dumps([
+            {"version": "0.1.0", "title": "0.1.0", "aliases": ["latest"]},
+            {"version": "0.0.9", "title": "0.0.9", "aliases": []},
+        ]),
+        encoding="utf-8",
+    )
+    monkeypatch.setattr(builder.shutil, "which", lambda command: "protoc")
+    monkeypatch.setattr(builder, "generate_proto_pages", lambda *args: [])
+
+    def build_site(path, **kwargs):
+        config = yaml.safe_load(path.read_text(encoding="utf-8"))
+        output = Path(config["site_dir"])
+        output.mkdir(parents=True, exist_ok=True)
+        (output / "index.html").write_text(config["site_name"], encoding="utf-8")
+
+    monkeypatch.setattr(builder, "run_mkdocs", build_site)
+    monkeypatch.setattr(
+        sys, "argv",
+        ["builder", "--repo-root", str(sources), "--versions", "2026.7.1",
+         "--previous-utils-site-dir", str(previous)],
+    )
+    builder.main()
+    site = sources / "site"
+    assert (site / "zenapi/2026.7.1/index.html").read_text(encoding="utf-8") == "ZEN API 2026.7.1"
+    assert (site / "zen_api_utils/0.0.9/index.html").read_text(encoding="utf-8") == "Historical utilities"
+    assert (site / "zen_api_utils/0.1.0/index.html").read_text(encoding="utf-8") == "ZEN API Utilities 0.1.0"
+    api_versions = json.loads((site / "zenapi/versions.json").read_text(encoding="utf-8"))
+    utility_versions = json.loads((site / "zen_api_utils/versions.json").read_text(encoding="utf-8"))
+    assert api_versions == [{"version": "2026.7.1", "title": "2026.7.1", "aliases": ["latest"]}]
+    assert utility_versions == [
+        {"version": "0.1.0", "title": "0.1.0", "aliases": ["latest"]},
+        {"version": "0.0.9", "title": "0.0.9", "aliases": []},
+    ]
+    assert "0.1.0/" in (site / "zen_api_utils/index.html").read_text(encoding="utf-8")
+
+
+@pytest.mark.parametrize("manifest", [
+    {"not": "a version list"},
+    [{"version": "../outside"}],
+    [{"version": "0.0.9"}],
+])
+def test_invalid_utility_history_preserves_output(builder, sources, monkeypatch, manifest):
+    previous = sources / "previous-utilities"
+    previous.mkdir()
+    (previous / "versions.json").write_text(json.dumps(manifest), encoding="utf-8")
+    site = sources / "site"
+    site.mkdir()
+    marker = site / "keep.txt"
+    marker.write_text("keep", encoding="utf-8")
+    monkeypatch.setattr(sys, "argv", [
+        "builder", "--repo-root", str(sources), "--versions", "2026.7.1",
+        "--previous-utils-site-dir", str(previous),
+    ])
+    with pytest.raises(SystemExit):
+        builder.main()
+    assert marker.read_text(encoding="utf-8") == "keep"
 
 
 def test_proto_reference_and_original_sources(builder, sources):
@@ -213,6 +291,28 @@ def test_workflow_builds_fresh_versioned_artifacts_and_opt_in_releases():
     assert "zen_api_utils_package" not in workflow.read_text(encoding="utf-8")
 
 
+def test_workflow_publishes_separate_docs_and_retains_utility_snapshots():
+    workflow = Path(__file__).resolve().parents[2] / "workflows/deploy-zen-api-docs.yml"
+    config = yaml.safe_load(workflow.read_text(encoding="utf-8"))
+    job = config["jobs"]["deploy-docs"]
+    assert job["permissions"]["contents"] == "write"
+    steps = job["steps"]
+    commands = "\n".join(step.get("run", "") for step in steps)
+    assert "git ls-remote --exit-code origin refs/heads/zen-api-utils-docs-history" in commands
+    assert '"$status" != "2"' in commands
+    assert '--previous-utils-site-dir "$PREVIOUS_UTILS_SITE"' in commands
+    artifacts = [step["with"] for step in steps if step.get("uses", "").startswith("actions/upload-artifact@")]
+    assert {artifact["path"] for artifact in artifacts} == {
+        "site/zenapi", "site/zen_api_utils/${{ needs.settings.outputs.utils_version }}"
+    }
+    pages = next(step for step in steps if step.get("uses", "").startswith("actions/upload-pages-artifact@"))
+    assert pages["with"]["path"] == "site"
+    history = next(step for step in steps if step.get("uses", "").startswith("peaceiris/actions-gh-pages@"))
+    assert history["with"]["publish_branch"] == "zen-api-utils-docs-history"
+    assert history["with"]["publish_dir"] == "site/zen_api_utils"
+    assert config["concurrency"]["cancel-in-progress"] is False
+
+
 def test_utility_release_uses_tested_wheels_and_explicit_approval():
     """Publish one utility artifact only after testing its wheel, never editable sources."""
     workflow = Path(__file__).resolve().parents[2] / "workflows/deploy-zen-api-docs.yml"
@@ -272,7 +372,7 @@ def test_workflow_defaults_match_supported_bundled_sources(builder):
         api_project, utils_project = builder.validate_version(repo_root, version)
         assert api_project["version"] == version
         assert api_project["requires-python"] == ">=3.12,<3.16"
-        assert utils_project["version"] == "0.1.0"
+        assert str(Version(utils_project["version"])) == utils_project["version"]
         assert f"https://zeiss-microscopy.github.io/OAD/zenapi/{version}/" in readme
 
 

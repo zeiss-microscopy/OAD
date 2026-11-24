@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "zen_api_utils"
-version = "0.1.0"
+version = "0.2.0"
 description = "Reusable headless helpers for the ZEN API"
 readme = "README.md"
 requires-python = ">=3.12,<3.16"
@@ -36,6 +36,9 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+dataframe = [
+    "pandas>=2.0",
+]
 omezarr = [
     "ome-writers",
     "zarr>=3",
@@ -48,6 +51,7 @@ dev = [
     "pytest>=8",
 ]
 all = [
+    "pandas>=2.0",
     "ome-writers",
     "zarr>=3",
     "ngff-zarr",

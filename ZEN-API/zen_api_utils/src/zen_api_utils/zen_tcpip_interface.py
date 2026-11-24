@@ -6,7 +6,7 @@ from zen_api_utils.zen_tcpip import ZenTCPIP
 
 
 def main() -> None:
-    """Run the example acquisition using the local ZEN TCP interface."""
+    """Run the example acquisition, raising RuntimeError if a TCP command fails."""
     savefolder = r"F:\Zen_Output"
     experiment_name = "ZEN_API_Test.czexp"
     czi_name = "from_TCPIP.czi"
@@ -23,7 +23,9 @@ def main() -> None:
     try:
         for command in commands:
             print(command)
-            zen_tcp.tcp_eval_expression_and_wait_for_ok(connection, command, 200)
+            success, answer = zen_tcp.tcp_eval_expression_and_wait_for_ok(connection, command, 200)
+            if not success:
+                raise RuntimeError(f"ZEN TCP command {command!r} failed: {answer!r}")
     finally:
         connection.close()
     print(f"CZI saved to: {Path(savefolder) / czi_name}")

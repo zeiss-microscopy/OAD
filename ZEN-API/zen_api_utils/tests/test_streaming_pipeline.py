@@ -436,6 +436,28 @@ def test_out_of_order_and_duplicate_frames_preserve_unique_count(harness: Simple
     assert status["received_frames"] == status["expected_frames"] == 2
 
 
+@pytest.mark.parametrize("mode", ["configured", "buffered"])
+def test_matching_frames_renew_inactivity_timeout(harness: SimpleNamespace, mode: str) -> None:
+    """A healthy acquisition may run longer than its inactivity timeout."""
+    harness.acquisition = replace(harness.acquisition, dimensions=AcquisitionDimensions(1, 1, 8, 1))
+    harness.status.zstack_slices_count = 8
+    harness.frames[0] = [_frame(z_index=index, value=index + 1) for index in range(8)]
+
+    class PacedMonitor(_Monitor):
+        async def __anext__(self) -> SimpleNamespace:
+            await asyncio.sleep(0.1)
+            return await super().__anext__()
+
+    harness.channel.request.side_effect = lambda *args, **kwargs: PacedMonitor(harness)
+
+    output = asyncio.run(_run_acquisition(harness, mode, inactivity_timeout=0.6))
+
+    status = json.loads((output / "acquisition_status.json").read_text(encoding="utf-8"))
+    assert status["complete"] is True
+    assert status["received_frames"] == 8
+    np.testing.assert_array_equal(_pixels(output)[:, 0, 0], np.arange(1, 9))
+
+
 @pytest.mark.parametrize("fail_start", [False, True])
 def test_existing_start_helper_still_loads_and_closes(
     harness: SimpleNamespace, monkeypatch: pytest.MonkeyPatch, fail_start: bool

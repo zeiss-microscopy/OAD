@@ -194,9 +194,13 @@ jobs:
               run: python -m pytest ZEN-API/zen_api_utils/tests -q -o pythonpath= --import-mode=importlib
 
     deploy-docs:
-        name: Deploy combined ZEN API documentation to GitHub Pages
+        name: Deploy separate API and utility documentation to GitHub Pages
         runs-on: ubuntu-latest
         needs: [settings, build-packages, test-utilities]
+        permissions:
+            contents: write
+            pages: write
+            id-token: write
         steps:
             - uses: actions/checkout@v5
             - uses: actions/setup-python@v6
@@ -209,19 +213,53 @@ jobs:
                   sudo apt-get update
                   sudo apt-get install --yes protobuf-compiler
                   protoc --version
-            - name: Install combined documentation dependencies
+            - name: Install documentation dependencies
               run: |
                   python -m pip install --upgrade pip
                   python -m pip install mkdocs-material "mkdocstrings[python]" pyyaml packaging "betterproto==2.0.0b7" pytest
                   python -m pip install numpy grpclib loguru pydantic ome-writers zarr ngff-zarr matplotlib
                   python -m pip install --no-deps -e ./ZEN-API/zen_api_utils
-            - name: Test combined documentation builder
+            - name: Test documentation builder
               run: python -m pytest .github/scripts/tests/test_build_zen_api_docs.py -q
-            - name: Build versioned MkDocs Material sites
+            - name: Restore previously published utility documentation
+              id: utility_history
+              shell: bash
+              run: |
+                  if git ls-remote --exit-code origin refs/heads/zen-api-utils-docs-history > "$RUNNER_TEMP/utils-docs-ref"; then
+                    git fetch origin zen-api-utils-docs-history
+                    git worktree add --detach "$RUNNER_TEMP/utility-docs-history" FETCH_HEAD
+                    echo "path=$RUNNER_TEMP/utility-docs-history" >> "$GITHUB_OUTPUT"
+                  else
+                    status=$?
+                    if [[ "$status" != "2" ]]; then
+                      echo "Failed to query utility documentation history." >&2
+                      exit "$status"
+                    fi
+                    echo "No previous utility documentation; publishing the first snapshot."
+                  fi
+            - name: Build independently versioned MkDocs Material sites
+              env:
+                  PREVIOUS_UTILS_SITE: ${{ steps.utility_history.outputs.path }}
               shell: bash
               run: |
                   read -r -a versions <<< "$DOC_VERSIONS"
-                  python .github/scripts/build_zen_api_docs.py --versions "${versions[@]}"
+                  history_args=()
+                  if [[ -n "$PREVIOUS_UTILS_SITE" ]]; then
+                    history_args=(--previous-utils-site-dir "$PREVIOUS_UTILS_SITE")
+                  fi
+                  python .github/scripts/build_zen_api_docs.py --versions "${versions[@]}" "${history_args[@]}"
+            - name: Upload API documentation artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: zen_api-mkdocs-sites
+                  path: site/zenapi
+                  if-no-files-found: error
+            - name: Upload utility documentation artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: zen_api_utils-${{ needs.settings.outputs.utils_version }}-mkdocs-site
+                  path: site/zen_api_utils/${{ needs.settings.outputs.utils_version }}
+                  if-no-files-found: error
             - name: Configure GitHub Pages
               uses: actions/configure-pages@v6
             - name: Upload GitHub Pages artifact
@@ -231,6 +269,12 @@ jobs:
             - name: Deploy to GitHub Pages
               id: deployment
               uses: actions/deploy-pages@v5
+            - name: Retain utility snapshots for subsequent Pages deployments
+              uses: peaceiris/actions-gh-pages@v4
+              with:
+                  github_token: ${{ secrets.GITHUB_TOKEN }}
+                  publish_branch: zen-api-utils-docs-history
+                  publish_dir: site/zen_api_utils
 
     publish-releases:
         name: Publish zen_api ${{ matrix.version }} release assets

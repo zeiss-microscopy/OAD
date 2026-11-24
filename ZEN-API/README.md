@@ -30,19 +30,53 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 |    zen_api-2026.7.1    | ZEN core 3.14 | [2026.7.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.7.1/)   |
 |   zen_api-2026.11.1    |   ZEN 3.15    | [2026.11.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.11.1/) |
 
-The combined documentation workflow defaults to API `2026.11.1`, `2026.7.1`, and `2026.5.1`,
-paired with the independently versioned `zen_api_utils` package in `zen_api_utils/`.
+The documentation workflow defaults to API `2026.11.1`, `2026.7.1`, and `2026.5.1`,
+and the independently versioned `zen_api_utils` package in `zen_api_utils/`.
 It builds the utility wheel and source distribution once per workflow run, then
 tests that same utility wheel against each selected API wheel on Python 3.12
 through 3.15 before publishing. Selected versions must use unpadded `YYYY.M.PATCH` names,
 have matching package and proto inputs, and satisfy the utility's declared API
 dependency range. The historical `2025.10.1` package is outside that range and
-is not included in the combined site.
+is not included in the published API sites.
+
+API and utility documentation are published separately:
+
+- Existing API URLs above remain unchanged. Each API site has an API version
+  dropdown, populated by the selected API versions.
+- [Utility documentation](https://zeiss-microscopy.github.io/OAD/zen_api_utils/)
+  has its own version dropdown, with snapshots at
+  `https://zeiss-microscopy.github.io/OAD/zen_api_utils/<utility-version>/`.
+  The utility version comes from its own committed `pyproject.toml`.
+- Navigation links connect the sites; an API snapshot no longer embeds a fixed
+  utility reference. Package versions do not need to match.
+
+To update documentation, commit and push changes to a configured workflow branch,
+or run **Deploy ZEN API docs and build packages** manually from the desired source
+revision. A manual run can select API versions through `versions`; it always
+builds the utility version from that checkout's TOML. Selecting a version number
+does not retrieve historical utility source. GitHub Pages must use
+**Settings > Pages > Source: GitHub Actions**.
+
+The workflow uploads separate API and utility package artifacts and separate
+documentation artifacts (`zen_api-mkdocs-sites` and
+`zen_api_utils-<utility-version>-mkdocs-site`). One Pages deployment includes both
+sites because they share the repository's Pages host.
+
+Previously published utility snapshots are restored from the
+`zen-api-utils-docs-history` branch before building. After deployment, the workflow
+updates that branch so later API or utility updates retain older utility versions.
+Do not delete or edit the history branch manually. The workflow token needs
+permission to write it; branch protection/rulesets must permit this workflow.
+The branch is storage, not a second Pages deployment source.
+On the first deployment, only the checked-in utility version is available.
+Rebuilding a utility version replaces that snapshot; the utility landing page
+points to the highest published utility version. API deployment includes only
+the selected API versions, with the first selected version as its default.
 
 Both release controls are opt-in when manually running the documentation workflow:
 `publish_releases` uploads API distributions, while `publish_utils_release` uploads
 the tested utility distributions under `zen-api-utils-v<utility-version>` (for
-example, `zen-api-utils-v0.1.0`). The utility version comes from its own
+example, `zen-api-utils-v0.2.0`). The utility version comes from its own
 `pyproject.toml`, independently of the selected API versions. Both controls
 default to false; successful runs still retain distributions as workflow artifacts
 without publishing releases. Release publication requires successful compatibility

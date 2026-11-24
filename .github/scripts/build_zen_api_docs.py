@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import html
+import json
 import posixpath
 import re
 import shutil
@@ -16,8 +17,11 @@ from pathlib import Path, PurePosixPath
 import yaml
 from betterproto.lib.google.protobuf import FileDescriptorSet
 from packaging.requirements import Requirement
+from packaging.version import Version
 
 ZENAPI_PAGES_PATH = "zenapi"
+UTILS_PAGES_PATH = "zen_api_utils"
+PAGES_URL = "https://zeiss-microscopy.github.io/OAD/"
 
 DOMAIN_LABELS = {
     "acquisition": "Acquisition",
@@ -363,7 +367,8 @@ def build_landing_page(build_dir: Path, site_dir: Path, versions: list[str]) -> 
 
     version_links = "\n".join(f"- [ZEN API {version}]({ZENAPI_PAGES_PATH}/{version}/)" for version in versions)
     (docs_dir / "index.md").write_text(
-        f"# ZEN API Documentation\n\nSelect one of the published ZEN API documentation versions:\n\n{version_links}\n",
+        f"# ZEN API Documentation\n\nSelect one of the published ZEN API documentation versions:\n\n{version_links}\n\n"
+        f"[ZEN API Utilities documentation]({UTILS_PAGES_PATH}/) has its own version dropdown.\n",
         encoding="utf-8",
     )
 
@@ -413,6 +418,8 @@ def validate_version(repo_root: Path, version: str) -> tuple[dict, dict]:
         raise ValueError(f"Package metadata does not match selected API version: {version}")
     if utils_project["name"] != "zen_api_utils":
         raise ValueError("Utility package metadata must declare zen_api_utils")
+    if str(Version(utils_project["version"])) != utils_project["version"]:
+        raise ValueError(f"Invalid or noncanonical utility version: {utils_project['version']!r}")
     requirements = [Requirement(dependency) for dependency in utils_project.get("dependencies", [])]
     api_requirements = [
         requirement for requirement in requirements if requirement.name.replace("_", "-").lower() == "zen-api"
@@ -428,7 +435,7 @@ def validate_version(repo_root: Path, version: str) -> tuple[dict, dict]:
 
 
 def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version: str, protoc: str = "protoc") -> None:
-    api_project, utils_project = validate_version(repo_root, version)
+    api_project, _ = validate_version(repo_root, version)
     package_dir = repo_root / "ZEN-API" / "python_packages" / f"zen_api-{version}"
 
     src_dir = package_dir / "src"
@@ -436,10 +443,6 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
     docs_dir = version_build_dir / "docs"
     version_site_dir = site_dir / ZENAPI_PAGES_PATH / version
     docs_dir.mkdir(parents=True, exist_ok=True)
-
-    utils_dir = repo_root / "ZEN-API" / "zen_api_utils"
-    utils_version = utils_project["version"]
-    shutil.copytree(utils_dir / "mkdocs_docs", docs_dir / "guides" / "zen_api_utils", dirs_exist_ok=True)
 
     (docs_dir / "index.md").write_text(
         textwrap.dedent(f"""
@@ -450,13 +453,11 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
             | Package | Documented version |
             | --- | --- |
             | `zen_api` | `{version}` |
-            | `zen_api_utils` | `{utils_version}` |
 
-            This site pairs the selected API sources with the utility sources from this repository checkout.
-            The packages are independently versioned.
+            Utilities have [separate documentation]({PAGES_URL}{UTILS_PAGES_PATH}/)
+            and their own version dropdown. Their version does not need to match the API version.
 
-            See the [utilities guide](guides/zen_api_utils/index.md), Python API references,
-            and [protocol definitions](proto/index.md).
+            See the Python API reference and [protocol definitions](proto/index.md).
 
             ## Installation
 
@@ -464,13 +465,11 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
 
             ```bash
             pip install zen_api-{version}-py3-none-any.whl
-            pip install zen_api_utils-{utils_version}-py3-none-any.whl
             ```
 
             ## Requirements
 
             - API Python requirement: `{api_project['requires-python']}`
-            - Utilities Python requirement: `{utils_project['requires-python']}`
             - betterproto == 2.0.0b7
 
             ## API Domains
@@ -506,8 +505,6 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
     )
 
     nav_items = generate_reference_pages(src_dir, docs_dir)
-    utils_src = utils_dir / "src"
-    utils_nav = generate_reference_pages(utils_src, docs_dir, "zen_api_utils", include_modules=True)
     proto_nav = generate_proto_pages(
         repo_root / "ZEN-API" / "protofiles" / f"proto_{version}", docs_dir, version, protoc
     )
@@ -517,6 +514,22 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
         docs_dir=docs_dir,
         site_dir=version_site_dir,
     )
+    configure_python_reference(config, src_dir)
+    config["site_description"] = "ZEN API services and protocol definitions"
+    config["extra"] = {"documented_versions": {"zen_api": version}, "version": {"provider": "mike"}}
+    config["nav"] = [
+        {"Home": "index.md"},
+        {"Utilities Documentation": f"{PAGES_URL}{UTILS_PAGES_PATH}/"},
+        {"Python API Reference": nav_items},
+        {"Protocol Buffer Reference": proto_nav},
+    ]
+
+    config_path = version_build_dir / "mkdocs.yml"
+    write_yaml(config_path, config)
+    run_mkdocs(config_path)
+
+
+def configure_python_reference(config: dict, src_dir: Path) -> None:
     config["plugins"] = [
         "search",
         {"autorefs": {"resolve_closest": True}},
@@ -524,7 +537,7 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
             "mkdocstrings": {
                 "handlers": {
                     "python": {
-                        "paths": [str(src_dir.resolve()), str(utils_src.resolve())],
+                        "paths": [str(src_dir.resolve())],
                         "options": {
                             "docstring_style": "google",
                             "docstring_section_style": "list",
@@ -545,18 +558,76 @@ def build_version_page(repo_root: Path, build_dir: Path, site_dir: Path, version
             }
         },
     ]
-    config["site_description"] = "ZEN API services, protocol definitions, and workflow utilities"
-    config["extra"] = {"documented_versions": {"zen_api": version, "zen_api_utils": utils_version}}
+
+
+def build_utility_page(repo_root: Path, build_dir: Path, site_dir: Path) -> None:
+    """Build the utility guide and reference once, independently of API snapshots."""
+    project_dir = repo_root / "ZEN-API" / "zen_api_utils"
+    with (project_dir / "pyproject.toml").open("rb") as metadata:
+        project = tomllib.load(metadata)["project"]
+    version = project["version"]
+    if project["name"] != "zen_api_utils" or str(Version(version)) != version:
+        raise ValueError("Expected zen_api_utils metadata with a canonical utility version")
+    version_build_dir = build_dir / UTILS_PAGES_PATH / version
+    docs_dir = version_build_dir / "docs"
+    shutil.copytree(project_dir / "mkdocs_docs", docs_dir, dirs_exist_ok=True)
+    (docs_dir / "versions.md").write_text(
+        f"# Documented Version\n\nThis site documents **zen_api_utils {version}**.\n\n"
+        "Use this site's dropdown to select a utility release independently of the API documentation.\n\n"
+        f"Python requirement: `{project['requires-python']}`. "
+        "Install a compatible API as declared by the utility package dependencies.\n",
+        encoding="utf-8",
+    )
+    nav_items = generate_reference_pages(project_dir / "src", docs_dir, "zen_api_utils", include_modules=True)
+    config = mkdocs_material_config(
+        site_name=f"ZEN API Utilities {version}",
+        site_url=f"{PAGES_URL}{UTILS_PAGES_PATH}/{version}/",
+        docs_dir=docs_dir,
+        site_dir=site_dir / UTILS_PAGES_PATH / version,
+    )
+    configure_python_reference(config, project_dir / "src")
+    config["site_description"] = "Independently versioned ZEN API application-side utilities"
+    config["extra"] = {"documented_versions": {"zen_api_utils": version}, "version": {"provider": "mike"}}
     config["nav"] = [
         {"Home": "index.md"},
-        {"Utilities Guide": "guides/zen_api_utils/index.md"},
-        {"Python API Reference": [{"zen_api": nav_items}, {"zen_api_utils": utils_nav}]},
-        {"Protocol Buffer Reference": proto_nav},
+        {"Documented Version": "versions.md"},
+        {"ZEN API Documentation": PAGES_URL},
+        {"Python API Reference": nav_items},
     ]
 
     config_path = version_build_dir / "mkdocs.yml"
     write_yaml(config_path, config)
     run_mkdocs(config_path)
+
+
+def utility_history_versions(directory: Path) -> list[str]:
+    """Reject incomplete history before replacing any local build output."""
+    entries = json.loads((directory / "versions.json").read_text(encoding="utf-8"))
+    if not isinstance(entries, list):
+        raise TypeError("Utility history versions.json must contain a version list")
+    versions = []
+    for entry in entries:
+        version = entry["version"]
+        if str(Version(version)) != version or not (directory / version / "index.html").is_file():
+            raise ValueError(f"Invalid or missing utility history snapshot: {version!r}")
+        versions.append(version)
+    return versions
+
+
+def write_version_index(directory: Path, versions: list[str]) -> None:
+    """Write the manifest consumed by Material's native Mike version dropdown."""
+    entries = [
+        {"version": version, "title": version, "aliases": ["latest"] if index == 0 else []}
+        for index, version in enumerate(versions)
+    ]
+    (directory / "versions.json").write_text(json.dumps(entries, indent=2) + "\n", encoding="utf-8")
+    target = versions[0] + "/"
+    (directory / "index.html").write_text(
+        '<!doctype html><html lang="en"><head><meta charset="utf-8">'
+        f'<meta http-equiv="refresh" content="0; url={target}">'
+        f'<title>Documentation</title></head><body><a href="{target}">Open documentation</a></body></html>\n',
+        encoding="utf-8",
+    )
 
 
 def main() -> None:
@@ -566,6 +637,10 @@ def main() -> None:
     parser.add_argument("--build-dir", type=Path, default=Path("_zen_api_pages"), help="Temporary build directory.")
     parser.add_argument("--site-dir", type=Path, default=Path("site"), help="GitHub Pages output directory.")
     parser.add_argument("--protoc", default="protoc", help="Protocol Buffers compiler executable.")
+    parser.add_argument(
+        "--previous-utils-site-dir", type=Path,
+        help="Previously published utility site root, including versions.json and version directories.",
+    )
     args = parser.parse_args()
 
     repo_root = args.repo_root.resolve()
@@ -573,10 +648,13 @@ def main() -> None:
     site_dir = (repo_root / args.site_dir).resolve()
 
     versions = list(dict.fromkeys(args.versions))
+    historical_versions = []
     try:
         for version in versions:
-            validate_version(repo_root, version)
-    except (OSError, ValueError, KeyError) as exc:
+            _, utility_project = validate_version(repo_root, version)
+        if args.previous_utils_site_dir is not None:
+            historical_versions = utility_history_versions(args.previous_utils_site_dir)
+    except (OSError, ValueError, TypeError, KeyError) as exc:
         parser.error(str(exc))
     if shutil.which(args.protoc) is None:
         parser.error(f"Protocol Buffers compiler not found: {args.protoc}")
@@ -592,6 +670,15 @@ def main() -> None:
     build_landing_page(build_dir, site_dir, versions)
     for version in versions:
         build_version_page(repo_root, build_dir, site_dir, version, args.protoc)
+    write_version_index(site_dir / ZENAPI_PAGES_PATH, versions)
+    utility_site_dir = site_dir / UTILS_PAGES_PATH
+    if args.previous_utils_site_dir is not None:
+        for version in historical_versions:
+            shutil.copytree(args.previous_utils_site_dir / version, utility_site_dir / version)
+    build_utility_page(repo_root, build_dir, site_dir)
+    utility_version = utility_project["version"]
+    utility_versions = sorted({utility_version, *historical_versions}, key=Version, reverse=True)
+    write_version_index(utility_site_dir, utility_versions)
 
 
 if __name__ == "__main__":

@@ -35,6 +35,12 @@ For OME-Zarr output and post-processing:
 pip install ".[omezarr]"
 ```
 
+For optional pandas position tables:
+
+```powershell
+pip install ".[dataframe]"
+```
+
 For development:
 
 ```powershell
@@ -87,27 +93,33 @@ separate API-specific utility artifacts.
 
 ## Documentation
 
-The shared MkDocs generator builds one site with separate `zen_api` and
-`zen_api_utils` references, protocol definitions, and both package versions.
-The utility guide lives under `mkdocs_docs`. The API build workflow and CI
-generate the site under the selected API package's `docs/mkdocs_site`; the
-utility builder does not generate documentation. The API output must include
-`proto-descriptor.pb` from wrapper generation and have a matching versioned
-proto directory. Documentation builds run MkDocs in strict mode and use the
-repository's `packaging/requirements.txt`. See `Instructions.md` for standalone
-documentation generation with an explicitly selected API release.
+Browse [utility documentation](https://zeiss-microscopy.github.io/OAD/zen_api_utils/)
+and use its own version dropdown. The
+[ZEN API reference](https://zeiss-microscopy.github.io/OAD/) has separate API
+version selection, at its existing URLs. The utility guide lives under
+`mkdocs_docs`; strict documentation builds generate it once per utility release,
+not once per API version.
 
-CI tests utilities against the matching API wheel before uploading and optionally
-publishing the combined `zen_api-<version>-mkdocs-site` artifact to
-[the versioned documentation site](https://sebi06.github.io/ZEN_API/).
-The two Python distributions and their versions remain separate. Utilities
-remain at `0.1.0`; an API release such as `2026.7.1` does not change that version.
+OAD's **Deploy ZEN API docs and build packages** workflow builds separate API and
+utility distributions and tests the actual wheels against the selected API
+versions on Python 3.12-3.15 before publishing the two documentation sites.
+Utility metadata, package artifacts, and documentation use the version committed
+in this checkout's `pyproject.toml`; selecting API versions does not change it or
+retrieve another utility source revision. Previously published utility snapshots
+are retained independently of the selected API versions.
+
+Both GitHub Release controls are opt-in. Enable `publish_utils_release` to attach
+the tested utility distributions to `zen-api-utils-v<utility-version>`, without
+enabling `publish_releases` for the API distributions. Ordinary successful runs
+still upload package and documentation artifacts; no PyPI upload occurs.
+See the [OAD documentation and release guide](../README.md#documentation).
+The local utility package builder continues to build distributions only.
 The project directory, distribution, and import package are all named
 `zen_api_utils`. The import package lives in `zen_api_utils/src/zen_api_utils`.
 
 The dependency `zen_api>=2026.5.1,<=2026.11.1` expresses the supported API range.
-CI tests the utilities with API `2026.5.1`, `2026.7.1`, and `2026.11.1`, and with
-the API built by the current workflow. API documentation builds and CI reject
+CI defaults to testing utilities with API `2026.5.1`, `2026.7.1`, and `2026.11.1`.
+Documentation builds and CI reject
 selected APIs outside that range before overwriting API output. Extend the range and
 the test matrix only after testing another API release. These checks do not
 replace hardware integration testing. New API versions and artifact names
@@ -182,6 +194,89 @@ zenapi-stream2omezarr --help
 
 ## Acquisition integrity
 
+### Offline experiment positions
+
+#### Map stage XY coordinates using an empty carrier experiment
+
+```python
+from zen_api_utils.extract_czexp_plan import load_carrier_geometry
+
+carrier = load_carrier_geometry("empty_W96.czexp")
+assignments = carrier.assign_positions([(4500.0, 8500.0), (13500.0, 8500.0)])
+for assignment in assignments:
+    if assignment is not None:
+        print(assignment.well_id, assignment.well_row, assignment.well_column)
+```
+
+The reference experiment needs a configured carrier, not acquisition positions
+or well containers. `carrier_geometry_from_xml(xml)` also accepts a ZEN XML
+export. `block_index` selects an ordinal in the active-block list, defaulting to
+the first; only its active RegionsSetup is used.
+
+Boundary conditions are documented on `CarrierGeometry` and its methods:
+
+- Absolute XY values must be in micrometers in the reference experiment's
+  coordinate frame, with the same origin, calibration and plate placement.
+- Mapping considers every physical well in the template, independent of
+  acquisition selection. Results preserve input order and duplicates.
+- Only regular, centered, unrotated rectangular grids with unswitched and
+  noninverted axes and a zero TopLeft reference are supported.
+- Rectangle edges are included without snapping or extra tolerance. Points in
+  gaps or outside the plate return `None`; non-finite coordinates raise
+  `ValueError`. Touching or overlapping wells are rejected as ambiguous.
+- Missing/unsupported geometry raises `UnsupportedCarrierGeometryError` (a
+  `ValueError`). This differs from automatic plan well inference, which logs
+  unsupported geometry and retains positions without inferred wells.
+- Assignment describes a point, not containment of an image/tile footprint.
+  Z coordinates, stage drift and physical placement accuracy are not evaluated.
+
+The [experiment parser](src/zen_api_utils/extract_czexp_plan.py) defines the
+shared index and unit convention for acquisition plans, typed positions, and
+tables. No running ZEN instance is required:
+
+```python
+from zen_api_utils.extract_czexp_plan import (
+    load_experiment_positions,
+    load_experiment_positions_dataframe,
+    positions_from_plan,
+)
+from zen_api_utils.experiment_acquisition import ExperimentAcquisition
+
+positions = load_experiment_positions("experiment.czexp")
+for position in positions:
+    print(position.well_id, position.x, position.y, position.z)
+    if position.tile_region is not None:
+        print(position.tile_region.width_um, position.tile_region.height_um)
+
+table = load_experiment_positions_dataframe("experiment.czexp")  # dataframe extra
+acquisition = ExperimentAcquisition.from_czexp("experiment.czexp")
+assert acquisition.positions == tuple(positions)
+```
+
+`Position` and `TileRegion` are immutable offline models, distinct from the
+meter-based API models in `tiles_positions`. A region position describes the
+region center, not each camera tile. Rectangular contour dimensions must be
+finite and positive; invalid dimensions raise `ValueError`. Other contours
+retain their type without shape-specific geometry. Missing coordinates and
+well assignments remain `None`; acquisition code must validate coordinates
+before moving hardware. No fields produces an empty list or a typed empty
+table. Table columns use pandas nullable dtypes and `pd.NA`.
+
+Use `positions_from_plan(plan)` or `positions_to_dataframe(positions)` to avoid
+re-reading an already parsed experiment. `positions_from_plan(..., block_index=n)`
+selects the nth active block; each position retains the original XML block
+index. `ExperimentAcquisition.from_xml(xml)` uses the same parser for API
+exports and exposes positions as typed objects.
+
+**Breaking plan migration:** schema `experimental.czexp-acquisition-plan/0.2`
+replaces `0.1`. Re-extract saved plans from their CZEXP source; the typed adapter
+and CZMBI exporter reject legacy schemas rather than reinterpret their indices.
+CZMBI row/column/field values and OME-Zarr well labels are converted at export
+boundaries, so their external conventions are unchanged. Existing consumers of
+`ExperimentAcquisition.positions` should use attributes, or `position.to_record()`
+for a flat dictionary with `stage_x_um`, `stage_y_um`, and `stage_z_um`.
+Rebuild/install the utility wheel before using these APIs from another project.
+
 Both writers load and export the selected experiment before sending channel
 subscriptions. Exported dimensions replace INI dimension hints; live status is
 queried for the pinned experiment, never for an arbitrary active experiment.
@@ -208,3 +303,33 @@ Library imports do not configure or remove application logging handlers.
 `set_logging()` returns the shared Loguru logger without changing its sinks.
 The legacy TCP acquisition example runs only when explicitly launched as
 `python -m zen_api_utils.zen_tcpip_interface`, never on import.
+
+## Utility behavior
+
+- Both streaming writers renew the inactivity timeout after each newly accepted
+  frame. Acquisition may run longer than the timeout; foreign and duplicate
+  frames do not extend it.
+- TCP command runners stop at the first failed or timed-out acknowledgement and
+  raise `RuntimeError` with the command and response. Connections are still
+  closed on failure; no successful output path is returned.
+- `workflow.run_job()` validates all requested resource names and supported value
+  types before changing parameters or running the job. Unknown names raise
+  `ValueError`; unsupported types raise `TypeError`. Loading the template and
+  querying its resource IDs still happen before resource-name validation.
+- `stage.PosXYZ` stores coordinates in meters. Its read-only `x_micron`,
+  `y_micron`, and `z_micron` properties always reflect the current meter values.
+  Update the meter fields to change a position. `stage.move_xyz()` leaves the
+  requested position unchanged and returns a new position with the actual
+  coordinates.
+- `experiment.show_track_info_LM()` returns a `Tracks` dataclass with `info` and
+  `number`, not a generated `TrackInfo` message.
+- Both changer entry points use the same best-effort movement implementation.
+  Their return value is still an ordinary dictionary, now described by
+  `changers.ChangerResults` and `changers.ChangerMove` type annotations. Requested
+  inventories are queried before movements; failures are reported without
+  stopping independent changers, and cancellation propagates.
+- Camera helpers preserve service order and exposure settings, and truncate
+  floating-point frame coordinates and sizes to integer pixels.
+- Streaming uses shared frame-validation, receiver and OME-Zarr helpers.
+  `streaming.pipeline.generate_omezarr_pyramids()` remains available and appends
+  pyramid levels without rewriting level 0.

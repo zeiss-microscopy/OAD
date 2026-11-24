@@ -94,22 +94,20 @@ def show_swaf_info_LM(
     logger.info("------------  SWAF Information End  ------------")
 
 
-def show_track_info_LM(info: TrackServiceGetTrackInfoResponse) -> TrackInfo:
+def show_track_info_LM(info: TrackServiceGetTrackInfoResponse) -> Tracks:
     """
-    Logs detailed information about tracks and their channels, and returns a TrackInfo object.
+    Log detailed information about tracks and their channels, and return a summary.
     Args:
         info (TrackServiceGetTrackInfoResponse): The response object containing track information.
     Returns:
-        TrackInfo: An object containing the track information and the number of tracks.
+        Tracks: The track information and the number of tracks.
     Logs:
         Logs the start and end of track information.
         Logs each track's index and activation status.
         Logs each channel's index, name, and activation status within each track.
     """
 
-    tracks = TrackInfo()
-    tracks.info = info.track_info
-    tracks.number = len(info.track_info)
+    tracks = Tracks(info=info.track_info, number=len(info.track_info))
 
     logger.info("------------  Track Information Start  ------------")
 

@@ -7,6 +7,12 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 from zen_api_utils.compatibility import api_capabilities
+from zen_api_utils.extract_czexp_plan import (
+    Position,
+    extract_plan,
+    extract_plan_xml,
+    positions_from_plan,
+)
 
 if TYPE_CHECKING:
     from zen_api.acquisition.v1beta import ExperimentServiceStub
@@ -41,19 +47,13 @@ class ExperimentAcquisition:
     experiment_name: str | None
     dimensions: AcquisitionDimensions
     channels_info: tuple[AcquisitionChannel, ...]
-    positions: tuple[dict[str, object], ...]
+    positions: tuple[Position, ...]
     split_scenes_in_separate_files: bool
 
     @property
     def well_ids(self) -> tuple[str, ...]:
         """Unique sample-carrier well IDs in acquisition order."""
-        return tuple(
-            dict.fromkeys(
-                well_id
-                for position in self.positions
-                if isinstance((well_id := position.get("well_id")), str) and well_id
-            )
-        )
+        return tuple(dict.fromkeys(position.well_id for position in self.positions if position.well_id))
 
     @property
     def well_count(self) -> int:
@@ -70,6 +70,8 @@ class ExperimentAcquisition:
         blocks = plan.get("acquisition_blocks")
         if not isinstance(blocks, list) or not blocks:
             raise ValueError("The experiment contains no active acquisition blocks.")
+        if not 0 <= block_index < len(blocks):
+            raise ValueError(f"Active acquisition block {block_index} is not available.")
         block = blocks[block_index]
         if not isinstance(block, dict):
             raise TypeError("The acquisition block has an invalid structure.")
@@ -109,15 +111,19 @@ class ExperimentAcquisition:
                 for channel in channels
                 if isinstance(channel, dict)
             ),
-            positions=tuple(position for position in positions if isinstance(position, dict)),
+            positions=tuple(positions_from_plan(plan, block_index=block_index)),
             split_scenes_in_separate_files=bool(block.get("split_scenes_in_separate_files", False)),
         )
 
     @classmethod
-    def from_czexp(cls, source: Path) -> ExperimentAcquisition:
-        from .extract_czexp_plan import extract_plan
-
+    def from_czexp(cls, source: str | Path) -> ExperimentAcquisition:
+        """Read a CZEXP once, including typed positions and region metadata."""
         return cls.from_plan(extract_plan(source))
+
+    @classmethod
+    def from_xml(cls, xml: str, source_name: str = "<experiment-export>") -> ExperimentAcquisition:
+        """Parse an API XML export through the same parser as persisted experiments."""
+        return cls.from_plan(extract_plan_xml(xml, source_name))
 
 
 async def query_experiment_acquisition(
@@ -126,8 +132,6 @@ async def query_experiment_acquisition(
     experiment_name: str | None = None,
 ) -> ExperimentAcquisition:
     """Export and parse a loaded experiment through the ZEN API."""
-    from .extract_czexp_plan import extract_plan_xml
-
     with api_capabilities("Experiment XML export", service, methods=("export",)):
         from zen_api.acquisition.v1beta import ExperimentServiceExportRequest
 
@@ -137,7 +141,7 @@ async def query_experiment_acquisition(
         xml = response.xml
     if not isinstance(xml, str) or not xml.strip():
         raise ValueError("ZEN returned an empty experiment XML export.")
-    acquisition = ExperimentAcquisition.from_plan(extract_plan_xml(xml, experiment_name or experiment_id))
+    acquisition = ExperimentAcquisition.from_xml(xml, experiment_name or experiment_id)
     if experiment_name is None:
         return acquisition
     return replace(acquisition, experiment_name=experiment_name)

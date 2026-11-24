@@ -19,6 +19,15 @@ script reloads that JSON and projects its first acquisition block to CZMBI 1.0.
 CZMBI generation requires split-scene acquisition with one planned CZI per scene.
 When ZEN does not expose exact output names, the generated CZMBI uses deterministic
 ``suggested_filename`` values that must be validated against actual ZEN output.
+
+Index convention (plan schema 0.2 and typed positions): all block, scene,
+well-row, well-column, well and field indices are zero-based. Block indices
+refer to the original XML order, including skipped inactive blocks. Well indices
+follow first appearance within each block; field indices restart per well, with
+unassigned fields forming a separate group per block. Counts are not indices.
+Well labels remain unchanged (B3 maps to row 1, column 2). XML and CZMBI
+one-based coordinates are converted at their input/output boundaries.
+Stage coordinates and full rectangular region dimensions are in micrometers.
 """
 
 from __future__ import annotations
@@ -30,10 +39,71 @@ import logging
 import math
 import re
 import xml.etree.ElementTree as ET
+from collections.abc import Sequence
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 LOGGER = logging.getLogger(__name__)
+PLAN_SCHEMA = "experimental.czexp-acquisition-plan/0.2"
+POSITION_FIELDS: tuple[str, ...] = (
+    "block_index", "scene_index", "well_id", "well_row", "well_column",
+    "well_index", "field_index", "position_name", "position_id",
+    "stage_x_um", "stage_y_um", "stage_z_um", "tile_width_um", "tile_height_um",
+)
+
+
+@dataclass(frozen=True, slots=True)
+class TileRegion:
+    """Offline contour metadata; dimensions describe a full rectangle in micrometers.
+
+    Nonrectangular contours retain their type but not shape-specific geometry.
+    """
+
+    contour_type: str | None
+    width_um: float | None = None
+    height_um: float | None = None
+
+
+@dataclass(frozen=True, slots=True)
+class Position:
+    """An acquisition field following this module's index and unit convention."""
+
+    block_index: int
+    scene_index: int
+    well_id: str | None
+    well_row: int | None
+    well_column: int | None
+    well_index: int | None
+    field_index: int
+    position_name: str | None
+    position_id: str | None
+    x: float | None
+    y: float | None
+    z: float | None
+    tile_region: TileRegion | None = None
+
+    def to_record(self) -> dict[str, object]:
+        """Flatten the position to the CSV/DataFrame column schema."""
+        return {
+            "block_index": self.block_index,
+            "scene_index": self.scene_index,
+            "well_id": self.well_id,
+            "well_row": self.well_row,
+            "well_column": self.well_column,
+            "well_index": self.well_index,
+            "field_index": self.field_index,
+            "position_name": self.position_name,
+            "position_id": self.position_id,
+            "stage_x_um": self.x,
+            "stage_y_um": self.y,
+            "stage_z_um": self.z,
+            "tile_width_um": self.tile_region.width_um if self.tile_region is not None else None,
+            "tile_height_um": self.tile_region.height_um if self.tile_region is not None else None,
+        }
 
 
 class UnsupportedCzmbiProjectionError(ValueError):
@@ -73,23 +143,26 @@ def integer(element: ET.Element | None, path: str, default: int) -> int:
 
 
 def parse_well_id(well_id: str) -> tuple[int | None, int | None]:
+    """Convert an Excel-style label to internal well indices."""
     match = re.fullmatch(r"([A-Za-z]+)(\d+)", well_id)
-    if not match:
+    if not match or int(match.group(2)) < 1:
         return None, None
     row = 0
     for letter in match.group(1).upper():
         row = row * 26 + ord(letter) - ord("A") + 1
-    return row, int(match.group(2))
+    return row - 1, int(match.group(2)) - 1
 
 
 def well_id(row: int, column: int) -> str:
-    """Return an Excel-style well identifier for one-based indices."""
+    """Convert internal well indices to an Excel-style label."""
+    if row < 0 or column < 0:
+        raise ValueError("Well indices must be nonnegative.")
     letters = ""
-    value = row
+    value = row + 1
     while value > 0:
         value, remainder = divmod(value - 1, 26)
         letters = chr(ord("A") + remainder) + letters
-    return f"{letters}{column}"
+    return f"{letters}{column + 1}"
 
 
 def coordinate_pair(
@@ -114,15 +187,98 @@ def tile_region_well(
     template_id = child_text(region, "TemplateShapeId", "") or ""
     match = re.fullmatch(r"(\d+)-(\d+)", template_id)
     if match is not None:
-        return int(match.group(1)), int(match.group(2))
+        row, column = int(match.group(1)), int(match.group(2))
+        if row < 1 or column < 1:
+            return None, None
+        return row - 1, column - 1
     return parse_well_id(region.get("Name", ""))
 
 
-def assign_template_wells(positions: list[dict[str, Any]], sample_holder: ET.Element) -> None:
-    """Assign direct positions to wells in a centered, axis-aligned carrier grid."""
+class UnsupportedCarrierGeometryError(ValueError):
+    """The experiment's carrier cannot be mapped by the supported geometry model."""
+
+
+@dataclass(frozen=True, slots=True)
+class WellAssignment:
+    """A physical well label and zero-based row/column, independent of acquisition selection."""
+
+    well_id: str
+    well_row: int
+    well_column: int
+
+
+@dataclass(frozen=True, slots=True)
+class CarrierGeometry:
+    """An unrotated rectangular well grid in absolute stage micrometers.
+
+    Only centered regular grids with unswitched, noninverted axes and a zero
+    TopLeft reference are supported. Width/height must be smaller than pitch:
+    touching/overlapping wells are rejected to avoid ambiguous edge assignment.
+    All physical wells are considered, regardless of selected well containers.
+
+    Coordinates must share the experiment's stage origin, calibration and plate
+    placement. This model cannot verify that condition or correct stage drift.
+    It classifies points, not whole images or tile footprints; Z is irrelevant.
+    """
+
+    rows: int
+    columns: int
+    center_x_um: float
+    center_y_um: float
+    pitch_x_um: float
+    pitch_y_um: float
+    well_width_um: float
+    well_height_um: float
+
+    def __post_init__(self) -> None:
+        if (
+            not isinstance(self.rows, int) or isinstance(self.rows, bool) or self.rows < 1
+            or not isinstance(self.columns, int) or isinstance(self.columns, bool) or self.columns < 1
+        ):
+            raise ValueError("Carrier rows and columns must be positive integers.")
+        values = (
+            self.center_x_um, self.center_y_um, self.pitch_x_um, self.pitch_y_um,
+            self.well_width_um, self.well_height_um,
+        )
+        if not all(math.isfinite(value) for value in values):
+            raise ValueError("Carrier geometry must contain finite values.")
+        if not (0 < self.well_width_um < self.pitch_x_um and 0 < self.well_height_um < self.pitch_y_um):
+            raise UnsupportedCarrierGeometryError("Well dimensions must be positive and smaller than their pitch.")
+
+    def locate(self, x_um: float, y_um: float) -> WellAssignment | None:
+        """Return the containing well, or None for gaps/outside the plate.
+
+        Rectangle edges are included, without an added tolerance or snapping.
+        Non-finite input raises ValueError rather than appearing unassigned.
+        """
+        if not math.isfinite(x_um) or not math.isfinite(y_um):
+            raise ValueError("Stage XY coordinates must be finite micrometer values.")
+        column_center = (self.columns - 1) / 2
+        row_center = (self.rows - 1) / 2
+        column = math.floor((x_um - self.center_x_um) / self.pitch_x_um + column_center + 0.5)
+        row = math.floor((y_um - self.center_y_um) / self.pitch_y_um + row_center + 0.5)
+        if not (0 <= column < self.columns and 0 <= row < self.rows):
+            return None
+        center_x = self.center_x_um + (column - column_center) * self.pitch_x_um
+        center_y = self.center_y_um + (row - row_center) * self.pitch_y_um
+        if abs(x_um - center_x) > self.well_width_um / 2 or abs(y_um - center_y) > self.well_height_um / 2:
+            return None
+        return WellAssignment(well_id(row, column), row, column)
+
+    def assign_positions(self, xy_um: Sequence[tuple[float, float]]) -> list[WellAssignment | None]:
+        """Return one assignment per input XY pair, preserving order and duplicates.
+
+        None means a valid point lies outside every configured well rectangle,
+        not that the template is unsupported. Unsupported geometry fails when
+        loaded; invalid coordinates raise rather than produce a partial result.
+        """
+        return [self.locate(x, y) for x, y in xy_um]
+
+
+def _carrier_geometry(sample_holder: ET.Element) -> CarrierGeometry:
     template = sample_holder.find("./Template")
     if template is None or (child_text(template, "HasRegularShapes", "false") or "false").lower() != "true":
-        return
+        raise UnsupportedCarrierGeometryError("A regular sample-carrier Template is required.")
 
     reference = coordinate_pair(template, "ReferencePoint")
     anchor = coordinate_pair(template, "AnchorPoint")
@@ -149,7 +305,9 @@ def assign_template_wells(positions: list[dict[str, Any]], sample_holder: ET.Ele
         or width <= 0
         or height <= 0
         or rotation is None
-        or not math.isclose(rotation, 0.0)
+        or rotation != 0.0
+        or not all(math.isfinite(value) for value in (*reference, *anchor, *immersion, pitch_x, pitch_y, width, height))
+        or child_text(template, "ShapeType") != "Rectangle"
         or reference != (0.0, 0.0)
         or child_text(template, "ReferencePointLocationMode") != "TopLeft"
         or (child_text(template, "AreShapesCenteredX", "false") or "false").lower() != "true"
@@ -158,16 +316,55 @@ def assign_template_wells(positions: list[dict[str, Any]], sample_holder: ET.Ele
         or (child_text(template, "IsRowAnnotationDirectionInverted", "false") or "false").lower() == "true"
         or (child_text(template, "IsColumnAnnotationDirectionInverted", "false") or "false").lower() == "true"
     ):
-        return
+        raise UnsupportedCarrierGeometryError(
+            "Carrier requires finite rectangular geometry, zero rotation/reference, "
+            "TopLeft reference mode, centered shapes and unswitched, noninverted axes."
+        )
 
     # In this ZEN template layout, AnchorPoint offsets ImmersionPoint to the grid center.
-    grid_center_x = immersion[0] + anchor[0]
-    grid_center_y = immersion[1] + anchor[1]
-    row_center = (rows - 1) / 2
-    column_center = (columns - 1) / 2
-    field_counts: dict[tuple[int, int], int] = {}
+    return CarrierGeometry(rows, columns, immersion[0] + anchor[0], immersion[1] + anchor[1],
+                           pitch_x, pitch_y, width, height)
 
+
+def carrier_geometry_from_xml(xml: str, *, block_index: int = 0) -> CarrierGeometry:
+    """Load carrier geometry even when the experiment has no acquisition positions.
+
+    block_index selects the nth active acquisition block. Multiple blocks are
+    never merged or searched for a silently substituted carrier. Only the active
+    RegionsSetup is used. Missing/unsupported geometry raises ValueError.
+    Malformed XML propagates ElementTree.ParseError. No ZEN connection is made.
+    """
+    root = ET.fromstring(xml)
+    blocks = [block for block in root.findall("./ExperimentBlocks/AcquisitionBlock") if is_active(block)]
+    if not 0 <= block_index < len(blocks):
+        raise ValueError(f"Active acquisition block {block_index} is not available.")
+    setup = find_active_dimension_setup(blocks[block_index], "RegionsSetup")
+    holder = setup.find("SampleHolder") if setup is not None else None
+    if holder is None:
+        raise UnsupportedCarrierGeometryError("Active RegionsSetup with SampleHolder is required.")
+    return _carrier_geometry(holder)
+
+
+def load_carrier_geometry(experiment: str | Path, *, block_index: int = 0) -> CarrierGeometry:
+    """Read a CZEXP once as a geometry-only reference; see CarrierGeometry boundaries."""
+    return carrier_geometry_from_xml(Path(experiment).read_text(encoding="utf-8"), block_index=block_index)
+
+
+def assign_template_wells(positions: list[dict[str, Any]], sample_holder: ET.Element) -> None:
+    """Assign parser positions with the same geometry used by the public XY API.
+
+    Missing/unsupported templates leave metadata unchanged with a warning.
+    Unlike the strict public loader, acquisition-plan extraction can still
+    return positions without inferred wells. Explicit well metadata is preserved.
+    """
+    try:
+        geometry = _carrier_geometry(sample_holder)
+    except UnsupportedCarrierGeometryError as error:
+        LOGGER.warning("Template well assignment skipped: %s", error)
+        return
     for position in positions:
+        if position.get("well_id"):
+            continue
         stage_position = position["stage_position"]
         x = stage_position.get("x")
         y = stage_position.get("y")
@@ -180,29 +377,13 @@ def assign_template_wells(positions: list[dict[str, Any]], sample_holder: ET.Ele
             )
             continue
 
-        # Round to the nearest grid center, then ensure the point lies inside that well.
-        column_index = math.floor((x - grid_center_x) / pitch_x + column_center + 0.5)
-        row_index = math.floor((y - grid_center_y) / pitch_y + row_center + 0.5)
-        if not (0 <= column_index < columns and 0 <= row_index < rows):
-            continue
-
-        center_x = grid_center_x + (column_index - column_center) * pitch_x
-        center_y = grid_center_y + (row_index - row_center) * pitch_y
-        if abs(x - center_x) > width / 2 or abs(y - center_y) > height / 2:
-            continue
-
-        well_row = row_index + 1
-        well_column = column_index + 1
-        well = (well_row, well_column)
-        field_counts[well] = field_counts.get(well, 0) + 1
-        position.update(
-            {
-                "well_id": well_id(well_row, well_column),
-                "well_row": well_row,
-                "well_column": well_column,
-                "field_index": field_counts[well],
-            }
-        )
+        assignment = geometry.locate(x, y)
+        if assignment is not None:
+            position.update(
+                well_id=assignment.well_id,
+                well_row=assignment.well_row,
+                well_column=assignment.well_column,
+            )
 
 
 def parse_detector_frame(block: ET.Element) -> tuple[int | None, int | None]:
@@ -259,7 +440,7 @@ def active_dimension_count(block: ET.Element, setup_name: str, count_path: str) 
 
 
 def extract_tile_regions(block: ET.Element) -> list[dict[str, Any]]:
-    """Extract active rectangular tile grids from the sample holder."""
+    """Extract active tile grids and their contour metadata from the sample holder."""
     regions_setup = find_active_dimension_setup(block, "RegionsSetup")
     sample_holder = regions_setup.find("./SampleHolder") if regions_setup is not None else None
     tile_regions = sample_holder.findall("./TileRegions/TileRegion") if sample_holder is not None else []
@@ -269,6 +450,19 @@ def extract_tile_regions(block: ET.Element) -> list[dict[str, Any]]:
             continue
         columns = max(1, integer(region, "Columns", 1))
         rows = max(1, integer(region, "Rows", 1))
+        contour = region.find("Contour")
+        contour_type = contour.get("Type") if contour is not None else None
+        width = height = None
+        if contour_type == "Rectangle":
+            try:
+                width, height = (float(value) for value in (child_text(region, "ContourSize") or "").split(","))
+                if not all(math.isfinite(value) and value > 0 for value in (width, height)):
+                    raise ValueError("Dimensions must be finite and positive.")
+            except ValueError as error:
+                raise ValueError(
+                    "Invalid rectangular tile-region ContourSize in "
+                    f"block {block.get('BlockReference')}, region {region.get('Id') or region.get('Name')}"
+                ) from error
         regions.append(
             {
                 "name": region.get("Name"),
@@ -276,6 +470,9 @@ def extract_tile_regions(block: ET.Element) -> list[dict[str, Any]]:
                 "columns": columns,
                 "rows": rows,
                 "tile_count": columns * rows,
+                "contour_type": contour_type,
+                "width_um": width,
+                "height_um": height,
             }
         )
     return regions
@@ -289,7 +486,21 @@ def active_tile_count(block: ET.Element) -> int:
     )
 
 
-def extract_positions(block: ET.Element) -> list[dict[str, Any]]:
+def _index_positions(positions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    well_indices: dict[str, int] = {}
+    field_counts: dict[str | None, int] = {}
+    for position in positions:
+        well = position["well_id"] or None
+        position["well_index"] = well_indices.setdefault(well, len(well_indices)) if well else None
+        position["field_index"] = field_counts.get(well, 0)
+        field_counts[well] = position["field_index"] + 1
+    return positions
+
+
+def extract_positions(
+    block: ET.Element, tile_regions: list[dict[str, Any]] | None = None
+) -> list[dict[str, Any]]:
+    """Extract active fields using this module's index and unit convention."""
     positions: list[dict[str, Any]] = []
     regions_setup = find_active_dimension_setup(block, "RegionsSetup")
     sample_holder = regions_setup.find("./SampleHolder") if regions_setup is not None else None
@@ -303,11 +514,9 @@ def extract_positions(block: ET.Element) -> list[dict[str, Any]]:
             continue
         well_name = well.get("Name", "")
         row, column = parse_well_id(well_name)
-        field_index = 0
         for position in well.findall("./SingleTileRegions/SingleTileRegion"):
             if child_text(position, "IsUsedForAcquisition", "true") != "true":
                 continue
-            field_index += 1
             positions.append(
                 {
                     "scene_index": scene_index,
@@ -315,7 +524,6 @@ def extract_positions(block: ET.Element) -> list[dict[str, Any]]:
                     "well_row": row,
                     "well_column": column,
                     "well_block_id": well.get("Id"),
-                    "field_index": field_index,
                     "position_name": position.get("Name"),
                     "position_id": position.get("Id"),
                     "stage_position": {
@@ -327,7 +535,7 @@ def extract_positions(block: ET.Element) -> list[dict[str, Any]]:
             )
             scene_index += 1
     if positions or sample_holder is None:
-        return positions
+        return _index_positions(positions)
 
     # Carrier-free exports can store all free positions directly under SampleHolder.
     for position in sample_holder.findall("./SingleTileRegions/SingleTileRegion"):
@@ -339,7 +547,6 @@ def extract_positions(block: ET.Element) -> list[dict[str, Any]]:
                 "well_id": None,
                 "well_row": None,
                 "well_column": None,
-                "field_index": None,
                 "position_name": position.get("Name"),
                 "position_id": position.get("Id"),
                 "stage_position": {
@@ -352,28 +559,24 @@ def extract_positions(block: ET.Element) -> list[dict[str, Any]]:
         scene_index += 1
     if positions:
         assign_template_wells(positions, sample_holder)
-        return positions
+        return _index_positions(positions)
 
     # Older carrier-mode exports encode one field per TileRegion and identify its well
     # through TemplateShapeId (row-column) or, as a fallback, the region name.
-    field_counts: dict[tuple[int, int], int] = {}
-    tile_regions = sample_holder.findall("./TileRegions/TileRegion")
-    for region in tile_regions:
-        if child_text(region, "IsUsedForAcquisition", "true") != "true":
-            continue
+    region_elements = [
+        region for region in sample_holder.findall("./TileRegions/TileRegion")
+        if (child_text(region, "IsUsedForAcquisition", "true") or "true").lower() == "true"
+    ]
+    metadata = extract_tile_regions(block) if tile_regions is None else tile_regions
+    for region, geometry in zip(region_elements, metadata, strict=True):
         row, column = tile_region_well(region)
-        if row is None or column is None:
-            return []
         center = coordinate_pair(region, "CenterPosition")
-        key = (row, column)
-        field_counts[key] = field_counts.get(key, 0) + 1
         positions.append(
             {
                 "scene_index": scene_index,
-                "well_id": well_id(row, column),
+                "well_id": well_id(row, column) if row is not None and column is not None else None,
                 "well_row": row,
                 "well_column": column,
-                "field_index": field_counts[key],
                 "position_name": region.get("Name"),
                 "position_id": region.get("Id"),
                 "stage_position": {
@@ -381,10 +584,15 @@ def extract_positions(block: ET.Element) -> list[dict[str, Any]]:
                     "y": center[1] if center is not None else None,
                     "z": number(region, "Z"),
                 },
+                "tile_region": {
+                    "contour_type": geometry["contour_type"],
+                    "width_um": geometry["width_um"],
+                    "height_um": geometry["height_um"],
+                },
             }
         )
         scene_index += 1
-    return positions
+    return _index_positions(positions)
 
 
 def suggested_filename(base_name: str, position: dict[str, Any]) -> str:
@@ -394,8 +602,8 @@ def suggested_filename(base_name: str, position: dict[str, Any]) -> str:
 
 
 def extract_block(block: ET.Element, block_index: int, autosave_name: str) -> dict[str, Any]:
-    positions = extract_positions(block)
     tile_regions = extract_tile_regions(block)
+    positions = extract_positions(block, tile_regions)
     channels = active_channels(block)
     width, height = parse_detector_frame(block)
     time_points = active_dimension_count(block, "TimeSeriesSetup", "Duration/Cycles")
@@ -421,7 +629,7 @@ def extract_block(block: ET.Element, block_index: int, autosave_name: str) -> di
         "Z": z_slices,
         "ZSpacing": z_spacing,
         "T": time_points,
-        "M": active_tile_count(block),
+        "M": max((region["tile_count"] for region in tile_regions), default=1),
         "S": scene_count,
     }
     if split_scenes and positions:
@@ -498,7 +706,7 @@ def extract_plan_xml(xml: str, source_name: str = "<experiment-export>") -> dict
         if is_active(block)
     ]
     return {
-        "schema": "experimental.czexp-acquisition-plan/0.1",
+        "schema": PLAN_SCHEMA,
         "source": {
             "path": source_name,
             "sha256": hashlib.sha256(xml.encode("utf-8")).hexdigest(),
@@ -509,9 +717,93 @@ def extract_plan_xml(xml: str, source_name: str = "<experiment-export>") -> dict
     }
 
 
-def extract_plan(source: Path) -> dict[str, Any]:
+def extract_plan(source: str | Path) -> dict[str, Any]:
     """Extract an acquisition plan from a persisted ``.czexp`` XML file."""
+    source = Path(source)
     return extract_plan_xml(source.read_text(encoding="utf-8"), str(source.resolve()))
+
+
+def _require_current_schema(plan: dict[str, Any]) -> None:
+    if plan.get("schema") != PLAN_SCHEMA:
+        raise ValueError(f"Expected plan schema {PLAN_SCHEMA}; re-extract legacy plans from the original CZEXP.")
+
+
+def positions_from_plan(plan: dict[str, Any], *, block_index: int | None = None) -> list[Position]:
+    """Build typed positions without reparsing XML.
+
+    By default all active blocks are included. ``block_index`` selects an ordinal
+    in the active-block list, not the original XML block index. Empty plans
+    return an empty list. Missing metadata stays None.
+    """
+    _require_current_schema(plan)
+    blocks = plan["acquisition_blocks"]
+    if block_index is not None:
+        if not 0 <= block_index < len(blocks):
+            raise ValueError(f"Active acquisition block {block_index} is not available.")
+        blocks = [blocks[block_index]]
+    positions: list[Position] = []
+    for block in blocks:
+        for position in block["positions"]:
+            stage = position["stage_position"]
+            region = position.get("tile_region")
+            positions.append(
+                Position(
+                    block_index=block["block_index"],
+                    scene_index=position["scene_index"],
+                    well_id=position["well_id"],
+                    well_row=position["well_row"],
+                    well_column=position["well_column"],
+                    well_index=position["well_index"],
+                    field_index=position["field_index"],
+                    position_name=position.get("position_name"),
+                    position_id=position.get("position_id"),
+                    x=stage["x"],
+                    y=stage["y"],
+                    z=stage["z"],
+                    tile_region=TileRegion(**region) if region is not None else None,
+                )
+            )
+    return positions
+
+
+def load_experiment_positions(experiment: str | Path) -> list[Position]:
+    """Read a CZEXP once and return its typed acquisition positions, without I/O output."""
+    return positions_from_plan(extract_plan(experiment))
+
+
+def positions_to_dataframe(positions: Sequence[Position]) -> pd.DataFrame:
+    """Convert typed positions to a nullable pandas table; requires the dataframe extra."""
+    try:
+        import pandas as pd
+    except ModuleNotFoundError as error:
+        if error.name != "pandas":
+            raise
+        raise ImportError("Position tables require pandas; install 'zen_api_utils[dataframe]'.") from error
+    return pd.DataFrame.from_records(
+        [position.to_record() for position in positions], columns=POSITION_FIELDS
+    ).astype(
+        {
+            "block_index": "Int64",
+            "scene_index": "Int64",
+            "well_id": "string",
+            "well_row": "Int64",
+            "well_column": "Int64",
+            "well_index": "Int64",
+            "field_index": "Int64",
+            "position_name": "string",
+            "position_id": "string",
+            "stage_x_um": "Float64",
+            "stage_y_um": "Float64",
+            "stage_z_um": "Float64",
+            "tile_width_um": "Float64",
+            "tile_height_um": "Float64",
+        }
+    )
+
+
+def load_experiment_positions_dataframe(experiment: str | Path) -> pd.DataFrame:
+    """Read a CZEXP and return a table without printing or writing files."""
+    return positions_to_dataframe(load_experiment_positions(experiment))
 
 
 def build_czmbi(plan: dict[str, Any], block_index: int = 0) -> ET.Element:
@@ -520,6 +812,7 @@ def build_czmbi(plan: dict[str, Any], block_index: int = 0) -> ET.Element:
     Exact ``zen_filename`` values take precedence. Deterministic
     ``suggested_filename`` values are used only when exact names are unavailable.
     """
+    _require_current_schema(plan)
     try:
         block = plan["acquisition_blocks"][block_index]
     except (KeyError, IndexError, TypeError) as error:
@@ -575,9 +868,9 @@ def build_czmbi(plan: dict[str, Any], block_index: int = 0) -> ET.Element:
             {
                 "BlockId": str(block_id),
                 "WellId": str(well),
-                "Row": str(row),
-                "Col": str(column),
-                "Field": str(field),
+                "Row": str(row + 1),
+                "Col": str(column + 1),
+                "Field": str(field + 1),
             },
         )
         document.text = str(filename)

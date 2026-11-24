@@ -10,7 +10,7 @@ import contextlib
 import itertools
 import json
 import sys
-from collections.abc import AsyncIterable, AsyncIterator
+from collections.abc import AsyncIterable
 from dataclasses import replace
 from datetime import datetime
 from pathlib import Path
@@ -25,7 +25,11 @@ from grpclib.exceptions import GRPCError, ProtocolError, StreamTerminatedError
 from ome_writers import AcquisitionSettings, Dimension, Plate, Position, create_stream
 
 # ZEN API auto-generated stubs
-from zen_api_utils.compatibility import ZenApiCompatibilityError, api_capabilities, api_operation
+from zen_api_utils.compatibility import (
+    ZenApiCompatibilityError,
+    api_capabilities,
+    api_operation,
+)
 
 with api_capabilities("Pixel streaming"):
     from zen_api.acquisition.v1beta import (
@@ -33,13 +37,15 @@ with api_capabilities("Pixel streaming"):
         ExperimentServiceStub,
         ExperimentStreamingServiceMonitorAllExperimentsRequest,
         ExperimentStreamingServiceMonitorAllExperimentsResponse,
-        PixelType,
     )
-from zen_api_utils.misc import initialize_zenapi, set_logging
 from zen_api_utils.experiment_acquisition import (
     AcquisitionDimensions,
     ExperimentAcquisition,
     query_experiment_acquisition,
+)
+from zen_api_utils.misc import initialize_zenapi, set_logging
+from zen_api_utils.streaming.frames import (
+    runtime_grayscale_dtype as _runtime_grayscale_dtype,
 )
 from zen_api_utils.streaming.geometry import (
     TileGeometry,
@@ -53,16 +59,23 @@ from zen_api_utils.streaming.omezarr import (
     open_in_ndv_viewer,
     start_loaded_experiment,
 )
+from zen_api_utils.streaming.omezarr import (
+    find_image_paths as _find_omezarr_image_paths,  # noqa: F401
+)
+from zen_api_utils.streaming.omezarr import (
+    generate_pyramids as generate_omezarr_pyramids,
+)
+from zen_api_utils.streaming.receiver import (
+    close_async_iterator as _close_async_iterator,
+)
+from zen_api_utils.streaming.receiver import (
+    merge_channel_streams as _merge_channel_streams,
+)
 
 logger = set_logging()
 
 # Default data type for pixel streaming
 DEFAULT_DTYPE = np.dtype(np.uint16)
-
-_GRAYSCALE_PIXEL_DTYPES: dict[PixelType, np.dtype] = {
-    PixelType.GRAY8: np.dtype(np.uint8),
-    PixelType.GRAY16: np.dtype(np.uint16),
-}
 
 # Inactivity timeout for matching pixel frames, in seconds.
 _STATUS_POLL_TIMEOUT: float = 30.0
@@ -204,32 +217,10 @@ def _record_completion(
         raise IncompleteAcquisitionError(zarr_path, len(received), len(coordinates), report_path)
 
 
-def _runtime_grayscale_dtype(
-    pixel_type: PixelType,
-    payload_size: int,
-    width: int,
-    height: int,
-) -> np.dtype:
-    """Return and validate the dtype reported by a streamed frame."""
-    try:
-        dtype = _GRAYSCALE_PIXEL_DTYPES[pixel_type]
-    except KeyError as exc:
-        name = getattr(pixel_type, "name", str(pixel_type))
-        raise ValueError(f"Unsupported streamed pixel type for OME-ZARR: {name}") from exc
-
-    expected_size = width * height * dtype.itemsize
-    if payload_size != expected_size:
-        raise ValueError(
-            "Streamed pixel payload size does not match its runtime "
-            f"metadata: got {payload_size} bytes, expected "
-            f"{expected_size} for {width}x{height} {pixel_type.name}."
-        )
-    return dtype
-
-
 def _plate_row_name(row: int) -> str:
-    """Convert a one-based plate row number to its alphabetic name."""
+    """Convert an internal plate row index to its alphabetic output label."""
     name = ""
+    row += 1
     while row > 0:
         row, remainder = divmod(row - 1, 26)
         name = chr(ord("A") + remainder) + name
@@ -284,7 +275,7 @@ def _build_position_layout(
         row = metadata.get("well_row")
         column = metadata.get("well_column")
         field_index = metadata.get("field_index")
-        if not isinstance(row, int) or row < 1 or not isinstance(column, int) or column < 1:
+        if not isinstance(row, int) or row < 0 or not isinstance(column, int) or column < 0:
             logger.warning(
                 f"ZEN XML contains an invalid well coordinate for scene {scene}; "
                 "writing a generic multiposition OME-ZARR dataset."
@@ -296,21 +287,21 @@ def _build_position_layout(
 
         max_row = max(max_row, row)
         max_column = max(max_column, column)
-        field = field_index - 1 if isinstance(field_index, int) and field_index > 0 else scene
+        field = field_index if isinstance(field_index, int) and field_index >= 0 else scene
         for tile in range(num_m):
             name = str(field * num_m + tile)
             hcs_positions.append(
                 Position(
                     name=name,
                     plate_row=_plate_row_name(row),
-                    plate_column=f"{column:02d}",
+                    plate_column=f"{column + 1:02d}",
                 )
             )
 
     plate = Plate(
         name=ecfg.experiment_name,
-        row_names=[_plate_row_name(row) for row in range(1, max_row + 1)],
-        column_names=[f"{column:02d}" for column in range(1, max_column + 1)],
+        row_names=[_plate_row_name(row) for row in range(max_row + 1)],
+        column_names=[f"{column + 1:02d}" for column in range(max_column + 1)],
     )
     return hcs_positions, plate
 
@@ -427,10 +418,10 @@ def _assemble_scene_mosaics(
             row = position.get("well_row")
             column = position.get("well_column")
             field_index = position.get("field_index")
-            if not isinstance(row, int) or not isinstance(column, int):
+            if not isinstance(row, int) or row < 0 or not isinstance(column, int) or column < 0:
                 raise ValueError("HCS scene has no valid well coordinate")
-            field = field_index - 1 if isinstance(field_index, int) and field_index > 0 else scene_index
-            well_path = f"{_plate_row_name(row)}/{column:02d}"
+            field = field_index if isinstance(field_index, int) and field_index >= 0 else scene_index
+            well_path = f"{_plate_row_name(row)}/{column + 1:02d}"
             tile_count = hcs_tile_count or max(tile.tile_index for tile in scene_tiles) + 1
             source_names = [str(field * tile_count + placed_tile.tile.tile_index) for placed_tile in geometry.tiles]
             source_paths = [f"{well_path}/{source_name}" for source_name in source_names]
@@ -632,123 +623,6 @@ def _assemble_scene_mosaics(
         if final_path in root:
             del root[final_path]
         (zarr_path / source_path).replace(zarr_path / final_path)
-
-
-def _find_omezarr_image_paths(zarr_path: Path) -> list[Path]:
-    """Find regular or HCS image groups containing multiscales metadata."""
-    root = zarr.open_group(zarr_path, mode="r")
-    if "OME" in root:
-        ome_metadata = root["OME"].attrs.get("ome", {})
-        series = ome_metadata.get("series", []) if isinstance(ome_metadata, dict) else []
-        if isinstance(series, list) and series:
-            return [zarr_path / path for path in series if isinstance(path, str)]
-
-    image_paths: list[Path] = []
-
-    def visit(group: zarr.Group, group_path: Path) -> None:
-        ome_metadata = group.attrs.get("ome", {})
-        if isinstance(ome_metadata, dict) and isinstance(ome_metadata.get("multiscales"), list):
-            image_paths.append(group_path)
-            return
-        for name, subgroup in group.groups():
-            visit(subgroup, group_path / name)
-
-    visit(root, zarr_path)
-    return image_paths
-
-
-def generate_omezarr_pyramids(
-    zarr_path: str | Path,
-    pyramid_levels: int,
-    spatial_shard_size_chunks: int | None = 2,
-) -> None:
-    """Append Y/X pyramid levels after acquisition without rewriting level 0."""
-    if pyramid_levels < 1:
-        raise ValueError("pyramid_levels must be at least 1")
-
-    import ngff_zarr as nz
-
-    zarr_path = Path(zarr_path)
-    image_paths = _find_omezarr_image_paths(zarr_path)
-    if not image_paths:
-        raise RuntimeError(f"No OME-Zarr image groups found in: {zarr_path}")
-
-    chunks_per_shard = (
-        {"y": spatial_shard_size_chunks, "x": spatial_shard_size_chunks}
-        if spatial_shard_size_chunks is not None
-        else None
-    )
-
-    logger.info(f"Generating {pyramid_levels} pyramid level(s) for {len(image_paths)} image(s) ...")
-    for image_index, image_path in enumerate(image_paths, start=1):
-        existing = nz.from_ngff_zarr(image_path, validate=True)
-        base_image = existing.images[0]
-        if not {"y", "x"}.issubset(base_image.dims):
-            raise RuntimeError(f"OME-Zarr image has no Y/X axes: {image_path}")
-
-        spatial_dims = [dim for dim in base_image.dims if dim in {"z", "y", "x"}]
-        scale_factors = [
-            {dim: 2**level if dim in {"y", "x"} else 1 for dim in spatial_dims}
-            for level in range(1, pyramid_levels + 1)
-        ]
-        chunks = tuple(int(chunk) for chunk in base_image.data.chunksize)
-        multiscales = nz.to_multiscales(
-            base_image,
-            scale_factors=scale_factors,
-            method=nz.Methods.ITKWASM_GAUSSIAN,
-            chunks=chunks,
-            cache=True,
-        )
-        for level, dataset in enumerate(multiscales.metadata.datasets):
-            dataset.path = str(level)
-
-        # start_level=1 binds the existing array at path "0" as read-only.
-        # Sharding is configured only on the newly written levels.
-        nz.to_ome_zarr(
-            image_path,
-            multiscales,
-            version="0.5",
-            overwrite=False,
-            start_level=1,
-            chunks_per_shard=chunks_per_shard,
-        )
-        logger.info(f"Pyramid image {image_index}/{len(image_paths)} complete: {image_path}")
-
-    logger.info(f"OME-Zarr pyramid generation completed: {zarr_path}")
-
-
-async def _merge_channel_streams(
-    streams: list[tuple[int, AsyncIterable[Any]]],
-) -> AsyncIterator[tuple[int, Any]]:
-    """Merge explicit channel subscriptions into one asynchronous stream."""
-    iterators = [(output_channel, stream.__aiter__()) for output_channel, stream in streams]
-    tasks = {
-        asyncio.create_task(stream_iter.__anext__()): (output_channel, stream_iter)
-        for output_channel, stream_iter in iterators
-    }
-    try:
-        while tasks:
-            done, _ = await asyncio.wait(tasks, return_when=asyncio.FIRST_COMPLETED)
-            for task in done:
-                output_channel, stream_iter = tasks.pop(task)
-                try:
-                    response = task.result()
-                except StopAsyncIteration:
-                    continue
-                tasks[asyncio.create_task(stream_iter.__anext__())] = (output_channel, stream_iter)
-                yield output_channel, response
-    finally:
-        for task in tasks:
-            task.cancel()
-        if tasks:
-            await asyncio.gather(*tasks, return_exceptions=True)
-
-
-async def _close_async_iterator(iterator: AsyncIterator[Any]) -> None:
-    """Close an asynchronous iterator when its implementation supports it."""
-    close = getattr(iterator, "aclose", None)
-    if close is not None:
-        await close()
 
 
 async def _cancel_channel_stream(stream: Any) -> None:
@@ -1289,7 +1163,7 @@ async def _stream_to_omezarr_with_config_connected(
         z_spacing=acquired_dimensions.z_spacing,
         tiles=acquired_dimensions.tiles,
         scenes=acquired_dimensions.scenes,
-        positions=acquisition.positions,
+        positions=tuple(position.to_record() for position in acquisition.positions),
     )
     num_t, num_c, num_z = ecfg.time_points, ecfg.channels, ecfg.z_planes
     num_m, num_s = ecfg.tiles, ecfg.scenes
@@ -1556,7 +1430,7 @@ async def _stream_to_omezarr_with_config_connected(
                 f"max_pending_frames={ecfg.max_pending_frames}; "
                 f"next expected linear index is {next_write}."
             )
-            deadline = asyncio.get_running_loop().time() + inactivity_timeout
+        deadline = asyncio.get_running_loop().time() + inactivity_timeout
 
         # All expected frames received – break out of the gRPC stream
         # (monitor_all_experiments does not terminate on its own).

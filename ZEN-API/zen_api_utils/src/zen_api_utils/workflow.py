@@ -217,6 +217,8 @@ async def run_job(
         verbose (bool, optional): Whether to log additional information during the job execution. Defaults to False.
     Raises:
         TypeError: If the type of a parameter is not supported.
+        ValueError: A parameter names an unknown resource or no resource service
+            was supplied. Parameters are validated before any resource updates.
     Returns:
         None: This function does not return anything.
     """
@@ -249,34 +251,27 @@ async def run_job(
         if job_resources_service is None:
             raise ValueError("job_resources_service is required when parameters are provided")
 
-        for k, v in parameters.items():
+        for name, value in parameters.items():
+            if name not in resources_ids:
+                raise ValueError(f"Unknown job resource: {name}")
+            if not isinstance(value, (bool, int, float, str)):
+                raise TypeError(f"The type of {name} is not supported")
 
-            if k in resources_ids:
+        for name, value in parameters.items():
+            if isinstance(value, bool):
+                request = JobResourcesServiceSetBooleanValueRequest(resource_id=name, value=value)
+                await job_resources_service.set_boolean_value(request)
+            elif isinstance(value, int):
+                request = JobResourcesServiceSetIntegerValueRequest(resource_id=name, value=value)
+                await job_resources_service.set_integer_value(request)
+            elif isinstance(value, float):
+                request = JobResourcesServiceSetFloatValueRequest(resource_id=name, value=value)
+                await job_resources_service.set_float_value(request)
+            elif isinstance(value, str):
+                request = JobResourcesServiceSetStringValueRequest(resource_id=name, value=value)
+                await job_resources_service.set_string_value(request)
 
-                if isinstance(v, bool):
-
-                    request = JobResourcesServiceSetBooleanValueRequest(resource_id=k, value=v)
-                    await job_resources_service.set_boolean_value(request)
-
-                elif isinstance(v, int):
-
-                    request = JobResourcesServiceSetIntegerValueRequest(resource_id=k, value=v)
-                    await job_resources_service.set_integer_value(request)
-
-                elif isinstance(v, float):
-
-                    request = JobResourcesServiceSetFloatValueRequest(resource_id=k, value=v)
-                    await job_resources_service.set_float_value(request)
-
-                elif isinstance(v, str):
-
-                    request = JobResourcesServiceSetStringValueRequest(resource_id=k, value=v)
-                    await job_resources_service.set_string_value(request)
-
-                else:
-                    raise TypeError(f"The type of {k} is not supported")
-
-                logger.info(f"Updated parameter: {k} --> {v}")
+            logger.info(f"Updated parameter: {name} --> {value}")
 
     if verbose:
         loaded = await is_job_template_loaded(workflow_service)
