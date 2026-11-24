@@ -93,31 +93,33 @@ separate API-specific utility artifacts.
 
 ## Documentation
 
-The shared MkDocs generator builds one site with separate `zen_api` and
-`zen_api_utils` references, protocol definitions, and both package versions.
-The utility guide lives under `mkdocs_docs`. The API build workflow and CI
-generate the site under the selected API package's `docs/mkdocs_site`; the
-utility builder does not generate documentation. The API output must include
-`proto-descriptor.pb` from wrapper generation and have a matching versioned
-proto directory. Documentation builds run MkDocs in strict mode and use the
-repository's `packaging/requirements.txt`. See `Instructions.md` for standalone
-documentation generation with an explicitly selected API release.
+Browse [utility documentation](https://zeiss-microscopy.github.io/OAD/zen_api_utils/)
+and use its own version dropdown. The
+[ZEN API reference](https://zeiss-microscopy.github.io/OAD/) has separate API
+version selection, at its existing URLs. The utility guide lives under
+`mkdocs_docs`; strict documentation builds generate it once per utility release,
+not once per API version.
 
-CI tests utilities against the matching API wheel before uploading and optionally
-publishing the combined `zen_api-<version>-mkdocs-site` artifact to
-[the versioned documentation site](https://sebi06.github.io/ZEN_API/).
-The two Python distributions and their versions remain separate. By default,
-the utility version comes from `pyproject.toml`; an API release does not change it.
-Manual CI runs can set the optional `utils_version` input to override that version
-for the run. The same version is used for testing, distributions, artifact names
-and documentation. This changes only CI checkouts, not committed metadata or the
-source revision being built. Tag builds use the utility version committed in TOML.
+OAD's **Deploy ZEN API docs and build packages** workflow builds separate API and
+utility distributions and tests the actual wheels against the selected API
+versions on Python 3.12-3.15 before publishing the two documentation sites.
+Utility metadata, package artifacts, and documentation use the version committed
+in this checkout's `pyproject.toml`; selecting API versions does not change it or
+retrieve another utility source revision. Previously published utility snapshots
+are retained independently of the selected API versions.
+
+Both GitHub Release controls are opt-in. Enable `publish_utils_release` to attach
+the tested utility distributions to `zen-api-utils-v<utility-version>`, without
+enabling `publish_releases` for the API distributions. Ordinary successful runs
+still upload package and documentation artifacts; no PyPI upload occurs.
+See the [OAD documentation and release guide](../README.md#documentation).
+The local utility package builder continues to build distributions only.
 The project directory, distribution, and import package are all named
 `zen_api_utils`. The import package lives in `zen_api_utils/src/zen_api_utils`.
 
 The dependency `zen_api>=2026.5.1,<=2026.11.1` expresses the supported API range.
-CI tests the utilities with API `2026.5.1`, `2026.7.1`, and `2026.11.1`, and with
-the API built by the current workflow. API documentation builds and CI reject
+CI defaults to testing utilities with API `2026.5.1`, `2026.7.1`, and `2026.11.1`.
+Documentation builds and CI reject
 selected APIs outside that range before overwriting API output. Extend the range and
 the test matrix only after testing another API release. These checks do not
 replace hardware integration testing. New API versions and artifact names
