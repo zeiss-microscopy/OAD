@@ -311,10 +311,95 @@ def test_workflow_publishes_separate_docs_and_retains_utility_snapshots():
     assert pages["with"]["name"] == artifact_name
     deployment = next(step for step in steps if step.get("uses", "").startswith("actions/deploy-pages@"))
     assert deployment["with"]["artifact_name"] == artifact_name
+    readiness = next(step for step in steps if step.get("id") == "pages_artifact_ready")
+    assert steps.index(pages) < steps.index(readiness) < steps.index(deployment)
+    assert job["permissions"]["actions"] == "read"
+    assert readiness["env"]["ARTIFACT_NAME"] == artifact_name
+    assert readiness["env"]["ARTIFACT_ID"] == "${{ steps.pages_upload.outputs.artifact_id }}"
+    assert pages["id"] == "pages_upload"
     history = next(step for step in steps if step.get("uses", "").startswith("peaceiris/actions-gh-pages@"))
     assert history["with"]["publish_branch"] == "zen-api-utils-docs-history"
     assert history["with"]["publish_dir"] == "site/zen_api_utils"
     assert config["concurrency"]["cancel-in-progress"] is False
+
+
+@pytest.mark.parametrize(
+    "scenario", ["immediate", "delayed", "timeout", "duplicate", "api-error", "wrong-id", "expired", "empty"]
+)
+def test_pages_artifact_readiness_handles_visibility_delay(scenario):
+    """Execute the actual workflow script with deterministic artifact API responses."""
+    workflow = Path(__file__).resolve().parents[2] / "workflows/deploy-zen-api-docs.yml"
+    config = yaml.safe_load(workflow.read_text(encoding="utf-8"))
+    step = next(step for step in config["jobs"]["deploy-docs"]["steps"] if step.get("id") == "pages_artifact_ready")
+    harness = r"""
+const assert = require("node:assert/strict");
+const { script, scenario } = JSON.parse(require("node:fs").readFileSync(0, "utf8"));
+let calls = 0;
+const sleeps = [];
+const logs = [];
+const artifact = {id: 42, name: "pages-test", expired: false, size_in_bytes: 123};
+const github = {
+  rest: {actions: {listWorkflowRunArtifacts: "list-artifacts"}},
+  paginate: async (method, options) => {
+    calls++;
+    assert.equal(method, "list-artifacts");
+    assert.deepEqual(options, {owner: "owner", repo: "repo", run_id: 123, per_page: 100});
+    if (scenario === "api-error") throw new Error("Forbidden");
+    if (scenario === "timeout" || (scenario === "delayed" && calls < 3))
+      return [{...artifact, name: "another-artifact"}];
+    if (scenario === "duplicate") return [artifact, {...artifact, id: 43}];
+    if (scenario === "wrong-id") return [{...artifact, id: 43}];
+    if (scenario === "expired") return [{...artifact, expired: true}];
+    if (scenario === "empty") return [{...artifact, size_in_bytes: 0}];
+    return [artifact];
+  }
+};
+const context = {repo: {owner: "owner", repo: "repo"}, runId: 123};
+const core = {info: message => logs.push(message)};
+const wait = (callback, milliseconds) => { sleeps.push(milliseconds); callback(); };
+const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
+(async () => {
+  const execute = () => new AsyncFunction("github", "context", "core", "setTimeout", script)(
+    github, context, core, wait
+  );
+  if (scenario === "timeout") {
+    await assert.rejects(execute, /not visible after 12 attempts/);
+    assert.equal(calls, 12);
+    assert.equal(sleeps.length, 11);
+  } else if (scenario === "duplicate") {
+    await assert.rejects(execute, /Multiple artifacts/);
+    assert.equal(calls, 1);
+    assert.equal(sleeps.length, 0);
+  } else if (scenario === "api-error") {
+    await assert.rejects(execute, /Forbidden/);
+    assert.equal(calls, 1);
+    assert.equal(sleeps.length, 0);
+  } else if (["wrong-id", "expired", "empty"].includes(scenario)) {
+    await assert.rejects(execute, /unexpected ID, expiration, or size/);
+    assert.equal(calls, 1);
+    assert.equal(sleeps.length, 0);
+  } else {
+    await execute();
+    assert.equal(calls, scenario === "delayed" ? 3 : 1);
+    assert.equal(sleeps.length, calls - 1);
+    assert.ok(logs.some(message => message.includes("ready")));
+  }
+  assert.ok(sleeps.every(delay => delay === 5000));
+})().catch(error => { console.error(error); process.exitCode = 1; });
+"""
+    node = shutil.which("node")
+    if node is None:
+        pytest.skip("Node.js is required to exercise the GitHub Actions JavaScript")
+    result = subprocess.run(
+        [node, "-e", harness],
+        input=json.dumps({"script": step["with"]["script"], "scenario": scenario}),
+        env={**os.environ, "ARTIFACT_NAME": "pages-test", "ARTIFACT_ID": "42"},
+        capture_output=True,
+        encoding="utf-8",
+        check=False,
+        timeout=15,
+    )
+    assert result.returncode == 0, result.stdout + result.stderr
 
 
 def test_utility_release_uses_tested_wheels_and_explicit_approval():
