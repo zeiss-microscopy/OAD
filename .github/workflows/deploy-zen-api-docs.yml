@@ -198,6 +198,7 @@ jobs:
         runs-on: ubuntu-latest
         needs: [settings, build-packages, test-utilities]
         permissions:
+            actions: read
             contents: write
             pages: write
             id-token: write
@@ -263,10 +264,49 @@ jobs:
             - name: Configure GitHub Pages
               uses: actions/configure-pages@v6
             - name: Upload GitHub Pages artifact
+              id: pages_upload
               uses: actions/upload-pages-artifact@v4
               with:
                   name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
                   path: site
+            - name: Wait for Pages artifact visibility
+              id: pages_artifact_ready
+              uses: actions/github-script@v8
+              timeout-minutes: 3
+              env:
+                  ARTIFACT_NAME: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+                  ARTIFACT_ID: ${{ steps.pages_upload.outputs.artifact_id }}
+              with:
+                  script: |
+                      const name = process.env.ARTIFACT_NAME;
+                      const expectedId = process.env.ARTIFACT_ID;
+                      if (!expectedId) {
+                        throw new Error("Pages upload did not return an artifact ID.");
+                      }
+                      const attempts = 12;
+                      for (let attempt = 1; attempt <= attempts; attempt++) {
+                        const artifacts = await github.paginate(
+                          github.rest.actions.listWorkflowRunArtifacts,
+                          {...context.repo, run_id: context.runId, per_page: 100}
+                        );
+                        const matches = artifacts.filter(artifact => artifact.name === name);
+                        if (matches.length > 1) {
+                          throw new Error(`Multiple artifacts named "${name}" were found.`);
+                        }
+                        if (matches.length === 1) {
+                          const artifact = matches[0];
+                          if (String(artifact.id) !== expectedId || artifact.expired || artifact.size_in_bytes === 0) {
+                            throw new Error(`Pages artifact "${name}" has unexpected ID, expiration, or size.`);
+                          }
+                          core.info(`Pages artifact "${name}" (${expectedId}) is ready.`);
+                          return;
+                        }
+                        core.info(`Pages artifact "${name}" is not visible yet (${attempt}/${attempts}).`);
+                        if (attempt < attempts) {
+                          await new Promise(resolve => setTimeout(resolve, 5000));
+                        }
+                      }
+                      throw new Error(`Pages artifact "${name}" is not visible after ${attempts} attempts.`);
             - name: Deploy to GitHub Pages
               id: deployment
               uses: actions/deploy-pages@v5

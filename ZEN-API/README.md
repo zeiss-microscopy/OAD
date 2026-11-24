@@ -62,6 +62,12 @@ documentation artifacts (`zen_api-mkdocs-sites` and
 `zen_api_utils-<utility-version>-mkdocs-site`). One Pages deployment includes both
 sites because they share the repository's Pages host.
 
+Pages artifact names include the run ID and attempt number to avoid collisions
+on reruns. Before deployment, the workflow polls GitHub's artifact API up to
+12 times, five seconds apart, for the exact uploaded artifact ID and name.
+Missing artifacts time out explicitly; duplicate or invalid artifacts and API
+errors fail the step instead of reporting a successful deployment.
+
 Previously published utility snapshots are restored from the
 `zen-api-utils-docs-history` branch before building. After deployment, the workflow
 updates that branch so later API or utility updates retain older utility versions.
