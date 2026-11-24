@@ -29,6 +29,7 @@ It opens a possibility to create applications, UIs or workflows, based on ZEN's 
 |    zen_api-2026.5.1    |   ZEN 3.14    | [2026.5.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.5.1/)   |
 |    zen_api-2026.7.1    | ZEN core 3.14 | [2026.7.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.7.1/)   |
 |   zen_api-2026.11.1    |   ZEN 3.15    | [2026.11.1](https://zeiss-microscopy.github.io/OAD/zenapi/2026.11.1/) |
+|   zen_api_utils-0.2.0  | API-dependent | [0.2.0](https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/) |
 
 The documentation workflow defaults to API `2026.11.1`, `2026.7.1`, and `2026.5.1`,
 and the independently versioned `zen_api_utils` package in `zen_api_utils/`.
