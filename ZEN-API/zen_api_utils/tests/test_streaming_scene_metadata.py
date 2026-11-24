@@ -19,6 +19,7 @@ from zen_api_utils.streaming.pipeline import (
     _build_position_layout,
     _find_omezarr_image_paths,
     _runtime_grayscale_dtype,
+    generate_omezarr_pyramids,
 )
 
 
@@ -144,15 +145,15 @@ def test_hcs_layout_can_be_enabled_or_disabled() -> None:
     positions = (
         {
             "scene_index": 0,
-            "well_row": 2,
-            "well_column": 2,
-            "field_index": 1,
+            "well_row": 1,
+            "well_column": 1,
+            "field_index": 0,
         },
         {
             "scene_index": 1,
-            "well_row": 3,
-            "well_column": 3,
-            "field_index": 1,
+            "well_row": 2,
+            "well_column": 2,
+            "field_index": 0,
         },
     )
     hcs_config = SimpleNamespace(
@@ -179,6 +180,23 @@ def test_hcs_layout_can_be_enabled_or_disabled() -> None:
     assert generic_positions[-1].name == "S1_M7"
 
 
+def test_hcs_layout_converts_zero_indices_and_keeps_second_field_distinct() -> None:
+    config = SimpleNamespace(
+        positions=tuple(
+            {"scene_index": scene, "well_row": 0, "well_column": 0, "field_index": scene}
+            for scene in range(2)
+        ),
+        use_hcs_layout=True,
+        experiment_name="first-well",
+    )
+    positions, plate = _build_position_layout(config, num_s=2, num_m=2)
+    assert plate is not None
+    assert [position.name for position in positions] == ["0", "1", "2", "3"]
+    assert all(position.plate_row == "A" and position.plate_column == "01" for position in positions)
+    assert plate.row_names == ["A"]
+    assert plate.column_names == ["01"]
+
+
 @pytest.mark.parametrize(
     ("pixel_type", "bytes_per_pixel", "expected"),
     [
@@ -200,6 +218,65 @@ def test_runtime_grayscale_dtype(
             height=3,
         )
         == expected
+    )
+
+
+@pytest.mark.parametrize("shard_size", [None, 2], ids=["unsharded", "sharded"])
+def test_pyramid_entry_point_appends_levels_without_rewriting_base(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    shard_size: int | None,
+) -> None:
+    import sys
+    from unittest.mock import Mock
+
+    store_path = tmp_path / "pyramids.zarr"
+    root = zarr.open_group(store_path, mode="w")
+    _create_raw_tile(root, 0, 7)
+    base_image = SimpleNamespace(
+        dims=("t", "c", "z", "y", "x"),
+        data=SimpleNamespace(chunksize=(1, 1, 1, 4, 4)),
+    )
+    datasets = [
+        SimpleNamespace(path="old-0"),
+        SimpleNamespace(path="old-1"),
+        SimpleNamespace(path="old-2"),
+    ]
+    multiscales = SimpleNamespace(metadata=SimpleNamespace(datasets=datasets))
+    ngff = SimpleNamespace(
+        from_ngff_zarr=Mock(return_value=SimpleNamespace(images=[base_image])),
+        to_multiscales=Mock(return_value=multiscales),
+        to_ome_zarr=Mock(),
+        Methods=SimpleNamespace(ITKWASM_GAUSSIAN="itkwasm_gaussian"),
+    )
+    monkeypatch.setitem(sys.modules, "ngff_zarr", ngff)
+
+    generate_omezarr_pyramids(
+        store_path, pyramid_levels=2, spatial_shard_size_chunks=shard_size
+    )
+
+    image_path = store_path / "raw_0"
+    ngff.from_ngff_zarr.assert_called_once_with(image_path, validate=True)
+    ngff.to_multiscales.assert_called_once_with(
+        base_image,
+        scale_factors=[{"z": 1, "y": 2, "x": 2}, {"z": 1, "y": 4, "x": 4}],
+        method="itkwasm_gaussian",
+        chunks=(1, 1, 1, 4, 4),
+        cache=True,
+    )
+    ngff.to_ome_zarr.assert_called_once_with(
+        image_path,
+        multiscales,
+        version="0.5",
+        overwrite=False,
+        start_level=1,
+        chunks_per_shard=None
+        if shard_size is None
+        else {"y": shard_size, "x": shard_size},
+    )
+    assert [dataset.path for dataset in datasets] == ["0", "1", "2"]
+    np.testing.assert_array_equal(
+        root["raw_0/0"][:], np.full((1, 1, 4, 4), 7, dtype=np.uint16)
     )
 
 
@@ -449,9 +526,9 @@ def test_hcs_scene_mosaic_finalizer_emits_one_scene(
         hcs_positions=(
             {
                 "scene_index": 0,
-                "well_row": 2,
-                "well_column": 2,
-                "field_index": 1,
+                "well_row": 1,
+                "well_column": 1,
+                "field_index": 0,
             },
         ),
         hcs_tile_count=3,
@@ -484,9 +561,9 @@ def test_hcs_single_tile_scene_is_finalized_without_copy(tmp_path: Path) -> None
         hcs_positions=(
             {
                 "scene_index": 0,
-                "well_row": 2,
-                "well_column": 2,
-                "field_index": 1,
+                "well_row": 1,
+                "well_column": 1,
+                "field_index": 0,
             },
         ),
         hcs_tile_count=1,
@@ -571,9 +648,9 @@ def test_hcs_scene_mosaic_can_retain_source_tiles(tmp_path: Path) -> None:
         hcs_positions=(
             {
                 "scene_index": 0,
-                "well_row": 2,
-                "well_column": 2,
-                "field_index": 1,
+                "well_row": 1,
+                "well_column": 1,
+                "field_index": 0,
             },
         ),
         hcs_tile_count=2,

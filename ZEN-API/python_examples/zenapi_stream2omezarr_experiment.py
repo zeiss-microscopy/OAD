@@ -168,7 +168,7 @@ async def build_config(args: argparse.Namespace) -> ExperimentConfig:
         overwrite_zarr=not args.no_overwrite_zarr,
         channel_index=args.channel_index,
         zenapi_config=str(args.zenapi_config),
-        positions=acquisition.positions,
+        positions=tuple(position.to_record() for position in acquisition.positions),
         use_hcs_layout=args.hcs_layout,
         keep_source_tiles=args.keep_source_tiles,
         spatial_shard_size_chunks=args.spatial_shard_size_chunks or None,

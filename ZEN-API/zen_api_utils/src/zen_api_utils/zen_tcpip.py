@@ -103,9 +103,11 @@ class ZenCommands:
         self.port = port
         self.verbose = verbose
 
-    def execute(self):
-        """
-        Executes the commands on the ZEN device using TCP-IP connection.
+    def execute(self) -> None:
+        """Execute commands in order, closing the connection even on failure.
+
+        Raises:
+            RuntimeError: A command was rejected or its acknowledgement timed out.
         """
 
         # open the TCP-IP connection to ZEN
@@ -118,7 +120,11 @@ class ZenCommands:
                 if self.verbose:
                     logger.info(f"TCP-IP: {command}")
 
-                zentcp.tcp_eval_expression_and_wait_for_ok(zentcp_connection, command, self.timeout)
+                success, answer = zentcp.tcp_eval_expression_and_wait_for_ok(
+                    zentcp_connection, command, self.timeout
+                )
+                if not success:
+                    raise RuntimeError(f"ZEN TCP command {command!r} failed: {answer!r}")
         finally:
             zentcp_connection.close()
 

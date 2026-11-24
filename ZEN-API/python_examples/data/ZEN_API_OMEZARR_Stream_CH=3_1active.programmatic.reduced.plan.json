@@ -1,0 +1,112 @@
+{
+  "schema": "experimental.czexp-acquisition-plan/0.1",
+  "source": {
+    "path": "F:\\GitHub\\ZEN_API\\python_examples\\data\\ZEN_API_OMEZARR_Stream_CH=3_1active.czexp",
+    "sha256": "bc28e83929ae4acb58e252af11c73454360498293071b60f3e2d468fb585eb98",
+    "hardware_experiment_version": "1.2"
+  },
+  "basis": "Persisted ZEN experiment XML under ExperimentBlocks",
+  "acquisition_blocks": [
+    {
+      "block_index": 0,
+      "block_reference": "638490271096494634",
+      "split_scenes_in_separate_files": false,
+      "dimensions": {
+        "X": 1024,
+        "Y": 1024,
+        "C": 1,
+        "Z": 15,
+        "T": 2,
+        "S": 3
+      },
+      "individual_scene_dimensions": {
+        "X": 1024,
+        "Y": 1024,
+        "C": 1,
+        "Z": 15,
+        "T": 2,
+        "S": 1
+      },
+      "channels": [
+        {
+          "name": "AF568",
+          "pixel_type": "Gray8"
+        }
+      ],
+      "well_count": 3,
+      "position_count": 3,
+      "positions": [
+        {
+          "scene_index": 0,
+          "well_id": "D4",
+          "well_row": 4,
+          "well_column": 4,
+          "field_index": 1,
+          "position_name": "P1",
+          "stage_position": {
+            "x": 31500.0,
+            "y": 35500.0,
+            "z": -8000.0
+          }
+        },
+        {
+          "scene_index": 1,
+          "well_id": "D5",
+          "well_row": 4,
+          "well_column": 5,
+          "field_index": 1,
+          "position_name": "P1",
+          "stage_position": {
+            "x": 40500.0,
+            "y": 35500.0,
+            "z": -8000.0
+          }
+        },
+        {
+          "scene_index": 2,
+          "well_id": "D6",
+          "well_row": 4,
+          "well_column": 6,
+          "field_index": 1,
+          "position_name": "P1",
+          "stage_position": {
+            "x": 49500.0,
+            "y": 35500.0,
+            "z": -8000.0
+          }
+        }
+      ],
+      "planned_czi_count": 1,
+      "planned_outputs": [
+        {
+          "output_index": 0,
+          "zen_filename": null,
+          "suggested_filename": "New.czi",
+          "dimensions": {
+            "X": 1024,
+            "Y": 1024,
+            "C": 1,
+            "Z": 15,
+            "T": 2,
+            "S": 3
+          },
+          "well_ids": [
+            "D4",
+            "D5",
+            "D6"
+          ],
+          "scene_indices": [
+            0,
+            1,
+            2
+          ]
+        }
+      ],
+      "unresolved": {
+        "stream_channel_mapping": "C counts active channels in the experiment XML. ZEN may expose a different FramePosition.c count; use live ExperimentStatus for pixel-stream dimensions.",
+        "exact_zen_filenames": "The experiment does not expose ZEN's complete split-scene filename expansion. suggested_filename is deterministic but must not be treated as the ZEN filename.",
+        "scene_mapping_assumption": "Each active SingleTileRegion is treated as one scene/field. Validate this mapping against the supported ZEN API and produced CZI metadata."
+      }
+    }
+  ]
+}

@@ -12,9 +12,8 @@
 #################################################################
 
 import xml.etree.ElementTree as ET
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
 
 from zen_api_utils.compatibility import api_capabilities, api_operation
 
@@ -50,35 +49,35 @@ class AxisPositions:
 
 @dataclass
 class PosXYZ:
-    """
-    PosXYZ is a data class that represents a position in 3D space with coordinates
-    specified in meters and automatically calculates their equivalent values in microns.
+    """Mutable stage position in meters with read-only micron conversions.
 
     Attributes:
         x_meter (float): The x-coordinate in meters.
         y_meter (float): The y-coordinate in meters.
-        z_meter (float, optional): The z-coordinate in meters. Defaults to None if not provided.
-        x_micron (float): The x-coordinate in microns, calculated from x_meter.
-        y_micron (float): The y-coordinate in microns, calculated from y_meter.
-        z_micron (float): The z-coordinate in microns, calculated from z_meter.
-    Methods:
-        __post_init__():
-            Automatically converts the meter values (x_meter, y_meter, z_meter)
-            to micron values (x_micron, y_micron, z_micron) after initialization.
+        z_meter (float | None): The optional z-coordinate in meters.
+        x_micron (float): The current x-coordinate in microns.
+        y_micron (float): The current y-coordinate in microns.
+        z_micron (float | None): The current z-coordinate in microns, or None.
     """
 
-    x_meter: float  # x position in [meter]
-    y_meter: float  # y position in [meter]
-    z_meter: Optional[float] = field(default=None)  # z position in [meter], optional with default value None
+    x_meter: float
+    y_meter: float
+    z_meter: float | None = None
 
-    def __post_init__(self):
-        """
-        Initializes the micron values for x, y, and z based on their meter values.
-        If z_meter is None, z_micron will also be None.
-        """
-        self.x_micron = self.x_meter * 1e6
-        self.y_micron = self.y_meter * 1e6
-        self.z_micron = self.z_meter * 1e6 if self.z_meter is not None else None
+    @property
+    def x_micron(self) -> float:
+        """Current x-coordinate in microns."""
+        return self.x_meter * 1e6
+
+    @property
+    def y_micron(self) -> float:
+        """Current y-coordinate in microns."""
+        return self.y_meter * 1e6
+
+    @property
+    def z_micron(self) -> float | None:
+        """Current z-coordinate in microns, or None when unspecified."""
+        return self.z_meter * 1e6 if self.z_meter is not None else None
 
 
 # Define a class to represent a StageMark
@@ -242,9 +241,8 @@ async def move_xyz(channel, metadata, pos_xyz: PosXYZ) -> PosXYZ:
     Args:
         channel: The gRPC channel used for communication with the services.
         metadata: Metadata for the gRPC requests.
-        xpos (float): The target X-coordinate in microns.
-        ypos (float): The target Y-coordinate in microns.
-        zpos (float): The target Z-coordinate in microns.
+        pos_xyz (PosXYZ): Target coordinates in meters. When Z is None, use
+            the current focus position without modifying this object.
     Returns:
         PosXYZ: An object containing the updated X, Y, and Z positions in meters.
     Raises:
@@ -255,22 +253,19 @@ async def move_xyz(channel, metadata, pos_xyz: PosXYZ) -> PosXYZ:
     stage_service = SimpleStageServiceStub(channel=channel, metadata=metadata)
     focus_service = FocusServiceStub(channel=channel, metadata=metadata)
 
-    # check if pos_xyz.z_meter is None, if so use the current focus position
-    if pos_xyz.z_meter is None:
-        # Retrieve the current focus position in meters
+    target_z = pos_xyz.z_meter
+    if target_z is None:
         posZ = await focus_service.get_position(FocusServiceGetPositionRequest())
-        pos_xyz.z_meter = posZ.value
+        target_z = posZ.value
 
     # Move the stage to the specified X and Y coordinates
     await stage_service.move_to(SimpleStageServiceMoveToRequest(x=pos_xyz.x_meter, y=pos_xyz.y_meter))
 
     # Move the focus to the specified Z position
-    await focus_service.move_to(FocusServiceMoveToRequest(value=pos_xyz.z_meter))
+    await focus_service.move_to(FocusServiceMoveToRequest(value=target_z))
 
     # Retrieve the current stage positions in microns
     posXY = await stage_service.get_position(SimpleStageServiceGetPositionRequest())
     posZ = await focus_service.get_position(FocusServiceGetPositionRequest())
 
-    pos_xyz = PosXYZ(x_meter=posXY.x, y_meter=posXY.y, z_meter=posZ.value)
-
-    return pos_xyz
+    return PosXYZ(x_meter=posXY.x, y_meter=posXY.y, z_meter=posZ.value)

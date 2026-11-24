@@ -141,7 +141,7 @@ def test_async_capability_operations_preserve_signatures_and_optional_fallbacks(
   "utility, api_module, symbol",
   [
     ("cameras", "zen_api.lm.hardware.v2", "CameraServiceGetCameraRequest"),
-    ("changers", "zen_api.lm.hardware.v2", "FilterData"),
+    ("changers", "zen_api.lm.hardware.v2", "FilterWheelServiceGetFiltersRequest"),
     ("experiment", "zen_api.acquisition.v1beta", "ExperimentServiceLoadRequest"),
     ("filters", "zen_api.lm.hardware.v2", "FilterData"),
     ("objective", "zen_api.lm.hardware.v2", "ObjectiveData"),
@@ -378,6 +378,181 @@ def test_library_logging_preserves_application_sink() -> None:
         logger.remove(sink)
 
 
+@pytest.mark.parametrize("entrypoint", ["commands", "experiment", "example"])
+@pytest.mark.parametrize("answer", ["ERROR: command failed", ""])
+def test_tcp_command_failure_stops_execution_and_closes_connection(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path, entrypoint: str, answer: str
+) -> None:
+    """Rejected commands and timeouts must not produce successful acquisitions."""
+    from unittest.mock import create_autospec
+
+    from zen_api_utils import zen_tcpip, zen_tcpip_interface, zencontrol_short
+
+    connection = create_autospec(zen_tcpip.ZenTCPConnection, instance=True)
+    transport = create_autospec(zen_tcpip.ZenTCPIP, instance=True)
+    transport.tcp_open_port.return_value = connection
+    transport.tcp_eval_expression_and_wait_for_ok.side_effect = [
+        (True, "Ok"),
+        (False, answer),
+    ] + [(True, "Ok")] * 5
+    monkeypatch.setattr(zen_tcpip, "ZenTCPIP", lambda: transport)
+    monkeypatch.setattr(zencontrol_short, "ZenTCPIP", lambda: transport)
+    monkeypatch.setattr(zen_tcpip_interface, "ZenTCPIP", lambda: transport)
+    execute = {
+        "commands": zen_tcpip.ZenCommands(["first()", "fails()", "last()"]).execute,
+        "experiment": zencontrol_short.ZenExperiment(savefolder=str(tmp_path)).startexperiment,
+        "example": zen_tcpip_interface.main,
+    }[entrypoint]
+
+    with pytest.raises(RuntimeError) as caught:
+        execute()
+
+    assert transport.tcp_eval_expression_and_wait_for_ok.call_count == 2
+    failed_command = transport.tcp_eval_expression_and_wait_for_ok.call_args.args[1]
+    assert repr(failed_command) in str(caught.value)
+    assert repr(answer) in str(caught.value)
+    connection.close.assert_called_once_with()
+
+
+def test_tcp_successful_commands_preserve_experiment_output(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    from unittest.mock import create_autospec
+
+    from zen_api_utils import zen_tcpip, zencontrol_short
+
+    connection = create_autospec(zen_tcpip.ZenTCPConnection, instance=True)
+    transport = create_autospec(zen_tcpip.ZenTCPIP, instance=True)
+    transport.tcp_open_port.return_value = connection
+    transport.tcp_eval_expression_and_wait_for_ok.return_value = (True, "Ok")
+    monkeypatch.setattr(zencontrol_short, "ZenTCPIP", lambda: transport)
+
+    output = zencontrol_short.ZenExperiment(savefolder=str(tmp_path), cziname="result.czi").startexperiment()
+
+    assert output == str(tmp_path / "result.czi")
+    assert transport.tcp_eval_expression_and_wait_for_ok.call_count == 7
+    connection.close.assert_called_once_with()
+
+
+@pytest.fixture
+def workflow_services() -> tuple[Mock, Mock]:
+    from types import SimpleNamespace
+    from unittest.mock import create_autospec
+
+    from zen_api_utils.workflow import JobResourcesServiceStub, WorkflowServiceStub
+
+    workflow = create_autospec(WorkflowServiceStub, instance=True)
+    resources = create_autospec(JobResourcesServiceStub, instance=True)
+    resources.get_available_resources.return_value = SimpleNamespace(
+        resources=["exposure", "enabled", "gain", "label"]
+    )
+    return workflow, resources
+
+
+@pytest.mark.parametrize(
+    ("parameters", "error", "message"),
+    [
+        pytest.param({"exposure": 10, "expsoure": 20}, ValueError, "expsoure", id="unknown-resource"),
+        pytest.param({"exposure": 10, "enabled": []}, TypeError, "enabled", id="unsupported-value"),
+    ],
+)
+def test_workflow_validates_all_parameters_before_updates(
+    workflow_services: tuple[Mock, Mock], parameters: dict[str, object], error: type[Exception], message: str
+) -> None:
+    import asyncio
+
+    from zen_api_utils.workflow import run_job
+
+    workflow, resources = workflow_services
+
+    with pytest.raises(error, match=message):
+        asyncio.run(run_job(workflow, "test", resources, parameters=parameters))
+
+    resources.set_integer_value.assert_not_awaited()
+    resources.set_boolean_value.assert_not_awaited()
+    resources.set_float_value.assert_not_awaited()
+    resources.set_string_value.assert_not_awaited()
+    workflow.run_job.assert_not_awaited()
+
+
+def test_workflow_applies_supported_parameters_before_running(workflow_services: tuple[Mock, Mock]) -> None:
+    import asyncio
+
+    from zen_api_utils.workflow import run_job
+
+    workflow, resources = workflow_services
+
+    asyncio.run(
+        run_job(
+            workflow, "test", resources,
+            parameters={"enabled": True, "exposure": 10, "gain": 1.5, "label": "sample"},
+        )
+    )
+
+    assert resources.set_boolean_value.call_args.args[0].value is True
+    assert resources.set_integer_value.call_args.args[0].value == 10
+    assert resources.set_float_value.call_args.args[0].value == 1.5
+    assert resources.set_string_value.call_args.args[0].value == "sample"
+    workflow.run_job.assert_awaited_once()
+
+
+def test_position_unit_conversions_follow_coordinate_updates() -> None:
+    from zen_api_utils.stage import PosXYZ
+
+    position = PosXYZ(1e-6, 2e-6, 3e-6)
+    position.x_meter = 4e-6
+    position.y_meter = 5e-6
+    position.z_meter = 6e-6
+
+    assert (position.x_micron, position.y_micron, position.z_micron) == pytest.approx((4, 5, 6))
+    position.z_meter = None
+    assert position.z_micron is None
+
+
+@pytest.mark.parametrize("z_meter", [None, 3e-6])
+def test_stage_movement_does_not_mutate_requested_position(
+    monkeypatch: pytest.MonkeyPatch, z_meter: float | None
+) -> None:
+    import asyncio
+    from types import SimpleNamespace
+    from unittest.mock import create_autospec
+
+    from zen_api_utils import stage
+
+    stage_service = create_autospec(stage.SimpleStageServiceStub, instance=True)
+    focus_service = create_autospec(stage.FocusServiceStub, instance=True)
+    stage_service.get_position.return_value = SimpleNamespace(x=1e-6, y=2e-6)
+    focus_service.get_position.return_value = SimpleNamespace(value=7e-6)
+    monkeypatch.setattr(stage, "SimpleStageServiceStub", lambda **kwargs: stage_service)
+    monkeypatch.setattr(stage, "FocusServiceStub", lambda **kwargs: focus_service)
+    requested = stage.PosXYZ(1e-6, 2e-6, z_meter)
+    expected_z = 7e-6 if z_meter is None else z_meter
+
+    actual = asyncio.run(stage.move_xyz(None, [], requested))
+
+    assert requested == stage.PosXYZ(1e-6, 2e-6, z_meter)
+    assert actual == stage.PosXYZ(1e-6, 2e-6, 7e-6)
+    assert actual is not requested
+    assert focus_service.move_to.call_args.args[0].value == expected_z
+
+
+@pytest.mark.parametrize("count", [0, 2])
+def test_track_summary_returns_declared_dataclass(count: int) -> None:
+    from dataclasses import asdict
+
+    from zen_api.lm.acquisition.v1 import TrackInfo, TrackServiceGetTrackInfoResponse
+    from zen_api_utils.experiment import Tracks, show_track_info_LM
+
+    info = TrackServiceGetTrackInfoResponse(track_info=[TrackInfo(is_activated=True) for _ in range(count)])
+
+    summary = show_track_info_LM(info)
+
+    assert isinstance(summary, Tracks)
+    assert summary.info == info.track_info
+    assert summary.number == count
+    assert len(asdict(summary)["info"]) == count
+
+
 def test_path_validator_rejects_invalid_values() -> None:
     """Invalid values raise ValueError, including inside Pydantic validation."""
     assert path_validator("example.czi") == Path("example.czi")
@@ -476,3 +651,248 @@ def test_extract_plan_xml_reads_direct_single_tile_regions_without_inventing_wel
         "<experiment-export>-Scene-001-P1.czi",
         "<experiment-export>-Scene-002-P2.czi",
     ]
+
+
+@pytest.mark.parametrize("variant", ["move_changers", "move_changers_adv"])
+@pytest.mark.parametrize("cached", [False, True], ids=["queried", "cached"])
+def test_changers_query_before_moving_and_keep_independent_results(
+    monkeypatch: pytest.MonkeyPatch,
+    variant: str,
+    cached: bool,
+) -> None:
+    import asyncio
+    from unittest.mock import create_autospec
+
+    from grpclib.client import Channel
+    from zen_api.lm.hardware.v2 import (
+        ObjectiveChangerServiceGetObjectivesResponse,
+        ObjectiveData,
+        OptovarData,
+        OptovarServiceGetOptovarsResponse,
+    )
+
+    from zen_api_utils import changers
+
+    events = []
+    objectives = ObjectiveChangerServiceGetObjectivesResponse(
+        objectives=[ObjectiveData(position=1, name="20x")]
+    )
+    optovars = OptovarServiceGetOptovarsResponse(
+        optovars=[OptovarData(position=2, name="1.5x")]
+    )
+    objective_service = create_autospec(
+        changers.ObjectiveChangerServiceStub, instance=True
+    )
+    optovar_service = create_autospec(changers.OptovarServiceStub, instance=True)
+
+    async def get_objectives(request):
+        events.append("query objective")
+        return objectives
+
+    async def get_optovars(request):
+        events.append("query optovar")
+        return optovars
+
+    async def move_objective(request):
+        events.append("move objective")
+        raise OSError("objective blocked")
+
+    async def move_optovar(request):
+        events.append("move optovar")
+
+    objective_service.get_objectives.side_effect = get_objectives
+    optovar_service.get_optovars.side_effect = get_optovars
+    objective_service.move_to.side_effect = move_objective
+    optovar_service.move_to.side_effect = move_optovar
+    if variant == "move_changers":
+        monkeypatch.setattr(
+            changers, "ObjectiveChangerServiceStub", lambda **kwargs: objective_service
+        )
+        monkeypatch.setattr(
+            changers, "OptovarServiceStub", lambda **kwargs: optovar_service
+        )
+        operation = changers.move_changers(
+            Mock(spec=Channel),
+            [],
+            objective_position=1,
+            optovar_position=2,
+            objectives=objectives if cached else None,
+            optovars=optovars if cached else None,
+        )
+    else:
+        operation = changers.move_changers_adv(
+            objchanger_service=objective_service,
+            optovar_service=optovar_service,
+            objective_position=1,
+            optovar_position=2,
+            objectives=objectives if cached else None,
+            optovars=optovars if cached else None,
+        )
+
+    result = asyncio.run(operation)
+
+    expected_queries = [] if cached else ["query objective", "query optovar"]
+    assert events == expected_queries + ["move objective", "move optovar"]
+    assert result == {
+        "objective": None,
+        "optovar": {"position": 2, "name": "1.5x", "status": "success"},
+        "reflector": None,
+        "filterwheel": None,
+        "skipped": [],
+        "warnings": [],
+        "errors": ["Failed to move objective to position 1: objective blocked"],
+    }
+    assert objective_service.move_to.call_args.args[0].position_index == 1
+    assert optovar_service.move_to.call_args.args[0].position_index == 2
+    assert objective_service.get_objectives.await_count == (0 if cached else 1)
+    assert optovar_service.get_optovars.await_count == (0 if cached else 1)
+
+
+def test_changer_initialization_failure_is_reported_once_and_other_changers_continue(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    import asyncio
+    from unittest.mock import create_autospec
+
+    from grpclib.client import Channel
+    from zen_api.lm.hardware.v2 import FilterData, FilterWheelServiceGetFiltersResponse
+
+    from zen_api_utils import changers
+
+    def unavailable(**kwargs):
+        raise OSError("objective unavailable")
+
+    filterwheel = create_autospec(changers.FilterWheelServiceStub, instance=True)
+    filterwheel.get_filters.return_value = FilterWheelServiceGetFiltersResponse(
+        filters=[FilterData(position=3, name="DAPI")]
+    )
+    monkeypatch.setattr(changers, "ObjectiveChangerServiceStub", unavailable)
+    monkeypatch.setattr(
+        changers, "FilterWheelServiceStub", lambda **kwargs: filterwheel
+    )
+
+    result = asyncio.run(
+        changers.move_changers(
+            Mock(spec=Channel), [], objective_position=1, filterwheel_position=3
+        )
+    )
+
+    assert result["skipped"] == ["objective"]
+    assert len(result["warnings"]) == 1
+    assert "objective unavailable" in result["warnings"][0]
+    assert result["errors"] == []
+    assert result["filterwheel"] == {"position": 3, "name": "DAPI", "status": "success"}
+    filterwheel.move_to.assert_awaited_once()
+
+
+def test_changers_report_missing_services_and_invalid_targets_without_moving() -> None:
+    import asyncio
+    from unittest.mock import create_autospec
+
+    from zen_api.lm.hardware.v2 import OptovarData, OptovarServiceGetOptovarsResponse
+
+    from zen_api_utils import changers
+
+    optovar = create_autospec(changers.OptovarServiceStub, instance=True)
+    optovars = OptovarServiceGetOptovarsResponse(
+        optovars=[OptovarData(position=1, name="1x")]
+    )
+
+    result = asyncio.run(
+        changers.move_changers_adv(
+            optovar_service=optovar,
+            optovars=optovars,
+            objective_position=1,
+            optovar_position=99,
+        )
+    )
+
+    assert result["objective"] is None
+    assert result["optovar"] is None
+    assert result["skipped"] == ["objective"]
+    assert len(result["warnings"]) == 1
+    assert result["errors"] == [
+        "Failed to move optovar to position 99: Invalid optovar position: 99"
+    ]
+    optovar.move_to.assert_not_awaited()
+    optovar.get_optovars.assert_not_awaited()
+
+
+@pytest.mark.parametrize("variant", ["move_changers", "move_changers_adv"])
+def test_changer_cancellation_propagates(
+    monkeypatch: pytest.MonkeyPatch, variant: str
+) -> None:
+    import asyncio
+    from unittest.mock import create_autospec
+
+    from grpclib.client import Channel
+
+    from zen_api_utils import changers
+
+    service = create_autospec(changers.ObjectiveChangerServiceStub, instance=True)
+    service.get_objectives.side_effect = asyncio.CancelledError
+    if variant == "move_changers":
+        monkeypatch.setattr(
+            changers, "ObjectiveChangerServiceStub", lambda **kwargs: service
+        )
+        operation = changers.move_changers(Mock(spec=Channel), [], objective_position=1)
+    else:
+        operation = changers.move_changers_adv(
+            objchanger_service=service, objective_position=1
+        )
+
+    with pytest.raises(asyncio.CancelledError):
+        asyncio.run(operation)
+    service.move_to.assert_not_awaited()
+
+
+def test_camera_queries_preserve_settings_order_and_truncate_pixel_geometry() -> None:
+    import asyncio
+    from unittest.mock import create_autospec
+
+    from zen_api.common.v1 import DoubleFrame, DoublePoint, DoubleSize
+    from zen_api.lm.hardware import v2 as hardware
+
+    from zen_api_utils import cameras
+
+    camera = hardware.GetCameraData(
+        id="camera-2",
+        name="Camera 2",
+        is_preset=True,
+        available_binnings=["1x1", "2x2"],
+        binning=2,
+        binning_description="2x2",
+        exposure_time=0.25,
+        min_exposure_time=0.001,
+        max_exposure_time=10.0,
+        frame=DoubleFrame(
+            start_point=DoublePoint(x=1.9, y=2.1),
+            size=DoubleSize(width=100.9, height=50.1),
+        ),
+        max_frame_size=DoubleSize(width=2048.9, height=1024.1),
+    )
+    service = create_autospec(hardware.CameraServiceStub, instance=True)
+    service.get_cameras.return_value = hardware.CameraServiceGetAllCamerasResponse(
+        cameras=[camera, hardware.GetCameraData(id="camera-1")]
+    )
+    service.get_camera.return_value = hardware.CameraServiceGetCameraResponse(camera=camera)
+    expected = cameras.CameraInfo(
+        available_binnings=["1x1", "2x2"],
+        binning=2,
+        binning_description="2x2",
+        exposure_time=0.25,
+        min_exposure_time=0.001,
+        max_exposure_time=10.0,
+        id="camera-2",
+        name="Camera 2",
+        is_preset=True,
+        frame=cameras.IntegerFrame(1, 2, 100, 50),
+        max_frame_size=cameras.IntegerSize(2048, 1024),
+    )
+
+    all_cameras = asyncio.run(cameras.get_cameras_info_LM(service))
+    single_camera = asyncio.run(cameras.get_camera_info_LM(service, "camera-2"))
+
+    assert [info.id for info in all_cameras] == ["camera-2", "camera-1"]
+    assert all_cameras[0] == single_camera == expected
+    assert service.get_camera.call_args.args[0].id == "camera-2"

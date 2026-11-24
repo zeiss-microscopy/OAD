@@ -50,6 +50,7 @@ class ZenExperiment:
         :type port: int, optional
         :return: full path of the saved CZI file
         :rtype: str
+        :raises RuntimeError: A command failed or its acknowledgement timed out.
         """
 
         # get the list of existing CZI in the current folder
@@ -83,7 +84,11 @@ class ZenExperiment:
             try:
                 for command in commandlist:
                     print(command)
-                    zentcp.tcp_eval_expression_and_wait_for_ok(zentcp_connection, command, timeout)
+                    success, answer = zentcp.tcp_eval_expression_and_wait_for_ok(
+                        zentcp_connection, command, timeout
+                    )
+                    if not success:
+                        raise RuntimeError(f"ZEN TCP command {command!r} failed: {answer!r}")
             finally:
                 zentcp_connection.close()
 
