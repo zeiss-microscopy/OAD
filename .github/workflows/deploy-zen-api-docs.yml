@@ -222,6 +222,8 @@ jobs:
                   python -m pip install --no-deps -e ./ZEN-API/zen_api_utils
             - name: Test documentation builder
               run: python -m pytest .github/scripts/tests/test_build_zen_api_docs.py -q
+            - name: Test release publication safeguards
+              run: node --test .github/scripts/tests/test_prepare_release.cjs
             - name: Restore previously published utility documentation
               id: utility_history
               shell: bash
@@ -331,12 +333,24 @@ jobs:
             matrix:
                 version: ${{ fromJSON(needs.settings.outputs.versions) }}
         steps:
+            - uses: actions/checkout@v5
+            - name: Check existing API release
+              id: release_check
+              uses: actions/github-script@v8
+              env:
+                  RELEASE_TAG: ${{ fromJSON(needs.settings.outputs.release_tags)[matrix.version] }}
+              with:
+                  script: |
+                      const prepareRelease = require('./.github/scripts/prepare_release.cjs');
+                      await prepareRelease({github, context, core, tag: process.env.RELEASE_TAG});
             - name: Download matching distributions
+              if: steps.release_check.outputs.publish == 'true'
               uses: actions/download-artifact@v4
               with:
                   name: zen_api-${{ matrix.version }}-python-package
                   path: release-assets
             - name: Create or update versioned GitHub Release
+              if: steps.release_check.outputs.publish == 'true'
               uses: softprops/action-gh-release@v2
               with:
                   tag_name: ${{ fromJSON(needs.settings.outputs.release_tags)[matrix.version] }}
@@ -356,12 +370,24 @@ jobs:
         permissions:
             contents: write
         steps:
+            - uses: actions/checkout@v5
+            - name: Check existing utility release
+              id: release_check
+              uses: actions/github-script@v8
+              env:
+                  RELEASE_TAG: zen-api-utils-v${{ needs.settings.outputs.utils_version }}
+              with:
+                  script: |
+                      const prepareRelease = require('./.github/scripts/prepare_release.cjs');
+                      await prepareRelease({github, context, core, tag: process.env.RELEASE_TAG});
             - name: Download tested utility distributions
+              if: steps.release_check.outputs.publish == 'true'
               uses: actions/download-artifact@v4
               with:
                   name: zen_api_utils-${{ needs.settings.outputs.utils_version }}-python-package
                   path: release-assets
             - name: Create or update utility GitHub Release
+              if: steps.release_check.outputs.publish == 'true'
               uses: softprops/action-gh-release@v2
               with:
                   tag_name: zen-api-utils-v${{ needs.settings.outputs.utils_version }}

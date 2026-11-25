@@ -90,6 +90,15 @@ without publishing releases. Release publication requires successful compatibili
 tests and documentation deployment. This workflow publishes GitHub Releases,
 not PyPI packages.
 
+Release publication preserves existing published releases and their assets,
+whether immutable or mutable; it does not overwrite or retarget them. If a
+matching draft exists, publication stops before making changes and reports an
+actionable error. Inspect that draft's earlier publication error rather than
+repeatedly retrying it. GitHub permanently reserves tags used by immutable
+releases: deleting a draft or tag does not make such a tag reusable. A blocked
+tag requires a new package version and unused release tag. Documentation-only
+runs should leave both release controls disabled.
+
 Existing API releases are retained: canonical API versions `2026.5.1` and
 `2026.7.1` reuse their historical `v2026.05.1` and `v2026.07.1` tags rather than
 creating duplicate releases. Other API versions use `v<canonical-version>` tags.
