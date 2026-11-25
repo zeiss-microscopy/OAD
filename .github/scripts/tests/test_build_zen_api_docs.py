@@ -409,6 +409,13 @@ def test_utility_release_uses_tested_wheels_and_explicit_approval():
     inputs = config["on"]["workflow_dispatch"]["inputs"]
     assert inputs["publish_utils_release"]["default"] is False
     jobs = config["jobs"]
+    for job_name in ("publish-releases", "publish-utilities-release"):
+        steps = jobs[job_name]["steps"]
+        guard = next(step for step in steps if step.get("id") == "release_check")
+        assert "prepare_release.cjs" in guard["with"]["script"]
+        for step in steps:
+            if step.get("uses", "").startswith(("actions/download-artifact@", "softprops/action-gh-release@")):
+                assert step["if"] == "steps.release_check.outputs.publish == 'true'"
     build = jobs["build-utilities"]
     assert "matrix" not in build.get("strategy", {})
     commands = "\n".join(step.get("run", "") for step in build["steps"])
