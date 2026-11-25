@@ -2,110 +2,110 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/index.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/versions.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/cameras.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/changers.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/compatibility.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/experiment.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/experiment_acquisition.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/extract_czexp_plan.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/filters.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/misc.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/objective.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/sample_carrier.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/stage.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/streaming.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/tiles_positions.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/workflow.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/zen_tcpip.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/zen_tcpip_commands.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/zen_tcpip_interface.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/zencontrol_short.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/streaming/acquisition.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/streaming/frames.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/streaming/geometry.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/streaming/metrics.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/streaming/omezarr.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/streaming/pipeline.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
     <url>
          <loc>https://zeiss-microscopy.github.io/OAD/zen_api_utils/0.2.0/reference/zen_api_utils/streaming/receiver.html</loc>
-         <lastmod>2026-11-24</lastmod>
+         <lastmod>2026-11-25</lastmod>
     </url>
 </urlset>
