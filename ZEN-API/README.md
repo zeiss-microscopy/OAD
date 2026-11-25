@@ -64,7 +64,9 @@ documentation artifacts (`zen_api-mkdocs-sites` and
 sites because they share the repository's Pages host.
 
 Pages artifact names include the run ID and attempt number to avoid collisions
-on reruns. Before deployment, the workflow polls GitHub's artifact API up to
+on reruns. Before deployment, the workflow uses `@actions/artifact`'s
+`DefaultArtifactClient.listArtifacts()`, the same discovery API used by
+`actions/deploy-pages`, rather than the separate GitHub REST listing. It polls up to
 12 times, five seconds apart, for the exact uploaded artifact ID and name.
 Missing artifacts time out explicitly; duplicate or invalid artifacts and API
 errors fail the step instead of reporting a successful deployment.

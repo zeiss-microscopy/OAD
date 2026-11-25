@@ -1,0 +1,7 @@
+{
+  "name": "oad-workflow-tools",
+  "private": true,
+  "dependencies": {
+    "@actions/artifact": "^2.1.8"
+  }
+}

@@ -312,6 +312,8 @@ def test_workflow_publishes_separate_docs_and_retains_utility_snapshots():
     deployment = next(step for step in steps if step.get("uses", "").startswith("actions/deploy-pages@"))
     assert deployment["with"]["artifact_name"] == artifact_name
     readiness = next(step for step in steps if step.get("id") == "pages_artifact_ready")
+    install = next(step for step in steps if "npm ci --prefix .github/scripts" in step.get("run", ""))
+    assert steps.index(install) < steps.index(readiness)
     assert steps.index(pages) < steps.index(readiness) < steps.index(deployment)
     assert job["permissions"]["actions"] == "read"
     assert readiness["env"]["ARTIFACT_NAME"] == artifact_name
@@ -324,7 +326,7 @@ def test_workflow_publishes_separate_docs_and_retains_utility_snapshots():
 
 
 @pytest.mark.parametrize(
-    "scenario", ["immediate", "delayed", "timeout", "duplicate", "api-error", "wrong-id", "expired", "empty"]
+    "scenario", ["immediate", "delayed", "timeout", "duplicate", "api-error", "wrong-id", "missing-size", "empty"]
 )
 def test_pages_artifact_readiness_handles_visibility_delay(scenario):
     """Execute the actual workflow script with deterministic artifact API responses."""
@@ -337,30 +339,28 @@ const { script, scenario } = JSON.parse(require("node:fs").readFileSync(0, "utf8
 let calls = 0;
 const sleeps = [];
 const logs = [];
-const artifact = {id: 42, name: "pages-test", expired: false, size_in_bytes: 123};
-const github = {
-  rest: {actions: {listWorkflowRunArtifacts: "list-artifacts"}},
-  paginate: async (method, options) => {
+const artifact = {id: 42, name: "pages-test", size: 123};
+const artifactRequire = name => {
+  assert.ok(name.endsWith("/.github/scripts/node_modules/@actions/artifact"));
+  return {DefaultArtifactClient: class {
+  async listArtifacts() {
     calls++;
-    assert.equal(method, "list-artifacts");
-    assert.deepEqual(options, {owner: "owner", repo: "repo", run_id: 123, per_page: 100});
     if (scenario === "api-error") throw new Error("Forbidden");
     if (scenario === "timeout" || (scenario === "delayed" && calls < 3))
-      return [{...artifact, name: "another-artifact"}];
-    if (scenario === "duplicate") return [artifact, {...artifact, id: 43}];
-    if (scenario === "wrong-id") return [{...artifact, id: 43}];
-    if (scenario === "expired") return [{...artifact, expired: true}];
-    if (scenario === "empty") return [{...artifact, size_in_bytes: 0}];
-    return [artifact];
-  }
+      return {artifacts: [{...artifact, name: "another-artifact"}]};
+    if (scenario === "duplicate") return {artifacts: [artifact, {...artifact, id: 43}]};
+    if (scenario === "wrong-id") return {artifacts: [{...artifact, id: 43}]};
+    if (scenario === "missing-size") return {artifacts: [{...artifact, size: undefined}]};
+    if (scenario === "empty") return {artifacts: [{...artifact, size: 0}]};
+    return {artifacts: [artifact]};
+  }}};
 };
-const context = {repo: {owner: "owner", repo: "repo"}, runId: 123};
 const core = {info: message => logs.push(message)};
 const wait = (callback, milliseconds) => { sleeps.push(milliseconds); callback(); };
 const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
 (async () => {
-  const execute = () => new AsyncFunction("github", "context", "core", "setTimeout", script)(
-    github, context, core, wait
+  const execute = () => new AsyncFunction("require", "core", "setTimeout", script)(
+    artifactRequire, core, wait
   );
   if (scenario === "timeout") {
     await assert.rejects(execute, /not visible after 12 attempts/);
@@ -374,8 +374,8 @@ const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
     await assert.rejects(execute, /Forbidden/);
     assert.equal(calls, 1);
     assert.equal(sleeps.length, 0);
-  } else if (["wrong-id", "expired", "empty"].includes(scenario)) {
-    await assert.rejects(execute, /unexpected ID, expiration, or size/);
+  } else if (["wrong-id", "missing-size", "empty"].includes(scenario)) {
+    await assert.rejects(execute, /unexpected ID or size/);
     assert.equal(calls, 1);
     assert.equal(sleeps.length, 0);
   } else {
@@ -393,7 +393,7 @@ const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
     result = subprocess.run(
         [node, "-e", harness],
         input=json.dumps({"script": step["with"]["script"], "scenario": scenario}),
-        env={**os.environ, "ARTIFACT_NAME": "pages-test", "ARTIFACT_ID": "42"},
+        env={**os.environ, "ARTIFACT_NAME": "pages-test", "ARTIFACT_ID": "42", "GITHUB_WORKSPACE": "/workspace"},
         capture_output=True,
         encoding="utf-8",
         check=False,

@@ -265,6 +265,8 @@ jobs:
                   if-no-files-found: error
             - name: Configure GitHub Pages
               uses: actions/configure-pages@v6
+            - name: Install Pages artifact discovery client
+              run: npm ci --prefix .github/scripts --ignore-scripts --no-audit --no-fund
             - name: Upload GitHub Pages artifact
               id: pages_upload
               uses: actions/upload-pages-artifact@v4
@@ -280,6 +282,10 @@ jobs:
                   ARTIFACT_ID: ${{ steps.pages_upload.outputs.artifact_id }}
               with:
                   script: |
+                      const {DefaultArtifactClient} = require(
+                        `${process.env.GITHUB_WORKSPACE}/.github/scripts/node_modules/@actions/artifact`
+                      );
+                      const client = new DefaultArtifactClient();
                       const name = process.env.ARTIFACT_NAME;
                       const expectedId = process.env.ARTIFACT_ID;
                       if (!expectedId) {
@@ -287,18 +293,15 @@ jobs:
                       }
                       const attempts = 12;
                       for (let attempt = 1; attempt <= attempts; attempt++) {
-                        const artifacts = await github.paginate(
-                          github.rest.actions.listWorkflowRunArtifacts,
-                          {...context.repo, run_id: context.runId, per_page: 100}
-                        );
+                        const {artifacts} = await client.listArtifacts();
                         const matches = artifacts.filter(artifact => artifact.name === name);
                         if (matches.length > 1) {
                           throw new Error(`Multiple artifacts named "${name}" were found.`);
                         }
                         if (matches.length === 1) {
                           const artifact = matches[0];
-                          if (String(artifact.id) !== expectedId || artifact.expired || artifact.size_in_bytes === 0) {
-                            throw new Error(`Pages artifact "${name}" has unexpected ID, expiration, or size.`);
+                          if (String(artifact.id) !== expectedId || !Number.isFinite(artifact.size) || artifact.size <= 0) {
+                            throw new Error(`Pages artifact "${name}" has unexpected ID or size.`);
                           }
                           core.info(`Pages artifact "${name}" (${expectedId}) is ready.`);
                           return;
