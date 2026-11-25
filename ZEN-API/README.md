@@ -106,8 +106,19 @@ matching draft exists, publication stops before making changes and reports an
 actionable error. Inspect that draft's earlier publication error rather than
 repeatedly retrying it. GitHub permanently reserves tags used by immutable
 releases: deleting a draft or tag does not make such a tag reusable. A blocked
-tag requires a new package version and unused release tag. Documentation-only
+tag requires an unused release tag (or a new package version). Documentation-only
 runs should leave both release controls disabled.
+
+To publish packages built from `master`, merge workflow fixes first, then manually
+run the workflow with **Branch: master**, `versions: 2026.11.1`, and both
+`publish_releases` and `publish_utils_release` enabled. For the currently blocked
+tags, set `release_suffix: r1` after confirming those retry tags are unused.
+This publishes `v2026.11.1-r1` and `zen-api-utils-v0.2.0-r1`; wheel versions remain
+`2026.11.1` and `0.2.0`. Existing drafts and published releases are not changed.
+Both releases target the exact master commit used for the build. Publishing
+from any other branch is rejected. Publication is not automatic on merge.
+The suffix applies to all selected releases, so select only versions that need
+publication rather than recreating historical releases.
 
 Existing API releases are retained: canonical API versions `2026.5.1` and
 `2026.7.1` reuse their historical `v2026.05.1` and `v2026.07.1` tags rather than

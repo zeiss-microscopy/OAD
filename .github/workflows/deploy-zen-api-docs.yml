@@ -34,6 +34,11 @@ name: Deploy ZEN API docs and build packages
                 required: true
                 default: false
                 type: boolean
+            release_suffix:
+                description: Optional unused release-tag suffix (for example r1); package versions are unchanged
+                required: false
+                default: ""
+                type: string
 
 permissions:
     contents: read
@@ -53,6 +58,7 @@ jobs:
             versions: ${{ steps.versions.outputs.versions }}
             release_tags: ${{ steps.versions.outputs.release_tags }}
             utils_version: ${{ steps.versions.outputs.utils_version }}
+            utils_release_tag: ${{ steps.versions.outputs.utils_release_tag }}
         steps:
             - uses: actions/checkout@v5
             - uses: actions/setup-python@v6
@@ -63,15 +69,25 @@ jobs:
             - name: Resolve version matrix
               id: versions
               shell: bash
+              env:
+                  RELEASE_SUFFIX: ${{ inputs.release_suffix }}
+                  PUBLISH_REQUESTED: ${{ inputs.publish_releases || inputs.publish_utils_release || false }}
               run: |
                   python - <<'PY'
                   import json
                   import os
+                  import re
                   from pathlib import Path
                   from runpy import run_path
                   from packaging.version import Version
 
                   builder = run_path(".github/scripts/build_zen_api_docs.py")
+                  if os.environ.get("PUBLISH_REQUESTED") == "true" and os.environ.get("GITHUB_REF") != "refs/heads/master":
+                      raise SystemExit("Package releases must be built from master; select master when running this workflow.")
+                  suffix = os.environ.get("RELEASE_SUFFIX", "")
+                  if suffix and not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9-]{0,31}", suffix):
+                      raise SystemExit("Release suffix must contain 1-32 letters, digits or hyphens, starting with a letter or digit.")
+                  suffix = f"-{suffix}" if suffix else ""
                   versions = list(dict.fromkeys(os.environ["DOC_VERSIONS"].split()))
                   if not versions:
                       raise SystemExit("Select at least one API version")
@@ -84,11 +100,12 @@ jobs:
                   except (OSError, ValueError, KeyError) as exc:
                       raise SystemExit(str(exc)) from exc
                   legacy_tags = {"2026.5.1": "v2026.05.1", "2026.7.1": "v2026.07.1"}
-                  release_tags = {version: legacy_tags.get(version, f"v{version}") for version in versions}
+                  release_tags = {version: legacy_tags.get(version, f"v{version}") + suffix for version in versions}
                   with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
                       output.write(f"versions={json.dumps(versions)}\n")
                       output.write(f"release_tags={json.dumps(release_tags)}\n")
                       output.write(f"utils_version={utils_version}\n")
+                      output.write(f"utils_release_tag=zen-api-utils-v{utils_version}{suffix}\n")
                   PY
 
     build-packages:
@@ -326,9 +343,10 @@ jobs:
                   ARTIFACT_ID: ${{ steps.pages_upload.outputs.artifact_id }}
               with:
                   script: |
-                      const {DefaultArtifactClient} = require(
-                        `${process.env.GITHUB_WORKSPACE}/.github/scripts/node_modules/@actions/artifact`
-                      );
+                      const {pathToFileURL} = require("node:url");
+                      const {DefaultArtifactClient} = await import(pathToFileURL(
+                        `${process.env.GITHUB_WORKSPACE}/.github/scripts/node_modules/@actions/artifact/lib/artifact.js`
+                      ).href);
                       const client = new DefaultArtifactClient();
                       const name = process.env.ARTIFACT_NAME;
                       const expectedId = process.env.ARTIFACT_ID;
@@ -370,7 +388,7 @@ jobs:
 
     publish-releases:
         name: Publish zen_api ${{ matrix.version }} release assets
-        if: github.event_name == 'workflow_dispatch' && inputs.publish_releases
+        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master' && inputs.publish_releases
         needs: [settings, build-packages, deploy-docs]
         runs-on: ubuntu-latest
         permissions:
@@ -411,7 +429,7 @@ jobs:
 
     publish-utilities-release:
         name: Publish zen_api_utils ${{ needs.settings.outputs.utils_version }} release assets
-        if: github.event_name == 'workflow_dispatch' && inputs.publish_utils_release
+        if: github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/master' && inputs.publish_utils_release
         needs: [settings, build-utilities, test-utilities, deploy-docs]
         runs-on: ubuntu-latest
         permissions:
@@ -422,7 +440,7 @@ jobs:
               id: release_check
               uses: actions/github-script@v8
               env:
-                  RELEASE_TAG: zen-api-utils-v${{ needs.settings.outputs.utils_version }}
+                  RELEASE_TAG: ${{ needs.settings.outputs.utils_release_tag }}
               with:
                   script: |
                       const prepareRelease = require('./.github/scripts/prepare_release.cjs');
@@ -437,7 +455,7 @@ jobs:
               if: steps.release_check.outputs.publish == 'true'
               uses: softprops/action-gh-release@v2
               with:
-                  tag_name: zen-api-utils-v${{ needs.settings.outputs.utils_version }}
+                  tag_name: ${{ needs.settings.outputs.utils_release_tag }}
                   name: ZEN API Utilities ${{ needs.settings.outputs.utils_version }}
                   target_commitish: ${{ github.sha }}
                   make_latest: false

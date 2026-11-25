@@ -341,7 +341,11 @@ const sleeps = [];
 const logs = [];
 const artifact = {id: 42, name: "pages-test", size: 123};
 const artifactRequire = name => {
-  assert.ok(name.endsWith("/.github/scripts/node_modules/@actions/artifact"));
+  if (name === "node:url") return require(name);
+  throw new Error(`Unexpected require: ${name}`);
+};
+const artifactImport = async name => {
+  assert.ok(name.endsWith("/.github/scripts/node_modules/@actions/artifact/lib/artifact.js"));
   return {DefaultArtifactClient: class {
   async listArtifacts() {
     calls++;
@@ -359,8 +363,9 @@ const core = {info: message => logs.push(message)};
 const wait = (callback, milliseconds) => { sleeps.push(milliseconds); callback(); };
 const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
 (async () => {
-  const execute = () => new AsyncFunction("require", "core", "setTimeout", script)(
-    artifactRequire, core, wait
+  const execute = () => new AsyncFunction("require", "core", "setTimeout", "artifactImport",
+    script.replace("await import(", "await artifactImport("))(
+    artifactRequire, core, wait, artifactImport
   );
   if (scenario === "timeout") {
     await assert.rejects(execute, /not visible after 12 attempts/);
@@ -400,6 +405,54 @@ const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
         timeout=15,
     )
     assert result.returncode == 0, result.stdout + result.stderr
+
+
+@pytest.mark.parametrize(
+    ("suffix", "ref", "publishing", "error"),
+    [
+        ("", "refs/heads/master", "true", None),
+        ("r1", "refs/heads/master", "true", None),
+        ("../bad", "refs/heads/master", "true", "Release suffix must"),
+        ("r1", "refs/heads/feature", "true", "must be built from master"),
+        ("", "refs/pull/104/merge", "false", None),
+    ],
+)
+def test_release_settings_validate_master_and_retry_tags(tmp_path, suffix, ref, publishing, error):
+    repo = Path(__file__).resolve().parents[3]
+    config = yaml.safe_load((repo / ".github/workflows/deploy-zen-api-docs.yml").read_text(encoding="utf-8"))
+    step = next(step for step in config["jobs"]["settings"]["steps"] if step.get("id") == "versions")
+    script = step["run"].split("python - <<'PY'\n", 1)[1].rsplit("\nPY", 1)[0]
+    output = tmp_path / "outputs"
+    result = subprocess.run(
+        [sys.executable, "-c", script],
+        cwd=repo,
+        env={
+            **os.environ,
+            "DOC_VERSIONS": "2026.11.1 2026.7.1",
+            "GITHUB_OUTPUT": str(output),
+            "GITHUB_REF": ref,
+            "PUBLISH_REQUESTED": publishing,
+            "RELEASE_SUFFIX": suffix,
+        },
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if error:
+        assert result.returncode != 0
+        assert error in result.stderr
+        assert not output.exists()
+    else:
+        assert result.returncode == 0, result.stderr
+        values = dict(line.split("=", 1) for line in output.read_text(encoding="utf-8").splitlines())
+        ending = f"-{suffix}" if suffix else ""
+        assert json.loads(values["release_tags"]) == {
+            "2026.11.1": f"v2026.11.1{ending}",
+            "2026.7.1": f"v2026.07.1{ending}",
+        }
+        assert values["utils_release_tag"] == f"zen-api-utils-v0.2.0{ending}"
+    for name in ("publish-releases", "publish-utilities-release"):
+        assert "github.ref == 'refs/heads/master'" in config["jobs"][name]["if"]
 
 
 def test_pull_requests_validate_without_publication():
@@ -467,7 +520,7 @@ def test_utility_release_uses_tested_wheels_and_explicit_approval():
     assert {"settings", "build-utilities", "test-utilities", "deploy-docs"} <= set(publish["needs"])
     assert publish["permissions"]["contents"] == "write"
     release = next(step for step in publish["steps"] if step.get("uses", "").startswith("softprops/action-gh-release@"))
-    assert release["with"]["tag_name"] == "zen-api-utils-v${{ needs.settings.outputs.utils_version }}"
+    assert release["with"]["tag_name"] == "${{ needs.settings.outputs.utils_release_tag }}"
     assert release["with"]["make_latest"] is False
     assert "*.whl" in release["with"]["files"] and "*.tar.gz" in release["with"]["files"]
     api_release = next(

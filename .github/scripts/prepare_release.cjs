@@ -9,7 +9,7 @@ module.exports = async function prepareRelease({ github, context, core, tag }) {
       `Release "${tag}" already has a draft. No release or assets were changed. ` +
       "Inspect the previous publication error before proceeding. If GitHub reports " +
       "'tag_name was used by an immutable release', the tag cannot be reused; " +
-      "prepare a new package version and unused release tag."
+      "select an unused release_suffix when publishing from master, or prepare a new package version."
     );
   }
   if (matches.length > 1) {
