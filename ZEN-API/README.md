@@ -58,6 +58,14 @@ builds the utility version from that checkout's TOML. Selecting a version number
 does not retrieve historical utility source. GitHub Pages must use
 **Settings > Pages > Source: GitHub Actions**.
 
+Pull requests targeting `master` with package, proto, utility, or workflow-tooling
+changes run package builds, the utility compatibility matrix, tooling tests, and
+strict builds of the separate API and utility documentation sites. PR validation
+has read-only repository permissions and never deploys Pages, updates utility
+history, or publishes releases. PR runs use separate concurrency groups so they
+do not block production deployments. Artifact visibility against the live
+Actions service is verified only during deployment; PR tests simulate delays.
+
 The workflow uploads separate API and utility package artifacts and separate
 documentation artifacts (`zen_api-mkdocs-sites` and
 `zen_api_utils-<utility-version>-mkdocs-site`). One Pages deployment includes both

@@ -402,6 +402,29 @@ const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor;
     assert result.returncode == 0, result.stdout + result.stderr
 
 
+def test_pull_requests_validate_without_publication():
+    workflow = Path(__file__).resolve().parents[2] / "workflows/deploy-zen-api-docs.yml"
+    config = yaml.safe_load(workflow.read_text(encoding="utf-8"))
+    assert config["on"]["pull_request"]["branches"] == ["master"]
+    assert ".github/scripts/**" in config["on"]["pull_request"]["paths"]
+    assert config["permissions"] == {"contents": "read"}
+    assert "github.event.pull_request.number" in config["concurrency"]["group"]
+    job = config["jobs"]["validate-pr"]
+    assert job["if"] == "github.event_name == 'pull_request'"
+    assert job["permissions"] == {"contents": "read"}
+    assert set(job["needs"]) == {"settings", "build-packages", "test-utilities"}
+    commands = "\n".join(step.get("run", "") for step in job["steps"])
+    assert "pytest .github/scripts/tests/test_build_zen_api_docs.py" in commands
+    assert "node --test .github/scripts/tests/test_prepare_release.cjs" in commands
+    assert 'build_zen_api_docs.py --versions "${versions[@]}"' in commands
+    assert "npm ci" in commands
+    assert not any("deploy-pages" in step.get("uses", "") or "action-gh-release" in step.get("uses", "")
+                   for step in job["steps"])
+    assert config["jobs"]["deploy-docs"]["if"] == "github.event_name != 'pull_request'"
+    for name in ("publish-releases", "publish-utilities-release"):
+        assert "github.event_name == 'workflow_dispatch'" in config["jobs"][name]["if"]
+
+
 def test_utility_release_uses_tested_wheels_and_explicit_approval():
     """Publish one utility artifact only after testing its wheel, never editable sources."""
     workflow = Path(__file__).resolve().parents[2] / "workflows/deploy-zen-api-docs.yml"
