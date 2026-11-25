@@ -58,13 +58,23 @@ builds the utility version from that checkout's TOML. Selecting a version number
 does not retrieve historical utility source. GitHub Pages must use
 **Settings > Pages > Source: GitHub Actions**.
 
+Pull requests targeting `master` with package, proto, utility, or workflow-tooling
+changes run package builds, the utility compatibility matrix, tooling tests, and
+strict builds of the separate API and utility documentation sites. PR validation
+has read-only repository permissions and never deploys Pages, updates utility
+history, or publishes releases. PR runs use separate concurrency groups so they
+do not block production deployments. Artifact visibility against the live
+Actions service is verified only during deployment; PR tests simulate delays.
+
 The workflow uploads separate API and utility package artifacts and separate
 documentation artifacts (`zen_api-mkdocs-sites` and
 `zen_api_utils-<utility-version>-mkdocs-site`). One Pages deployment includes both
 sites because they share the repository's Pages host.
 
 Pages artifact names include the run ID and attempt number to avoid collisions
-on reruns. Before deployment, the workflow polls GitHub's artifact API up to
+on reruns. Before deployment, the workflow uses `@actions/artifact`'s
+`DefaultArtifactClient.listArtifacts()`, the same discovery API used by
+`actions/deploy-pages`, rather than the separate GitHub REST listing. It polls up to
 12 times, five seconds apart, for the exact uploaded artifact ID and name.
 Missing artifacts time out explicitly; duplicate or invalid artifacts and API
 errors fail the step instead of reporting a successful deployment.
